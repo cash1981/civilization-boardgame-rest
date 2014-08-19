@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="IdProvider" IDEtalkID="669454CF862B884CF5A5E7A96DD5CC32" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="$AUTODEPLOY$" jdk-15="$AUTODEPLOY$" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/classes" />
+  </component>
+  <component name="SuppressionsComponent">
+    <option name="suppComments" value="[]" />
+  </component>
+</project>
+
