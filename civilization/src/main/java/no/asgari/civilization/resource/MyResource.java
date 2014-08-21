@@ -1,4 +1,4 @@
-package no.asgari.civilization;
+package no.asgari.civilization.resource;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

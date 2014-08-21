@@ -97,6 +97,4 @@ public class ExcelTest {
         System.out.println(hut);
         assertEquals(sizeOfHuts - 1, shuffledHuts.size());
     }
-
-
 }

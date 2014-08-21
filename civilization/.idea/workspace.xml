@@ -33,14 +33,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MyResource.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/MyResource.java">
+      <file leaf-file-name="MyResource.java" pinned="false" current="$AUTODEPLOY$" current-in-tab="$AUTODEPLOY$">
+        <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/MyResource.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="493">
-              <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="$AUTODEPLOY$" />
-              </folding>
+            <state vertical-scroll-proportion="0.19601677" vertical-offset="0" max-vertical-offset="954">
+              <caret line="14" column="74" selection-start-line="14" selection-start-column="74" selection-end-line="14" selection-end-column="74" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -48,8 +46,8 @@
       <file leaf-file-name="Main.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/Main.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="782">
-              <caret line="36" column="25" selection-start-line="36" selection-start-column="25" selection-end-line="36" selection-end-column="25" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="782">
+              <caret line="14" column="27" selection-start-line="14" selection-start-column="27" selection-end-line="14" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -58,34 +56,19 @@
       <file leaf-file-name="ExcelTest.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/no/asgari/civilization/ExcelTest.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-7.0" vertical-offset="1178" max-vertical-offset="1802">
-              <caret line="82" column="0" selection-start-line="82" selection-start-column="0" selection-end-line="82" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="$AUTODEPLOY$" />
-              </folding>
+            <state vertical-scroll-proportion="0.0" vertical-offset="1683" max-vertical-offset="1802">
+              <caret line="99" column="0" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Item.java" pinned="false" current="$AUTODEPLOY$" current-in-tab="$AUTODEPLOY$">
+      <file leaf-file-name="Item.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/Item.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.71753246" vertical-offset="0" max-vertical-offset="1224">
+            <state vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="1224">
               <caret line="26" column="61" selection-start-line="26" selection-start-column="61" selection-end-line="26" selection-end-column="61" />
-              <folding>
-                <element signature="e#1050#1051#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1088#1089#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1282#1283#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1309#1310#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1340#1341#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1367#1368#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1405#1406#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1439#1440#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1470#1471#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1497#1498#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1538#1539#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1570#1571#0" expanded="$AUTODEPLOY$" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -93,7 +76,7 @@
       <file leaf-file-name="Spliterator.java" pinned="false" current="false" current-in-tab="false">
         <entry file="jar://C:/apps/jdk1.8.0_05/src.zip!/java/util/Spliterator.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="7744" max-vertical-offset="13566">
+            <state vertical-scroll-proportion="0.0" vertical-offset="8245" max-vertical-offset="14246">
               <caret line="485" column="28" selection-start-line="485" selection-start-column="28" selection-end-line="485" selection-end-column="28" />
               <folding />
             </state>
@@ -103,7 +86,7 @@
       <file leaf-file-name="Function.java" pinned="false" current="false" current-in-tab="false">
         <entry file="jar://C:/apps/jdk1.8.0_05/src.zip!/java/util/function/Function.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1377">
+            <state vertical-scroll-proportion="0.0" vertical-offset="680" max-vertical-offset="1802">
               <caret line="40" column="17" selection-start-line="40" selection-start-column="17" selection-end-line="40" selection-end-column="17" />
               <folding />
             </state>
@@ -113,14 +96,9 @@
       <file leaf-file-name="ExcelSheet.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/ExcelSheet.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="595">
+            <state vertical-scroll-proportion="0.0" vertical-offset="357" max-vertical-offset="595">
               <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-              <folding>
-                <element signature="e#833#834#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#874#875#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#928#929#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#964#965#0" expanded="$AUTODEPLOY$" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -128,7 +106,7 @@
       <file leaf-file-name="AbstractSAXParser.class" pinned="false" current="false" current-in-tab="false">
         <entry file="jar://$MAVEN_REPOSITORY$/xerces/xercesImpl/2.4.0/xercesImpl-2.4.0.jar!/org/apache/xerces/parsers/AbstractSAXParser.class">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-7.0" vertical-offset="556" max-vertical-offset="3264">
+            <state vertical-scroll-proportion="0.0" vertical-offset="748" max-vertical-offset="3281">
               <caret line="44" column="16" selection-start-line="44" selection-start-column="16" selection-end-line="44" selection-end-column="16" />
               <folding />
             </state>
@@ -138,7 +116,7 @@
       <file leaf-file-name="XMLNSDocumentScannerImpl.class" pinned="false" current="false" current-in-tab="false">
         <entry file="jar://$MAVEN_REPOSITORY$/xerces/xercesImpl/2.4.0/xercesImpl-2.4.0.jar!/org/apache/xerces/impl/XMLNSDocumentScannerImpl.class">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-7.0" vertical-offset="114" max-vertical-offset="680">
+            <state vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="697">
               <caret line="18" column="22" selection-start-line="18" selection-start-column="22" selection-end-line="18" selection-end-column="22" />
               <folding />
             </state>
@@ -148,7 +126,7 @@
       <file leaf-file-name="XMLDocumentFragmentScannerImpl.class" pinned="false" current="false" current-in-tab="false">
         <entry file="jar://$MAVEN_REPOSITORY$/xerces/xercesImpl/2.4.0/xercesImpl-2.4.0.jar!/org/apache/xerces/impl/XMLDocumentFragmentScannerImpl.class">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-7.0" vertical-offset="1797" max-vertical-offset="2533">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1989" max-vertical-offset="2550">
               <caret line="117" column="23" selection-start-line="117" selection-start-column="23" selection-end-line="117" selection-end-column="23" />
               <folding />
             </state>
@@ -158,7 +136,7 @@
       <file leaf-file-name="SharedStringsTable.java" pinned="false" current="false" current-in-tab="false">
         <entry file="jar://$MAVEN_REPOSITORY$/org/apache/poi/poi-ooxml/3.11-beta1/poi-ooxml-3.11-beta1-sources.jar!/org/apache/poi/xssf/model/SharedStringsTable.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1641" max-vertical-offset="3349">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2346" max-vertical-offset="3978">
               <caret line="138" column="17" selection-start-line="138" selection-start-column="17" selection-end-line="138" selection-end-column="17" />
               <folding />
             </state>
@@ -168,12 +146,9 @@
       <file leaf-file-name="FromHowTo.java" pinned="false" current="false" current-in-tab="false">
         <entry file="jar://$MAVEN_REPOSITORY$/org/apache/poi/poi-examples/3.11-beta1/poi-examples-3.11-beta1-sources.jar!/org/apache/poi/xssf/eventusermodel/examples/FromHowTo.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1921">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2074" max-vertical-offset="2448">
               <caret line="122" column="43" selection-start-line="122" selection-start-column="43" selection-end-line="122" selection-end-column="43" />
-              <folding>
-                <element signature="e#3174#3175#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#3197#3198#0" expanded="$AUTODEPLOY$" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -181,7 +156,7 @@
       <file leaf-file-name="IterateCells.java" pinned="false" current="false" current-in-tab="false">
         <entry file="jar://$MAVEN_REPOSITORY$/org/apache/poi/poi-examples/3.11-beta1/poi-examples-3.11-beta1-sources.jar!/org/apache/poi/xssf/usermodel/examples/IterateCells.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="527">
+            <state vertical-scroll-proportion="0.0" vertical-offset="731" max-vertical-offset="884">
               <caret line="43" column="9" selection-start-line="33" selection-start-column="8" selection-end-line="43" selection-end-column="9" />
               <folding />
             </state>
@@ -191,7 +166,7 @@
       <file leaf-file-name="Assert.java" pinned="false" current="false" current-in-tab="false">
         <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.9/junit-4.9-sources.jar!/org/junit/Assert.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="10950" max-vertical-offset="12240">
+            <state vertical-scroll-proportion="0.0" vertical-offset="12512" max-vertical-offset="13413">
               <caret line="736" column="27" selection-start-line="736" selection-start-column="27" selection-end-line="736" selection-end-column="27" />
               <folding />
             </state>
@@ -209,13 +184,14 @@
     <option name="changedFiles">
       <list>
         <option value="$PROJECT_DIR$/src/test/java/no/asgari/civilization/MyResourceTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/Main.java" />
         <option value="$PROJECT_DIR$/src/test/java/no/asgari/civilization/FileReaderTest.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/Sheets.java" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/ExcelSheet.java" />
-        <option value="$PROJECT_DIR$/src/test/java/no/asgari/civilization/ExcelTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/Item.java" />
+        <option value="$PROJECT_DIR$/src/test/java/no/asgari/civilization/ExcelTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/MyResource.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/Main.java" />
       </list>
     </option>
   </component>
@@ -281,7 +257,7 @@
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectReloadState">
-    <option name="STATE" value="2" />
+    <option name="STATE" value="0" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -611,10 +587,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="xssf" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="examples" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1076,6 +1048,36 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="civilization" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="civilization" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="civilization" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resource" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -1290,19 +1292,6 @@
       <option name="trusted" value="$AUTODEPLOY$" />
       <method />
     </configuration>
-    <configuration default="$AUTODEPLOY$" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method />
-    </configuration>
     <configuration default="$AUTODEPLOY$" type="TestNG" factoryName="TestNG">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="$AUTODEPLOY$" runner="idea" />
       <module name="" />
@@ -1329,6 +1318,19 @@
       <envs />
       <properties />
       <listeners />
+      <method />
+    </configuration>
+    <configuration default="$AUTODEPLOY$" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="$AUTODEPLOY$" type="Application" factoryName="Application">
@@ -1427,51 +1429,55 @@
     </configuration>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="$AUTODEPLOY$" id="Default" summary="Default task">
       <changelist id="a1d30372-8a9d-4e5f-9b66-0bd0e994b45d" name="Default" comment="" />
       <created>1408442509258</created>
       <updated>1408442509258</updated>
       <workItem from="1408442514003" duration="261000" />
-      <workItem from="1408442778605" duration="14114000" />
+      <workItem from="1408442778605" duration="16407000" />
+      <workItem from="1408608622221" duration="27000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14375000" />
+    <option name="totallyTimeSpent" value="16695000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-4" y="-4" width="1928" height="1164" extended-state="6" />
     <editor active="$AUTODEPLOY$" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32960597" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="$AUTODEPLOY$" content_ui="tabs" />
-      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="$AUTODEPLOY$" weight="0.24973376" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="$AUTODEPLOY$" weight="0.32941177" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Atlassian " active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32960597" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="$AUTODEPLOY$" content_ui="tabs" />
+      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="$AUTODEPLOY$" content_ui="tabs" />
+      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="FindBugs-IDEA" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32941177" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Analysis" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="$AUTODEPLOY$" weight="0.17678382" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Analysis" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="$AUTODEPLOY$" weight="0.17838125" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="$AUTODEPLOY$" weight="0.24973376" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32941177" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32941177" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1520,6 +1526,38 @@
     </option>
   </component>
   <component name="editorHistoryManager">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/poi/poi-ooxml/3.11-beta1/poi-ooxml-3.11-beta1-sources.jar!/org/apache/poi/xssf/model/SharedStringsTable.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2346" max-vertical-offset="3978">
+          <caret line="138" column="17" selection-start-line="138" selection-start-column="17" selection-end-line="138" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/poi/poi-examples/3.11-beta1/poi-examples-3.11-beta1-sources.jar!/org/apache/poi/xssf/eventusermodel/examples/FromHowTo.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2074" max-vertical-offset="2448">
+          <caret line="122" column="43" selection-start-line="122" selection-start-column="43" selection-end-line="122" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/poi/poi-examples/3.11-beta1/poi-examples-3.11-beta1-sources.jar!/org/apache/poi/xssf/usermodel/examples/IterateCells.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="731" max-vertical-offset="884">
+          <caret line="43" column="9" selection-start-line="33" selection-start-column="8" selection-end-line="43" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.9/junit-4.9-sources.jar!/org/junit/Assert.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="12512" max-vertical-offset="13413">
+          <caret line="736" column="27" selection-start-line="736" selection-start-column="27" selection-end-line="736" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="408" max-vertical-offset="1462">
@@ -1528,24 +1566,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/MyResource.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="493">
-          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="$AUTODEPLOY$" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/glassfish/grizzly/grizzly-http-server/2.3.16/grizzly-http-server-2.3.16-sources.jar!/org/glassfish/grizzly/http/server/HttpServer.java">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.10030395" vertical-offset="5374" max-vertical-offset="12750">
           <caret line="416" column="29" selection-start-line="416" selection-start-column="29" selection-end-line="416" selection-end-column="29" />
-          <folding>
-            <element signature="e#15689#15690#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#15718#15719#0" expanded="$AUTODEPLOY$" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1553,7 +1577,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.55250406" vertical-offset="508" max-vertical-offset="1513">
           <caret line="51" column="16" selection-start-line="51" selection-start-column="16" selection-end-line="51" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1569,7 +1592,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3799392" vertical-offset="1535" max-vertical-offset="2193">
           <caret line="131" column="35" selection-start-line="131" selection-start-column="35" selection-end-line="131" selection-end-column="35" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1577,7 +1599,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-19.68" vertical-offset="1514" max-vertical-offset="2159">
           <caret line="119" column="27" selection-start-line="119" selection-start-column="27" selection-end-line="119" selection-end-column="27" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1585,7 +1606,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.1342812" vertical-offset="0" max-vertical-offset="633">
           <caret line="6" column="17" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1601,7 +1621,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.29541865" vertical-offset="0" max-vertical-offset="633">
           <caret line="12" column="1" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1609,7 +1628,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.1342812" vertical-offset="0" max-vertical-offset="633">
           <caret line="6" column="51" selection-start-line="6" selection-start-column="51" selection-end-line="6" selection-end-column="51" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1617,7 +1635,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="918">
           <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1625,7 +1642,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="595">
           <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1633,10 +1649,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.886218" vertical-offset="574" max-vertical-offset="24973">
           <caret line="154" column="55" selection-start-line="154" selection-start-column="55" selection-end-line="154" selection-end-column="55" />
-          <folding>
-            <element signature="e#6202#6203#0" expanded="false" />
-            <element signature="e#6254#6255#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1644,7 +1656,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33281004" vertical-offset="7625" max-vertical-offset="11237">
           <caret line="496" column="23" selection-start-line="496" selection-start-column="23" selection-end-line="496" selection-end-column="37" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1652,7 +1663,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1046" max-vertical-offset="1683">
           <caret line="41" column="39" selection-start-line="41" selection-start-column="39" selection-end-line="41" selection-end-column="39" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1660,7 +1670,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="111" max-vertical-offset="4539">
           <caret line="63" column="11" selection-start-line="63" selection-start-column="11" selection-end-line="63" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1674,7 +1683,7 @@
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/xerces/xercesImpl/2.4.0/xercesImpl-2.4.0.jar!/org/apache/xerces/parsers/AbstractSAXParser.class">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.0" vertical-offset="556" max-vertical-offset="3264">
+        <state vertical-scroll-proportion="0.0" vertical-offset="748" max-vertical-offset="3281">
           <caret line="44" column="16" selection-start-line="44" selection-start-column="16" selection-end-line="44" selection-end-column="16" />
           <folding />
         </state>
@@ -1682,7 +1691,7 @@
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/xerces/xercesImpl/2.4.0/xercesImpl-2.4.0.jar!/org/apache/xerces/impl/XMLNSDocumentScannerImpl.class">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.0" vertical-offset="114" max-vertical-offset="680">
+        <state vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="697">
           <caret line="18" column="22" selection-start-line="18" selection-start-column="22" selection-end-line="18" selection-end-column="22" />
           <folding />
         </state>
@@ -1690,7 +1699,7 @@
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/xerces/xercesImpl/2.4.0/xercesImpl-2.4.0.jar!/org/apache/xerces/impl/XMLDocumentFragmentScannerImpl.class">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.0" vertical-offset="1797" max-vertical-offset="2533">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1989" max-vertical-offset="2550">
           <caret line="117" column="23" selection-start-line="117" selection-start-column="23" selection-end-line="117" selection-end-column="23" />
           <folding />
         </state>
@@ -1700,7 +1709,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.42300886" vertical-offset="849" max-vertical-offset="8959">
           <caret line="96" column="7" selection-start-line="96" selection-start-column="7" selection-end-line="96" selection-end-column="7" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1716,10 +1724,7 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1921">
           <caret line="122" column="43" selection-start-line="122" selection-start-column="43" selection-end-line="122" selection-end-column="43" />
-          <folding>
-            <element signature="e#3174#3175#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#3197#3198#0" expanded="$AUTODEPLOY$" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1727,7 +1732,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6017699" vertical-offset="0" max-vertical-offset="731">
           <caret line="29" column="10" selection-start-line="29" selection-start-column="10" selection-end-line="29" selection-end-column="10" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1735,7 +1739,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334" vertical-offset="2536" max-vertical-offset="29716">
           <caret line="249" column="11" selection-start-line="249" selection-start-column="11" selection-end-line="249" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1743,7 +1746,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-12.24" vertical-offset="306" max-vertical-offset="2210">
           <caret line="37" column="52" selection-start-line="37" selection-start-column="52" selection-end-line="37" selection-end-column="52" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1759,7 +1761,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334" vertical-offset="3226" max-vertical-offset="9792">
           <caret line="224" column="10" selection-start-line="224" selection-start-column="10" selection-end-line="224" selection-end-column="10" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1767,7 +1768,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33281004" vertical-offset="485" max-vertical-offset="5083">
           <caret line="66" column="32" selection-start-line="66" selection-start-column="32" selection-end-line="66" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1783,7 +1783,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-6.0722136" vertical-offset="4123" max-vertical-offset="17391">
           <caret line="33" column="17" selection-start-line="33" selection-start-column="17" selection-end-line="33" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1791,7 +1790,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33281004" vertical-offset="536" max-vertical-offset="1360">
           <caret line="71" column="17" selection-start-line="71" selection-start-column="17" selection-end-line="71" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1799,7 +1797,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33281004" vertical-offset="111" max-vertical-offset="6392">
           <caret line="38" column="17" selection-start-line="38" selection-start-column="17" selection-end-line="38" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1807,7 +1804,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-4.711146" vertical-offset="3154" max-vertical-offset="3842">
           <caret line="24" column="17" selection-start-line="24" selection-start-column="17" selection-end-line="24" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1823,7 +1819,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="2.732773" vertical-offset="5871" max-vertical-offset="34850">
           <caret line="475" column="37" selection-start-line="475" selection-start-column="37" selection-end-line="475" selection-end-column="37" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1843,19 +1838,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/Main.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="782">
-          <caret line="36" column="25" selection-start-line="36" selection-start-column="25" selection-end-line="36" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/apps/jdk1.8.0_05/src.zip!/java/util/function/Supplier.java">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.60714287" vertical-offset="0" max-vertical-offset="616">
           <caret line="45" column="23" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1863,7 +1849,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33279222" vertical-offset="2260" max-vertical-offset="25432">
           <caret line="211" column="40" selection-start-line="211" selection-start-column="40" selection-end-line="211" selection-end-column="40" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1871,7 +1856,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.41558442" vertical-offset="2549" max-vertical-offset="3247">
           <caret line="198" column="6" selection-start-line="198" selection-start-column="6" selection-end-line="198" selection-end-column="6" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1879,6 +1863,13 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.49837664" vertical-offset="4980" max-vertical-offset="7531">
           <caret line="336" column="49" selection-start-line="336" selection-start-column="49" selection-end-line="336" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/no/asgari/civilization/ExcelTest.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1683" max-vertical-offset="1802">
+          <caret line="99" column="0" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1887,43 +1878,31 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="595">
           <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-          <folding>
-            <element signature="e#833#834#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#874#875#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#928#929#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#964#965#0" expanded="$AUTODEPLOY$" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/no/asgari/civilization/ExcelTest.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.0" vertical-offset="1178" max-vertical-offset="1802">
-          <caret line="82" column="0" selection-start-line="82" selection-start-column="0" selection-end-line="82" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="$AUTODEPLOY$" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/Item.java">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.71753246" vertical-offset="0" max-vertical-offset="1224">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1224">
           <caret line="26" column="61" selection-start-line="26" selection-start-column="61" selection-end-line="26" selection-end-column="61" />
-          <folding>
-            <element signature="e#1050#1051#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1088#1089#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1282#1283#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1309#1310#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1340#1341#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1367#1368#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1405#1406#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1439#1440#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1470#1471#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1497#1498#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1538#1539#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1570#1571#0" expanded="$AUTODEPLOY$" />
-          </folding>
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/Main.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="782">
+          <caret line="14" column="27" selection-start-line="14" selection-start-column="27" selection-end-line="14" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/MyResource.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.19601677" vertical-offset="0" max-vertical-offset="954">
+          <caret line="14" column="74" selection-start-line="14" selection-start-column="74" selection-end-line="14" selection-end-column="74" />
+          <folding />
         </state>
       </provider>
     </entry>
