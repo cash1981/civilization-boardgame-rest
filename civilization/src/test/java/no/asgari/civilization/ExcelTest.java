@@ -32,8 +32,8 @@ public class ExcelTest {
 
     @Before
     public void checkThatFileExist() throws Exception {
-        in = this.getClass().getClassLoader().getResourceAsStream("gamedata-faf-waw.xlsx");
-        url = this.getClass().getClassLoader().getResource("gamedata-faf-waw.xlsx");
+        in = this.getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
+        url = this.getClass().getClassLoader().getResource("assets/gamedata-faf-waw.xlsx");
 
         assertNotNull(in);
         assertNotNull(url);
@@ -75,22 +75,22 @@ public class ExcelTest {
         Sheet sheet = wb.getSheet(HUTS.toString());
         assertNotNull(sheet);
 
-        List<Cell> hutCells = new ArrayList<>();
+        List<Cell> unfilteredHutCells = new ArrayList<>();
 
-        sheet.forEach(row -> row.forEach(cell -> hutCells.add(cell))
+        sheet.forEach(row -> row.forEach(cell -> unfilteredHutCells.add(cell))
         );
-        assertFalse(hutCells.isEmpty());
+        assertFalse(unfilteredHutCells.isEmpty());
 
-        List<String> huts = hutCells.stream()
-                .filter(p -> !p.toString().equals("RAND()"))
-                .map(c -> new String(c.toString()))
+        List<String> huts = unfilteredHutCells.stream()
+                .filter(p -> !p.toString().isEmpty())
+                .map(Object::toString)
                 .collect(Collectors.toList());
 
         Collections.shuffle(huts);
-        Queue<String> shuffledHuts = new LinkedList(huts);
+        Queue<String> shuffledHuts = new LinkedList<>(huts);
 
         System.out.println(shuffledHuts);
-        assertTrue(shuffledHuts.size() < hutCells.size());
+        assertTrue(shuffledHuts.size() <= unfilteredHutCells.size());
 
         int sizeOfHuts = shuffledHuts.size();
         String hut = shuffledHuts.poll();

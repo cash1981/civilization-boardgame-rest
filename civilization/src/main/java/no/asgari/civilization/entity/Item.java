@@ -1,5 +1,9 @@
-package no.asgari.civilization;
+package no.asgari.civilization.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
@@ -13,25 +17,40 @@ import java.io.Serializable;
  * description = Battle: Each time you start a battle with fewer units in your battle force than your opponent,
  *               your combat bonus is increased by 8 until the end of the battle.
  * used = true
+ * hidden = false
  *
  * name = America
  * type = null
  * description = null
  * used = false
+ * hidden = false;
  *
  * name = Barbarian Encampment
  * type = null
  * description = Start of Turn : Choose an empty square not in the outskirts of a city. Place a village token on that square.
  * used = true
+ * hidden = true;
  *
- * Serializable in case we decide to write everything to disc
  */
-public class Item implements Serializable {
+@Entity
+@Table(name = "item")
+@NamedQueries({
+        @NamedQuery(
+                name = "no.asgari.civilization.entity.Item.findAll",
+                query = "SELECT it FROM Item it"
+        )
+})
+public class Item {
 
-    private final String name;
-    private final String type;
-    private final String description;
+    private String name;
+    private String type;
+    private String description;
     private boolean used = false;
+    private boolean hidden = false;
+
+    private Owner owner;
+
+    public Item() {}
 
     public Item(String name) {
         this(name, null, null);
