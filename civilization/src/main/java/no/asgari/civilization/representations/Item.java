@@ -1,10 +1,4 @@
-package no.asgari.civilization.entity;
-
-import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import java.io.Serializable;
+package no.asgari.civilization.representations;
 
 /**
  * The item you pull for instance Great Person, Wonder, Civ etc
@@ -32,46 +26,47 @@ import java.io.Serializable;
  * hidden = true;
  *
  */
-@Entity
-@Table(name = "item")
-@NamedQueries({
-        @NamedQuery(
-                name = "no.asgari.civilization.entity.Item.findAll",
-                query = "SELECT it FROM Item it"
-        )
-})
 public class Item {
 
+    private long id;
     private String name;
     private String type;
     private String description;
     private boolean used = false;
     private boolean hidden = false;
+    private String owner; // game_id or player_id (username)
 
-    private Owner owner;
 
-    public Item() {}
-
-    public Item(String name) {
-        this(name, null, null);
+    public long getId() {
+        return id;
     }
 
-    public Item(String name, String type, String description) {
-        this.name = name;
-        this.type = type;
-        this.description = description;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getType() {
         return type;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public boolean isUsed() {
@@ -82,4 +77,19 @@ public class Item {
         this.used = used;
     }
 
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
 }

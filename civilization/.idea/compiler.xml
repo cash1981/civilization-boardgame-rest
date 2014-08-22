@@ -23,10 +23,12 @@
         <outputRelativeToContentRoot value="$AUTODEPLOY$" />
         <processorPath useClasspath="$AUTODEPLOY$" />
         <module name="civilization" />
+        <module name="reader30" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="civilization" target="1.8" />
+      <module name="reader30" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>

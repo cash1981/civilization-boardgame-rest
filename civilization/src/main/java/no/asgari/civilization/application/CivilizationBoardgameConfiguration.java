@@ -1,54 +1,25 @@
 package no.asgari.civilization.application;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
-import io.dropwizard.db.DataSourceFactory;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 public class CivilizationBoardgameConfiguration extends Configuration {
+
+    @JsonProperty
     @NotEmpty
-    private String template;
+    public String mongohost = System.getenv("OPENSHIFT_MONGODB_DB_HOST") == null ? "localhost" : System.getenv("OPENSHIFT_MONGODB_DB_HOST");
 
+    @JsonProperty
+    @Min(1)
+    @Max(65535)
+    public int mongoport = System.getenv("OPENSHIFT_MONGODB_DB_PORT") == null ? 27017 : Integer.parseInt(System.getenv("OPENSHIFT_MONGODB_DB_PORT"));
+
+    @JsonProperty
     @NotEmpty
-    private String defaultName = "Stranger";
+    public String mongodb = System.getenv("OPENSHIFT_APP_NAME") == null ? "mydb" : System.getenv("OPENSHIFT_APP_NAME");
 
-    @Valid
-    @NotNull
-    private DataSourceFactory database = new DataSourceFactory();
-
-    @JsonProperty
-    public String getTemplate() {
-        return template;
-    }
-
-    @JsonProperty
-    public void setTemplate(String template) {
-        this.template = template;
-    }
-
-    @JsonProperty
-    public String getDefaultName() {
-        return defaultName;
-    }
-
-    @JsonProperty
-    public void setDefaultName(String defaultName) {
-        this.defaultName = defaultName;
-    }
-
-    public Template buildTemplate() {
-        return new Template(template, defaultName);
-    }
-
-    @JsonProperty("database")
-    public DataSourceFactory getDataSourceFactory() {
-        return database;
-    }
-
-    @JsonProperty("database")
-    public void setDataSourceFactory(DataSourceFactory dataSourceFactory) {
-        this.database = dataSourceFactory;
-    }
 }
