@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/civilization.iml" filepath="$PROJECT_DIR$/civilization.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../dropwizard/dropwizard-example/dropwizard-example.iml" filepath="$PROJECT_DIR$/../../dropwizard/dropwizard-example/dropwizard-example.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../day13-dropwizard-mongodb-demo-app/reader30.iml" filepath="$PROJECT_DIR$/../../day13-dropwizard-mongodb-demo-app/reader30.iml" />
     </modules>
   </component>

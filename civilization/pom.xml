@@ -36,10 +36,16 @@
             <version>${dropwizard.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.4.178</version>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-assets</artifactId>
+            <version>${dropwizard.version}</version>
         </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>com.h2database</groupId>-->
+            <!--<artifactId>h2</artifactId>-->
+            <!--<version>1.4.178</version>-->
+        <!--</dependency>-->
 
         <!-- !dropwizard -->
         <dependency>
@@ -82,13 +88,6 @@
         </dependency>
 -->
         <!-- test -->
-<!--
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-client</artifactId>
-            <scope>test</scope>
-        </dependency>
--->
         <dependency>
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-testing</artifactId>
@@ -102,6 +101,13 @@
             <version>4.9</version>
             <scope>test</scope>
         </dependency>
+        <!--
+                <dependency>
+                    <groupId>org.glassfish.jersey.core</groupId>
+                    <artifactId>jersey-client</artifactId>
+                    <scope>test</scope>
+                </dependency>
+        -->
     </dependencies>
 
     <build>
@@ -146,7 +152,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>no.asgari.civilization.application.CivilizationBoardgameApplication</mainClass>
+                    <mainClass>no.asgari.civilization.application.CivBoardgameRandomizerApplication</mainClass>
                 </configuration>
             </plugin>
             <plugin>
@@ -176,7 +182,7 @@
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>no.asgari.civilization.application.CivilizationBoardgameApplication</mainClass>
+                                    <mainClass>no.asgari.civilization.application.CivBoardgameRandomizerApplication</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

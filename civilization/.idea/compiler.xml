@@ -23,11 +23,13 @@
         <outputRelativeToContentRoot value="$AUTODEPLOY$" />
         <processorPath useClasspath="$AUTODEPLOY$" />
         <module name="civilization" />
+        <module name="dropwizard-example" />
         <module name="reader30" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="civilization" target="1.8" />
+      <module name="dropwizard-example" target="1.7" />
       <module name="reader30" target="1.7" />
     </bytecodeTargetLevel>
   </component>

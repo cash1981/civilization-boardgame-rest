@@ -17,8 +17,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
-import static no.asgari.civilization.ExcelSheet.Sheet.HUTS;
+import static no.asgari.civilization.ExcelSheet.HUTS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -77,12 +79,14 @@ public class ExcelTest {
 
         List<Cell> unfilteredHutCells = new ArrayList<>();
 
-        sheet.forEach(row -> row.forEach(cell -> unfilteredHutCells.add(cell))
+        sheet.forEach(row -> row.forEach(unfilteredHutCells::add)
         );
+
         assertFalse(unfilteredHutCells.isEmpty());
 
         List<String> huts = unfilteredHutCells.stream()
                 .filter(p -> !p.toString().isEmpty())
+                .filter(cell -> cell.getRow().getRowNum() != 0)
                 .map(Object::toString)
                 .collect(Collectors.toList());
 
@@ -96,5 +100,13 @@ public class ExcelTest {
         String hut = shuffledHuts.poll();
         System.out.println(hut);
         assertEquals(sizeOfHuts - 1, shuffledHuts.size());
+    }
+
+    public static <T> Stream<T> stream(Iterable<T> in) {
+        return StreamSupport.stream(in.spliterator(), false);
+    }
+
+    public static <T> Stream<T> parallelStream(Iterable<T> in) {
+        return StreamSupport.stream(in.spliterator(), true);
     }
 }

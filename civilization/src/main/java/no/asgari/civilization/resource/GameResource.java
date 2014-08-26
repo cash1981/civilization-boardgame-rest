@@ -23,13 +23,13 @@ public class GameResource {
 
     private JacksonDBCollection<Game, String> collection;
 
-    public GameResource(JacksonDBCollection<Game, String> blogs) {
-        this.collection = blogs;
+    public GameResource(JacksonDBCollection<Game, String> games) {
+        this.collection = games;
     }
 
     @GET
     @Timed
-    public List<Game> gamesTimeline() {
+    public List<Game> getAllGames() {
         DBCursor<Game> dbCursor = collection.find();
         List<Game> blogs = new ArrayList<>();
         while (dbCursor.hasNext()) {

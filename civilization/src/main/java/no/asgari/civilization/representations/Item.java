@@ -1,11 +1,19 @@
 package no.asgari.civilization.representations;
 
+import net.vz.mongodb.jackson.Id;
+import net.vz.mongodb.jackson.ObjectId;
+import no.asgari.civilization.ExcelSheet;
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotNull;
+
 /**
  * The item you pull for instance Great Person, Wonder, Civ etc
  * Most of them will not have type or description.
  * The @used attribute will determine if the item is available or not
  * ie:
  *
+ * sheet = GREAT_PERSON
  * name = Leonidas
  * type = General
  * description = Battle: Each time you start a battle with fewer units in your battle force than your opponent,
@@ -13,12 +21,14 @@ package no.asgari.civilization.representations;
  * used = true
  * hidden = false
  *
+ * sheet = CIV
  * name = America
  * type = null
  * description = null
  * used = false
  * hidden = false;
  *
+ * sheet = VILLAGES
  * name = Barbarian Encampment
  * type = null
  * description = Start of Turn : Choose an empty square not in the outskirts of a city. Place a village token on that square.
@@ -26,31 +36,60 @@ package no.asgari.civilization.representations;
  * hidden = true;
  *
  */
-public class Item {
+public class Item implements Comparable<Item> {
 
-    private long id;
-    private String name;
+    @Id
+    @ObjectId
+    private String id;
+
+    @NotNull
+    private final ExcelSheet excelSheet;
+    @NotBlank
+    private final String name;
+
     private String type;
     private String description;
-    private boolean used = false;
-    private boolean hidden = false;
+    private boolean used;
+    private boolean hidden;
     private String owner; // game_id or player_id (username)
 
-
-    public long getId() {
-        return id;
+    public Item(ExcelSheet excelSheet, String name) {
+        this.excelSheet = excelSheet;
+        this.name = name;
+        this.used = false;
+        this.hidden = true;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed(boolean used) {
+        this.used = used;
+    }
+
+    public ExcelSheet getExcelSheet() {
+        return excelSheet;
     }
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getType() {
@@ -69,27 +108,30 @@ public class Item {
         this.description = description;
     }
 
-    public boolean isUsed() {
-        return used;
+    public String getId() {
+        return id;
     }
 
-    public void setUsed(boolean used) {
-        this.used = used;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public boolean isHidden() {
-        return hidden;
+    @Override
+    public int compareTo(Item o) {
+        return name.compareTo(o.getName());
     }
 
-    public void setHidden(boolean hidden) {
-        this.hidden = hidden;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id='" + id + '\'' +
+                ", excelSheet=" + excelSheet +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", description='" + description + '\'' +
+                ", used=" + used +
+                ", hidden=" + hidden +
+                ", owner='" + owner + '\'' +
+                '}';
     }
 }

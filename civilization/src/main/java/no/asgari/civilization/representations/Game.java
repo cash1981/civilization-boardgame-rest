@@ -1,15 +1,23 @@
 package no.asgari.civilization.representations;
 
 import com.google.common.collect.Lists;
+import net.vz.mongodb.jackson.Id;
+import net.vz.mongodb.jackson.ObjectId;
+import org.hibernate.validator.constraints.NotBlank;
 
+import java.util.Date;
 import java.util.List;
 
 public class Game {
+    @Id
+    @ObjectId
+    private String id;
 
     private List<Player> players = Lists.newArrayList();
     private List<Item> items = Lists.newArrayList();
-    private String url;
+    @NotBlank
     private String name;
+    private Date created = new Date();
 
     public List<Item> getItems() {
         return items;
@@ -27,19 +35,27 @@ public class Game {
         this.players = players;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 }

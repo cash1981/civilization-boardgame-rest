@@ -7,7 +7,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-public class CivilizationBoardgameConfiguration extends Configuration {
+//TODO: Fiks openshift env name
+public class CivBoardGameRandomizerConfiguration extends Configuration {
 
     @JsonProperty
     @NotEmpty

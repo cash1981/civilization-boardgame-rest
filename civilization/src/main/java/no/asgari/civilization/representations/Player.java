@@ -4,9 +4,7 @@ import com.google.common.collect.Lists;
 import net.vz.mongodb.jackson.Id;
 import net.vz.mongodb.jackson.ObjectId;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.URL;
 
-import java.util.Date;
 import java.util.List;
 
 public class Player {
@@ -16,15 +14,36 @@ public class Player {
     private String id;
 
     @NotBlank
-    private String title;
+    private String username;
 
-    @URL
     @NotBlank
-    private String url;
-
-    private final Date publishedOn = new Date();
+    private String password;
 
     private List<Item> items = Lists.newArrayList();
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
 
     public String getId() {
         return id;
@@ -34,23 +53,4 @@ public class Player {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public Date getPublishedOn() {
-        return publishedOn;
-    }
 }
