@@ -2,10 +2,10 @@ package no.asgari.civilization.representations;
 
 public class GameBuilder {
 
-    public static Game createGame(String id) {
-        Game game = new Game();
-        game.setId(id);
-        return game;
+    public static PBF createGame(String id) {
+        PBF PBF = new PBF();
+        PBF.setId(id);
+        return PBF;
     }
 
     public static Player createPlayer(String id, String username) {

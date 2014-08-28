@@ -36,7 +36,7 @@ import javax.validation.constraints.NotNull;
  * hidden = true;
  *
  */
-public class Item implements Comparable<Item> {
+public class Item {
 
     @Id
     @ObjectId
@@ -114,11 +114,6 @@ public class Item implements Comparable<Item> {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    @Override
-    public int compareTo(Item o) {
-        return name.compareTo(o.getName());
     }
 
     @Override

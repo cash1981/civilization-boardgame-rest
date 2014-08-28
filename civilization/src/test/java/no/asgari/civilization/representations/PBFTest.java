@@ -22,7 +22,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public class GameTest {
+public class PBFTest {
 
     /**
      * This test will create the setup with all items
@@ -30,7 +30,7 @@ public class GameTest {
      */
     @Test
     public void createGameTest() throws Exception {
-        Game game = GameBuilder.createGame("1");
+        PBF PBF = GameBuilder.createGame("1");
         List<Player> players = Lists.newArrayList(
             GameBuilder.createPlayer("1", "cash1981"),
             GameBuilder.createPlayer("2", "Itchi"),
@@ -51,6 +51,9 @@ public class GameTest {
 
         Queue<Item> shuffledCultureIII = getShuffledCultureIIIFromExcel(wb);
         assertNotNull(shuffledCultureIII);
+
+        Queue<Item> shuffledGPs = getShuffledGreatPersonFromExcel(wb);
+        assertNotNull(shuffledGPs);
 
         wb.close();
     }
@@ -93,16 +96,32 @@ public class GameTest {
         assertNotNull(culture1Sheet);
 
         List<Cell> unfilteredCells = new ArrayList<>();
-        culture1Sheet.forEach(row -> row.forEach(cell -> unfilteredCells.add(cell))
+        culture1Sheet.forEach(row -> row.forEach(unfilteredCells::add)
         );
 
-        List<Item> cultures = unfilteredCells.stream()
+        List<Item> cultures = unfilteredCells.parallelStream()
                 .filter(p -> !p.toString().isEmpty())
                 .filter(p -> !p.toString().equals("RAND()"))
                 .filter(p -> p.getRow().getRowNum() != 0)
                 .filter(cell -> cell.getColumnIndex() == 0)
                 .map(cell -> createItem(ExcelSheet.CULTURE_1, cell.toString()))
                 .collect(Collectors.toList());
+
+
+        List<String> description = unfilteredCells.parallelStream()
+                .filter(p -> !p.toString().isEmpty())
+                .filter(p -> !p.toString().equals("RAND()"))
+                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(cell -> cell.getColumnIndex() == 1)
+                .map(Object::toString)
+                .collect(Collectors.toList());
+
+        //Description should be in the same order as cultures
+        assertEquals(description.size(), cultures.size());
+        for(int i = 0; i < cultures.size(); i++) {
+            Item item = cultures.get(i);
+            item.setDescription(description.get(i));
+        }
 
         Collections.shuffle(cultures);
 
@@ -118,7 +137,7 @@ public class GameTest {
         assertNotNull(culture2Sheet);
 
         List<Cell> unfilteredCells = new ArrayList<>();
-        culture2Sheet.forEach(row -> row.forEach(cell -> unfilteredCells.add(cell))
+        culture2Sheet.forEach(row -> row.forEach(unfilteredCells::add)
         );
 
         List<Item> cultures = unfilteredCells.stream()
@@ -128,6 +147,21 @@ public class GameTest {
                 .filter(cell -> cell.getColumnIndex() == 0)
                 .map(cell -> createItem(ExcelSheet.CULTURE_2, cell.toString()))
                 .collect(Collectors.toList());
+
+        List<String> description = unfilteredCells.parallelStream()
+                .filter(p -> !p.toString().isEmpty())
+                .filter(p -> !p.toString().equals("RAND()"))
+                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(cell -> cell.getColumnIndex() == 1)
+                .map(Object::toString)
+                .collect(Collectors.toList());
+
+        //Description should be in the same order as cultures
+        assertEquals(description.size(), cultures.size());
+        for(int i = 0; i < cultures.size(); i++) {
+            Item item = cultures.get(i);
+            item.setDescription(description.get(i));
+        }
 
         Collections.shuffle(cultures);
 
@@ -143,8 +177,7 @@ public class GameTest {
         assertNotNull(culture3Sheet);
 
         List<Cell> unfilteredCells = new ArrayList<>();
-        culture3Sheet.forEach(row -> row.forEach(cell -> unfilteredCells.add(cell))
-        );
+        culture3Sheet.forEach(row -> row.forEach(unfilteredCells::add));
 
         List<Item> cultures = unfilteredCells.stream()
                 .filter(p -> !p.toString().isEmpty())
@@ -154,6 +187,21 @@ public class GameTest {
                 .map(cell -> createItem(ExcelSheet.CULTURE_3, cell.toString()))
                 .collect(Collectors.toList());
 
+        List<String> description = unfilteredCells.parallelStream()
+                .filter(p -> !p.toString().isEmpty())
+                .filter(p -> !p.toString().equals("RAND()"))
+                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(cell -> cell.getColumnIndex() == 1)
+                .map(Object::toString)
+                .collect(Collectors.toList());
+
+        //Description should be in the same order as cultures
+        assertEquals(description.size(), cultures.size());
+        for(int i = 0; i < cultures.size(); i++) {
+            Item item = cultures.get(i);
+            item.setDescription(description.get(i));
+        }
+
         Collections.shuffle(cultures);
 
         //Now we want to take every other one
@@ -161,6 +209,55 @@ public class GameTest {
         assertQueue(culture3, cultures);
         System.out.println(culture3);
         return culture3;
+    }
+
+    private Queue<Item> getShuffledGreatPersonFromExcel(Workbook wb) {
+        Sheet gpSheet = wb.getSheet(ExcelSheet.GREAT_PERSON.toString());
+        assertNotNull(gpSheet);
+
+        List<Cell> unfilteredCells = new ArrayList<>();
+        gpSheet.forEach(row -> row.forEach(unfilteredCells::add));
+
+        List<Item> gps = unfilteredCells.stream()
+                .filter(p -> !p.toString().isEmpty())
+                .filter(p -> !p.toString().equals("RAND()"))
+                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(cell -> cell.getColumnIndex() == 0)
+                .map(cell -> createItem(ExcelSheet.GREAT_PERSON, cell.toString()))
+                .collect(Collectors.toList());
+
+        List<String> tile = unfilteredCells.parallelStream()
+                .filter(p -> !p.toString().isEmpty())
+                .filter(p -> !p.toString().equals("RAND()"))
+                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(cell -> cell.getColumnIndex() == 1)
+                .map(Object::toString)
+                .collect(Collectors.toList());
+
+        List<String> description = unfilteredCells.parallelStream()
+                .filter(p -> !p.toString().isEmpty())
+                .filter(p -> !p.toString().equals("RAND()"))
+                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(cell -> cell.getColumnIndex() == 2)
+                .map(Object::toString)
+                .collect(Collectors.toList());
+
+        //Description should be in the same order as cultures
+        assertEquals(description.size(), gps.size());
+        assertEquals(tile.size(), gps.size());
+        for(int i = 0; i < gps.size(); i++) {
+            Item item = gps.get(i);
+            item.setDescription(description.get(i));
+            item.setType(tile.get(i));
+        }
+
+        Collections.shuffle(gps);
+
+        //Now we want to take every other one
+        Queue<Item> gpQueue = new LinkedList<>(gps);
+        assertQueue(gpQueue, gps);
+        System.out.println(gpQueue);
+        return gpQueue;
     }
 
     private static Item createItem(ExcelSheet excelSheet, String name) {

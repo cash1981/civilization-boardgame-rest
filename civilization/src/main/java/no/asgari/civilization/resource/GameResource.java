@@ -3,7 +3,7 @@ package no.asgari.civilization.resource;
 import com.codahale.metrics.annotation.Timed;
 import net.vz.mongodb.jackson.DBCursor;
 import net.vz.mongodb.jackson.JacksonDBCollection;
-import no.asgari.civilization.representations.Game;
+import no.asgari.civilization.representations.PBF;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -21,19 +21,19 @@ import java.util.List;
 @Consumes(value = MediaType.APPLICATION_JSON)
 public class GameResource {
 
-    private JacksonDBCollection<Game, String> collection;
+    private JacksonDBCollection<PBF, String> collection;
 
-    public GameResource(JacksonDBCollection<Game, String> games) {
+    public GameResource(JacksonDBCollection<PBF, String> games) {
         this.collection = games;
     }
 
     @GET
     @Timed
-    public List<Game> getAllGames() {
-        DBCursor<Game> dbCursor = collection.find();
-        List<Game> blogs = new ArrayList<>();
+    public List<PBF> getAllGames() {
+        DBCursor<PBF> dbCursor = collection.find();
+        List<PBF> blogs = new ArrayList<>();
         while (dbCursor.hasNext()) {
-            Game blog = dbCursor.next();
+            PBF blog = dbCursor.next();
             blogs.add(blog);
         }
         return blogs;
@@ -42,8 +42,8 @@ public class GameResource {
 
     @POST
     @Timed
-    public Response createNewGame(@Valid Game game) {
-        collection.insert(game);
+    public Response createNewGame(@Valid PBF PBF) {
+        collection.insert(PBF);
         return Response.noContent().build();
     }
 

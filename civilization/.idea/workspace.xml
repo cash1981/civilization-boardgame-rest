@@ -28,22 +28,30 @@
       <file leaf-file-name="GameBuilder.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/GameBuilder.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="391">
+            <state vertical-scroll-proportion="0.0" vertical-offset="34" max-vertical-offset="391">
               <caret line="2" column="24" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="24" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GameTest.java" pinned="false" current="$AUTODEPLOY$" current-in-tab="$AUTODEPLOY$">
-        <entry file="file://$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/GameTest.java">
+      <file leaf-file-name="PBFTest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/PBFTest.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.9949833" vertical-offset="1425" max-vertical-offset="2992">
-              <caret line="154" column="46" selection-start-line="154" selection-start-column="46" selection-end-line="154" selection-end-column="46" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4267">
+              <caret line="260" column="5" selection-start-line="260" selection-start-column="5" selection-end-line="260" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Game.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/Game.java">
+          <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="374">
+              <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="$AUTODEPLOY$" />
-                <element signature="e#6214#6215#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#6263#6264#0" expanded="$AUTODEPLOY$" />
               </folding>
             </state>
           </provider>
@@ -52,51 +60,19 @@
       <file leaf-file-name="Optional.java" pinned="false" current="false" current-in-tab="false">
         <entry file="jar://C:/apps/jdk1.8.0_05/src.zip!/java/util/Optional.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="3966" max-vertical-offset="5321">
+            <state vertical-scroll-proportion="0.0" vertical-offset="4845" max-vertical-offset="6035">
               <caret line="285" column="35" selection-start-line="285" selection-start-column="35" selection-end-line="285" selection-end-column="35" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Item.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="Item.java" pinned="false" current="$AUTODEPLOY$" current-in-tab="$AUTODEPLOY$">
         <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Item.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1833" max-vertical-offset="2431">
-              <caret line="124" column="18" selection-start-line="124" selection-start-column="18" selection-end-line="124" selection-end-column="18" />
-              <folding>
-                <element signature="imports" expanded="$AUTODEPLOY$" />
-                <element signature="e#1672#1673#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1700#1701#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1742#1743#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1776#1777#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1809#1810#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1838#1839#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1883#1884#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1919#1920#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1950#1951#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1977#1978#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#2018#2019#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#2050#2051#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#2091#2092#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#2124#2125#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#2155#2156#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#2182#2183#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#2213#2214#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#2240#2241#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#2280#2281#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#2312#2313#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#2350#2351#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#2384#2385#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#2438#2439#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#2484#2485#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#2513#2514#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#2538#2539#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#2574#2575#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#2602#2603#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#2652#2653#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#2702#2703#0" expanded="$AUTODEPLOY$" />
-              </folding>
+            <state vertical-scroll-proportion="0.31384614" vertical-offset="153" max-vertical-offset="1785">
+              <caret line="32" column="14" selection-start-line="32" selection-start-column="14" selection-end-line="32" selection-end-column="14" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -104,15 +80,9 @@
       <file leaf-file-name="ExcelTest.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/no/asgari/civilization/ExcelTest.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1088" max-vertical-offset="1972">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1530" max-vertical-offset="2006">
               <caret line="90" column="46" selection-start-line="90" selection-start-column="46" selection-end-line="90" selection-end-column="46" />
-              <folding>
-                <element signature="imports" expanded="$AUTODEPLOY$" />
-                <element signature="e#3278#3279#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#3346#3347#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#3412#3413#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#3479#3480#0" expanded="$AUTODEPLOY$" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -120,7 +90,7 @@
       <file leaf-file-name="PlayerBuilder.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/PlayerBuilder.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="289">
+            <state vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="289">
               <caret line="8" column="17" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
               <folding />
             </state>
@@ -130,12 +100,9 @@
       <file leaf-file-name="GameResource.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/GameResource.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="714">
+            <state vertical-scroll-proportion="0.0" vertical-offset="748" max-vertical-offset="952">
               <caret line="44" column="23" selection-start-line="44" selection-start-column="23" selection-end-line="44" selection-end-column="23" />
-              <folding>
-                <element signature="e#777#778#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#816#817#0" expanded="$AUTODEPLOY$" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -143,8 +110,8 @@
       <file leaf-file-name="IndexResource.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/IndexResource.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="527">
-              <caret line="28" column="19" selection-start-line="28" selection-start-column="19" selection-end-line="28" selection-end-column="19" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="476" max-vertical-offset="748">
+              <caret line="28" column="17" selection-start-line="28" selection-start-column="17" selection-end-line="28" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -153,7 +120,7 @@
       <file leaf-file-name="Reader30Configuration.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../../day13-dropwizard-mongodb-demo-app/src/main/java/com/shekhar/reader30/Reader30Configuration.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="374">
+            <state vertical-scroll-proportion="0.0" vertical-offset="340" max-vertical-offset="476">
               <caret line="20" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
               <folding />
             </state>
@@ -163,32 +130,43 @@
       <file leaf-file-name="CivBoardGameRandomizerConfiguration.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/application/CivBoardGameRandomizerConfiguration.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="459">
+            <state vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="544">
               <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Game.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Game.java">
+      <file leaf-file-name="PBF.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/PBF.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="17" max-vertical-offset="1003">
-              <caret line="17" column="4" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1326">
+              <caret line="57" column="0" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
               <folding>
-                <element signature="imports" expanded="$AUTODEPLOY$" />
-                <element signature="e#700#701#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#622#623#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#650#651#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#696#697#0" expanded="$AUTODEPLOY$" />
                 <element signature="e#730#731#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#782#783#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#820#821#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#979#980#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1004#1005#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1040#1041#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1068#1069#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1100#1101#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1130#1131#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1174#1175#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#1212#1213#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#770#771#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#800#801#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#852#853#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#890#891#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#921#922#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#948#949#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#988#989#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#1020#1021#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#1049#1050#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#1074#1075#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#1110#1111#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#1138#1139#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#1170#1171#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#1200#1201#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#1244#1245#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#1282#1283#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#1379#1380#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#1414#1415#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#1467#1468#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#1515#1516#0" expanded="$AUTODEPLOY$" />
               </folding>
             </state>
           </provider>
@@ -197,11 +175,9 @@
       <file leaf-file-name="ExcelSheet.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/ExcelSheet.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="578">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="561">
               <caret line="28" column="63" selection-start-line="28" selection-start-column="63" selection-end-line="28" selection-end-column="63" />
-              <folding>
-                <element signature="imports" expanded="$AUTODEPLOY$" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -209,7 +185,7 @@
       <file leaf-file-name="ReferencePipeline.java" pinned="false" current="false" current-in-tab="false">
         <entry file="jar://C:/apps/jdk1.8.0_05/src.zip!/java/util/stream/ReferencePipeline.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="6247" max-vertical-offset="9639">
+            <state vertical-scroll-proportion="0.0" vertical-offset="7854" max-vertical-offset="11339">
               <caret line="462" column="33" selection-start-line="462" selection-start-column="33" selection-end-line="462" selection-end-column="33" />
               <folding />
             </state>
@@ -219,11 +195,9 @@
       <file leaf-file-name="Player.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Player.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="782">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="697">
               <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-              <folding>
-                <element signature="imports" expanded="$AUTODEPLOY$" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -277,12 +251,15 @@
         <option value="$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/PlayerBuilder.java" />
         <option value="$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/GameBuilder.java" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Player.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Game.java" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/Sheet.java" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/ExcelSheet.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Item.java" />
         <option value="$PROJECT_DIR$/src/test/java/no/asgari/civilization/ExcelTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Item.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/Randomizer.java" />
         <option value="$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/GameTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Game.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/Game.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/PBF.java" />
       </list>
     </option>
   </component>
@@ -459,84 +436,6 @@
               <option name="myItemId" value="poi-ooxml-3.11-beta1.jar" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="poi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Maven: org.apache.poi:poi-ooxml:3.11-beta1" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="poi-ooxml-3.11-beta1.jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="poi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xssf" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Maven: org.apache.poi:poi-ooxml:3.11-beta1" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="poi-ooxml-3.11-beta1.jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="poi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xssf" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="usermodel" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Maven: org.apache.poi:poi-ooxml:3.11-beta1" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="poi-ooxml-3.11-beta1.jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -575,62 +474,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="poi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Maven: org.apache.poi:poi:3.11-beta1" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="poi-3.11-beta1.jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="poi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ss" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Maven: org.apache.poi:poi:3.11-beta1" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="poi-3.11-beta1.jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="poi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ss" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="usermodel" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -689,94 +532,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="dropwizard-core-0.7.1.jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Maven: io.dropwizard:dropwizard-core:0.7.1" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dropwizard-core-0.7.1.jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dropwizard" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Maven: io.dropwizard:dropwizard-core:0.7.1" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dropwizard-core-0.7.1.jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dropwizard" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="setup" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Maven: io.dropwizard:dropwizard-assets:0.7.0" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dropwizard-assets-0.7.0.jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Maven: io.dropwizard:dropwizard-assets:0.7.0" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dropwizard-assets-0.7.0.jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="assets" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -895,116 +650,6 @@
               <option name="myItemId" value="civilization" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="&lt; 1.8 &gt;" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="rt.jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lang" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="day13-dropwizard-mongodb-demo-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="day13-dropwizard-mongodb-demo-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="day13-dropwizard-mongodb-demo-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="reader30" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="day13-dropwizard-mongodb-demo-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="reader30" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="representations" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -1089,36 +734,6 @@
               <option name="myItemId" value="main" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="assets" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -1143,36 +758,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1251,7 +836,7 @@
       <recent name="C:\wses\Civilization\civilization\src\main\resources\assets" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.GameTest">
+  <component name="RunManager" selected="JUnit.PBFTest">
     <configuration default="false" name="CivBoardgameRandomizerApplication" type="Application" factoryName="Application" temporary="$AUTODEPLOY$" nameIsGenerated="$AUTODEPLOY$">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="$AUTODEPLOY$" runner="idea">
         <pattern>
@@ -1308,7 +893,7 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="GameTest.createGameTest" type="JUnit" factoryName="JUnit" temporary="$AUTODEPLOY$" nameIsGenerated="$AUTODEPLOY$">
+    <configuration default="false" name="PBFTest.createGameTest" type="JUnit" factoryName="JUnit" temporary="$AUTODEPLOY$" nameIsGenerated="$AUTODEPLOY$">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="$AUTODEPLOY$" runner="idea">
         <pattern>
           <option name="PATTERN" value="no.asgari.civilization.representations.*" />
@@ -1319,7 +904,7 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="no.asgari.civilization.representations" />
-      <option name="MAIN_CLASS_NAME" value="no.asgari.civilization.representations.GameTest" />
+      <option name="MAIN_CLASS_NAME" value="no.asgari.civilization.representations.PBFTest" />
       <option name="METHOD_NAME" value="createGameTest" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
@@ -1336,7 +921,7 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="GameTest" type="JUnit" factoryName="JUnit" temporary="$AUTODEPLOY$" nameIsGenerated="$AUTODEPLOY$">
+    <configuration default="false" name="PBFTest" type="JUnit" factoryName="JUnit" temporary="$AUTODEPLOY$" nameIsGenerated="$AUTODEPLOY$">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="$AUTODEPLOY$" runner="idea">
         <pattern>
           <option name="PATTERN" value="no.asgari.civilization.representations.*" />
@@ -1347,7 +932,7 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="no.asgari.civilization.representations" />
-      <option name="MAIN_CLASS_NAME" value="no.asgari.civilization.representations.GameTest" />
+      <option name="MAIN_CLASS_NAME" value="no.asgari.civilization.representations.PBFTest" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" value="-ea" />
@@ -1560,14 +1145,14 @@
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Application.CivBoardgameRandomizerApplication" />
       <item index="1" class="java.lang.String" itemvalue="JUnit.ExcelTest.getHutSheet" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.GameTest.createGameTest" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.GameTest" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.PBFTest.createGameTest" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.PBFTest" />
       <item index="4" class="java.lang.String" itemvalue="JUnit.ExcelTest.iterateXLS" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.GameTest" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.GameTest.createGameTest" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.PBFTest" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.PBFTest.createGameTest" />
         <item index="2" class="java.lang.String" itemvalue="JUnit.ExcelTest.getHutSheet" />
         <item index="3" class="java.lang.String" itemvalue="JUnit.ExcelTest.iterateXLS" />
         <item index="4" class="java.lang.String" itemvalue="Application.CivBoardgameRandomizerApplication" />
@@ -1598,12 +1183,14 @@
       <workItem from="1408713343814" duration="835000" />
       <workItem from="1408714199124" duration="2719000" />
       <workItem from="1408950732352" duration="3007000" />
-      <workItem from="1409048185874" duration="13876000" />
+      <workItem from="1409048185874" duration="15982000" />
+      <workItem from="1409135868629" duration="25000" />
+      <workItem from="1409207454434" duration="1132000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="46968000" />
+    <option name="totallyTimeSpent" value="50231000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-4" y="-4" width="1928" height="1164" extended-state="6" />
@@ -1617,26 +1204,26 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32960597" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="$AUTODEPLOY$" weight="0.2518637" sideWeight="0.5007278" order="2" side_tool="$AUTODEPLOY$" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="$AUTODEPLOY$" weight="0.2518637" sideWeight="0.50097847" order="2" side_tool="$AUTODEPLOY$" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33170253" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="$AUTODEPLOY$" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="FindBugs-IDEA" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32941177" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Analysis" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="$AUTODEPLOY$" weight="0.19595315" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="$AUTODEPLOY$" weight="0.12034079" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="$AUTODEPLOY$" weight="0.2518637" sideWeight="0.4992722" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="$AUTODEPLOY$" weight="0.32647058" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="$AUTODEPLOY$" weight="0.2518637" sideWeight="0.49902153" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32647058" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32941177" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32941177" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1659,7 +1246,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="15" />
+      <option name="time" value="17" />
     </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
@@ -1686,21 +1273,6 @@
     </option>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../../day13-dropwizard-mongodb-demo-app/src/main/java/com/shekhar/reader30/MongoHealthCheck.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.071278825" vertical-offset="0" max-vertical-offset="954">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../day13-dropwizard-mongodb-demo-app/src/main/java/com/shekhar/reader30/resources/IndexResource.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.071278825" vertical-offset="0" max-vertical-offset="954">
-          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/io/dropwizard/dropwizard-core/0.7.1/dropwizard-core-0.7.1-sources.jar!/io/dropwizard/setup/Environment.java">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.12473795" vertical-offset="561" max-vertical-offset="2227">
@@ -1712,7 +1284,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="476">
           <caret line="12" column="16" selection-start-line="12" selection-start-column="16" selection-end-line="12" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1727,11 +1298,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.08928572" vertical-offset="0" max-vertical-offset="952">
           <caret line="5" column="47" selection-start-line="5" selection-start-column="47" selection-end-line="5" selection-end-column="47" />
-          <folding>
-            <element signature="imports" expanded="$AUTODEPLOY$" />
-            <element signature="e#240#241#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#274#275#0" expanded="$AUTODEPLOY$" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1739,7 +1305,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="391">
           <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1747,7 +1312,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.2494759" vertical-offset="0" max-vertical-offset="954">
           <caret line="25" column="37" selection-start-line="25" selection-start-column="37" selection-end-line="25" selection-end-column="37" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1755,7 +1319,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="187">
           <caret line="3" column="47" selection-start-line="3" selection-start-column="47" selection-end-line="3" selection-end-column="47" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1763,7 +1326,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="73" max-vertical-offset="1700">
           <caret line="31" column="16" selection-start-line="31" selection-start-column="16" selection-end-line="31" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1771,7 +1333,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="984" max-vertical-offset="2754">
           <caret line="122" column="7" selection-start-line="122" selection-start-column="7" selection-end-line="122" selection-end-column="7" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1779,7 +1340,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.05419766" vertical-offset="0" max-vertical-offset="941">
           <caret line="4" column="28" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="28" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1787,7 +1347,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="952">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1795,7 +1354,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.125" vertical-offset="0" max-vertical-offset="952">
           <caret line="16" column="11" selection-start-line="16" selection-start-column="11" selection-end-line="16" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1803,7 +1361,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="27" max-vertical-offset="5151">
           <caret line="21" column="73" selection-start-line="21" selection-start-column="73" selection-end-line="21" selection-end-column="73" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1811,7 +1368,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334" vertical-offset="1336" max-vertical-offset="24531">
           <caret line="137" column="51" selection-start-line="137" selection-start-column="51" selection-end-line="137" selection-end-column="51" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1819,7 +1375,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.07303974" vertical-offset="0" max-vertical-offset="931">
           <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1843,17 +1398,14 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="714">
           <caret line="44" column="23" selection-start-line="44" selection-start-column="23" selection-end-line="44" selection-end-column="23" />
-          <folding>
-            <element signature="e#777#778#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#816#817#0" expanded="$AUTODEPLOY$" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/IndexResource.java">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="527">
-          <caret line="28" column="19" selection-start-line="28" selection-start-column="19" selection-end-line="28" selection-end-column="19" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="476" max-vertical-offset="748">
+          <caret line="28" column="17" selection-start-line="28" selection-start-column="17" selection-end-line="28" selection-end-column="17" />
           <folding />
         </state>
       </provider>
@@ -1862,9 +1414,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.18259935" vertical-offset="0" max-vertical-offset="931">
           <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1872,7 +1421,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.14285715" vertical-offset="0" max-vertical-offset="952">
           <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1880,7 +1428,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3392857" vertical-offset="0" max-vertical-offset="952">
           <caret line="28" column="14" selection-start-line="28" selection-start-column="14" selection-end-line="28" selection-end-column="14" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1888,7 +1435,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="1292">
           <caret line="20" column="13" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1896,7 +1442,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.25" vertical-offset="153" max-vertical-offset="1768">
           <caret line="29" column="11" selection-start-line="29" selection-start-column="11" selection-end-line="29" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1904,9 +1449,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.4717369" vertical-offset="153" max-vertical-offset="1156">
           <caret line="40" column="37" selection-start-line="40" selection-start-column="37" selection-end-line="40" selection-end-column="37" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1914,7 +1456,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5236">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1922,7 +1463,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.54791665" vertical-offset="171" max-vertical-offset="3366">
           <caret line="41" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1930,9 +1470,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6462513" vertical-offset="0" max-vertical-offset="947">
           <caret line="36" column="50" selection-start-line="36" selection-start-column="50" selection-end-line="36" selection-end-column="50" />
-          <folding>
-            <element signature="imports" expanded="$AUTODEPLOY$" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1944,19 +1481,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/GameBuilder.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="391">
-          <caret line="2" column="24" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/easytesting/fest-util/1.2.5/fest-util-1.2.5.jar!/org/fest/util/Lists.class">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.16585366" vertical-offset="0" max-vertical-offset="615">
           <caret line="7" column="45" selection-start-line="7" selection-start-column="45" selection-end-line="7" selection-end-column="45" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1965,16 +1493,6 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="289">
           <caret line="8" column="17" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Player.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="782">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="$AUTODEPLOY$" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1998,17 +1516,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.015384615" vertical-offset="16584" max-vertical-offset="51867">
           <caret line="1035" column="19" selection-start-line="1035" selection-start-column="19" selection-end-line="1035" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/ExcelSheet.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="578">
-          <caret line="28" column="63" selection-start-line="28" selection-start-column="63" selection-end-line="28" selection-end-column="63" />
-          <folding>
-            <element signature="imports" expanded="$AUTODEPLOY$" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2016,10 +1523,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.73996174" vertical-offset="837" max-vertical-offset="1394">
           <caret line="99" column="27" selection-start-line="99" selection-start-column="27" selection-end-line="99" selection-end-column="27" />
-          <folding>
-            <element signature="e#2712#2713#0" expanded="false" />
-            <element signature="e#2785#2786#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2027,7 +1530,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3842">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2035,7 +1537,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33277592" vertical-offset="56" max-vertical-offset="17391">
           <caret line="33" column="17" selection-start-line="33" selection-start-column="17" selection-end-line="33" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2043,13 +1544,7 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1088" max-vertical-offset="1972">
           <caret line="90" column="46" selection-start-line="90" selection-start-column="46" selection-end-line="90" selection-end-column="46" />
-          <folding>
-            <element signature="imports" expanded="$AUTODEPLOY$" />
-            <element signature="e#3278#3279#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#3346#3347#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#3412#3413#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#3479#3480#0" expanded="$AUTODEPLOY$" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2057,7 +1552,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33277592" vertical-offset="20847" max-vertical-offset="25432">
           <caret line="1314" column="23" selection-start-line="1314" selection-start-column="23" selection-end-line="1314" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2065,7 +1559,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-1.7140468" vertical-offset="3354" max-vertical-offset="18581">
           <caret line="183" column="18" selection-start-line="183" selection-start-column="18" selection-end-line="183" selection-end-column="18" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2073,7 +1566,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.6120402" vertical-offset="617" max-vertical-offset="20349">
           <caret line="116" column="11" selection-start-line="116" selection-start-column="11" selection-end-line="116" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2081,7 +1573,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33204633" vertical-offset="6934" max-vertical-offset="17816">
           <caret line="472" column="28" selection-start-line="472" selection-start-column="20" selection-end-line="472" selection-end-column="28" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2089,81 +1580,96 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.59375" vertical-offset="0" max-vertical-offset="6392">
           <caret line="38" column="19" selection-start-line="38" selection-start-column="19" selection-end-line="38" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/GameBuilder.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="391">
+          <caret line="2" column="24" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="24" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Game.java">
+    <entry file="jar://C:/apps/jdk1.8.0_05/src.zip!/java/util/Collections.java">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="17" max-vertical-offset="1003">
-          <caret line="17" column="4" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="13" />
+        <state vertical-scroll-proportion="1.0489038" vertical-offset="7572" max-vertical-offset="87754">
+          <caret line="517" column="18" selection-start-line="517" selection-start-column="18" selection-end-line="517" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/ExcelSheet.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="578">
+          <caret line="28" column="63" selection-start-line="28" selection-start-column="63" selection-end-line="28" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Player.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="782">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/Game.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="374">
+          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="$AUTODEPLOY$" />
-            <element signature="e#700#701#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#730#731#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#782#783#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#820#821#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#979#980#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1004#1005#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1040#1041#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1068#1069#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1100#1101#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1130#1131#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1174#1175#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1212#1213#0" expanded="$AUTODEPLOY$" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/PBF.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1326">
+          <caret line="57" column="0" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
+          <folding>
+            <element signature="e#622#623#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#650#651#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#696#697#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#730#731#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#770#771#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#800#801#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#852#853#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#890#891#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#921#922#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#948#949#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#988#989#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#1020#1021#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#1049#1050#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#1074#1075#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#1110#1111#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#1138#1139#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#1170#1171#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#1200#1201#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#1244#1245#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#1282#1283#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#1379#1380#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#1414#1415#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#1467#1468#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#1515#1516#0" expanded="$AUTODEPLOY$" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/PBFTest.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4267">
+          <caret line="260" column="5" selection-start-line="260" selection-start-column="5" selection-end-line="260" selection-end-column="5" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Item.java">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1833" max-vertical-offset="2431">
-          <caret line="124" column="18" selection-start-line="124" selection-start-column="18" selection-end-line="124" selection-end-column="18" />
-          <folding>
-            <element signature="imports" expanded="$AUTODEPLOY$" />
-            <element signature="e#1672#1673#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1700#1701#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1742#1743#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1776#1777#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1809#1810#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1838#1839#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1883#1884#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1919#1920#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1950#1951#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#1977#1978#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#2018#2019#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#2050#2051#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#2091#2092#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#2124#2125#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#2155#2156#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#2182#2183#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#2213#2214#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#2240#2241#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#2280#2281#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#2312#2313#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#2350#2351#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#2384#2385#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#2438#2439#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#2484#2485#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#2513#2514#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#2538#2539#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#2574#2575#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#2602#2603#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#2652#2653#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#2702#2703#0" expanded="$AUTODEPLOY$" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/GameTest.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.9949833" vertical-offset="1425" max-vertical-offset="2992">
-          <caret line="154" column="46" selection-start-line="154" selection-start-column="46" selection-end-line="154" selection-end-column="46" />
-          <folding>
-            <element signature="imports" expanded="$AUTODEPLOY$" />
-            <element signature="e#6214#6215#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#6263#6264#0" expanded="$AUTODEPLOY$" />
-          </folding>
+        <state vertical-scroll-proportion="0.31384614" vertical-offset="153" max-vertical-offset="1785">
+          <caret line="32" column="14" selection-start-line="32" selection-start-column="14" selection-end-line="32" selection-end-column="14" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -8,7 +8,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
 import net.vz.mongodb.jackson.JacksonDBCollection;
-import no.asgari.civilization.representations.Game;
+import no.asgari.civilization.representations.PBF;
 import no.asgari.civilization.resource.GameResource;
 
 public class CivBoardgameRandomizerApplication extends Application<CivBoardGameRandomizerConfiguration> {
@@ -28,7 +28,7 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
         Mongo mongo = new Mongo(configuration.mongohost, configuration.mongoport);
         DB db = mongo.getDB(configuration.mongodb);
 
-        JacksonDBCollection<Game, String> games = JacksonDBCollection.wrap(db.getCollection("games"), Game.class, String.class);
+        JacksonDBCollection<PBF, String> games = JacksonDBCollection.wrap(db.getCollection("games"), PBF.class, String.class);
         MongoManaged mongoManaged = new MongoManaged(mongo);
         environment.lifecycle().manage(mongoManaged);
 

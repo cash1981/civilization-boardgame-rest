@@ -8,7 +8,10 @@ import org.hibernate.validator.constraints.NotBlank;
 import java.util.Date;
 import java.util.List;
 
-public class Game {
+/**
+ * PBF stands for Play By Forum
+ */
+public class PBF {
     @Id
     @ObjectId
     private String id;
@@ -18,6 +21,8 @@ public class Game {
     @NotBlank
     private String name;
     private Date created = new Date();
+
+    private int numOfPlayers;
 
     public List<Item> getItems() {
         return items;
@@ -58,4 +63,16 @@ public class Game {
     public void setCreated(Date created) {
         this.created = created;
     }
+
+    /**
+     * Number of players playing in this PBF
+     */
+    public int getNumOfPlayers() {
+        return numOfPlayers;
+    }
+
+    public void setNumOfPlayers(int numOfPlayers) {
+        this.numOfPlayers = numOfPlayers;
+    }
+
 }
