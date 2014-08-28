@@ -29,17 +29,19 @@ package no.asgari.civilization.representations;
  * hidden = true;
  *
  */
-public interface Item<T> extends Spreadsheet {
+public interface Unit<T> extends Spreadsheet {
 
     /** Either the username or pbf name, both of which must be unique **/
-    public String getName();
     public String getOwner();
     public boolean isHidden();
     public boolean isUsed();
-    public String getDescription();
+    public boolean isDead();
+    public int getLevel();
     public String getId();
-    /** For instance general */
+    /** For instance Pikemen 3/3*/
     public String getType();
-    public T getItem();
+    public int getAttack();
+    public int getHealth();
+    public T getUnit();
 
 }

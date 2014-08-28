@@ -40,25 +40,25 @@ public class PBFTest {
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
         Workbook wb = new XSSFWorkbook(in);
 
-        Queue<Item> civs = getShuffledCivsFromExcel(wb);
+        Queue<? extends Item> civs = getShuffledCivsFromExcel(wb);
         assertNotNull(civs);
 
-        Queue<Item> shuffledCultureI = getShuffledCultureIFromExcel(wb);
+        Queue<? extends Item> shuffledCultureI = getShuffledCultureIFromExcel(wb);
         assertNotNull(shuffledCultureI);
 
-        Queue<Item> shuffledCultureII = getShuffledCultureIIFromExcel(wb);
+        Queue<? extends Item> shuffledCultureII = getShuffledCultureIIFromExcel(wb);
         assertNotNull(shuffledCultureII);
 
-        Queue<Item> shuffledCultureIII = getShuffledCultureIIIFromExcel(wb);
+        Queue<? extends Item> shuffledCultureIII = getShuffledCultureIIIFromExcel(wb);
         assertNotNull(shuffledCultureIII);
 
-        Queue<Item> shuffledGPs = getShuffledGreatPersonFromExcel(wb);
+        Queue<? extends Item> shuffledGPs = getShuffledGreatPersonFromExcel(wb);
         assertNotNull(shuffledGPs);
 
         wb.close();
     }
 
-    private void assertQueue(Queue<Item> queue, Collection<Item> col) {
+    private void assertQueue(Queue<? extends Item> queue, Collection<? extends Item> col) {
         assertTrue(queue.size() <= queue.size());
 
         int sizeOfHuts = queue.size();
@@ -75,12 +75,12 @@ public class PBFTest {
         );
         assertFalse(unfilteredCivCells.isEmpty());
 
-        List<Item> civs = unfilteredCivCells.stream()
+        List<Civ> civs = unfilteredCivCells.stream()
                 .filter(p -> !p.toString().isEmpty())
                 .filter(p -> !p.toString().equals("RAND()"))
                 .filter(p -> p.getRow().getRowNum() != 0)
                 .filter(cell -> cell.getColumnIndex() == 0)
-                .map(civname -> createItem(ExcelSheet.CIV, civname.toString()))
+                .map(civname -> new Civ(civname.toString()))
                 .collect(Collectors.toList());
 
         Collections.shuffle(civs);
@@ -91,7 +91,7 @@ public class PBFTest {
         return shuffledCivs;
     }
 
-    private Queue<Item> getShuffledCultureIFromExcel(Workbook wb) {
+    private Queue<CultureI> getShuffledCultureIFromExcel(Workbook wb) {
         Sheet culture1Sheet = wb.getSheet(ExcelSheet.CULTURE_1.toString());
         assertNotNull(culture1Sheet);
 
@@ -99,12 +99,12 @@ public class PBFTest {
         culture1Sheet.forEach(row -> row.forEach(unfilteredCells::add)
         );
 
-        List<Item> cultures = unfilteredCells.parallelStream()
+        List<CultureI> cultures = unfilteredCells.parallelStream()
                 .filter(p -> !p.toString().isEmpty())
                 .filter(p -> !p.toString().equals("RAND()"))
                 .filter(p -> p.getRow().getRowNum() != 0)
                 .filter(cell -> cell.getColumnIndex() == 0)
-                .map(cell -> createItem(ExcelSheet.CULTURE_1, cell.toString()))
+                .map(cell -> new CultureI(cell.toString()))
                 .collect(Collectors.toList());
 
 
@@ -119,20 +119,20 @@ public class PBFTest {
         //Description should be in the same order as cultures
         assertEquals(description.size(), cultures.size());
         for(int i = 0; i < cultures.size(); i++) {
-            Item item = cultures.get(i);
+            CultureI item = cultures.get(i);
             item.setDescription(description.get(i));
         }
 
         Collections.shuffle(cultures);
 
         //Now we want to take every other one
-        Queue<Item> culture1 = new LinkedList<>(cultures);
+        Queue<CultureI> culture1 = new LinkedList<>(cultures);
         assertQueue(culture1, cultures);
         System.out.println(culture1);
         return culture1;
     }
 
-    private Queue<Item> getShuffledCultureIIFromExcel(Workbook wb) {
+    private Queue<CultureII> getShuffledCultureIIFromExcel(Workbook wb) {
         Sheet culture2Sheet = wb.getSheet(ExcelSheet.CULTURE_2.toString());
         assertNotNull(culture2Sheet);
 
@@ -140,12 +140,12 @@ public class PBFTest {
         culture2Sheet.forEach(row -> row.forEach(unfilteredCells::add)
         );
 
-        List<Item> cultures = unfilteredCells.stream()
+        List<CultureII> cultures = unfilteredCells.stream()
                 .filter(p -> !p.toString().isEmpty())
                 .filter(p -> !p.toString().equals("RAND()"))
                 .filter(p -> p.getRow().getRowNum() != 0)
                 .filter(cell -> cell.getColumnIndex() == 0)
-                .map(cell -> createItem(ExcelSheet.CULTURE_2, cell.toString()))
+                .map(cell -> new CultureII(cell.toString()))
                 .collect(Collectors.toList());
 
         List<String> description = unfilteredCells.parallelStream()
@@ -159,32 +159,32 @@ public class PBFTest {
         //Description should be in the same order as cultures
         assertEquals(description.size(), cultures.size());
         for(int i = 0; i < cultures.size(); i++) {
-            Item item = cultures.get(i);
+            CultureII item = cultures.get(i);
             item.setDescription(description.get(i));
         }
 
         Collections.shuffle(cultures);
 
         //Now we want to take every other one
-        Queue<Item> culture2 = new LinkedList<>(cultures);
+        Queue<CultureII> culture2 = new LinkedList<>(cultures);
         assertQueue(culture2, cultures);
         System.out.println(culture2);
         return culture2;
     }
 
-    private Queue<Item> getShuffledCultureIIIFromExcel(Workbook wb) {
+    private Queue<CultureIII> getShuffledCultureIIIFromExcel(Workbook wb) {
         Sheet culture3Sheet = wb.getSheet(ExcelSheet.CULTURE_3.toString());
         assertNotNull(culture3Sheet);
 
         List<Cell> unfilteredCells = new ArrayList<>();
         culture3Sheet.forEach(row -> row.forEach(unfilteredCells::add));
 
-        List<Item> cultures = unfilteredCells.stream()
+        List<CultureIII> cultures = unfilteredCells.stream()
                 .filter(p -> !p.toString().isEmpty())
                 .filter(p -> !p.toString().equals("RAND()"))
                 .filter(p -> p.getRow().getRowNum() != 0)
                 .filter(cell -> cell.getColumnIndex() == 0)
-                .map(cell -> createItem(ExcelSheet.CULTURE_3, cell.toString()))
+                .map(cell -> new CultureIII(cell.toString()))
                 .collect(Collectors.toList());
 
         List<String> description = unfilteredCells.parallelStream()
@@ -198,32 +198,32 @@ public class PBFTest {
         //Description should be in the same order as cultures
         assertEquals(description.size(), cultures.size());
         for(int i = 0; i < cultures.size(); i++) {
-            Item item = cultures.get(i);
+            CultureIII item = cultures.get(i);
             item.setDescription(description.get(i));
         }
 
         Collections.shuffle(cultures);
 
         //Now we want to take every other one
-        Queue<Item> culture3 = new LinkedList<>(cultures);
+        Queue<CultureIII> culture3 = new LinkedList<>(cultures);
         assertQueue(culture3, cultures);
         System.out.println(culture3);
         return culture3;
     }
 
-    private Queue<Item> getShuffledGreatPersonFromExcel(Workbook wb) {
+    private Queue<GreatPerson> getShuffledGreatPersonFromExcel(Workbook wb) {
         Sheet gpSheet = wb.getSheet(ExcelSheet.GREAT_PERSON.toString());
         assertNotNull(gpSheet);
 
         List<Cell> unfilteredCells = new ArrayList<>();
         gpSheet.forEach(row -> row.forEach(unfilteredCells::add));
 
-        List<Item> gps = unfilteredCells.stream()
+        List<GreatPerson> gps = unfilteredCells.stream()
                 .filter(p -> !p.toString().isEmpty())
                 .filter(p -> !p.toString().equals("RAND()"))
                 .filter(p -> p.getRow().getRowNum() != 0)
                 .filter(cell -> cell.getColumnIndex() == 0)
-                .map(cell -> createItem(ExcelSheet.GREAT_PERSON, cell.toString()))
+                .map(cell -> new GreatPerson(cell.toString()))
                 .collect(Collectors.toList());
 
         List<String> tile = unfilteredCells.parallelStream()
@@ -246,7 +246,7 @@ public class PBFTest {
         assertEquals(description.size(), gps.size());
         assertEquals(tile.size(), gps.size());
         for(int i = 0; i < gps.size(); i++) {
-            Item item = gps.get(i);
+            GreatPerson item = gps.get(i);
             item.setDescription(description.get(i));
             item.setType(tile.get(i));
         }
@@ -254,14 +254,10 @@ public class PBFTest {
         Collections.shuffle(gps);
 
         //Now we want to take every other one
-        Queue<Item> gpQueue = new LinkedList<>(gps);
+        Queue<GreatPerson> gpQueue = new LinkedList<>(gps);
         assertQueue(gpQueue, gps);
         System.out.println(gpQueue);
         return gpQueue;
-    }
-
-    private static Item createItem(ExcelSheet excelSheet, String name) {
-        return new Item(excelSheet, name);
     }
 
 }
