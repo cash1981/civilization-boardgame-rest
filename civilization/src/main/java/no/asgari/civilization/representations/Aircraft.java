@@ -3,7 +3,6 @@ package no.asgari.civilization.representations;
 import net.vz.mongodb.jackson.Id;
 import net.vz.mongodb.jackson.ObjectId;
 import no.asgari.civilization.ExcelSheet;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * Type should describe the unit type, for instance
@@ -17,9 +16,13 @@ public class Aircraft implements Unit<Aircraft> {
     private boolean hidden;
     private boolean used;
     private boolean dead;
-    private String type;
     private int attack;
     private int health;
+
+    public Aircraft(int attack, int health) {
+        this.attack = attack;
+        this.health = health;
+    }
 
     @Override
     public String getOwner() {
@@ -49,11 +52,6 @@ public class Aircraft implements Unit<Aircraft> {
     @Override
     public String getId() {
         return id;
-    }
-
-    @Override
-    public String getType() {
-        return type;
     }
 
     @Override
@@ -96,10 +94,6 @@ public class Aircraft implements Unit<Aircraft> {
         this.id = id;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public void setAttack(int attack) {
         this.attack = attack;
     }
@@ -110,6 +104,6 @@ public class Aircraft implements Unit<Aircraft> {
 
     @Override
     public String toString() {
-        return type + " " + attack + "." + health;
+        return "Aircraft " + attack + "." + health;
     }
 }

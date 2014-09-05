@@ -11,12 +11,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -26,45 +21,119 @@ import static org.junit.Assert.assertNotNull;
 
 public class UnitTest {
 
+    @Test
     public void createInfantryTest() throws Exception{
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
         Workbook wb = new XSSFWorkbook(in);
-        Sheet gpSheet = wb.getSheet(ExcelSheet.INFANTRY.toString());
-        assertNotNull(gpSheet);
+        Sheet infantrySheet = wb.getSheet(ExcelSheet.INFANTRY.toString());
+        assertNotNull(infantrySheet);
 
         List<Cell> unfilteredCells = new ArrayList<>();
-        gpSheet.forEach(row -> row.forEach(unfilteredCells::add));
+        infantrySheet.forEach(row -> row.forEach(unfilteredCells::add));
 
-//        List<Infantry> units = unfilteredCells.stream()
-//                .filter(p -> !p.toString().isEmpty())
-//                .filter(p -> !p.toString().equals("RAND()"))
-//                .filter(p -> p.getRow().getRowNum() != 0)
-//                .filter(cell -> cell.getColumnIndex() == 0)
-//                .map(cell -> new Infantry(cell.toString()))
-//                .collect(Collectors.toList());
+        List<Infantry> infantryUnits = unfilteredCells.stream()
+                .filter(p -> !p.toString().isEmpty())
+                .filter(p -> !p.toString().equals("RAND()"))
+                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(cell -> cell.getColumnIndex() == 0)
+                .map(cell -> createInfantry(cell.toString()))
+                .collect(Collectors.toList());
 
-//        unfilteredCells.stream()
-//                .filter(p -> !p.toString().isEmpty())
-//                .filter(p -> !p.toString().equals("RAND()"))
-//                .filter(p -> p.getRow().getRowNum() != 0)
-//                .filter(cell -> cell.getColumnIndex() == 0)
-////                .map(cell -> new Infantry(cell.toString()))
-//                .collect(Collectors.toMap(cell.));
-//
-//
-//        Collections.shuffle(gps);
-//
-//        //Now we want to take every other one
-//        Queue<Infantry> gpQueue = new LinkedList<>(gps);
-//        System.out.println(gpQueue);
+        Collections.shuffle(infantryUnits);
+
+        //Now we want to take every other one
+        Queue<Infantry> infantryQueue = new LinkedList<>(infantryUnits);
+        System.out.println(infantryQueue);
 
         wb.close();
     }
 
     @Test
+    public void createMountedTest() throws Exception {
+        InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
+        Workbook wb = new XSSFWorkbook(in);
+        Sheet mountedsheet = wb.getSheet(ExcelSheet.MOUNTED.toString());
+        assertNotNull(mountedsheet);
+
+        List<Cell> unfilteredCells = new ArrayList<>();
+        mountedsheet.forEach(row -> row.forEach(unfilteredCells::add));
+
+        List<Mounted> mountedUnits = unfilteredCells.stream()
+                .filter(p -> !p.toString().isEmpty())
+                .filter(p -> !p.toString().equals("RAND()"))
+                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(cell -> cell.getColumnIndex() == 0)
+                .map(cell -> createMounted(cell.toString()))
+                .collect(Collectors.toList());
+
+        Collections.shuffle(mountedUnits);
+
+        //Now we want to take every other one
+        Queue<Mounted> mountedQueue = new LinkedList<>(mountedUnits);
+        System.out.println(mountedQueue);
+
+        wb.close();
+    }
+
+    @Test
+    public void createArtilleryTest() throws Exception {
+        InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
+        Workbook wb = new XSSFWorkbook(in);
+        Sheet artillerySheet = wb.getSheet(ExcelSheet.ARTILLERY.toString());
+        assertNotNull(artillerySheet);
+
+        List<Cell> unfilteredCells = new ArrayList<>();
+        artillerySheet.forEach(row -> row.forEach(unfilteredCells::add));
+
+        List<Artillery> artilleryUnits = unfilteredCells.stream()
+                .filter(p -> !p.toString().isEmpty())
+                .filter(p -> !p.toString().equals("RAND()"))
+                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(cell -> cell.getColumnIndex() == 0)
+                .map(cell -> createArtillery(cell.toString()))
+                .collect(Collectors.toList());
+
+        Collections.shuffle(artilleryUnits);
+
+        //Now we want to take every other one
+        Queue<Artillery> artilleryQueue = new LinkedList<>(artilleryUnits);
+        System.out.println(artilleryQueue);
+
+        wb.close();
+    }
+
+    @Test
+    public void createAircraftTest() throws Exception {
+        InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
+        Workbook wb = new XSSFWorkbook(in);
+        Sheet aircraftSheet = wb.getSheet(ExcelSheet.AIRCRAFT.toString());
+        assertNotNull(aircraftSheet);
+
+        List<Cell> unfilteredCells = new ArrayList<>();
+        aircraftSheet.forEach(row -> row.forEach(unfilteredCells::add));
+
+        List<Aircraft> aircraftUnits = unfilteredCells.stream()
+                .filter(p -> !p.toString().isEmpty())
+                .filter(p -> !p.toString().equals("RAND()"))
+                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(cell -> cell.getColumnIndex() == 0)
+                .map(cell -> createAircraft(cell.toString()))
+                .collect(Collectors.toList());
+
+        Collections.shuffle(aircraftUnits);
+
+        //Now we want to take every other one
+        Queue<Aircraft> aircraftQueue = new LinkedList<>(aircraftUnits);
+        System.out.println(aircraftQueue);
+
+        wb.close();
+    }
+
+
+    @Test
     public void splitStringTest() {
-        ImmutableList<String> strings = ImmutableList.of("1,3", "1,3", "1,3", "1,3", "1,3", "3,1", "3,1", "3,1", "3,1", "3,1", "3,1", "2,2", "2,2", "2,2", "2,2", "2,2", "2,2", "2,2");
-        List<Infantry> infantries = strings.stream()
+        ImmutableList<String> strengths = ImmutableList.of("1,3", "1,3", "1,3", "1,3", "1,3", "3,1", "3,1", "3,1", "3,1", "3,1", "3,1", "2,2", "2,2", "2,2", "2,2", "2,2", "2,2", "2,2");
+        List<Infantry> infantries = strengths.stream()
                 .map(val -> createInfantry(val))
                 .collect(Collectors.toList());
 
@@ -80,6 +149,38 @@ public class UnitTest {
 
         return new Infantry(attack, health);
     }
+
+    private static Artillery createArtillery(String string) {
+        Iterable<String> split = Splitter.onPattern(",|\\.").omitEmptyStrings().trimResults().split(string);
+        assertEquals(2, Iterables.size(split));
+
+        int attack = Integer.parseInt(Iterables.get(split, 0));
+        int health = Integer.parseInt(Iterables.get(split, 1));
+
+        return new Artillery(attack, health);
+    }
+
+    private static Mounted createMounted(String string) {
+        Iterable<String> split = Splitter.onPattern(",|\\.").omitEmptyStrings().trimResults().split(string);
+        assertEquals(2, Iterables.size(split));
+
+        int attack = Integer.parseInt(Iterables.get(split, 0));
+        int health = Integer.parseInt(Iterables.get(split, 1));
+
+        return new Mounted(attack, health);
+    }
+
+
+    private static Aircraft createAircraft(String string) {
+        Iterable<String> split = Splitter.onPattern(",|\\.").omitEmptyStrings().trimResults().split(string);
+        assertEquals(2, Iterables.size(split));
+
+        int attack = Integer.parseInt(Iterables.get(split, 0));
+        int health = Integer.parseInt(Iterables.get(split, 1));
+
+        return new Aircraft(attack, health);
+    }
+
 
     public static <T> Stream<T> stream(Iterable<T> in) {
         return StreamSupport.stream(in.spliterator(), false);

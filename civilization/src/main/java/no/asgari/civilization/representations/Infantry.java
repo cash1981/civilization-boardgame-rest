@@ -22,7 +22,6 @@ public class Infantry implements Unit<Infantry> {
     private boolean used;
     private boolean dead;
     private int level = LEVEL_1;
-    private String type;
     private final int attack;
     private final int health;
 
@@ -59,11 +58,6 @@ public class Infantry implements Unit<Infantry> {
     @Override
     public String getId() {
         return id;
-    }
-
-    @Override
-    public String getType() {
-        return type;
     }
 
     @Override
@@ -108,10 +102,6 @@ public class Infantry implements Unit<Infantry> {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     @Override

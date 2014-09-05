@@ -22,9 +22,13 @@ public class Mounted implements Unit<Mounted> {
     private boolean used;
     private boolean dead;
     private int level = LEVEL_1;
-    private String type;
     private int attack;
     private int health;
+
+    public Mounted(int attack, int health) {
+        this.attack = attack;
+        this.health = health;
+    }
 
     @Override
     public String getOwner() {
@@ -54,11 +58,6 @@ public class Mounted implements Unit<Mounted> {
     @Override
     public String getId() {
         return id;
-    }
-
-    @Override
-    public String getType() {
-        return type;
     }
 
     @Override
@@ -105,10 +104,6 @@ public class Mounted implements Unit<Mounted> {
         this.id = id;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public void setAttack(int attack) {
         this.attack = attack;
     }
@@ -121,15 +116,15 @@ public class Mounted implements Unit<Mounted> {
     public String toString() {
         switch (level) {
             case LEVEL_1:
-                return type + " " + attack + "." + health;
+                return "Horsemen " + attack + "." + health;
             case LEVEL_2:
-                return type + " " + (attack + LEVEL_1) + "." + (health + LEVEL_1);
+                return "Knight " + (attack + LEVEL_1) + "." + (health + LEVEL_1);
             case LEVEL_3:
-                return type + " " + (attack + LEVEL_2) + "." + (health + LEVEL_2);
+                return "Cavalry " + (attack + LEVEL_2) + "." + (health + LEVEL_2);
             case LEVEL_4:
-                return type + " " + (attack + LEVEL_3) + "." + (health + LEVEL_3);
+                return "Tank" + (attack + LEVEL_3) + "." + (health + LEVEL_3);
             default:
-                return type + " " + attack + "." + health;
+                return "Unknown level" + attack + "." + health;
         }
     }
 }

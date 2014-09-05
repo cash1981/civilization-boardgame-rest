@@ -21,7 +21,6 @@ public class PBF {
     @NotBlank
     private String name;
     private Date created = new Date();
-
     private int numOfPlayers;
 
     public List<Item> getItems() {
