@@ -47,8 +47,9 @@ public class PBFTest {
         Queue<? extends Item> shuffledGPs = getShuffledGreatPersonFromExcel(wb);
         assertNotNull(shuffledGPs);
 
-
         getShuffledWonderFromExcel(wb);
+
+        getShuffledTilesFromExcel(wb);
         wb.close();
     }
 
@@ -336,6 +337,31 @@ public class PBFTest {
         Collections.shuffle(allWonders);
 
         return allWonders;
+    }
+
+    private Queue<Item> getShuffledTilesFromExcel(Workbook wb) {
+        Sheet tileSheet = wb.getSheet(ExcelSheet.TILES.toString());
+        assertNotNull(tileSheet);
+
+        List<Cell> unfilteredCivCells = new ArrayList<>();
+        tileSheet.forEach(row -> row.forEach(cell -> unfilteredCivCells.add(cell))
+        );
+        assertFalse(unfilteredCivCells.isEmpty());
+
+        List<Tile> tiles = unfilteredCivCells.stream()
+                .filter(p -> !p.toString().isEmpty())
+                .filter(p -> !p.toString().equals("RAND()"))
+                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(cell -> cell.getColumnIndex() == 0)
+                .map(tilename -> new Tile(String.format("%d", (int) Double.valueOf(tilename.toString()).doubleValue())))
+                .collect(Collectors.toList());
+
+        Collections.shuffle(tiles);
+        Queue<Item> shuffledTiles = new LinkedList<>(tiles);
+        assertQueue(shuffledTiles, tiles);
+
+        System.out.println(shuffledTiles);
+        return shuffledTiles;
     }
 
 }

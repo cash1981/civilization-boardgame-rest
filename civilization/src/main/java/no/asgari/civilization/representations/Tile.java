@@ -92,4 +92,11 @@ public class Tile implements Item<Tile> {
         this.hidden = hidden;
     }
 
+    @Override
+    public String toString() {
+        return "Tile{" +
+                "name='" + name + '\'' +
+                '}';
+    }
+
 }
