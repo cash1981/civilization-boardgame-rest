@@ -47,6 +47,12 @@ public class PBFTest {
         Queue<? extends Item> shuffledGPs = getShuffledGreatPersonFromExcel(wb);
         assertNotNull(shuffledGPs);
 
+        Queue<? extends Item> shuffledHuts = getShuffledHutsFromExcel(wb);
+        assertNotNull(shuffledGPs);
+
+        Queue<? extends Item> shuffledVillages = getShuffledVillages(wb);
+        assertNotNull(shuffledGPs);
+
         getShuffledWonderFromExcel(wb);
 
         getShuffledTilesFromExcel(wb);
@@ -344,7 +350,7 @@ public class PBFTest {
         assertNotNull(tileSheet);
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
-        tileSheet.forEach(row -> row.forEach(cell -> unfilteredCivCells.add(cell))
+        tileSheet.forEach(row -> row.forEach(unfilteredCivCells::add)
         );
         assertFalse(unfilteredCivCells.isEmpty());
 
@@ -363,5 +369,56 @@ public class PBFTest {
         System.out.println(shuffledTiles);
         return shuffledTiles;
     }
+
+    private Queue<Item> getShuffledHutsFromExcel(Workbook wb) {
+        Sheet hutSheet = wb.getSheet(ExcelSheet.HUTS.toString());
+        assertNotNull(hutSheet);
+
+        List<Cell> unfilteredCivCells = new ArrayList<>();
+        hutSheet.forEach(row -> row.forEach(unfilteredCivCells::add)
+        );
+        assertFalse(unfilteredCivCells.isEmpty());
+
+        List<Hut> huts = unfilteredCivCells.stream()
+                .filter(p -> !p.toString().isEmpty())
+                .filter(p -> !p.toString().equals("RAND()"))
+                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(cell -> cell.getColumnIndex() == 0)
+                .map(hut -> new Hut(hut.toString()))
+                .collect(Collectors.toList());
+
+        Collections.shuffle(huts);
+        Queue<Item> shuffledTiles = new LinkedList<>(huts);
+        assertQueue(shuffledTiles, huts);
+
+        System.out.println(shuffledTiles);
+        return shuffledTiles;
+    }
+
+    private Queue<Item> getShuffledVillages(Workbook wb) {
+        Sheet sheet = wb.getSheet(ExcelSheet.VILLAGES.toString());
+        assertNotNull(sheet);
+
+        List<Cell> unfilteredCivCells = new ArrayList<>();
+        sheet.forEach(row -> row.forEach(unfilteredCivCells::add)
+        );
+        assertFalse(unfilteredCivCells.isEmpty());
+
+        List<Village> villages = unfilteredCivCells.stream()
+                .filter(p -> !p.toString().isEmpty())
+                .filter(p -> !p.toString().equals("RAND()"))
+                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(cell -> cell.getColumnIndex() == 0)
+                .map(village -> new Village(village.toString()))
+                .collect(Collectors.toList());
+
+        Collections.shuffle(villages);
+        Queue<Item> shuffledTiles = new LinkedList<>(villages);
+        assertQueue(shuffledTiles, villages);
+
+        System.out.println(shuffledTiles);
+        return shuffledTiles;
+    }
+
 
 }

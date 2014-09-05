@@ -13,8 +13,6 @@ import org.junit.Test;
 import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -22,7 +20,7 @@ import static org.junit.Assert.assertNotNull;
 public class UnitTest {
 
     @Test
-    public void createInfantryTest() throws Exception{
+    public void createInfantryTest() throws Exception {
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
         Workbook wb = new XSSFWorkbook(in);
         Sheet infantrySheet = wb.getSheet(ExcelSheet.INFANTRY.toString());
@@ -179,15 +177,6 @@ public class UnitTest {
         int health = Integer.parseInt(Iterables.get(split, 1));
 
         return new Aircraft(attack, health);
-    }
-
-
-    public static <T> Stream<T> stream(Iterable<T> in) {
-        return StreamSupport.stream(in.spliterator(), false);
-    }
-
-    public static <T> Stream<T> parallelStream(Iterable<T> in) {
-        return StreamSupport.stream(in.spliterator(), true);
     }
 
 }
