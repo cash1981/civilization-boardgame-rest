@@ -9,18 +9,10 @@ import org.fest.util.Lists;
 import org.junit.Test;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class PBFTest {
 
@@ -55,6 +47,8 @@ public class PBFTest {
         Queue<? extends Item> shuffledGPs = getShuffledGreatPersonFromExcel(wb);
         assertNotNull(shuffledGPs);
 
+
+        getShuffledWonderFromExcel(wb);
         wb.close();
     }
 
@@ -258,6 +252,90 @@ public class PBFTest {
         assertQueue(gpQueue, gps);
         System.out.println(gpQueue);
         return gpQueue;
+    }
+
+    private List<Wonder> getShuffledWonderFromExcel(Workbook wb) {
+        Sheet wonderSheet = wb.getSheet(ExcelSheet.WONDERS.toString());
+        assertNotNull(wonderSheet);
+
+        List<Cell> unfilteredCells = new ArrayList<>();
+        wonderSheet.forEach(row -> row.forEach(unfilteredCells::add));
+
+        //Kategoriser wonderne
+
+        List<String> wonderName = unfilteredCells.stream()
+                .filter(p -> !p.toString().trim().isEmpty())
+                .filter(p -> !p.toString().equals("RAND()"))
+                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(cell -> cell.getColumnIndex() == 0)
+                .map(Object::toString)
+                .collect(Collectors.toList());
+
+        List<String> description = unfilteredCells.parallelStream()
+                .filter(p -> !p.toString().trim().isEmpty())
+                .filter(p -> !p.toString().equals("RAND()"))
+                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(cell -> cell.getColumnIndex() == 1)
+                .map(Object::toString)
+                .collect(Collectors.toList());
+
+        assertEquals(wonderName.size(), description.size());
+
+        LinkedList<String> wondersName = new LinkedList<>(wonderName);
+        LinkedList<String> desciptions = new LinkedList<>(description);
+
+        //Kun ancient
+        List<Wonder> ancientWonders = new ArrayList<>();
+        for (int i = 0; i < wondersName.size(); i++) {
+            String wonder = wondersName.poll();
+            String desc = desciptions.poll();
+            System.out.println("Fjernet wonder " + wonder + " list har nå size " + wondersName.size());
+            if (wonder.toLowerCase().contains("wonders")) {
+                assertEquals("Description", desc);
+                break;
+            }
+
+            ancientWonders.add(new Wonder(wonder, desc, "Ancient"));
+        }
+
+        assertEquals(9, ancientWonders.size());
+
+        //Kun ancient
+        List<Wonder> medivalWonder = new ArrayList<>();
+        for (int i = 0; i < wondersName.size(); i++) {
+            String wonder = wondersName.poll();
+            String desc = desciptions.poll();
+            System.out.println("Fjernet wonder " + wonder + " list har nå size " + wondersName.size());
+            if (wonder.toLowerCase().contains("wonders")) {
+                assertEquals("Description", desc);
+                break;
+            }
+            medivalWonder.add(new Wonder(wonder, desc, "Medieval"));
+        }
+
+        assertEquals(9, medivalWonder.size());
+
+        //Kun ancient
+        List<Wonder> modernWonder = new ArrayList<>();
+
+        int remainingSize = wondersName.size();
+
+        for (int i = 0; i < remainingSize; i++) {
+            String wonder = wondersName.poll();
+            String desc = desciptions.poll();
+            System.out.println("Fjernet wonder " + wonder + " list har nå size " + wondersName.size());
+            modernWonder.add(new Wonder(wonder, desc, "Modern"));
+        }
+
+        assertEquals(9, modernWonder.size());
+
+        List<Wonder> allWonders = new ArrayList<>(ancientWonders);
+        allWonders.addAll(medivalWonder);
+        allWonders.addAll(modernWonder);
+
+        Collections.shuffle(allWonders);
+
+        return allWonders;
     }
 
 }

@@ -17,8 +17,10 @@ public class Wonder implements Item<Wonder> {
     private boolean hidden;
     private String owner; // game_id or player_id (username)
 
-    public Wonder(String name) {
+    public Wonder(String name, String description, String type) {
         this.name = name;
+        this.description = description;
+        this.type = type;
         this.used = false;
         this.hidden = true;
     }
@@ -90,6 +92,15 @@ public class Wonder implements Item<Wonder> {
 
     public void setHidden(boolean hidden) {
         this.hidden = hidden;
+    }
+
+    @Override
+    public String toString() {
+        return "Wonder{" +
+                "type='" + type + '\'' +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 
 }
