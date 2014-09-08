@@ -10,6 +10,8 @@ import javax.validation.constraints.Min;
 //TODO: Fiks openshift env name
 public class CivBoardGameRandomizerConfiguration extends Configuration {
 
+    public String CIVILIZATION = "civilization";
+
     @JsonProperty
     @NotEmpty
     public String mongohost = System.getenv("OPENSHIFT_MONGODB_DB_HOST") == null ? "localhost" : System.getenv("OPENSHIFT_MONGODB_DB_HOST");
@@ -21,6 +23,6 @@ public class CivBoardGameRandomizerConfiguration extends Configuration {
 
     @JsonProperty
     @NotEmpty
-    public String mongodb = System.getenv("OPENSHIFT_APP_NAME") == null ? "mydb" : System.getenv("OPENSHIFT_APP_NAME");
+    public String mongodb = System.getenv("OPENSHIFT_APP_NAME") == null ? CIVILIZATION : System.getenv("OPENSHIFT_APP_NAME");
 
 }

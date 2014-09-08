@@ -6,6 +6,9 @@ import no.asgari.civilization.ExcelSheet;
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class Wonder implements Item<Wonder> {
+    public static String ANCIENT = "Ancient";
+    public static String MEDIEVAL = "Medieval";
+    public static String MODERN = "Modern";
     @Id
     @ObjectId
     private String id;

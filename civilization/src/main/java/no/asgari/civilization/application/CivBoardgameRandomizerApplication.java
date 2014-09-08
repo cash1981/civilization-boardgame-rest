@@ -28,13 +28,13 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
         Mongo mongo = new Mongo(configuration.mongohost, configuration.mongoport);
         DB db = mongo.getDB(configuration.mongodb);
 
-        JacksonDBCollection<PBF, String> games = JacksonDBCollection.wrap(db.getCollection("games"), PBF.class, String.class);
+        JacksonDBCollection<PBF, String> pbf = JacksonDBCollection.wrap(db.getCollection("pbf"), PBF.class, String.class);
         MongoManaged mongoManaged = new MongoManaged(mongo);
         environment.lifecycle().manage(mongoManaged);
 
         environment.healthChecks().register("MongoHealthCheck", new MongoHealthCheck(mongo));
 
-        environment.jersey().register(new GameResource(games));
+        environment.jersey().register(new GameResource(pbf));
     }
 
 }

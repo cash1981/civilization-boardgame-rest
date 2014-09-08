@@ -3,6 +3,7 @@ package no.asgari.civilization.resource;
 import com.codahale.metrics.annotation.Timed;
 import net.vz.mongodb.jackson.DBCursor;
 import net.vz.mongodb.jackson.JacksonDBCollection;
+import no.asgari.civilization.excel.PBFTest;
 import no.asgari.civilization.representations.PBF;
 
 import javax.validation.Valid;
@@ -31,13 +32,28 @@ public class GameResource {
     @Timed
     public List<PBF> getAllGames() {
         DBCursor<PBF> dbCursor = collection.find();
-        List<PBF> blogs = new ArrayList<>();
+
+        if(dbCursor.size() == 0) {
+            createTestGame();
+        }
+
+        List<PBF> pbfs = new ArrayList<>();
         while (dbCursor.hasNext()) {
             PBF blog = dbCursor.next();
-            blogs.add(blog);
+            pbfs.add(blog);
         }
-        return blogs;
+        return pbfs;
 
+    }
+
+    private void createTestGame() {
+        PBFTest pbfTest = new PBFTest();
+        try {
+            pbfTest.createGameTest();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     @POST

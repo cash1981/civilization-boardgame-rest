@@ -18,6 +18,12 @@ public class PBF {
 
     private List<Player> players = Lists.newArrayList();
     private List<Item> items = Lists.newArrayList();
+
+    private List<Mounted> mounted = Lists.newArrayList();
+    private List<Infantry> infantry = Lists.newArrayList();
+    private List<Artillery> artillery = Lists.newArrayList();
+    private List<Aircraft> aircraft = Lists.newArrayList();
+
     @NotBlank
     private String name;
     private Date created = new Date();
@@ -74,4 +80,35 @@ public class PBF {
         this.numOfPlayers = numOfPlayers;
     }
 
+    public List<Mounted> getMounted() {
+        return mounted;
+    }
+
+    public void setMounted(List<Mounted> mounted) {
+        this.mounted = mounted;
+    }
+
+    public List<Infantry> getInfantry() {
+        return infantry;
+    }
+
+    public void setInfantry(List<Infantry> infantry) {
+        this.infantry = infantry;
+    }
+
+    public List<Artillery> getArtillery() {
+        return artillery;
+    }
+
+    public void setArtillery(List<Artillery> artillery) {
+        this.artillery = artillery;
+    }
+
+    public List<Aircraft> getAircraft() {
+        return aircraft;
+    }
+
+    public void setAircraft(List<Aircraft> aircraft) {
+        this.aircraft = aircraft;
+    }
 }

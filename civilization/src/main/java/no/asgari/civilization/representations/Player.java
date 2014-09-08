@@ -20,6 +20,7 @@ public class Player {
     private String password;
 
     private List<Item> items = Lists.newArrayList();
+    private List<Item> units = Lists.newArrayList();
 
     public String getUsername() {
         return username;
@@ -51,6 +52,14 @@ public class Player {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public List<Item> getUnits() {
+        return units;
+    }
+
+    public void setUnits(List<Item> units) {
+        this.units = units;
     }
 
 }

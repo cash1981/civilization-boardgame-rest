@@ -19,8 +19,20 @@ import static org.junit.Assert.assertNotNull;
 
 public class UnitTest {
 
+    public Queue<Aircraft> aircraftQueue;
+    public Queue<Artillery> artilleryQueue;
+    public Queue<Mounted> mountedQueue;
+    public Queue<Infantry> infantryQueue;
+
     @Test
-    public void createInfantryTest() throws Exception {
+    public void readAllUnitsFromExcel() throws Exception {
+        createInfantryTest();
+        createMountedTest();
+        createArtilleryTest();
+        createAircraftTest();
+    }
+
+    private void createInfantryTest() throws Exception {
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
         Workbook wb = new XSSFWorkbook(in);
         Sheet infantrySheet = wb.getSheet(ExcelSheet.INFANTRY.toString());
@@ -40,14 +52,13 @@ public class UnitTest {
         Collections.shuffle(infantryUnits);
 
         //Now we want to take every other one
-        Queue<Infantry> infantryQueue = new LinkedList<>(infantryUnits);
+        infantryQueue = new LinkedList<>(infantryUnits);
         System.out.println(infantryQueue);
 
         wb.close();
     }
 
-    @Test
-    public void createMountedTest() throws Exception {
+    private void createMountedTest() throws Exception {
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
         Workbook wb = new XSSFWorkbook(in);
         Sheet mountedsheet = wb.getSheet(ExcelSheet.MOUNTED.toString());
@@ -67,14 +78,13 @@ public class UnitTest {
         Collections.shuffle(mountedUnits);
 
         //Now we want to take every other one
-        Queue<Mounted> mountedQueue = new LinkedList<>(mountedUnits);
+        mountedQueue = new LinkedList<>(mountedUnits);
         System.out.println(mountedQueue);
 
         wb.close();
     }
 
-    @Test
-    public void createArtilleryTest() throws Exception {
+    private void createArtilleryTest() throws Exception {
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
         Workbook wb = new XSSFWorkbook(in);
         Sheet artillerySheet = wb.getSheet(ExcelSheet.ARTILLERY.toString());
@@ -94,14 +104,13 @@ public class UnitTest {
         Collections.shuffle(artilleryUnits);
 
         //Now we want to take every other one
-        Queue<Artillery> artilleryQueue = new LinkedList<>(artilleryUnits);
+        artilleryQueue = new LinkedList<>(artilleryUnits);
         System.out.println(artilleryQueue);
 
         wb.close();
     }
 
-    @Test
-    public void createAircraftTest() throws Exception {
+    private void createAircraftTest() throws Exception {
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
         Workbook wb = new XSSFWorkbook(in);
         Sheet aircraftSheet = wb.getSheet(ExcelSheet.AIRCRAFT.toString());
@@ -121,7 +130,7 @@ public class UnitTest {
         Collections.shuffle(aircraftUnits);
 
         //Now we want to take every other one
-        Queue<Aircraft> aircraftQueue = new LinkedList<>(aircraftUnits);
+        aircraftQueue = new LinkedList<>(aircraftUnits);
         System.out.println(aircraftQueue);
 
         wb.close();
