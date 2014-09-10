@@ -1,16 +1,15 @@
 package no.asgari.civilization.representations;
 
-import net.vz.mongodb.jackson.Id;
-import net.vz.mongodb.jackson.ObjectId;
+
 import no.asgari.civilization.ExcelSheet;
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class Tile implements Item<Tile> {
-    @Id
-    @ObjectId
-    private String id;
+
+
     @NotEmpty
     private final String name;
+    private String id;
     private String type;
     private String description;
     private boolean used;
@@ -33,9 +32,17 @@ public class Tile implements Item<Tile> {
         return owner;
     }
 
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
     @Override
     public boolean isHidden() {
         return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
     }
 
     @Override
@@ -43,9 +50,17 @@ public class Tile implements Item<Tile> {
         return used;
     }
 
+    public void setUsed(boolean used) {
+        this.used = used;
+    }
+
     @Override
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -53,9 +68,17 @@ public class Tile implements Item<Tile> {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public String getType() {
         return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override
@@ -66,30 +89,6 @@ public class Tile implements Item<Tile> {
     @Override
     public ExcelSheet getSheetName() {
         return ExcelSheet.TILES;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setUsed(boolean used) {
-        this.used = used;
-    }
-
-    public void setHidden(boolean hidden) {
-        this.hidden = hidden;
     }
 
     @Override

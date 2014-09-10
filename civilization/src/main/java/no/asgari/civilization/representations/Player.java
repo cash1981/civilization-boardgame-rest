@@ -1,16 +1,13 @@
 package no.asgari.civilization.representations;
 
 import com.google.common.collect.Lists;
-import net.vz.mongodb.jackson.Id;
-import net.vz.mongodb.jackson.ObjectId;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.util.List;
 
 public class Player {
 
-    @Id
-    @ObjectId
+
     private String id;
 
     @NotBlank

@@ -2,12 +2,13 @@ package no.asgari.civilization.application;
 
 import com.mongodb.DB;
 import com.mongodb.Mongo;
+import com.mongodb.DBCollection;
+import com.mongodb.MongoClient;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
-import net.vz.mongodb.jackson.JacksonDBCollection;
 import no.asgari.civilization.representations.PBF;
 import no.asgari.civilization.resource.GameResource;
 
@@ -25,10 +26,11 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
 
     @Override
     public void run(CivBoardGameRandomizerConfiguration configuration, Environment environment) throws Exception {
-        Mongo mongo = new Mongo(configuration.mongohost, configuration.mongoport);
+        MongoClient mongo = new MongoClient(configuration.mongohost, configuration.mongoport);
         DB db = mongo.getDB(configuration.mongodb);
 
-        JacksonDBCollection<PBF, String> pbf = JacksonDBCollection.wrap(db.getCollection("pbf"), PBF.class, String.class);
+        //DBCollection<PBF, String> pbf = DBCollection.wrap(db.getCollection("pbf"), PBF.class, String.class);
+        DBCollection pbf = db.getCollection("pbf");
         MongoManaged mongoManaged = new MongoManaged(mongo);
         environment.lifecycle().manage(mongoManaged);
 

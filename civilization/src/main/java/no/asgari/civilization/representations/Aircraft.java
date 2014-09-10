@@ -1,7 +1,6 @@
 package no.asgari.civilization.representations;
 
-import net.vz.mongodb.jackson.Id;
-import net.vz.mongodb.jackson.ObjectId;
+
 import no.asgari.civilization.ExcelSheet;
 
 /**
@@ -9,8 +8,8 @@ import no.asgari.civilization.ExcelSheet;
  * Spearmen, Pikemen, Riflemen etc
  */
 public class Aircraft implements Unit<Aircraft> {
-    @Id
-    @ObjectId
+
+
     private String id;
     private String owner;
     private boolean hidden;
@@ -29,9 +28,17 @@ public class Aircraft implements Unit<Aircraft> {
         return owner;
     }
 
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
     @Override
     public boolean isHidden() {
         return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
     }
 
     @Override
@@ -39,9 +46,17 @@ public class Aircraft implements Unit<Aircraft> {
         return used;
     }
 
+    public void setUsed(boolean used) {
+        this.used = used;
+    }
+
     @Override
     public boolean isDead() {
         return dead;
+    }
+
+    public void setDead(boolean dead) {
+        this.dead = dead;
     }
 
     @Override
@@ -54,14 +69,26 @@ public class Aircraft implements Unit<Aircraft> {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public int getAttack() {
         return attack;
     }
 
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
+
     @Override
     public int getHealth() {
         return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
     }
 
     @Override
@@ -72,34 +99,6 @@ public class Aircraft implements Unit<Aircraft> {
     @Override
     public ExcelSheet getSheetName() {
         return ExcelSheet.AIRCRAFT;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public void setHidden(boolean hidden) {
-        this.hidden = hidden;
-    }
-
-    public void setUsed(boolean used) {
-        this.used = used;
-    }
-
-    public void setDead(boolean dead) {
-        this.dead = dead;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setAttack(int attack) {
-        this.attack = attack;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package no.asgari.civilization.representations;
 
-import net.vz.mongodb.jackson.Id;
-import net.vz.mongodb.jackson.ObjectId;
+
 import no.asgari.civilization.ExcelSheet;
 
 /**
@@ -10,20 +9,17 @@ import no.asgari.civilization.ExcelSheet;
  */
 public class Infantry implements Unit<Infantry> {
     public final int LEVEL_1 = 1;
+    private int level = LEVEL_1;
     public final int LEVEL_2 = 2;
     public final int LEVEL_3 = 3;
     public final int LEVEL_4 = 4;
-
-    @Id
-    @ObjectId
+    private final int attack;
+    private final int health;
     private String id;
     private String owner;
     private boolean hidden;
     private boolean used;
     private boolean dead;
-    private int level = LEVEL_1;
-    private final int attack;
-    private final int health;
 
     public Infantry(int attack, int health) {
         this.attack = attack;
@@ -35,9 +31,17 @@ public class Infantry implements Unit<Infantry> {
         return owner;
     }
 
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
     @Override
     public boolean isHidden() {
         return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
     }
 
     @Override
@@ -45,9 +49,17 @@ public class Infantry implements Unit<Infantry> {
         return used;
     }
 
+    public void setUsed(boolean used) {
+        this.used = used;
+    }
+
     @Override
     public boolean isDead() {
         return dead;
+    }
+
+    public void setDead(boolean dead) {
+        this.dead = dead;
     }
 
     @Override
@@ -55,9 +67,17 @@ public class Infantry implements Unit<Infantry> {
         return level;
     }
 
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
     @Override
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override
@@ -78,30 +98,6 @@ public class Infantry implements Unit<Infantry> {
     @Override
     public ExcelSheet getSheetName() {
         return ExcelSheet.INFANTRY;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public void setHidden(boolean hidden) {
-        this.hidden = hidden;
-    }
-
-    public void setUsed(boolean used) {
-        this.used = used;
-    }
-
-    public void setDead(boolean dead) {
-        this.dead = dead;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     @Override

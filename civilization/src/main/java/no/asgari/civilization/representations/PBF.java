@@ -1,8 +1,6 @@
 package no.asgari.civilization.representations;
 
 import com.google.common.collect.Lists;
-import net.vz.mongodb.jackson.Id;
-import net.vz.mongodb.jackson.ObjectId;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.util.Date;
@@ -12,8 +10,8 @@ import java.util.List;
  * PBF stands for Play By Forum
  */
 public class PBF {
-    @Id
-    @ObjectId
+    //
+    //
     private String id;
 
     private List<Player> players = Lists.newArrayList();

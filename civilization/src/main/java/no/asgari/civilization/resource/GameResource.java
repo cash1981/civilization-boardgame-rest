@@ -1,8 +1,9 @@
 package no.asgari.civilization.resource;
 
 import com.codahale.metrics.annotation.Timed;
-import net.vz.mongodb.jackson.DBCursor;
-import net.vz.mongodb.jackson.JacksonDBCollection;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import no.asgari.civilization.excel.PBFTest;
 import no.asgari.civilization.representations.PBF;
 
@@ -22,25 +23,25 @@ import java.util.List;
 @Consumes(value = MediaType.APPLICATION_JSON)
 public class GameResource {
 
-    private JacksonDBCollection<PBF, String> collection;
+    private DBCollection collection;
 
-    public GameResource(JacksonDBCollection<PBF, String> games) {
-        this.collection = games;
+    public GameResource(DBCollection pbf) {
+        this.collection = pbf;
     }
 
     @GET
     @Timed
-    public List<PBF> getAllGames() {
-        DBCursor<PBF> dbCursor = collection.find();
+    public List<DBObject> getAllGames() {
+        DBCursor dbCursor = collection.find();
 
         if(dbCursor.size() == 0) {
             createTestGame();
         }
 
-        List<PBF> pbfs = new ArrayList<>();
+        List<DBObject> pbfs = new ArrayList<>();
         while (dbCursor.hasNext()) {
-            PBF blog = dbCursor.next();
-            pbfs.add(blog);
+            DBObject pbf = dbCursor.next();
+            pbfs.add(pbf);
         }
         return pbfs;
 
@@ -56,11 +57,11 @@ public class GameResource {
         }
     }
 
-    @POST
+    /*@POST
     @Timed
-    public Response createNewGame(@Valid PBF PBF) {
+    public Response createNewGame(PBF PBF) {
         collection.insert(PBF);
         return Response.noContent().build();
     }
-
+    */
 }

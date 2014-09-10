@@ -1,9 +1,10 @@
 package no.asgari.civilization.resource;
 
 import com.codahale.metrics.annotation.Timed;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import io.dropwizard.views.View;
-import net.vz.mongodb.jackson.DBCursor;
-import net.vz.mongodb.jackson.JacksonDBCollection;
 import no.asgari.civilization.representations.PBF;
 import no.asgari.civilization.views.GameView;
 
@@ -16,23 +17,23 @@ import java.util.List;
 @Path("/")
 public class IndexResource {
 
-    private JacksonDBCollection<PBF, String> collection;
+    private DBCollection collection;
 
-    public IndexResource(JacksonDBCollection<PBF, String> blogs) {
-        this.collection = blogs;
+    public IndexResource(DBCollection collection) {
+        this.collection = collection;
     }
 
     @GET
     @Produces("text/html;charset=UTF-8")
     @Timed
     public View index() {
-        DBCursor<PBF> dbCursor = collection.find();
-        List<PBF> PBFs = new ArrayList<>();
+        DBCursor dbCursor = collection.find();
+        List<DBObject> dbObjects = new ArrayList<>();
         while (dbCursor.hasNext()) {
-            PBF PBF = dbCursor.next();
-            PBFs.add(PBF);
+            DBObject dbObject = dbCursor.next();
+            dbObjects.add(dbObject);
         }
-        return new GameView(PBFs);
+        return new GameView(dbObjects);
     }
 
 }

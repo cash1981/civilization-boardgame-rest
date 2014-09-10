@@ -1,7 +1,6 @@
 package no.asgari.civilization.representations;
 
-import net.vz.mongodb.jackson.Id;
-import net.vz.mongodb.jackson.ObjectId;
+
 import no.asgari.civilization.ExcelSheet;
 
 /**
@@ -10,18 +9,15 @@ import no.asgari.civilization.ExcelSheet;
  */
 public class Mounted implements Unit<Mounted> {
     public final int LEVEL_1 = 1;
+    private int level = LEVEL_1;
     public final int LEVEL_2 = 2;
     public final int LEVEL_3 = 3;
     public final int LEVEL_4 = 4;
-
-    @Id
-    @ObjectId
     private String id;
     private String owner;
     private boolean hidden;
     private boolean used;
     private boolean dead;
-    private int level = LEVEL_1;
     private int attack;
     private int health;
 
@@ -35,9 +31,17 @@ public class Mounted implements Unit<Mounted> {
         return owner;
     }
 
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
     @Override
     public boolean isHidden() {
         return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
     }
 
     @Override
@@ -45,9 +49,17 @@ public class Mounted implements Unit<Mounted> {
         return used;
     }
 
+    public void setUsed(boolean used) {
+        this.used = used;
+    }
+
     @Override
     public boolean isDead() {
         return dead;
+    }
+
+    public void setDead(boolean dead) {
+        this.dead = dead;
     }
 
     @Override
@@ -55,9 +67,17 @@ public class Mounted implements Unit<Mounted> {
         return level;
     }
 
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
     @Override
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override
@@ -65,9 +85,17 @@ public class Mounted implements Unit<Mounted> {
         return attack;
     }
 
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
+
     @Override
     public int getHealth() {
         return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
     }
 
     @Override
@@ -78,38 +106,6 @@ public class Mounted implements Unit<Mounted> {
     @Override
     public ExcelSheet getSheetName() {
         return ExcelSheet.MOUNTED;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public void setHidden(boolean hidden) {
-        this.hidden = hidden;
-    }
-
-    public void setUsed(boolean used) {
-        this.used = used;
-    }
-
-    public void setDead(boolean dead) {
-        this.dead = dead;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setAttack(int attack) {
-        this.attack = attack;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
     }
 
     @Override
