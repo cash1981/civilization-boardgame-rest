@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Setter
 @ToString(of={"type", "name", "description"})
 @JsonTypeName("wonder")
-public class Wonder implements Item<Wonder> {
+public class Wonder implements Item {
     public static String ANCIENT = "Ancient";
     public static String MEDIEVAL = "Medieval";
     public static String MODERN = "Modern";
@@ -30,11 +30,6 @@ public class Wonder implements Item<Wonder> {
         this.type = type;
         this.used = false;
         this.hidden = true;
-    }
-
-    @Override
-    public Wonder getItem() {
-        return this;
     }
 
     @Override

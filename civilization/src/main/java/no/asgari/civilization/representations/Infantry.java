@@ -13,7 +13,7 @@ import no.asgari.civilization.ExcelSheet;
 @Getter
 @Setter
 @JsonTypeName("aircraft")
-public class Infantry implements Unit<Infantry> {
+public class Infantry implements Unit {
     private final int LEVEL_1 = 1;
     private final int LEVEL_2 = 2;
     private final int LEVEL_3 = 3;
@@ -31,11 +31,6 @@ public class Infantry implements Unit<Infantry> {
     public Infantry(int attack, int health) {
         this.attack = attack;
         this.health = health;
-    }
-
-    @Override
-    public Infantry getUnit() {
-        return this;
     }
 
     @Override

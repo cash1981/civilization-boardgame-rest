@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Getter
 @Setter
 @JsonTypeName("citystate")
-public class Citystate implements Item<Citystate> {
+public class Citystate implements Item {
     private String id;
 
     @JsonProperty
@@ -40,8 +40,4 @@ public class Citystate implements Item<Citystate> {
         return ExcelSheet.CITY_STATES;
     }
 
-    @Override
-    public Citystate getItem() {
-        return this;
-    }
 }

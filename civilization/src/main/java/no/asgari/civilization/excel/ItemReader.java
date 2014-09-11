@@ -13,71 +13,77 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ItemReader {
-    public Queue<? extends Item> shuffledCivs;
-    public Queue<? extends Item> shuffledCultureI;
-    public Queue<? extends Item> shuffledCultureII;
-    public Queue<? extends Item> shuffledCultureIII;
-    public Queue<? extends Item> shuffledGPs;
-    public Queue<? extends Item> shuffledHuts;
-    public Queue<? extends Item> shuffledVillages;
+    public LinkedList<Civ> shuffledCivs;
+    public LinkedList<CultureI> shuffledCultureI;
+    public LinkedList<CultureII> shuffledCultureII;
+    public LinkedList<CultureIII> shuffledCultureIII;
+    public LinkedList<GreatPerson> shuffledGPs;
+    public LinkedList<Hut> shuffledHuts;
+    public LinkedList<Village> shuffledVillages;
     public List<Wonder> modernWonder;
     public List<Wonder> medivalWonder;
     public List<Wonder> ancientWonders;
-    public Queue<? extends Item> shuffledTiles;
-    private Queue<? extends Item> shuffledCityStates;
+    public LinkedList<Tile> shuffledTiles;
+    public LinkedList<Citystate> shuffledCityStates;
+    
+    private final Predicate<Cell> notEmptyPredicate = p -> !p.toString().isEmpty();
+    private final Predicate<Cell> notRandomPredicate = p -> !p.toString().equals("RAND()");
+    private final Predicate<Cell> rowNotZeroPredicate = p -> p.getRow().getRowNum() != 0;
+    private final Predicate<Cell> columnIndexZeroPredicate = cell -> cell.getColumnIndex() == 0;
 
+    @SuppressWarnings("unchecked")
     public void readItemsFromExcel() throws IOException {
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
         Workbook wb = new XSSFWorkbook(in);
 
-        shuffledCivs = getShuffledCivsFromExcel(wb);
+        shuffledCivs = (LinkedList<Civ>) getShuffledCivsFromExcel(wb);
 
-        shuffledCultureI = getShuffledCultureIFromExcel(wb);
+        shuffledCultureI = (LinkedList<CultureI>) getShuffledCultureIFromExcel(wb);
 
-        shuffledCultureII = getShuffledCultureIIFromExcel(wb);
+        shuffledCultureII = (LinkedList<CultureII>) getShuffledCultureIIFromExcel(wb);
 
-        shuffledCultureIII = getShuffledCultureIIIFromExcel(wb);
+        shuffledCultureIII = (LinkedList<CultureIII>) getShuffledCultureIIIFromExcel(wb);
 
-        shuffledGPs = getShuffledGreatPersonFromExcel(wb);
+        shuffledGPs = (LinkedList<GreatPerson>) getShuffledGreatPersonFromExcel(wb);
 
-        shuffledHuts = getShuffledHutsFromExcel(wb);
+        shuffledHuts = (LinkedList<Hut>) getShuffledHutsFromExcel(wb);
 
-        shuffledVillages = getShuffledVillages(wb);
+        shuffledVillages = (LinkedList<Village>) getShuffledVillages(wb);
 
-        shuffledCityStates = getShuffledCityStates(wb);
+        shuffledCityStates = (LinkedList<Citystate>) getShuffledCityStates(wb);
 
-        getShuffledWonderFromExcel(wb);
+        extractShuffledWonderFromExcel(wb);
 
-        shuffledTiles = getShuffledTilesFromExcel(wb);
+        shuffledTiles = (LinkedList<Tile>) getShuffledTilesFromExcel(wb);
         wb.close();
     }
 
-    private Queue<Item> getShuffledCityStates(Workbook wb) {
+    private LinkedList<? extends Item> getShuffledCityStates(Workbook wb) {
         Sheet civSheet = wb.getSheet(ExcelSheet.CITY_STATES.toString());
 
-        List<Cell> unfilteredCitystateCells = new ArrayList<>();
-        civSheet.forEach(row -> row.forEach(cell -> unfilteredCitystateCells.add(cell))
+        List<Cell> unfilteredCivCells = new ArrayList<>();
+        civSheet.forEach(row -> row.forEach(cell -> unfilteredCivCells.add(cell))
         );
 
-        List<Citystate> citystates = unfilteredCitystateCells.stream()
-                .filter(p -> !p.toString().isEmpty())
-                .filter(p -> !p.toString().equals("RAND()"))
-                .filter(p -> p.getRow().getRowNum() != 0)
-                .filter(cell -> cell.getColumnIndex() == 0)
-                .map(name -> new Citystate(name.toString()))
+
+        List<Citystate> cityStates = unfilteredCivCells.stream()
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
+                .filter(columnIndexZeroPredicate)
+                .map(civname -> new Citystate(civname.toString()))
                 .collect(Collectors.toList());
 
-        Collections.shuffle(citystates);
-        Queue<Item> shuffledCitystates = new LinkedList<>(citystates);
-
-        return shuffledCitystates;
+        Collections.shuffle(cityStates);
+        LinkedList<Item> shuffled = new LinkedList<>(cityStates);
+        return shuffled;
     }
 
-    private Queue<Item> getShuffledCivsFromExcel(Workbook wb) {
+    private LinkedList<? extends Item> getShuffledCivsFromExcel(Workbook wb) {
         Sheet civSheet = wb.getSheet(ExcelSheet.CIV.toString());
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
@@ -85,20 +91,20 @@ public class ItemReader {
         );
 
         List<Civ> civs = unfilteredCivCells.stream()
-                .filter(p -> !p.toString().isEmpty())
-                .filter(p -> !p.toString().equals("RAND()"))
-                .filter(p -> p.getRow().getRowNum() != 0)
-                .filter(cell -> cell.getColumnIndex() == 0)
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
+                .filter(columnIndexZeroPredicate)
                 .map(civname -> new Civ(civname.toString()))
                 .collect(Collectors.toList());
 
         Collections.shuffle(civs);
-        Queue<Item> shuffledCivs = new LinkedList<>(civs);
+        LinkedList<Civ> shuffledCivs = new LinkedList<>(civs);
 
         return shuffledCivs;
     }
 
-    private Queue<CultureI> getShuffledCultureIFromExcel(Workbook wb) {
+    private LinkedList<? extends Item> getShuffledCultureIFromExcel(Workbook wb) {
         Sheet culture1Sheet = wb.getSheet(ExcelSheet.CULTURE_1.toString());
 
         List<Cell> unfilteredCells = new ArrayList<>();
@@ -106,18 +112,18 @@ public class ItemReader {
         );
 
         List<CultureI> cultures = unfilteredCells.parallelStream()
-                .filter(p -> !p.toString().isEmpty())
-                .filter(p -> !p.toString().equals("RAND()"))
-                .filter(p -> p.getRow().getRowNum() != 0)
-                .filter(cell -> cell.getColumnIndex() == 0)
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
+                .filter(columnIndexZeroPredicate)
                 .map(cell -> new CultureI(cell.toString()))
                 .collect(Collectors.toList());
 
 
         List<String> description = unfilteredCells.parallelStream()
-                .filter(p -> !p.toString().isEmpty())
-                .filter(p -> !p.toString().equals("RAND()"))
-                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
                 .filter(cell -> cell.getColumnIndex() == 1)
                 .map(Object::toString)
                 .collect(Collectors.toList());
@@ -131,11 +137,11 @@ public class ItemReader {
         Collections.shuffle(cultures);
 
         //Now we want to take every other one
-        Queue<CultureI> culture1 = new LinkedList<>(cultures);
+        LinkedList<CultureI> culture1 = new LinkedList<>(cultures);
         return culture1;
     }
 
-    private Queue<CultureII> getShuffledCultureIIFromExcel(Workbook wb) {
+    private LinkedList<? extends Item> getShuffledCultureIIFromExcel(Workbook wb) {
         Sheet culture2Sheet = wb.getSheet(ExcelSheet.CULTURE_2.toString());
 
         List<Cell> unfilteredCells = new ArrayList<>();
@@ -143,17 +149,17 @@ public class ItemReader {
         );
 
         List<CultureII> cultures = unfilteredCells.stream()
-                .filter(p -> !p.toString().isEmpty())
-                .filter(p -> !p.toString().equals("RAND()"))
-                .filter(p -> p.getRow().getRowNum() != 0)
-                .filter(cell -> cell.getColumnIndex() == 0)
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
+                .filter(columnIndexZeroPredicate)
                 .map(cell -> new CultureII(cell.toString()))
                 .collect(Collectors.toList());
 
         List<String> description = unfilteredCells.parallelStream()
-                .filter(p -> !p.toString().isEmpty())
-                .filter(p -> !p.toString().equals("RAND()"))
-                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
                 .filter(cell -> cell.getColumnIndex() == 1)
                 .map(Object::toString)
                 .collect(Collectors.toList());
@@ -167,28 +173,28 @@ public class ItemReader {
         Collections.shuffle(cultures);
 
         //Now we want to take every other one
-        Queue<CultureII> culture2 = new LinkedList<>(cultures);
+        LinkedList<CultureII> culture2 = new LinkedList<>(cultures);
         return culture2;
     }
 
-    private Queue<CultureIII> getShuffledCultureIIIFromExcel(Workbook wb) {
+    private LinkedList<? extends Item> getShuffledCultureIIIFromExcel(Workbook wb) {
         Sheet culture3Sheet = wb.getSheet(ExcelSheet.CULTURE_3.toString());
 
         List<Cell> unfilteredCells = new ArrayList<>();
         culture3Sheet.forEach(row -> row.forEach(unfilteredCells::add));
 
         List<CultureIII> cultures = unfilteredCells.stream()
-                .filter(p -> !p.toString().isEmpty())
-                .filter(p -> !p.toString().equals("RAND()"))
-                .filter(p -> p.getRow().getRowNum() != 0)
-                .filter(cell -> cell.getColumnIndex() == 0)
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
+                .filter(columnIndexZeroPredicate)
                 .map(cell -> new CultureIII(cell.toString()))
                 .collect(Collectors.toList());
 
         List<String> description = unfilteredCells.parallelStream()
-                .filter(p -> !p.toString().isEmpty())
-                .filter(p -> !p.toString().equals("RAND()"))
-                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
                 .filter(cell -> cell.getColumnIndex() == 1)
                 .map(Object::toString)
                 .collect(Collectors.toList());
@@ -202,36 +208,36 @@ public class ItemReader {
         Collections.shuffle(cultures);
 
         //Now we want to take every other one
-        Queue<CultureIII> culture3 = new LinkedList<>(cultures);
+        LinkedList<CultureIII> culture3 = new LinkedList<>(cultures);
         return culture3;
     }
 
-    private Queue<GreatPerson> getShuffledGreatPersonFromExcel(Workbook wb) {
+    private LinkedList<? extends Item> getShuffledGreatPersonFromExcel(Workbook wb) {
         Sheet gpSheet = wb.getSheet(ExcelSheet.GREAT_PERSON.toString());
 
         List<Cell> unfilteredCells = new ArrayList<>();
         gpSheet.forEach(row -> row.forEach(unfilteredCells::add));
 
         List<GreatPerson> gps = unfilteredCells.stream()
-                .filter(p -> !p.toString().isEmpty())
-                .filter(p -> !p.toString().equals("RAND()"))
-                .filter(p -> p.getRow().getRowNum() != 0)
-                .filter(cell -> cell.getColumnIndex() == 0)
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
+                .filter(columnIndexZeroPredicate)
                 .map(cell -> new GreatPerson(cell.toString()))
                 .collect(Collectors.toList());
 
         List<String> tile = unfilteredCells.parallelStream()
-                .filter(p -> !p.toString().isEmpty())
-                .filter(p -> !p.toString().equals("RAND()"))
-                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
                 .filter(cell -> cell.getColumnIndex() == 1)
                 .map(Object::toString)
                 .collect(Collectors.toList());
 
         List<String> description = unfilteredCells.parallelStream()
-                .filter(p -> !p.toString().isEmpty())
-                .filter(p -> !p.toString().equals("RAND()"))
-                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
                 .filter(cell -> cell.getColumnIndex() == 2)
                 .map(Object::toString)
                 .collect(Collectors.toList());
@@ -246,11 +252,11 @@ public class ItemReader {
         Collections.shuffle(gps);
 
         //Now we want to take every other one
-        Queue<GreatPerson> gpQueue = new LinkedList<>(gps);
-        return gpQueue;
+        LinkedList<GreatPerson> gpLinkedList = new LinkedList<>(gps);
+        return gpLinkedList;
     }
 
-    private void getShuffledWonderFromExcel(Workbook wb) {
+    private void extractShuffledWonderFromExcel(Workbook wb) {
         Sheet wonderSheet = wb.getSheet(ExcelSheet.WONDERS.toString());
 
         List<Cell> unfilteredCells = new ArrayList<>();
@@ -260,16 +266,16 @@ public class ItemReader {
 
         List<String> wonderName = unfilteredCells.stream()
                 .filter(p -> !p.toString().trim().isEmpty())
-                .filter(p -> !p.toString().equals("RAND()"))
-                .filter(p -> p.getRow().getRowNum() != 0)
-                .filter(cell -> cell.getColumnIndex() == 0)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
+                .filter(columnIndexZeroPredicate)
                 .map(Object::toString)
                 .collect(Collectors.toList());
 
         List<String> description = unfilteredCells.parallelStream()
                 .filter(p -> !p.toString().trim().isEmpty())
-                .filter(p -> !p.toString().equals("RAND()"))
-                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
                 .filter(cell -> cell.getColumnIndex() == 1)
                 .map(Object::toString)
                 .collect(Collectors.toList());
@@ -315,7 +321,7 @@ public class ItemReader {
         Collections.shuffle(modernWonder);
     }
 
-    private Queue<Item> getShuffledTilesFromExcel(Workbook wb) {
+    private LinkedList<? extends Item> getShuffledTilesFromExcel(Workbook wb) {
         Sheet tileSheet = wb.getSheet(ExcelSheet.TILES.toString());
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
@@ -323,19 +329,19 @@ public class ItemReader {
         );
 
         List<Tile> tiles = unfilteredCivCells.stream()
-                .filter(p -> !p.toString().isEmpty())
-                .filter(p -> !p.toString().equals("RAND()"))
-                .filter(p -> p.getRow().getRowNum() != 0)
-                .filter(cell -> cell.getColumnIndex() == 0)
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
+                .filter(columnIndexZeroPredicate)
                 .map(tilename -> new Tile(String.format("%d", (int) Double.valueOf(tilename.toString()).doubleValue())))
                 .collect(Collectors.toList());
 
         Collections.shuffle(tiles);
-        Queue<Item> shuffledTiles = new LinkedList<>(tiles);
+        LinkedList<Tile> shuffledTiles = new LinkedList<>(tiles);
         return shuffledTiles;
     }
 
-    private Queue<Item> getShuffledHutsFromExcel(Workbook wb) {
+    private LinkedList<? extends Item> getShuffledHutsFromExcel(Workbook wb) {
         Sheet hutSheet = wb.getSheet(ExcelSheet.HUTS.toString());
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
@@ -343,20 +349,20 @@ public class ItemReader {
         );
 
         List<Hut> huts = unfilteredCivCells.stream()
-                .filter(p -> !p.toString().isEmpty())
-                .filter(p -> !p.toString().equals("RAND()"))
-                .filter(p -> p.getRow().getRowNum() != 0)
-                .filter(cell -> cell.getColumnIndex() == 0)
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
+                .filter(columnIndexZeroPredicate)
                 .map(hut -> new Hut(hut.toString()))
                 .collect(Collectors.toList());
 
         Collections.shuffle(huts);
-        Queue<Item> shuffledTiles = new LinkedList<>(huts);
+        LinkedList<Hut> shuffledHuts = new LinkedList<>(huts);
 
-        return shuffledTiles;
+        return shuffledHuts;
     }
 
-    private Queue<Item> getShuffledVillages(Workbook wb) {
+    private LinkedList<? extends Item> getShuffledVillages(Workbook wb) {
         Sheet sheet = wb.getSheet(ExcelSheet.VILLAGES.toString());
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
@@ -364,17 +370,17 @@ public class ItemReader {
         );
 
         List<Village> villages = unfilteredCivCells.stream()
-                .filter(p -> !p.toString().isEmpty())
-                .filter(p -> !p.toString().equals("RAND()"))
-                .filter(p -> p.getRow().getRowNum() != 0)
-                .filter(cell -> cell.getColumnIndex() == 0)
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
+                .filter(columnIndexZeroPredicate)
                 .map(village -> new Village(village.toString()))
                 .collect(Collectors.toList());
 
         Collections.shuffle(villages);
-        Queue<Item> shuffledTiles = new LinkedList<>(villages);
+        LinkedList<Village> shuffledVillages = new LinkedList<>(villages);
 
-        return shuffledTiles;
+        return shuffledVillages;
     }
 
 }

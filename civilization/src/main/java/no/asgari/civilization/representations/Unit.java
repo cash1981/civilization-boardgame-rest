@@ -38,7 +38,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value=Artillery.class, name="artillery"),
         @JsonSubTypes.Type(value=Aircraft.class, name="aircraft")
 })
-public interface Unit<T> extends Spreadsheet {
+public interface Unit extends Spreadsheet {
 
     /**
      * Either the username or pbf name, both of which must be unique *
@@ -58,7 +58,5 @@ public interface Unit<T> extends Spreadsheet {
     public int getAttack();
 
     public int getHealth();
-
-    public T getUnit();
 
 }

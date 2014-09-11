@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Setter
 @ToString(of="name")
 @JsonTypeName("village")
-public class Village implements Item<Village> {
+public class Village implements Item {
     @NotEmpty
     private final String name;
     private String id;
@@ -25,11 +25,6 @@ public class Village implements Item<Village> {
         this.name = name;
         this.used = false;
         this.hidden = true;
-    }
-
-    @Override
-    public Village getItem() {
-        return this;
     }
 
     @Override
