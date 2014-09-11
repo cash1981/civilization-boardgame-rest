@@ -28,6 +28,7 @@ public class ItemTest {
     public List<Wonder> medivalWonder;
     public List<Wonder> ancientWonders;
     public Queue<? extends Item> shuffledTiles;
+    private Queue<? extends Item> shuffledCityStates;
 
     @Test
     public void readItemsFromExcel() throws IOException {
@@ -58,6 +59,10 @@ public class ItemTest {
         getShuffledWonderFromExcel(wb);
 
         shuffledTiles = getShuffledTilesFromExcel(wb);
+
+        shuffledCityStates = getShuffledCityStatesFromExcel(wb);
+        assertNotNull(shuffledCityStates);
+
         wb.close();
     }
 
@@ -92,6 +97,31 @@ public class ItemTest {
 
         System.out.println(shuffledCivs);
         return shuffledCivs;
+    }
+
+    private Queue<Item> getShuffledCityStatesFromExcel(Workbook wb) {
+        Sheet civSheet = wb.getSheet(ExcelSheet.CITY_STATES.toString());
+        assertNotNull(civSheet);
+
+        List<Cell> unfilteredCivCells = new ArrayList<>();
+        civSheet.forEach(row -> row.forEach(cell -> unfilteredCivCells.add(cell))
+        );
+        assertFalse(unfilteredCivCells.isEmpty());
+
+        List<Citystate> cityStates = unfilteredCivCells.stream()
+                .filter(p -> !p.toString().isEmpty())
+                .filter(p -> !p.toString().equals("RAND()"))
+                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(cell -> cell.getColumnIndex() == 0)
+                .map(civname -> new Citystate(civname.toString()))
+                .collect(Collectors.toList());
+
+        Collections.shuffle(cityStates);
+        Queue<Item> shuffled = new LinkedList<>(cityStates);
+        assertQueue(shuffled, cityStates);
+
+        System.out.println(shuffled);
+        return shuffled;
     }
 
     private Queue<CultureI> getShuffledCultureIFromExcel(Workbook wb) {

@@ -3,7 +3,6 @@ package no.asgari.civilization.views;
 import com.google.common.base.Charsets;
 import com.mongodb.DBObject;
 import io.dropwizard.views.View;
-import no.asgari.civilization.representations.PBF;
 
 import java.util.List;
 

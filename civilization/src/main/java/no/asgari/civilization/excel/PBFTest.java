@@ -36,7 +36,7 @@ public class PBFTest {
         pbf.setInfantry(new ArrayList<>(unit.infantryQueue));
 
         List<Item> allItems = new ArrayList<>();
-        allItems.addAll(items.civs);
+        allItems.addAll(items.shuffledCivs);
         allItems.addAll(items.shuffledCultureI);
         allItems.addAll(items.shuffledCultureII);
         allItems.addAll(items.shuffledCultureIII);

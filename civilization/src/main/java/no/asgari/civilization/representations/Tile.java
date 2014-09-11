@@ -1,12 +1,17 @@
 package no.asgari.civilization.representations;
 
-
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import no.asgari.civilization.ExcelSheet;
 import org.hibernate.validator.constraints.NotEmpty;
 
+@Getter
+@Setter
+@ToString(of="name")
+@JsonTypeName("tile")
 public class Tile implements Item<Tile> {
-
-
     @NotEmpty
     private final String name;
     private String id;
@@ -23,65 +28,6 @@ public class Tile implements Item<Tile> {
     }
 
     @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    @Override
-    public boolean isHidden() {
-        return hidden;
-    }
-
-    public void setHidden(boolean hidden) {
-        this.hidden = hidden;
-    }
-
-    @Override
-    public boolean isUsed() {
-        return used;
-    }
-
-    public void setUsed(boolean used) {
-        this.used = used;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @Override
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    @Override
     public Tile getItem() {
         return this;
     }
@@ -89,13 +35,6 @@ public class Tile implements Item<Tile> {
     @Override
     public ExcelSheet getSheetName() {
         return ExcelSheet.TILES;
-    }
-
-    @Override
-    public String toString() {
-        return "Tile{" +
-                "name='" + name + '\'' +
-                '}';
     }
 
 }

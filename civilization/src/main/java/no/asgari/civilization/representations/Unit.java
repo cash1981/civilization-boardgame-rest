@@ -1,5 +1,8 @@
 package no.asgari.civilization.representations;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 /**
  * The item you pull for instance Great Person, Wonder, Civ etc
  * Most of them will not have type or description.
@@ -28,6 +31,13 @@ package no.asgari.civilization.representations;
  * used = true
  * hidden = true;
  */
+@JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include= JsonTypeInfo.As.WRAPPER_OBJECT, property="type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value=Infantry.class, name="infantry"),
+        @JsonSubTypes.Type(value=Mounted.class, name="mounted"),
+        @JsonSubTypes.Type(value=Artillery.class, name="artillery"),
+        @JsonSubTypes.Type(value=Aircraft.class, name="aircraft")
+})
 public interface Unit<T> extends Spreadsheet {
 
     /**

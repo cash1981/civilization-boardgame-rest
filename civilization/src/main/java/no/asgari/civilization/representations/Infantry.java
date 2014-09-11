@@ -1,18 +1,25 @@
 package no.asgari.civilization.representations;
 
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import lombok.Getter;
+import lombok.Setter;
 import no.asgari.civilization.ExcelSheet;
 
 /**
  * Type should describe the unit type, for instance
  * Spearmen, Pikemen, Riflemen etc
  */
+@Getter
+@Setter
+@JsonTypeName("aircraft")
 public class Infantry implements Unit<Infantry> {
-    public final int LEVEL_1 = 1;
+    private final int LEVEL_1 = 1;
+    private final int LEVEL_2 = 2;
+    private final int LEVEL_3 = 3;
+    private final int LEVEL_4 = 4;
+
     private int level = LEVEL_1;
-    public final int LEVEL_2 = 2;
-    public final int LEVEL_3 = 3;
-    public final int LEVEL_4 = 4;
     private final int attack;
     private final int health;
     private String id;
@@ -24,70 +31,6 @@ public class Infantry implements Unit<Infantry> {
     public Infantry(int attack, int health) {
         this.attack = attack;
         this.health = health;
-    }
-
-    @Override
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    @Override
-    public boolean isHidden() {
-        return hidden;
-    }
-
-    public void setHidden(boolean hidden) {
-        this.hidden = hidden;
-    }
-
-    @Override
-    public boolean isUsed() {
-        return used;
-    }
-
-    public void setUsed(boolean used) {
-        this.used = used;
-    }
-
-    @Override
-    public boolean isDead() {
-        return dead;
-    }
-
-    public void setDead(boolean dead) {
-        this.dead = dead;
-    }
-
-    @Override
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @Override
-    public int getAttack() {
-        return attack;
-    }
-
-    @Override
-    public int getHealth() {
-        return health;
     }
 
     @Override

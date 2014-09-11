@@ -1,5 +1,6 @@
 package no.asgari.civilization.representations;
 
+import com.fasterxml.jackson.annotation.JsonRootName;
 import com.google.common.collect.Lists;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -9,9 +10,8 @@ import java.util.List;
 /**
  * PBF stands for Play By Forum
  */
+@JsonRootName(value="pbf")
 public class PBF {
-    //
-    //
     private String id;
 
     private List<Player> players = Lists.newArrayList();

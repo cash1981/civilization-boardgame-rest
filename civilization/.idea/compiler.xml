@@ -14,7 +14,7 @@
       <entry name="!?*.clj" />
     </wildcardResourcePatterns>
     <annotationProcessing>
-      <profile default="$AUTODEPLOY$" name="Default" enabled="false">
+      <profile default="$AUTODEPLOY$" name="Default" enabled="$AUTODEPLOY$">
         <processorPath useClasspath="$AUTODEPLOY$" />
       </profile>
       <profile default="false" name="Maven default annotation processors profile" enabled="$AUTODEPLOY$">
@@ -29,8 +29,6 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="civilization" target="1.8" />
-      <module name="dropwizard-example" target="1.7" />
-      <module name="reader30" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>

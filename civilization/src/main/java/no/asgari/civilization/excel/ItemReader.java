@@ -17,7 +17,7 @@ import java.util.Queue;
 import java.util.stream.Collectors;
 
 public class ItemReader {
-    public Queue<? extends Item> civs;
+    public Queue<? extends Item> shuffledCivs;
     public Queue<? extends Item> shuffledCultureI;
     public Queue<? extends Item> shuffledCultureII;
     public Queue<? extends Item> shuffledCultureIII;
@@ -28,12 +28,13 @@ public class ItemReader {
     public List<Wonder> medivalWonder;
     public List<Wonder> ancientWonders;
     public Queue<? extends Item> shuffledTiles;
+    private Queue<? extends Item> shuffledCityStates;
 
     public void readItemsFromExcel() throws IOException {
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
         Workbook wb = new XSSFWorkbook(in);
 
-        civs = getShuffledCivsFromExcel(wb);
+        shuffledCivs = getShuffledCivsFromExcel(wb);
 
         shuffledCultureI = getShuffledCultureIFromExcel(wb);
 
@@ -47,10 +48,33 @@ public class ItemReader {
 
         shuffledVillages = getShuffledVillages(wb);
 
+        shuffledCityStates = getShuffledCityStates(wb);
+
         getShuffledWonderFromExcel(wb);
 
         shuffledTiles = getShuffledTilesFromExcel(wb);
         wb.close();
+    }
+
+    private Queue<Item> getShuffledCityStates(Workbook wb) {
+        Sheet civSheet = wb.getSheet(ExcelSheet.CITY_STATES.toString());
+
+        List<Cell> unfilteredCitystateCells = new ArrayList<>();
+        civSheet.forEach(row -> row.forEach(cell -> unfilteredCitystateCells.add(cell))
+        );
+
+        List<Citystate> citystates = unfilteredCitystateCells.stream()
+                .filter(p -> !p.toString().isEmpty())
+                .filter(p -> !p.toString().equals("RAND()"))
+                .filter(p -> p.getRow().getRowNum() != 0)
+                .filter(cell -> cell.getColumnIndex() == 0)
+                .map(name -> new Citystate(name.toString()))
+                .collect(Collectors.toList());
+
+        Collections.shuffle(citystates);
+        Queue<Item> shuffledCitystates = new LinkedList<>(citystates);
+
+        return shuffledCitystates;
     }
 
     private Queue<Item> getShuffledCivsFromExcel(Workbook wb) {

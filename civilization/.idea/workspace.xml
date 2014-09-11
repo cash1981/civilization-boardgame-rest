@@ -2,32 +2,33 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="$AUTODEPLOY$" id="a1d30372-8a9d-4e5f-9b66-0bd0e994b45d" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_9.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_1.xml" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Aircraft.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Aircraft.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Artillery.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Artillery.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Citystate.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Citystate.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Civ.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Civ.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/application/CivBoardGameRandomizerConfiguration.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/application/CivBoardGameRandomizerConfiguration.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/application/CivBoardgameRandomizerApplication.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/application/CivBoardgameRandomizerApplication.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/CultureI.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/CultureI.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/CultureII.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/CultureII.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/CultureIII.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/CultureIII.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/GameResource.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/GameResource.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/no/asgari/civilization/resource/GameResourceTest.java" afterPath="$PROJECT_DIR$/src/test/java/no/asgari/civilization/resource/GameResourceTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/views/GameView.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/views/GameView.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/GreatPerson.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/GreatPerson.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Hut.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Hut.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/IndexResource.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/IndexResource.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Infantry.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Infantry.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Item.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Item.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/excel/ItemReader.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/excel/ItemReader.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/ItemTest.java" afterPath="$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/ItemTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Mounted.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Mounted.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/PBF.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/PBF.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/excel/PBFTest.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/excel/PBFTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Player.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Player.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Tile.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Tile.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Unit.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Unit.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Village.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Village.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Wonder.java" afterPath="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Wonder.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/civilization.iml" afterPath="$PROJECT_DIR$/civilization.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/config.yml" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -52,60 +53,66 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
+      <file leaf-file-name="Unit.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Unit.java">
+          <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="525" max-vertical-offset="1260">
+              <caret line="37" column="65" selection-start-line="37" selection-start-column="65" selection-end-line="37" selection-end-column="65" />
+              <folding>
+                <element signature="imports" expanded="$AUTODEPLOY$" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Mounted.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Mounted.java">
+          <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1134">
+              <caret line="15" column="34" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="34" />
+              <folding>
+                <element signature="imports" expanded="$AUTODEPLOY$" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="GameResource.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/GameResource.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1314">
-              <caret line="65" column="6" selection-start-line="65" selection-start-column="6" selection-end-line="65" selection-end-column="6" />
-              <folding>
-                <element signature="imports" expanded="$AUTODEPLOY$" />
-                <element signature="e#777#778#0" expanded="$AUTODEPLOY$" />
-                <element signature="e#814#815#0" expanded="$AUTODEPLOY$" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HelloWorldResource.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/HelloWorldResource.java">
-          <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="522">
-              <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="439" max-vertical-offset="1242">
+              <caret line="65" column="36" selection-start-line="65" selection-start-column="36" selection-end-line="65" selection-end-column="36" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IndexResource.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/IndexResource.java">
+      <file leaf-file-name="Exception.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar:///usr/lib/jvm/jdk1.8.0_20/src.zip!/java/lang/Exception.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="144" max-vertical-offset="774">
-              <caret line="35" column="22" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="22" />
-              <folding>
-                <element signature="imports" expanded="$AUTODEPLOY$" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GameView.java" pinned="false" current="$AUTODEPLOY$" current-in-tab="$AUTODEPLOY$">
-        <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/views/GameView.java">
-          <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.18398637" vertical-offset="0" max-vertical-offset="587">
-              <caret line="11" column="25" selection-start-line="11" selection-start-column="25" selection-end-line="11" selection-end-column="25" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="205" max-vertical-offset="1746">
+              <caret line="44" column="13" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="13" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PBF.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/PBF.java">
+      <file leaf-file-name="Item.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Item.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="198" max-vertical-offset="1404">
-              <caret line="11" column="6" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="6" />
-              <folding>
-                <element signature="imports" expanded="$AUTODEPLOY$" />
-              </folding>
+            <state vertical-scroll-proportion="0.0" vertical-offset="367" max-vertical-offset="1368">
+              <caret line="33" column="11" selection-start-line="33" selection-start-column="11" selection-end-line="33" selection-end-column="11" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="JsonTypeInfo.java" pinned="false" current="$AUTODEPLOY$" current-in-tab="$AUTODEPLOY$">
+        <entry file="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-annotations/2.3.0/jackson-annotations-2.3.0-sources.jar!/com/fasterxml/jackson/annotation/JsonTypeInfo.java">
+          <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="2.8304431" vertical-offset="2167" max-vertical-offset="5058">
+              <caret line="204" column="14" selection-start-line="204" selection-start-column="14" selection-end-line="204" selection-end-column="14" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -113,18 +120,32 @@
       <file leaf-file-name="Aircraft.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Aircraft.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="61" max-vertical-offset="1404">
-              <caret line="11" column="15" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="75" max-vertical-offset="882">
+              <caret line="15" column="34" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="34" />
+              <folding>
+                <element signature="imports" expanded="$AUTODEPLOY$" />
+                <element signature="e#709#710#0" expanded="$AUTODEPLOY$" />
+                <element signature="e#733#734#0" expanded="$AUTODEPLOY$" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PBF.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/PBF.java">
+          <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1314">
+              <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CivBoardGameRandomizerConfiguration.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/application/CivBoardGameRandomizerConfiguration.java">
+      <file leaf-file-name="Civ.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Civ.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="18" max-vertical-offset="612">
-              <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="54" max-vertical-offset="792">
+              <caret line="15" column="29" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
               <folding>
                 <element signature="imports" expanded="$AUTODEPLOY$" />
               </folding>
@@ -132,34 +153,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="WebResource.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/com/sun/jersey/jersey-client/1.18.1/jersey-client-1.18.1-sources.jar!/com/sun/jersey/api/client/WebResource.java">
+      <file leaf-file-name="Artillery.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Artillery.java">
           <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2250" max-vertical-offset="9738">
-              <caret line="191" column="17" selection-start-line="191" selection-start-column="17" selection-end-line="191" selection-end-column="17" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="21" max-vertical-offset="1062">
+              <caret line="15" column="38" selection-start-line="15" selection-start-column="38" selection-end-line="15" selection-end-column="38" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pom.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pom.xml">
-          <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="3942">
-              <caret line="25" column="4" selection-start-line="25" selection-start-column="4" selection-end-line="25" selection-end-column="4" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CivBoardgameRandomizerApplication.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/application/CivBoardgameRandomizerApplication.java">
-          <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="234" max-vertical-offset="864">
-              <caret line="32" column="20" selection-start-line="32" selection-start-column="8" selection-end-line="32" selection-end-column="20" />
-              <folding>
-                <element signature="imports" expanded="$AUTODEPLOY$" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -177,8 +176,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/application/MongoHealthCheck.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/application/CivilizationBoardgameApplication.java" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/application/CivilizationBoardgameConfiguration.java" />
         <option value="$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/PlayerBuilder.java" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/Sheet.java" />
@@ -188,46 +185,48 @@
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Game.java" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/ItemImpl.java" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Excel.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Unit.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Mounted.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Artillery.java" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Villages.java" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Huts.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Item.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Citystate.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Civ.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/CultureI.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/CultureII.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/CultureIII.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/GreatPerson.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Hut.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Tile.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Village.java" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/Game.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Infantry.java" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Spreadsheet.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Player.java" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/ExcelSheet.java" />
         <option value="$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/PBFBuilder.java" />
         <option value="$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/GameBuilder.java" />
         <option value="$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/UnitTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Wonder.java" />
-        <option value="$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/ItemTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/PBFTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/test/PBFTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/test/UnitTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/test/ItemTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/excel/UnitReader.java" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/excel/PBFTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/no/asgari/civilization/resource/GameResourceTest.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/application/CivBoardGameRandomizerConfiguration.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/application/CivBoardgameRandomizerApplication.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/PBF.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Aircraft.java" />
-        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/GameResource.java" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/IndexResource.java" />
         <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/views/GameView.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/config.yml" />
+        <option value="$PROJECT_DIR$/src/test/java/no/asgari/civilization/resource/GameResourceTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/application/CivBoardgameRandomizerApplication.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/excel/ItemReader.java" />
+        <option value="$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/ItemTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/GameResource.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Citystate.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/CultureI.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/CultureII.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/CultureIII.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/GreatPerson.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Item.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Hut.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Tile.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Village.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Wonder.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Player.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Aircraft.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Infantry.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Artillery.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Mounted.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Unit.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/PBF.java" />
+        <option value="$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Civ.java" />
       </list>
     </option>
   </component>
@@ -280,12 +279,24 @@
             <id />
           </State>
           <State>
-            <id>Imports</id>
+            <id>Android Lint</id>
+          </State>
+          <State>
+            <id>General</id>
+          </State>
+          <State>
+            <id>Maven</id>
+          </State>
+          <State>
+            <id>Plugin DevKit</id>
+          </State>
+          <State>
+            <id>XPath</id>
           </State>
         </expanded-state>
         <selected-state>
           <State>
-            <id>UNUSED_IMPORT</id>
+            <id>Abstraction issues</id>
           </State>
         </selected-state>
       </profile-state>
@@ -340,12 +351,12 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Maven: com.sun.jersey:jersey-client:1.18.1" />
+              <option name="myItemId" value="Maven: org.projectlombok:lombok:1.14.6" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="jersey-client-1.18.1.jar" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemId" value="lombok-1.14.6.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -358,16 +369,16 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Maven: com.sun.jersey:jersey-client:1.18.1" />
+              <option name="myItemId" value="Maven: org.projectlombok:lombok:1.14.6" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="jersey-client-1.18.1.jar" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemId" value="lombok-1.14.6.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="sun" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemId" value="lombok" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -380,20 +391,114 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Maven: com.sun.jersey:jersey-client:1.18.1" />
+              <option name="myItemId" value="Maven: com.fasterxml.jackson.core:jackson-databind:2.3.3" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="jersey-client-1.18.1.jar" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemId" value="jackson-databind-2.3.3.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="civilization" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="sun" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Maven: com.fasterxml.jackson.core:jackson-databind:2.3.3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jackson-databind-2.3.3.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="databind" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="civilization" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Maven: com.fasterxml.jackson.core:jackson-annotations:2.3.0" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jackson-annotations-2.3.0.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="civilization" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Maven: com.fasterxml.jackson.core:jackson-annotations:2.3.0" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jackson-annotations-2.3.0.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="annotation" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="civilization" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Maven: com.codahale.metrics:metrics-jersey:3.0.2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="metrics-jersey-3.0.2.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="civilization" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Maven: com.codahale.metrics:metrics-jersey:3.0.2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="metrics-jersey-3.0.2.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="jersey" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -406,24 +511,26 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Maven: com.sun.jersey:jersey-client:1.18.1" />
+              <option name="myItemId" value="&lt; 1.8 &gt;" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="civilization" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="&lt; 1.8 &gt;" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="jersey-client-1.18.1.jar" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sun" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jersey" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="client" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemId" value="rt.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -432,34 +539,72 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemId" value="&lt; 1.8 &gt;" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemId" value="rt.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="util" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
               <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="&lt; 1.8 &gt;" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rt.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="civilization" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="&lt; 1.8 &gt;" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rt.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lang" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -469,27 +614,95 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+          </PATH>
+          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemId" value="civilization" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="civilization" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="civilization" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="civilization" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="civilization" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="civilization" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="civilization" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="civilization" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="civilization" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="resource" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -499,27 +712,27 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="representations" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -529,41 +742,27 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="excel" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -573,87 +772,27 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resource" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="civilization" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="application" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -669,7 +808,7 @@
     <property name="MemberChooser.showClasses" value="$AUTODEPLOY$" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../dropwizard-examples/Fullstack-skeleton/pom.xml" />
-    <property name="options.lastSelected" value="preferences.keymap" />
+    <property name="options.lastSelected" value="reference.projectsettings.compiler.annotationProcessors" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="$AUTODEPLOY$" />
@@ -724,41 +863,7 @@
       <recent name="C:\wses\Civilization\civilization\src\main\resources\assets" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.PBFTest.createGameTest">
-    <configuration default="false" name="ExcelTest.getHutSheet" type="JUnit" factoryName="JUnit" temporary="$AUTODEPLOY$" nameIsGenerated="$AUTODEPLOY$">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="$AUTODEPLOY$" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="no.asgari.civilization.*" />
-          <option name="ENABLED" value="$AUTODEPLOY$" />
-        </pattern>
-      </extension>
-      <module name="civilization" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="no.asgari.civilization" />
-      <option name="MAIN_CLASS_NAME" value="no.asgari.civilization.ExcelTest" />
-      <option name="METHOD_NAME" value="getHutSheet" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="$AUTODEPLOY$" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <envs />
-      <patterns />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="" />
-        <option name="TRANSPORT" value="0" />
-        <option name="LOCAL" value="$AUTODEPLOY$" />
-      </RunnerSettings>
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Debug" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Application.CivBoardgameRandomizerApplication">
     <configuration default="false" name="PBFTest.createGameTest" type="JUnit" factoryName="JUnit" temporary="$AUTODEPLOY$" nameIsGenerated="$AUTODEPLOY$">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="$AUTODEPLOY$" runner="idea">
         <pattern>
@@ -772,74 +877,6 @@
       <option name="PACKAGE_NAME" value="no.asgari.civilization.representations" />
       <option name="MAIN_CLASS_NAME" value="no.asgari.civilization.representations.PBFTest" />
       <option name="METHOD_NAME" value="createGameTest" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="$AUTODEPLOY$" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <envs />
-      <patterns />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="" />
-        <option name="TRANSPORT" value="0" />
-        <option name="LOCAL" value="$AUTODEPLOY$" />
-      </RunnerSettings>
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Debug" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
-    <configuration default="false" name="PBFTest" type="JUnit" factoryName="JUnit" temporary="$AUTODEPLOY$" nameIsGenerated="$AUTODEPLOY$">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="$AUTODEPLOY$" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="no.asgari.civilization.representations.*" />
-          <option name="ENABLED" value="$AUTODEPLOY$" />
-        </pattern>
-      </extension>
-      <module name="civilization" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="no.asgari.civilization.representations" />
-      <option name="MAIN_CLASS_NAME" value="no.asgari.civilization.representations.PBFTest" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="$AUTODEPLOY$" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <envs />
-      <patterns />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="" />
-        <option name="TRANSPORT" value="0" />
-        <option name="LOCAL" value="$AUTODEPLOY$" />
-      </RunnerSettings>
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Debug" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
-    <configuration default="false" name="UnitTest.splitStringTest" type="JUnit" factoryName="JUnit" temporary="$AUTODEPLOY$" nameIsGenerated="$AUTODEPLOY$">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="$AUTODEPLOY$" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="no.asgari.civilization.representations.*" />
-          <option name="ENABLED" value="$AUTODEPLOY$" />
-        </pattern>
-      </extension>
-      <module name="civilization" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="no.asgari.civilization.representations" />
-      <option name="MAIN_CLASS_NAME" value="no.asgari.civilization.representations.UnitTest" />
-      <option name="METHOD_NAME" value="splitStringTest" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
@@ -889,6 +926,94 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
+    <configuration default="false" name="GameResourceTest" type="Application" factoryName="Application" temporary="$AUTODEPLOY$" nameIsGenerated="$AUTODEPLOY$">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="$AUTODEPLOY$" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="no.asgari.civilization.resource.*" />
+          <option name="ENABLED" value="$AUTODEPLOY$" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="no.asgari.civilization.resource.GameResourceTest" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="$AUTODEPLOY$" />
+      <module name="civilization" />
+      <envs />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="$AUTODEPLOY$" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="CivBoardgameRandomizerApplication" type="Application" factoryName="Application" temporary="$AUTODEPLOY$" nameIsGenerated="$AUTODEPLOY$">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="$AUTODEPLOY$" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="no.asgari.civilization.application.*" />
+          <option name="ENABLED" value="$AUTODEPLOY$" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="no.asgari.civilization.application.CivBoardgameRandomizerApplication" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="$AUTODEPLOY$" />
+      <module name="civilization" />
+      <envs />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="$AUTODEPLOY$" />
+      </RunnerSettings>
+      <ConfigurationWrapper RunnerId="Debug" />
+      <method />
+    </configuration>
+    <configuration default="false" name="ItemTest" type="JUnit" factoryName="JUnit" temporary="$AUTODEPLOY$" nameIsGenerated="$AUTODEPLOY$">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="$AUTODEPLOY$" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="no.asgari.civilization.representations.*" />
+          <option name="ENABLED" value="$AUTODEPLOY$" />
+        </pattern>
+      </extension>
+      <module name="civilization" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="no.asgari.civilization.representations" />
+      <option name="MAIN_CLASS_NAME" value="no.asgari.civilization.representations.ItemTest" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="$AUTODEPLOY$" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="$AUTODEPLOY$" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
     <configuration default="$AUTODEPLOY$" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
@@ -926,6 +1051,20 @@
       <method />
     </configuration>
     <configuration default="$AUTODEPLOY$" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="$AUTODEPLOY$" type="FlexUnitRunConfigurationType" factoryName="FlexUnit" appDescriptorForEmulator="Android" class_name="" emulatorAdlOptions="" method_name="" package_name="" scope="Class">
+      <option name="BCName" value="" />
+      <option name="launcherParameters">
+        <LauncherParameters>
+          <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
+          <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
+          <option name="playerPath" value="FlashPlayerDebugger.exe" />
+        </LauncherParameters>
+      </option>
+      <option name="moduleName" value="" />
+      <option name="trusted" value="$AUTODEPLOY$" />
       <method />
     </configuration>
     <configuration default="$AUTODEPLOY$" type="TestNG" factoryName="TestNG">
@@ -967,6 +1106,40 @@
       <option name="VM_PARAMETERS" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
+      <method />
+    </configuration>
+    <configuration default="$AUTODEPLOY$" type="CucumberJavaRunConfigurationType" factoryName="Cucumber java">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="$AUTODEPLOY$" runner="idea" />
+      <option name="myFilePath" />
+      <option name="GLUE" />
+      <option name="myNameFilter" />
+      <option name="myGeneratedName" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="$AUTODEPLOY$" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="$AUTODEPLOY$" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="$AUTODEPLOY$" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="$AUTODEPLOY$" />
+      <module name="" />
+      <envs />
       <method />
     </configuration>
     <configuration default="$AUTODEPLOY$" type="JUnit" factoryName="JUnit">
@@ -1025,109 +1198,20 @@
       <option name="usbDebugPort" value="7936" />
       <method />
     </configuration>
-    <configuration default="$AUTODEPLOY$" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
-      <module name="" />
-      <option name="TESTING_TYPE" value="0" />
-      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
-      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="USE_COMMAND_LINE" value="$AUTODEPLOY$" />
-      <option name="COMMAND_LINE" value="" />
-      <option name="WIPE_USER_DATA" value="false" />
-      <option name="DISABLE_BOOT_ANIMATION" value="false" />
-      <option name="NETWORK_SPEED" value="full" />
-      <option name="NETWORK_LATENCY" value="none" />
-      <option name="CLEAR_LOGCAT" value="false" />
-      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="$AUTODEPLOY$" />
-      <option name="FILTER_LOGCAT_AUTOMATICALLY" value="$AUTODEPLOY$" />
-      <method />
-    </configuration>
-    <configuration default="$AUTODEPLOY$" type="FlexUnitRunConfigurationType" factoryName="FlexUnit" appDescriptorForEmulator="Android" class_name="" emulatorAdlOptions="" method_name="" package_name="" scope="Class">
-      <option name="BCName" value="" />
-      <option name="launcherParameters">
-        <LauncherParameters>
-          <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
-          <option name="launcherType" value="OSDefault" />
-          <option name="newPlayerInstance" value="false" />
-          <option name="playerPath" value="FlashPlayerDebugger.exe" />
-        </LauncherParameters>
-      </option>
-      <option name="moduleName" value="" />
-      <option name="trusted" value="$AUTODEPLOY$" />
-      <method />
-    </configuration>
-    <configuration default="$AUTODEPLOY$" type="CucumberJavaRunConfigurationType" factoryName="Cucumber java">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="$AUTODEPLOY$" runner="idea" />
-      <option name="myFilePath" />
-      <option name="GLUE" />
-      <option name="myNameFilter" />
-      <option name="myGeneratedName" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="$AUTODEPLOY$" />
-      <module name="" />
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="$AUTODEPLOY$" type="Application" factoryName="Application">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="$AUTODEPLOY$" runner="idea" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="$AUTODEPLOY$" />
-      <module name="" />
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="$AUTODEPLOY$" type="AndroidRunConfigurationType" factoryName="Android Application">
-      <module name="" />
-      <option name="ACTIVITY_CLASS" value="" />
-      <option name="MODE" value="default_activity" />
-      <option name="DEPLOY" value="$AUTODEPLOY$" />
-      <option name="ARTIFACT_NAME" value="" />
-      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
-      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="USE_COMMAND_LINE" value="$AUTODEPLOY$" />
-      <option name="COMMAND_LINE" value="" />
-      <option name="WIPE_USER_DATA" value="false" />
-      <option name="DISABLE_BOOT_ANIMATION" value="false" />
-      <option name="NETWORK_SPEED" value="full" />
-      <option name="NETWORK_LATENCY" value="none" />
-      <option name="CLEAR_LOGCAT" value="false" />
-      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="$AUTODEPLOY$" />
-      <option name="FILTER_LOGCAT_AUTOMATICALLY" value="$AUTODEPLOY$" />
-      <method />
-    </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="JUnit.ExcelTest.getHutSheet" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.PBFTest.createGameTest" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.PBFTest" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.UnitTest.splitStringTest" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.UnitTest" />
+      <item index="0" class="java.lang.String" itemvalue="JUnit.PBFTest.createGameTest" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.UnitTest" />
+      <item index="2" class="java.lang.String" itemvalue="Application.GameResourceTest" />
+      <item index="3" class="java.lang.String" itemvalue="Application.CivBoardgameRandomizerApplication" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.ItemTest" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.PBFTest.createGameTest" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.UnitTest" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.UnitTest.splitStringTest" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.PBFTest" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.ExcelTest.getHutSheet" />
+        <item index="0" class="java.lang.String" itemvalue="Application.CivBoardgameRandomizerApplication" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.ItemTest" />
+        <item index="2" class="java.lang.String" itemvalue="Application.GameResourceTest" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.PBFTest.createGameTest" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.UnitTest" />
       </list>
     </recent_temporary>
     <configuration name="&lt;template&gt;" type="WebApp" default="$AUTODEPLOY$" selected="false">
@@ -1160,29 +1244,37 @@
       <workItem from="1410205458596" duration="5106000" />
       <workItem from="1410268794371" duration="4094000" />
       <workItem from="1410368971124" duration="2178000" />
+      <workItem from="1410378844618" duration="22000" />
+      <workItem from="1410432527948" duration="1784000" />
+      <workItem from="1410434766929" duration="888000" />
+      <workItem from="1410451585983" duration="17000" />
+      <workItem from="1410451612536" duration="150000" />
+      <workItem from="1410451771592" duration="1396000" />
+      <workItem from="1410453189584" duration="2412000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="71564000" />
+    <option name="totallyTimeSpent" value="78233000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="55" y="-14" width="1875" height="1104" extended-state="6" />
     <editor active="$AUTODEPLOY$" />
     <layout>
-      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27745098" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32960597" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39958158" sideWeight="0.49973047" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="$AUTODEPLOY$" weight="0.39958158" sideWeight="0.49973047" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33170253" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="$AUTODEPLOY$" weight="0.32845187" sideWeight="0.50026953" order="9" side_tool="$AUTODEPLOY$" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="$AUTODEPLOY$" weight="0.39958158" sideWeight="0.50026953" order="9" side_tool="$AUTODEPLOY$" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25175202" sideWeight="0.5023401" order="3" side_tool="$AUTODEPLOY$" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3294979" sideWeight="0.49973047" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32845187" sideWeight="0.49973047" order="18" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="$AUTODEPLOY$" weight="0.12021563" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -1190,15 +1282,14 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="$AUTODEPLOY$" weight="0.25175202" sideWeight="0.4976599" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3253138" sideWeight="0.49973047" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Atlassian " active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
-      <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32845187" sideWeight="0.49973047" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="FindBugs-IDEA" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32941177" sideWeight="0.5" order="18" side_tool="false" content_ui="tabs" />
       <window_info id="Analysis" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
       <window_info id="Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="17" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1226,12 +1317,12 @@
       <breakpoints>
         <line-breakpoint enabled="$AUTODEPLOY$" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/GameResource.java</url>
-          <line>36</line>
+          <line>38</line>
           <properties />
-          <option name="timeStamp" value="21" />
+          <option name="timeStamp" value="25" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="22" />
+      <option name="time" value="26" />
     </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
@@ -1258,214 +1349,10 @@
     </option>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/GameResource.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="990">
-          <caret line="32" column="26" selection-start-line="32" selection-start-column="26" selection-end-line="32" selection-end-column="26" />
-          <folding>
-            <element signature="imports" expanded="$AUTODEPLOY$" />
-            <element signature="e#777#778#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#814#815#0" expanded="$AUTODEPLOY$" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/UnitTest.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2376" max-vertical-offset="3546">
-          <caret line="132" column="39" selection-start-line="132" selection-start-column="39" selection-end-line="132" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/excel/PBFTest.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="529" max-vertical-offset="1116">
-          <caret line="12" column="49" selection-start-line="12" selection-start-column="32" selection-end-line="12" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/excel/ItemReader.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="6516">
-          <caret line="10" column="27" selection-start-line="10" selection-start-column="27" selection-end-line="10" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/jdk1.8.0_20/src.zip!/java/io/PrintStream.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="14742" max-vertical-offset="20430">
-          <caret line="819" column="16" selection-start-line="819" selection-start-column="16" selection-end-line="819" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/excel/UnitReader.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2599" max-vertical-offset="3186">
-          <caret line="35" column="28" selection-start-line="35" selection-start-column="28" selection-end-line="35" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/PBF.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="234" max-vertical-offset="2160">
-          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="$AUTODEPLOY$" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Player.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="396" max-vertical-offset="1278">
-          <caret line="22" column="4" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="52" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/ItemTest.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="5763" max-vertical-offset="7614">
-          <caret line="335" column="67" selection-start-line="335" selection-start-column="67" selection-end-line="335" selection-end-column="67" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Wonder.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="2070">
-          <caret line="10" column="43" selection-start-line="10" selection-start-column="43" selection-end-line="10" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4068">
-          <caret line="110" column="0" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/civilization.iml">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5236">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/easytesting/fest-util/1.2.5/fest-util-1.2.5.jar!/org/fest/util/Lists.class">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.16585366" vertical-offset="0" max-vertical-offset="615">
-          <caret line="7" column="45" selection-start-line="7" selection-start-column="45" selection-end-line="7" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/poi/poi-ooxml/3.11-beta1/poi-ooxml-3.11-beta1-sources.jar!/org/apache/poi/xssf/usermodel/XSSFCell.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33204633" vertical-offset="6934" max-vertical-offset="17816">
-          <caret line="472" column="28" selection-start-line="472" selection-start-column="20" selection-end-line="472" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/17.0/guava-17.0.jar!/com/google/common/base/Splitter.class">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.15644172" vertical-offset="0" max-vertical-offset="1649">
-          <caret line="7" column="19" selection-start-line="7" selection-start-column="19" selection-end-line="7" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/config.yml">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="953">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/application/MongoManaged.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="450">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/application/MongoHealthCheck.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="414">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/mongodb/mongo-java-driver/2.7.2/mongo-java-driver-2.7.2.jar!/com/mongodb/Mongo.class">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-23.76" vertical-offset="0" max-vertical-offset="2520">
-          <caret line="34" column="63" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/net/vz/mongodb/jackson/mongo-jackson-mapper/1.4.2/mongo-jackson-mapper-1.4.2.jar!/net/vz/mongodb/jackson/JacksonDBCollection.class">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-12.2" vertical-offset="55" max-vertical-offset="5454">
-          <caret line="21" column="73" selection-start-line="21" selection-start-column="73" selection-end-line="21" selection-end-column="73" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/mongodb/mongo-java-driver/2.7.2/mongo-java-driver-2.7.2-sources.jar!/com/mongodb/Mongo.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2193" max-vertical-offset="11322">
-          <caret line="180" column="11" selection-start-line="180" selection-start-column="11" selection-end-line="180" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/net/vz/mongodb/jackson/mongo-jackson-mapper/1.4.2/mongo-jackson-mapper-1.4.2-sources.jar!/net/vz/mongodb/jackson/JacksonDBCollection.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1441" max-vertical-offset="25974">
-          <caret line="137" column="51" selection-start-line="137" selection-start-column="51" selection-end-line="137" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Spreadsheet.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="252">
-          <caret line="6" column="9" selection-start-line="6" selection-start-column="9" selection-end-line="6" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Item.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="918">
-          <caret line="11" column="32" selection-start-line="11" selection-start-column="32" selection-end-line="11" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Civ.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1242">
-          <caret line="7" column="30" selection-start-line="7" selection-start-column="30" selection-end-line="7" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/jdk1.8.0_20/src.zip!/java/util/LinkedList.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="267" max-vertical-offset="21546">
-          <caret line="82" column="13" selection-start-line="82" selection-start-column="13" selection-end-line="82" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/ExcelSheet.java">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="594">
           <caret line="28" column="65" selection-start-line="28" selection-start-column="65" selection-end-line="28" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Unit.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="386" max-vertical-offset="1080">
-          <caret line="30" column="17" selection-start-line="30" selection-start-column="17" selection-end-line="30" selection-end-column="17" />
         </state>
       </provider>
     </entry>
@@ -1476,33 +1363,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Player.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="54" max-vertical-offset="828">
-          <caret line="22" column="4" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="52" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Wonder.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1476">
-          <caret line="10" column="43" selection-start-line="10" selection-start-column="43" selection-end-line="10" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///usr/lib/jvm/jdk1.8.0_20/src.zip!/java/io/PrintStream.java">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="13507" max-vertical-offset="19296">
           <caret line="819" column="16" selection-start-line="819" selection-start-column="16" selection-end-line="819" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/excel/ItemReader.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6516">
-          <caret line="10" column="27" selection-start-line="10" selection-start-column="27" selection-end-line="10" selection-end-column="27" />
         </state>
       </provider>
     </entry>
@@ -1513,27 +1377,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/excel/PBFTest.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="529" max-vertical-offset="1116">
-          <caret line="12" column="49" selection-start-line="12" selection-start-column="32" selection-end-line="12" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/ItemTest.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="5763" max-vertical-offset="7614">
-          <caret line="335" column="67" selection-start-line="335" selection-start-column="67" selection-end-line="335" selection-end-column="67" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/no/asgari/civilization/ExcelTest.java">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1566">
           <caret line="29" column="13" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1548,7 +1395,6 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3276">
           <caret line="132" column="39" selection-start-line="132" selection-start-column="39" selection-end-line="132" selection-end-column="39" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1556,35 +1402,34 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="9205" max-vertical-offset="10044">
           <caret line="671" column="25" selection-start-line="671" selection-start-column="25" selection-end-line="671" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/no/asgari/civilization/resource/GameResourceTest.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/HelloWorldResource.java">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="414">
-          <caret line="11" column="35" selection-start-line="11" selection-start-column="35" selection-end-line="11" selection-end-column="35" />
-          <folding>
-            <element signature="imports" expanded="$AUTODEPLOY$" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="522">
+          <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/io/dropwizard/dropwizard-assets/0.7.1/dropwizard-assets-0.7.1.jar!/io/dropwizard/assets/AssetsBundle.class">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.35701275" vertical-offset="74" max-vertical-offset="648">
+          <caret line="16" column="11" selection-start-line="16" selection-start-column="11" selection-end-line="16" selection-end-column="11" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/application/CivBoardGameRandomizerConfiguration.java">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="18" max-vertical-offset="612">
-          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="$AUTODEPLOY$" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="522">
+          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/config.yml">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="3942">
-          <caret line="25" column="4" selection-start-line="25" selection-start-column="4" selection-end-line="25" selection-end-column="4" />
-          <folding />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="144">
+          <caret line="2" column="21" selection-start-line="2" selection-start-column="21" selection-end-line="2" selection-end-column="21" />
         </state>
       </provider>
     </entry>
@@ -1592,24 +1437,224 @@
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2055" max-vertical-offset="9738">
           <caret line="191" column="17" selection-start-line="191" selection-start-column="17" selection-end-line="191" selection-end-column="17" />
-          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/views/GameView.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="414">
+          <caret line="8" column="17" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/no/asgari/civilization/resource/GameResourceTest.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="342">
+          <caret line="11" column="24" selection-start-line="11" selection-start-column="24" selection-end-line="11" selection-end-column="24" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/application/CivBoardgameRandomizerApplication.java">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="234" max-vertical-offset="864">
-          <caret line="32" column="20" selection-start-line="32" selection-start-column="8" selection-end-line="32" selection-end-column="20" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="684">
+          <caret line="16" column="25" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/IndexResource.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="144" max-vertical-offset="774">
+          <caret line="35" column="22" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/excel/PBFTest.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="216" max-vertical-offset="1008">
+          <caret line="27" column="26" selection-start-line="27" selection-start-column="26" selection-end-line="27" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/no/asgari/civilization/representations/ItemTest.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1501" max-vertical-offset="7902">
+          <caret line="101" column="38" selection-start-line="101" selection-start-column="38" selection-end-line="101" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="957" max-vertical-offset="4050">
+          <caret line="78" column="42" selection-start-line="78" selection-start-column="35" selection-end-line="78" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/excel/ItemReader.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="781" max-vertical-offset="6948">
+          <caret line="74" column="49" selection-start-line="74" selection-start-column="49" selection-end-line="74" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-annotations/2.3.0/jackson-annotations-2.3.0.jar!/com/fasterxml/jackson/annotation/JsonProperty.class">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
+          <caret line="9" column="18" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-annotations/2.3.0/jackson-annotations-2.3.0-sources.jar!/com/fasterxml/jackson/annotation/JsonRootName.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.42711863" vertical-offset="0" max-vertical-offset="590">
+          <caret line="17" column="30" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-annotations/2.3.0/jackson-annotations-2.3.0-sources.jar!/com/fasterxml/jackson/annotation/JsonAutoDetect.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7898305" vertical-offset="74" max-vertical-offset="2286">
+          <caret line="35" column="18" selection-start-line="35" selection-start-column="18" selection-end-line="35" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-annotations/2.3.0/jackson-annotations-2.3.0-sources.jar!/com/fasterxml/jackson/annotation/JsonProperty.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.31869918" vertical-offset="164" max-vertical-offset="1260">
+          <caret line="23" column="18" selection-start-line="23" selection-start-column="18" selection-end-line="23" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/jdk1.8.0_20/src.zip!/java/util/Optional.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="381" max-vertical-offset="5634">
+          <caret line="49" column="19" selection-start-line="49" selection-start-column="19" selection-end-line="49" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.14.6/lombok-1.14.6.jar!/lombok/ToString.class">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2241993" vertical-offset="0" max-vertical-offset="562">
+          <caret line="8" column="18" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/CultureI.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="666">
+          <caret line="13" column="36" selection-start-line="13" selection-start-column="36" selection-end-line="13" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Citystate.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="774">
+          <caret line="14" column="37" selection-start-line="14" selection-start-column="37" selection-end-line="14" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/CultureII.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="79" max-vertical-offset="666">
+          <caret line="12" column="24" selection-start-line="12" selection-start-column="24" selection-end-line="12" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/CultureIII.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="684">
+          <caret line="14" column="36" selection-start-line="14" selection-start-column="36" selection-end-line="14" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/GreatPerson.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="684">
+          <caret line="14" column="37" selection-start-line="14" selection-start-column="37" selection-end-line="14" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Hut.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="684">
+          <caret line="14" column="30" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Tile.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="666">
+          <caret line="13" column="31" selection-start-line="13" selection-start-column="31" selection-end-line="13" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Village.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="738">
+          <caret line="13" column="34" selection-start-line="13" selection-start-column="34" selection-end-line="13" selection-end-column="34" />
+          <folding>
+            <element signature="e#783#784#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#810#811#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#864#865#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#906#907#0" expanded="$AUTODEPLOY$" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Wonder.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="792">
+          <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+          <folding>
+            <element signature="e#1121#1122#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#1162#1163#0" expanded="$AUTODEPLOY$" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Player.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2" max-vertical-offset="846">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Spreadsheet.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="252">
+          <caret line="4" column="17" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Infantry.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="241" max-vertical-offset="1134">
+          <caret line="15" column="36" selection-start-line="15" selection-start-column="36" selection-end-line="15" selection-end-column="36" />
           <folding>
             <element signature="imports" expanded="$AUTODEPLOY$" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/PBF.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Mounted.java">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1404">
-          <caret line="11" column="6" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="6" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1134">
+          <caret line="15" column="34" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="34" />
           <folding>
             <element signature="imports" expanded="$AUTODEPLOY$" />
           </folding>
@@ -1618,46 +1663,96 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Aircraft.java">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="61" max-vertical-offset="1404">
-          <caret line="11" column="15" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="75" max-vertical-offset="882">
+          <caret line="15" column="34" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="34" />
+          <folding>
+            <element signature="imports" expanded="$AUTODEPLOY$" />
+            <element signature="e#709#710#0" expanded="$AUTODEPLOY$" />
+            <element signature="e#733#734#0" expanded="$AUTODEPLOY$" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Artillery.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="21" max-vertical-offset="1062">
+          <caret line="15" column="38" selection-start-line="15" selection-start-column="38" selection-end-line="15" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/codahale/metrics/metrics-jersey/3.0.2/metrics-jersey-3.0.2.jar!/com/codahale/metrics/jersey/InstrumentedResourceMethodDispatchProvider.class">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.75259876" vertical-offset="394" max-vertical-offset="900">
+          <caret line="43" column="20" selection-start-line="43" selection-start-column="20" selection-end-line="43" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/PBF.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1314">
+          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/jdk1.8.0_20/src.zip!/java/lang/Exception.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="205" max-vertical-offset="1746">
+          <caret line="44" column="13" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-databind/2.3.3/jackson-databind-2.3.3.jar!/com/fasterxml/jackson/databind/ObjectMapper.class">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.2474012" vertical-offset="4584" max-vertical-offset="7488">
+          <caret line="289" column="28" selection-start-line="289" selection-start-column="28" selection-end-line="289" selection-end-column="28" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/GameResource.java">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1314">
-          <caret line="65" column="6" selection-start-line="65" selection-start-column="6" selection-end-line="65" selection-end-column="6" />
-          <folding>
-            <element signature="imports" expanded="$AUTODEPLOY$" />
-            <element signature="e#777#778#0" expanded="$AUTODEPLOY$" />
-            <element signature="e#814#815#0" expanded="$AUTODEPLOY$" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/HelloWorldResource.java">
-      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="522">
-          <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="439" max-vertical-offset="1242">
+          <caret line="65" column="36" selection-start-line="65" selection-start-column="36" selection-end-line="65" selection-end-column="36" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/resource/IndexResource.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Unit.java">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="144" max-vertical-offset="774">
-          <caret line="35" column="22" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="22" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="525" max-vertical-offset="1260">
+          <caret line="37" column="65" selection-start-line="37" selection-start-column="65" selection-end-line="37" selection-end-column="65" />
           <folding>
             <element signature="imports" expanded="$AUTODEPLOY$" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/views/GameView.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Civ.java">
       <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.18398637" vertical-offset="0" max-vertical-offset="587">
-          <caret line="11" column="25" selection-start-line="11" selection-start-column="25" selection-end-line="11" selection-end-column="25" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="54" max-vertical-offset="792">
+          <caret line="15" column="29" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
+          <folding>
+            <element signature="imports" expanded="$AUTODEPLOY$" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/no/asgari/civilization/representations/Item.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="367" max-vertical-offset="1368">
+          <caret line="33" column="11" selection-start-line="33" selection-start-column="11" selection-end-line="33" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-annotations/2.3.0/jackson-annotations-2.3.0-sources.jar!/com/fasterxml/jackson/annotation/JsonTypeInfo.java">
+      <provider selected="$AUTODEPLOY$" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="2.8304431" vertical-offset="2167" max-vertical-offset="5058">
+          <caret line="204" column="14" selection-start-line="204" selection-start-column="14" selection-end-line="204" selection-end-column="14" />
           <folding />
         </state>
       </provider>
