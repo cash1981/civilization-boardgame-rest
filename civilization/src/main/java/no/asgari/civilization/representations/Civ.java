@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @ToString(of="name")
 @JsonTypeName("civ")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "objectType")
-public class Civ implements Item<Civ> {
+public class Civ implements Item {
     @NotEmpty
     private final String name;
     private String id;
@@ -27,11 +27,6 @@ public class Civ implements Item<Civ> {
         this.name = name;
         this.used = false;
         this.hidden = true;
-    }
-
-    @Override
-    public Civ getItem() {
-        return this;
     }
 
     @Override

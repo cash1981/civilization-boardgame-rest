@@ -1,6 +1,5 @@
 package no.asgari.civilization.representations;
 
-
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +12,7 @@ import no.asgari.civilization.ExcelSheet;
 @Getter
 @Setter
 @JsonTypeName("aircraft")
-public class Aircraft implements Unit<Aircraft> {
+public class Aircraft implements Unit {
     private String id;
     private String owner;
     private boolean hidden;
@@ -30,11 +29,6 @@ public class Aircraft implements Unit<Aircraft> {
     @Override
     public int getLevel() {
         return 0;
-    }
-
-    @Override
-    public Aircraft getUnit() {
-        return this;
     }
 
     @Override

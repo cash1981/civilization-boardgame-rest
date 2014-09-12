@@ -13,7 +13,7 @@ import no.asgari.civilization.ExcelSheet;
 @Getter
 @Setter
 @JsonTypeName("mounted")
-public class Mounted implements Unit<Mounted> {
+public class Mounted implements Unit {
     public final int LEVEL_1 = 1;
     public final int LEVEL_2 = 2;
     public final int LEVEL_3 = 3;
@@ -31,11 +31,6 @@ public class Mounted implements Unit<Mounted> {
     public Mounted(int attack, int health) {
         this.attack = attack;
         this.health = health;
-    }
-
-    @Override
-    public Mounted getUnit() {
-        return this;
     }
 
     @Override

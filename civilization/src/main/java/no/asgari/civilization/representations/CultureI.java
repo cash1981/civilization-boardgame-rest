@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Setter
 @JsonTypeName("cultureI")
 @ToString(of="name")
-public class CultureI implements Item<CultureI> {
+public class CultureI implements Item {
     @NotEmpty
     private final String name;
     private String id;
@@ -25,11 +25,6 @@ public class CultureI implements Item<CultureI> {
         this.name = name;
         this.used = false;
         this.hidden = true;
-    }
-
-    @Override
-    public CultureI getItem() {
-        return this;
     }
 
     @Override

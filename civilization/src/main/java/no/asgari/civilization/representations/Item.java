@@ -44,7 +44,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value=Village.class, name="village"),
         @JsonSubTypes.Type(value=Wonder.class, name="wonder")
 })
-public interface Item<T> extends Spreadsheet {
+public interface Item extends Spreadsheet {
 
     /**
      * Either the username or pbf name, both of which must be unique *
@@ -65,7 +65,5 @@ public interface Item<T> extends Spreadsheet {
      * For instance general
      */
     public String getType();
-
-    public T getItem();
 
 }

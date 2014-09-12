@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Setter
 @ToString(of="name")
 @JsonTypeName("hut")
-public class Hut implements Item<Hut> {
+public class Hut implements Item {
     @NotEmpty
     private final String name;
     private String id;
@@ -26,11 +26,6 @@ public class Hut implements Item<Hut> {
         this.name = name;
         this.used = false;
         this.hidden = true;
-    }
-
-    @Override
-    public Hut getItem() {
-        return this;
     }
 
     @Override
