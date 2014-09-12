@@ -3,21 +3,20 @@ package no.asgari.civilization.resource;
 import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Preconditions;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.excel.PBFTest;
 import no.asgari.civilization.representations.PBF;
+import no.asgari.civilization.rest.CreateGameDTO;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Path("/games")
 @Produces(value = MediaType.APPLICATION_JSON)
@@ -46,6 +45,27 @@ public class GameResource {
             pbfs.add(pbf);
         }
         return pbfs;
+
+    }
+
+    @POST
+    @Timed
+    @Path("/create")
+    public Response createGame(CreateGameDTO createGame) {
+        Preconditions.checkNotNull(createGame);
+
+        log.info("Creating game " + createGame);
+        //TODO Validate input data
+
+        //TODO Get stuff from Excel
+
+        //TODO Save stuff in mongodb
+
+        //TODO Get id back and return the link to the created game
+
+
+        return Response.status(200).entity("123").build();
+
 
     }
 

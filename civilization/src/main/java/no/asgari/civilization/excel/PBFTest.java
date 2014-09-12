@@ -1,6 +1,7 @@
 package no.asgari.civilization.excel;
 
 import com.google.common.collect.Lists;
+import no.asgari.civilization.representations.GameType;
 import no.asgari.civilization.representations.Item;
 import no.asgari.civilization.representations.PBF;
 import no.asgari.civilization.representations.Player;
@@ -15,13 +16,14 @@ public class PBFTest {
         List<Player> players = Lists.newArrayList(
                 GameBuilder.createPlayer("cash1981"),
                 GameBuilder.createPlayer("Itchi"),
-                GameBuilder.createPlayer("DaveLuza"),
+                GameBuilder.createPlayer("Chul"),
                 GameBuilder.createPlayer("Karandras1")
         );
 
         pbf.setPlayers(players);
         pbf.setNumOfPlayers(4);
         pbf.setName("First civ game");
+        pbf.setType(GameType.WAW);
 
 
         ItemReader items = new ItemReader();
