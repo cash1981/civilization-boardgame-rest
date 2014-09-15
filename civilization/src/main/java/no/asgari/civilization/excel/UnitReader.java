@@ -18,10 +18,10 @@ import java.util.stream.Collectors;
 
 public class UnitReader {
 
-    public Queue<Aircraft> aircraftQueue;
-    public Queue<Artillery> artilleryQueue;
-    public Queue<Mounted> mountedQueue;
-    public Queue<Infantry> infantryQueue;
+    public LinkedList<Aircraft> aircraftList;
+    public LinkedList<Artillery> artilleryList;
+    public LinkedList<Mounted> mountedList;
+    public LinkedList<Infantry> infantryList;
 
     public void readAllUnitsFromExcel() throws Exception {
         createInfantryTest();
@@ -49,8 +49,8 @@ public class UnitReader {
         Collections.shuffle(infantryUnits);
 
         //Now we want to take every other one
-        infantryQueue = new LinkedList<>(infantryUnits);
-        System.out.println(infantryQueue);
+        infantryList = new LinkedList<>(infantryUnits);
+        System.out.println(infantryList);
 
         wb.close();
     }
@@ -74,8 +74,8 @@ public class UnitReader {
         Collections.shuffle(mountedUnits);
 
         //Now we want to take every other one
-        mountedQueue = new LinkedList<>(mountedUnits);
-        System.out.println(mountedQueue);
+        mountedList = new LinkedList<>(mountedUnits);
+        System.out.println(mountedList);
 
         wb.close();
     }
@@ -99,8 +99,8 @@ public class UnitReader {
         Collections.shuffle(artilleryUnits);
 
         //Now we want to take every other one
-        artilleryQueue = new LinkedList<>(artilleryUnits);
-        System.out.println(artilleryQueue);
+        artilleryList = new LinkedList<>(artilleryUnits);
+        System.out.println(artilleryList);
 
         wb.close();
     }
@@ -124,8 +124,8 @@ public class UnitReader {
         Collections.shuffle(aircraftUnits);
 
         //Now we want to take every other one
-        aircraftQueue = new LinkedList<>(aircraftUnits);
-        System.out.println(aircraftQueue);
+        aircraftList = new LinkedList<>(aircraftUnits);
+        System.out.println(aircraftList);
 
         wb.close();
     }

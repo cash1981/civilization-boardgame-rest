@@ -1,61 +1,28 @@
 package no.asgari.civilization.representations;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.collect.Lists;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.util.List;
 
+@Getter
+@Setter
+@JsonIgnoreProperties(value="_id")
 public class Player {
-
-    private String id;
-
     @NotBlank
     private String username;
+
+    @Email
+    private String email;
 
     @NotBlank
     private String password;
 
     private List<Item> items = Lists.newArrayList();
-    private List<Item> units = Lists.newArrayList();
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<Item> getItems() {
-        return items;
-    }
-
-    public void setItems(List<Item> items) {
-        this.items = items;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public List<Item> getUnits() {
-        return units;
-    }
-
-    public void setUnits(List<Item> units) {
-        this.units = units;
-    }
-
+    private List<Unit> units = Lists.newArrayList();
+    private List<Integer> gameIds = Lists.newArrayList();
 }

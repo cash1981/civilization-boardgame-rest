@@ -1,16 +1,23 @@
-package no.asgari.civilization.excel;
+package no.asgari.civilization.test;
 
+import no.asgari.civilization.excel.ItemReader;
+import no.asgari.civilization.excel.UnitReader;
+import no.asgari.civilization.representations.GameType;
 import no.asgari.civilization.representations.PBF;
-import no.asgari.civilization.representations.Player;
 
-public class GameBuilder {
+public class PBFBuilder {
 
-    private ItemReader items = new ItemReader();
-
-    public PBF createNewPBF(int gameId) throws Exception {
+    public PBF createGameTest(int gameId) throws Exception {
         PBF pbf = new PBF();
+        pbf.setGameId(gameId);
+        pbf.setNumOfPlayers(4); //TODO
+        pbf.setName("First civ game"); //TODO
+        pbf.setType(GameType.WAW);  //TODO
 
+
+        ItemReader items = new ItemReader();
         items.readItemsFromExcel();
+
         UnitReader unit = new UnitReader();
         unit.readAllUnitsFromExcel();
 
@@ -31,14 +38,8 @@ public class GameBuilder {
         pbf.getWonders().addAll(items.ancientWonders);
         pbf.getWonders().addAll(items.medivalWonder);
         pbf.getWonders().addAll(items.modernWonder);
-        return pbf;
-    }
 
-    public static Player createPlayer(String username, int gameId) {
-        Player p = new Player();
-        p.setUsername(username);
-        p.getGameIds().add(gameId);
-        return p;
+        return pbf;
     }
 
 }

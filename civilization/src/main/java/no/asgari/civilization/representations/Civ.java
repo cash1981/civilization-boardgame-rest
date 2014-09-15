@@ -1,8 +1,10 @@
 package no.asgari.civilization.representations;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import no.asgari.civilization.ExcelSheet;
@@ -13,9 +15,10 @@ import org.hibernate.validator.constraints.NotEmpty;
 @ToString(of="name")
 @JsonTypeName("civ")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "objectType")
+@NoArgsConstructor
 public class Civ implements Item {
     @NotEmpty
-    private final String name;
+    private String name;
     private String id;
     private String type;
     private String description;
@@ -29,6 +32,8 @@ public class Civ implements Item {
         this.hidden = true;
     }
 
+
+    @JsonIgnore
     @Override
     public ExcelSheet getSheetName() {
         return ExcelSheet.CIV;

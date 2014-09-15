@@ -1,7 +1,6 @@
 package no.asgari.civilization.application;
 
 import com.mongodb.DB;
-import com.mongodb.Mongo;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import io.dropwizard.Application;
@@ -9,7 +8,6 @@ import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
-import no.asgari.civilization.representations.PBF;
 import no.asgari.civilization.resource.GameResource;
 
 public class CivBoardgameRandomizerApplication extends Application<CivBoardGameRandomizerConfiguration> {
@@ -31,12 +29,13 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
 
         //DBCollection<PBF, String> pbf = DBCollection.wrap(db.getCollection("pbf"), PBF.class, String.class);
         DBCollection pbf = db.getCollection("pbf");
+        DBCollection player = db.getCollection("player");
         MongoManaged mongoManaged = new MongoManaged(mongo);
         environment.lifecycle().manage(mongoManaged);
 
         environment.healthChecks().register("MongoHealthCheck", new MongoHealthCheck(mongo));
 
-        environment.jersey().register(new GameResource(pbf));
+        environment.jersey().register(new GameResource(pbf, player));
     }
 
 }

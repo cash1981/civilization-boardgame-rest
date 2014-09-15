@@ -1,22 +1,26 @@
 package no.asgari.civilization.representations;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
  * PBF stands for Play By Forum
  */
-@JsonRootName(value="pbf")
 @Getter
 @Setter
+@JsonRootName(value="pbf")
+@JsonIgnoreProperties(value = "_id")
 public class PBF {
-    private String id;
+
+    private int id;
+    private int gameId;
 
     private List<Player> players = Lists.newArrayList();
     private List<Civ> civs = Lists.newArrayList();
@@ -38,7 +42,8 @@ public class PBF {
     @NotBlank
     private String name;
     private GameType type;
-    private Date created = new Date();
+    private LocalDateTime created = LocalDateTime.now();
     private int numOfPlayers;
+    private boolean active = true;
 
 }
