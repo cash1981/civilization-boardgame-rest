@@ -1,23 +1,23 @@
 package no.asgari.civilization.resource;
 
-import com.codahale.metrics.annotation.Timed;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import lombok.extern.log4j.Log4j;
-import no.asgari.civilization.excel.PBFTest;
-import no.asgari.civilization.representations.PBF;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+
+import com.codahale.metrics.annotation.Timed;
+import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j;
+import no.asgari.civilization.excel.PBFTest;
+import no.asgari.civilization.representations.PBF;
+import no.asgari.civilization.representations.Player;
+import org.mongojack.DBCursor;
+import org.mongojack.JacksonDBCollection;
 
 @Path("/games")
 @Produces(value = MediaType.APPLICATION_JSON)
@@ -25,52 +25,53 @@ import java.util.Optional;
 @Log4j
 public class GameResource {
 
-    private DBCollection collection;
+    JacksonDBCollection<PBF, String> pbfCollection;
+    JacksonDBCollection<Player, String> playerCollection;
 
-    public GameResource(DBCollection pbf) {
-        this.collection = pbf;
+    public GameResource(JacksonDBCollection<PBF, String> pbfCollection, JacksonDBCollection<Player, String> playerCollection) {
+        this.pbfCollection = pbfCollection;
+        this.playerCollection = playerCollection;
     }
 
     @GET
     @Timed
-    public List<DBObject> getAllGames() {
-        DBCursor dbCursor = collection.find();
+    public List<PBF> getAllGames() {
+        DBCursor<PBF> dbCursor = pbfCollection.find();
 
-        if(dbCursor.size() == 0) {
-            createTestGame();
+        if (dbCursor.size() == 0) {
+            //FIXME REMOVE, ONLY FOR TESTING PURPOSES
+            createNewPBFGame();
         }
 
-        List<DBObject> pbfs = new ArrayList<>();
+        List<PBF> pbfs = new ArrayList<>();
         while (dbCursor.hasNext()) {
-            DBObject pbf = dbCursor.next();
+            PBF pbf = dbCursor.next();
             pbfs.add(pbf);
         }
         return pbfs;
 
     }
 
-    private void createTestGame() {
+    @SneakyThrows(IOException.class)
+    private PBF createNewPBFGame() {
         PBFTest pbfTest = new PBFTest();
-        try {
-            PBF pbf = pbfTest.createGameTest();
-            createJSONFromPBF(pbf);
-        } catch (Exception e) {
-            log.error("Couldn't create test game", e);
-            throw new RuntimeException(e);
-        }
+        PBF pbf = pbfTest.createGameTest();
+        pbf.setNumOfPlayers(4);
+        pbf.setName("Game #100 WaW");
+        return pbf;
     }
 
-    private String createJSONFromPBF(PBF pbf) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            String json = mapper.writeValueAsString(pbf);
-            log.info(json);
-            return json;
-        } catch (JsonProcessingException e) {
-            log.error("Couldn't create JSON object", e);
-        }
-        return "";
-    }
+//    private String createJSONFromPBF(PBF pbf) {
+//        ObjectMapper mapper = new ObjectMapper();
+//        try {
+//            String json = mapper.writeValueAsString(pbf);
+//            log.info(json);
+//            return json;
+//        } catch (JsonProcessingException e) {
+//            log.error("Couldn't create JSON object", e);
+//        }
+//        return "";
+//    }
 
     /*@POST
     @Timed

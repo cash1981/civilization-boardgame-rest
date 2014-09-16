@@ -1,10 +1,12 @@
 package no.asgari.civilization.representations;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
+import org.mongojack.ObjectId;
 
 import java.util.Date;
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.List;
 @Getter
 @Setter
 public class PBF {
+    @ObjectId
+    @JsonProperty("_id")
     private String id;
 
     private List<Player> players = Lists.newArrayList();

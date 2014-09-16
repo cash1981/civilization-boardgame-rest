@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,14 +24,14 @@ public class UnitReader {
     public Queue<Mounted> mountedQueue;
     public Queue<Infantry> infantryQueue;
 
-    public void readAllUnitsFromExcel() throws Exception {
+    public void readAllUnitsFromExcel() throws IOException {
         createInfantryTest();
         createMountedTest();
         createArtilleryTest();
         createAircraftTest();
     }
 
-    private void createInfantryTest() throws Exception {
+    private void createInfantryTest() throws IOException {
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
         Workbook wb = new XSSFWorkbook(in);
         Sheet infantrySheet = wb.getSheet(ExcelSheet.INFANTRY.toString());
@@ -55,7 +56,7 @@ public class UnitReader {
         wb.close();
     }
 
-    private void createMountedTest() throws Exception {
+    private void createMountedTest() throws IOException {
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
         Workbook wb = new XSSFWorkbook(in);
         Sheet mountedsheet = wb.getSheet(ExcelSheet.MOUNTED.toString());
@@ -80,7 +81,7 @@ public class UnitReader {
         wb.close();
     }
 
-    private void createArtilleryTest() throws Exception {
+    private void createArtilleryTest() throws IOException {
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
         Workbook wb = new XSSFWorkbook(in);
         Sheet artillerySheet = wb.getSheet(ExcelSheet.ARTILLERY.toString());
@@ -105,7 +106,7 @@ public class UnitReader {
         wb.close();
     }
 
-    private void createAircraftTest() throws Exception {
+    private void createAircraftTest() throws IOException {
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
         Workbook wb = new XSSFWorkbook(in);
         Sheet aircraftSheet = wb.getSheet(ExcelSheet.AIRCRAFT.toString());

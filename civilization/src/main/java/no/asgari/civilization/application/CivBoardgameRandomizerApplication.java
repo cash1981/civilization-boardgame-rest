@@ -10,7 +10,9 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
 import no.asgari.civilization.representations.PBF;
+import no.asgari.civilization.representations.Player;
 import no.asgari.civilization.resource.GameResource;
+import org.mongojack.JacksonDBCollection;
 
 public class CivBoardgameRandomizerApplication extends Application<CivBoardGameRandomizerConfiguration> {
 
@@ -29,14 +31,14 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
         MongoClient mongo = new MongoClient(configuration.mongohost, configuration.mongoport);
         DB db = mongo.getDB(configuration.mongodb);
 
-        //DBCollection<PBF, String> pbf = DBCollection.wrap(db.getCollection("pbf"), PBF.class, String.class);
-        DBCollection pbf = db.getCollection("pbf");
+        JacksonDBCollection<PBF, String> pbfCollection = JacksonDBCollection.wrap(db.getCollection("pbf"), PBF.class, String.class);
+        JacksonDBCollection<Player, String> playerCollection = JacksonDBCollection.wrap(db.getCollection("player"), Player.class, String.class);
         MongoManaged mongoManaged = new MongoManaged(mongo);
         environment.lifecycle().manage(mongoManaged);
 
         environment.healthChecks().register("MongoHealthCheck", new MongoHealthCheck(mongo));
 
-        environment.jersey().register(new GameResource(pbf));
+        environment.jersey().register(new GameResource(pbfCollection, playerCollection));
     }
 
 }

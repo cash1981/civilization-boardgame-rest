@@ -1,26 +1,25 @@
 package no.asgari.civilization.excel;
 
-import com.google.common.collect.Lists;
-import no.asgari.civilization.representations.*;
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import no.asgari.civilization.representations.Citystate;
+import no.asgari.civilization.representations.Civ;
+import no.asgari.civilization.representations.CultureI;
+import no.asgari.civilization.representations.CultureII;
+import no.asgari.civilization.representations.CultureIII;
+import no.asgari.civilization.representations.GreatPerson;
+import no.asgari.civilization.representations.Hut;
+import no.asgari.civilization.representations.Item;
+import no.asgari.civilization.representations.PBF;
+import no.asgari.civilization.representations.Tile;
+import no.asgari.civilization.representations.Village;
+
 public class PBFTest {
 
-    public PBF createGameTest() throws Exception {
+    public PBF createGameTest() throws IOException {
         PBF pbf = GameBuilder.createPBF();
-        List<Player> players = Lists.newArrayList(
-                GameBuilder.createPlayer("cash1981"),
-                GameBuilder.createPlayer("Itchi"),
-                GameBuilder.createPlayer("DaveLuza"),
-                GameBuilder.createPlayer("Karandras1")
-        );
-
-        pbf.setPlayers(players);
-        pbf.setNumOfPlayers(4);
-        pbf.setName("First civ game");
-
 
         ItemReader items = new ItemReader();
         items.readItemsFromExcel();
