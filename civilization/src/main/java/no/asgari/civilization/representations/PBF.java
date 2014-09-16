@@ -22,6 +22,8 @@ public class PBF {
     @JsonProperty("_id")
     private String id;
 
+    private List<Draw> draws = Lists.newArrayList();
+
     private List<Player> players = Lists.newArrayList();
     private List<Civ> civs = Lists.newArrayList();
     private List<Citystate> citystates = Lists.newArrayList();
@@ -43,6 +45,4 @@ public class PBF {
     private String name;
     private Date created = new Date();
     private int numOfPlayers;
-
-
 }

@@ -27,6 +27,8 @@ public class Player {
     @NotBlank
     private String password;
 
+    /** A list of all the private draws a player has made in one game **/
+    private List<Draw> draws = Lists.newArrayList();
     private List<Item> items = Lists.newArrayList();
     private List<Item> units = Lists.newArrayList();
     /** List of active games **/

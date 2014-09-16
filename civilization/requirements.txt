@@ -22,12 +22,6 @@ Alle actions/metoder logger til et visst sted. Denne loggen blir alltid displaye
 1.6.1 - Noen civs skal ha flere units, dette kan hardkodes basert på civ
 
 
-
-http://stackoverflow.com/questions/2922692/to-get-columns-from-excel-files-using-apache-poi 
-Tips til hvordan jeg leser ut enkelt kolonne
-
-
-
 #Inne i spillet
 
 Hver gang det gjøres en action, skal dette logges på siden av skjermen, f.eks <<User>> chose civ Japan
@@ -38,3 +32,8 @@ Her må jeg tenke ut hvordan jeg skal gjøre det enklest mulig.
 
 
 5. Choose CIV (En del av setup)
+
+
+#TODO
+- Create method that logs draw and prints nicely
+- Method that can perform undo, find the type and item and put back in the deck and reshuffle. Either put the item in the back, or pick random index and put it back

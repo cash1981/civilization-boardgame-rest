@@ -7,12 +7,15 @@ import lombok.Setter;
 import lombok.ToString;
 import no.asgari.civilization.ExcelSheet;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.mongojack.ObjectId;
 
 @ToString(of = "name")
 @Getter
 @Setter
 @JsonTypeName("citystate")
 public class Citystate implements Item {
+    @JsonProperty("_id")
+    @ObjectId
     private String id;
 
     @JsonProperty
@@ -27,7 +30,7 @@ public class Citystate implements Item {
     @JsonProperty
     private boolean hidden;
     @JsonProperty
-    private String owner; // game_id or player_id (username)
+    private String owner; // (username)
 
     public Citystate(String name) {
         this.name = name;
