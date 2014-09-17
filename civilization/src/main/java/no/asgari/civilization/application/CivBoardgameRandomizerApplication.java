@@ -1,8 +1,6 @@
 package no.asgari.civilization.application;
 
 import com.mongodb.DB;
-import com.mongodb.Mongo;
-import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
