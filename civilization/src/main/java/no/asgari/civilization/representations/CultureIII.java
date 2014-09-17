@@ -3,18 +3,24 @@ package no.asgari.civilization.representations;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import no.asgari.civilization.ExcelSheet;
+import no.asgari.civilization.SheetName;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.mongojack.Id;
+import org.mongojack.ObjectId;
 
 @Getter
 @Setter
 @ToString(of="name")
 @JsonTypeName("cultureIII")
+@NoArgsConstructor
 public class CultureIII implements Item {
     @NotEmpty
-    private final String name;
+    private String name;
+    @ObjectId
+    @Id
     private String id;
     private String description;
     private String type;
@@ -29,8 +35,8 @@ public class CultureIII implements Item {
     }
 
     @Override
-    public ExcelSheet getSheetName() {
-        return ExcelSheet.CULTURE_3;
+    public SheetName getSheetName() {
+        return SheetName.CULTURE_3;
     }
 
 }

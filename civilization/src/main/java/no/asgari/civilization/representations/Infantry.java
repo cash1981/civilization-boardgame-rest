@@ -3,8 +3,11 @@ package no.asgari.civilization.representations;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import no.asgari.civilization.ExcelSheet;
+import no.asgari.civilization.SheetName;
+import org.mongojack.Id;
+import org.mongojack.ObjectId;
 
 /**
  * Type should describe the unit type, for instance
@@ -12,17 +15,16 @@ import no.asgari.civilization.ExcelSheet;
  */
 @Getter
 @Setter
-@JsonTypeName("aircraft")
+@JsonTypeName("infantry")
+@NoArgsConstructor
 public class Infantry implements Unit {
-    private final int LEVEL_1 = 1;
-    private final int LEVEL_2 = 2;
-    private final int LEVEL_3 = 3;
-    private final int LEVEL_4 = 4;
+    @ObjectId
+    @Id
+    private String id;
 
     private int level = LEVEL_1;
-    private final int attack;
-    private final int health;
-    private String id;
+    private int attack;
+    private int health;
     private String owner;
     private boolean hidden;
     private boolean used;
@@ -34,8 +36,8 @@ public class Infantry implements Unit {
     }
 
     @Override
-    public ExcelSheet getSheetName() {
-        return ExcelSheet.INFANTRY;
+    public SheetName getSheetName() {
+        return SheetName.INFANTRY;
     }
 
     @Override

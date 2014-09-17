@@ -1,20 +1,21 @@
 package no.asgari.civilization.representations;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.mongojack.Id;
 import org.mongojack.ObjectId;
 
-@Getter
-@Setter
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+@Data
 public class Player {
+    @JsonIgnore
+    public static final String COL_NAME = "player";
 
     @ObjectId
     @Id

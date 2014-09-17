@@ -1,9 +1,13 @@
 package no.asgari.civilization.representations;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import no.asgari.civilization.ExcelSheet;
+import no.asgari.civilization.SheetName;
+import org.mongojack.Id;
+import org.mongojack.ObjectId;
 
 /**
  * Type should describe the unit type, for instance
@@ -12,7 +16,10 @@ import no.asgari.civilization.ExcelSheet;
 @Getter
 @Setter
 @JsonTypeName("aircraft")
+@NoArgsConstructor
 public class Aircraft implements Unit {
+    @ObjectId
+    @Id
     private String id;
     private String owner;
     private boolean hidden;
@@ -26,14 +33,19 @@ public class Aircraft implements Unit {
         this.health = health;
     }
 
+    /**
+     * Aircrafts have no level
+     * @return 0
+     */
+    @JsonIgnore
     @Override
     public int getLevel() {
         return 0;
     }
 
     @Override
-    public ExcelSheet getSheetName() {
-        return ExcelSheet.AIRCRAFT;
+    public SheetName getSheetName() {
+        return SheetName.AIRCRAFT;
     }
 
     @Override

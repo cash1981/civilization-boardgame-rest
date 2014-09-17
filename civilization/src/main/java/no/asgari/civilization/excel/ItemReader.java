@@ -1,6 +1,6 @@
 package no.asgari.civilization.excel;
 
-import no.asgari.civilization.ExcelSheet;
+import no.asgari.civilization.SheetName;
 import no.asgari.civilization.representations.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -63,7 +63,7 @@ public class ItemReader {
     }
 
     private LinkedList<? extends Item> getShuffledCityStates(Workbook wb) {
-        Sheet civSheet = wb.getSheet(ExcelSheet.CITY_STATES.toString());
+        Sheet civSheet = wb.getSheet(SheetName.CITY_STATES.toString());
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
         civSheet.forEach(row -> row.forEach(cell -> unfilteredCivCells.add(cell))
@@ -84,7 +84,7 @@ public class ItemReader {
     }
 
     private LinkedList<? extends Item> getShuffledCivsFromExcel(Workbook wb) {
-        Sheet civSheet = wb.getSheet(ExcelSheet.CIV.toString());
+        Sheet civSheet = wb.getSheet(SheetName.CIV.toString());
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
         civSheet.forEach(row -> row.forEach(cell -> unfilteredCivCells.add(cell))
@@ -105,7 +105,7 @@ public class ItemReader {
     }
 
     private LinkedList<? extends Item> getShuffledCultureIFromExcel(Workbook wb) {
-        Sheet culture1Sheet = wb.getSheet(ExcelSheet.CULTURE_1.toString());
+        Sheet culture1Sheet = wb.getSheet(SheetName.CULTURE_1.toString());
 
         List<Cell> unfilteredCells = new ArrayList<>();
         culture1Sheet.forEach(row -> row.forEach(unfilteredCells::add)
@@ -142,7 +142,7 @@ public class ItemReader {
     }
 
     private LinkedList<? extends Item> getShuffledCultureIIFromExcel(Workbook wb) {
-        Sheet culture2Sheet = wb.getSheet(ExcelSheet.CULTURE_2.toString());
+        Sheet culture2Sheet = wb.getSheet(SheetName.CULTURE_2.toString());
 
         List<Cell> unfilteredCells = new ArrayList<>();
         culture2Sheet.forEach(row -> row.forEach(unfilteredCells::add)
@@ -178,7 +178,7 @@ public class ItemReader {
     }
 
     private LinkedList<? extends Item> getShuffledCultureIIIFromExcel(Workbook wb) {
-        Sheet culture3Sheet = wb.getSheet(ExcelSheet.CULTURE_3.toString());
+        Sheet culture3Sheet = wb.getSheet(SheetName.CULTURE_3.toString());
 
         List<Cell> unfilteredCells = new ArrayList<>();
         culture3Sheet.forEach(row -> row.forEach(unfilteredCells::add));
@@ -213,7 +213,7 @@ public class ItemReader {
     }
 
     private LinkedList<? extends Item> getShuffledGreatPersonFromExcel(Workbook wb) {
-        Sheet gpSheet = wb.getSheet(ExcelSheet.GREAT_PERSON.toString());
+        Sheet gpSheet = wb.getSheet(SheetName.GREAT_PERSON.toString());
 
         List<Cell> unfilteredCells = new ArrayList<>();
         gpSheet.forEach(row -> row.forEach(unfilteredCells::add));
@@ -257,7 +257,7 @@ public class ItemReader {
     }
 
     private void extractShuffledWonderFromExcel(Workbook wb) {
-        Sheet wonderSheet = wb.getSheet(ExcelSheet.WONDERS.toString());
+        Sheet wonderSheet = wb.getSheet(SheetName.WONDERS.toString());
 
         List<Cell> unfilteredCells = new ArrayList<>();
         wonderSheet.forEach(row -> row.forEach(unfilteredCells::add));
@@ -322,7 +322,7 @@ public class ItemReader {
     }
 
     private LinkedList<? extends Item> getShuffledTilesFromExcel(Workbook wb) {
-        Sheet tileSheet = wb.getSheet(ExcelSheet.TILES.toString());
+        Sheet tileSheet = wb.getSheet(SheetName.TILES.toString());
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
         tileSheet.forEach(row -> row.forEach(unfilteredCivCells::add)
@@ -342,7 +342,7 @@ public class ItemReader {
     }
 
     private LinkedList<? extends Item> getShuffledHutsFromExcel(Workbook wb) {
-        Sheet hutSheet = wb.getSheet(ExcelSheet.HUTS.toString());
+        Sheet hutSheet = wb.getSheet(SheetName.HUTS.toString());
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
         hutSheet.forEach(row -> row.forEach(unfilteredCivCells::add)
@@ -363,7 +363,7 @@ public class ItemReader {
     }
 
     private LinkedList<? extends Item> getShuffledVillages(Workbook wb) {
-        Sheet sheet = wb.getSheet(ExcelSheet.VILLAGES.toString());
+        Sheet sheet = wb.getSheet(SheetName.VILLAGES.toString());
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
         sheet.forEach(row -> row.forEach(unfilteredCivCells::add)

@@ -2,7 +2,7 @@ package no.asgari.civilization.excel;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
-import no.asgari.civilization.ExcelSheet;
+import no.asgari.civilization.SheetName;
 import no.asgari.civilization.representations.Aircraft;
 import no.asgari.civilization.representations.Artillery;
 import no.asgari.civilization.representations.Infantry;
@@ -34,7 +34,7 @@ public class UnitReader {
     private void createInfantryTest() throws IOException {
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
         Workbook wb = new XSSFWorkbook(in);
-        Sheet infantrySheet = wb.getSheet(ExcelSheet.INFANTRY.toString());
+        Sheet infantrySheet = wb.getSheet(SheetName.INFANTRY.toString());
 
         List<Cell> unfilteredCells = new ArrayList<>();
         infantrySheet.forEach(row -> row.forEach(unfilteredCells::add));
@@ -59,7 +59,7 @@ public class UnitReader {
     private void createMountedTest() throws IOException {
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
         Workbook wb = new XSSFWorkbook(in);
-        Sheet mountedsheet = wb.getSheet(ExcelSheet.MOUNTED.toString());
+        Sheet mountedsheet = wb.getSheet(SheetName.MOUNTED.toString());
 
         List<Cell> unfilteredCells = new ArrayList<>();
         mountedsheet.forEach(row -> row.forEach(unfilteredCells::add));
@@ -84,7 +84,7 @@ public class UnitReader {
     private void createArtilleryTest() throws IOException {
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
         Workbook wb = new XSSFWorkbook(in);
-        Sheet artillerySheet = wb.getSheet(ExcelSheet.ARTILLERY.toString());
+        Sheet artillerySheet = wb.getSheet(SheetName.ARTILLERY.toString());
 
         List<Cell> unfilteredCells = new ArrayList<>();
         artillerySheet.forEach(row -> row.forEach(unfilteredCells::add));
@@ -109,7 +109,7 @@ public class UnitReader {
     private void createAircraftTest() throws IOException {
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
         Workbook wb = new XSSFWorkbook(in);
-        Sheet aircraftSheet = wb.getSheet(ExcelSheet.AIRCRAFT.toString());
+        Sheet aircraftSheet = wb.getSheet(SheetName.AIRCRAFT.toString());
 
         List<Cell> unfilteredCells = new ArrayList<>();
         aircraftSheet.forEach(row -> row.forEach(unfilteredCells::add));

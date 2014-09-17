@@ -1,5 +1,6 @@
 package no.asgari.civilization.representations;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -39,6 +40,14 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value=Aircraft.class, name="aircraft")
 })
 public interface Unit extends Spreadsheet {
+    @JsonIgnore
+    static final int LEVEL_1 = 1;
+    @JsonIgnore
+    static final int LEVEL_2 = 2;
+    @JsonIgnore
+    static final int LEVEL_3 = 3;
+    @JsonIgnore
+    static final int LEVEL_4 = 4;
 
     /**
      * Either the username or pbf name, both of which must be unique *

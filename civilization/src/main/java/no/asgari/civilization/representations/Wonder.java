@@ -1,22 +1,32 @@
 package no.asgari.civilization.representations;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import no.asgari.civilization.ExcelSheet;
+import no.asgari.civilization.SheetName;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.mongojack.Id;
+import org.mongojack.ObjectId;
 
 @Getter
 @Setter
 @ToString(of={"type", "name", "description"})
 @JsonTypeName("wonder")
+@NoArgsConstructor
 public class Wonder implements Item {
+    @JsonIgnore
     public static String ANCIENT = "Ancient";
+    @JsonIgnore
     public static String MEDIEVAL = "Medieval";
+    @JsonIgnore
     public static String MODERN = "Modern";
     @NotEmpty
-    private final String name;
+    private String name;
+    @ObjectId
+    @Id
     private String id;
     private String type;
     private String description;
@@ -33,8 +43,8 @@ public class Wonder implements Item {
     }
 
     @Override
-    public ExcelSheet getSheetName() {
-        return ExcelSheet.WONDERS;
+    public SheetName getSheetName() {
+        return SheetName.WONDERS;
     }
 
 }

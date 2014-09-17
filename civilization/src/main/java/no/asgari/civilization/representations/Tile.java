@@ -2,18 +2,24 @@ package no.asgari.civilization.representations;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import no.asgari.civilization.ExcelSheet;
+import no.asgari.civilization.SheetName;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.mongojack.Id;
+import org.mongojack.ObjectId;
 
 @Getter
 @Setter
 @ToString(of="name")
 @JsonTypeName("tile")
+@NoArgsConstructor
 public class Tile implements Item {
     @NotEmpty
-    private final String name;
+    private String name;
+    @ObjectId
+    @Id
     private String id;
     private String type;
     private String description;
@@ -28,8 +34,8 @@ public class Tile implements Item {
     }
 
     @Override
-    public ExcelSheet getSheetName() {
-        return ExcelSheet.TILES;
+    public SheetName getSheetName() {
+        return SheetName.TILES;
     }
 
 }

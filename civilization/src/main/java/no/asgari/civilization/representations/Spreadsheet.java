@@ -1,8 +1,10 @@
 package no.asgari.civilization.representations;
 
-import no.asgari.civilization.ExcelSheet;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import no.asgari.civilization.SheetName;
 
 public interface Spreadsheet {
 
-    ExcelSheet getSheetName();
+    @JsonIgnore
+    SheetName getSheetName();
 }

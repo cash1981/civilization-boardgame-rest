@@ -1,6 +1,6 @@
 package no.asgari.civilization.representations;
 
-import no.asgari.civilization.ExcelSheet;
+import no.asgari.civilization.SheetName;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -73,7 +73,7 @@ public class ItemTest {
     }
 
     private Queue<Item> getShuffledCivsFromExcel(Workbook wb) {
-        Sheet civSheet = wb.getSheet(ExcelSheet.CIV.toString());
+        Sheet civSheet = wb.getSheet(SheetName.CIV.toString());
         assertNotNull(civSheet);
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
@@ -98,7 +98,7 @@ public class ItemTest {
     }
 
     private Queue<Item> getShuffledCityStatesFromExcel(Workbook wb) {
-        Sheet civSheet = wb.getSheet(ExcelSheet.CITY_STATES.toString());
+        Sheet civSheet = wb.getSheet(SheetName.CITY_STATES.toString());
         assertNotNull(civSheet);
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
@@ -123,7 +123,7 @@ public class ItemTest {
     }
 
     private Queue<CultureI> getShuffledCultureIFromExcel(Workbook wb) {
-        Sheet culture1Sheet = wb.getSheet(ExcelSheet.CULTURE_1.toString());
+        Sheet culture1Sheet = wb.getSheet(SheetName.CULTURE_1.toString());
         assertNotNull(culture1Sheet);
 
         List<Cell> unfilteredCells = new ArrayList<>();
@@ -164,7 +164,7 @@ public class ItemTest {
     }
 
     private Queue<CultureII> getShuffledCultureIIFromExcel(Workbook wb) {
-        Sheet culture2Sheet = wb.getSheet(ExcelSheet.CULTURE_2.toString());
+        Sheet culture2Sheet = wb.getSheet(SheetName.CULTURE_2.toString());
         assertNotNull(culture2Sheet);
 
         List<Cell> unfilteredCells = new ArrayList<>();
@@ -204,7 +204,7 @@ public class ItemTest {
     }
 
     private Queue<CultureIII> getShuffledCultureIIIFromExcel(Workbook wb) {
-        Sheet culture3Sheet = wb.getSheet(ExcelSheet.CULTURE_3.toString());
+        Sheet culture3Sheet = wb.getSheet(SheetName.CULTURE_3.toString());
         assertNotNull(culture3Sheet);
 
         List<Cell> unfilteredCells = new ArrayList<>();
@@ -243,7 +243,7 @@ public class ItemTest {
     }
 
     private Queue<GreatPerson> getShuffledGreatPersonFromExcel(Workbook wb) {
-        Sheet gpSheet = wb.getSheet(ExcelSheet.GREAT_PERSON.toString());
+        Sheet gpSheet = wb.getSheet(SheetName.GREAT_PERSON.toString());
         assertNotNull(gpSheet);
 
         List<Cell> unfilteredCells = new ArrayList<>();
@@ -292,7 +292,7 @@ public class ItemTest {
     }
 
     private void getShuffledWonderFromExcel(Workbook wb) {
-        Sheet wonderSheet = wb.getSheet(ExcelSheet.WONDERS.toString());
+        Sheet wonderSheet = wb.getSheet(SheetName.WONDERS.toString());
         assertNotNull(wonderSheet);
 
         List<Cell> unfilteredCells = new ArrayList<>();
@@ -368,7 +368,7 @@ public class ItemTest {
     }
 
     private Queue<Item> getShuffledTilesFromExcel(Workbook wb) {
-        Sheet tileSheet = wb.getSheet(ExcelSheet.TILES.toString());
+        Sheet tileSheet = wb.getSheet(SheetName.TILES.toString());
         assertNotNull(tileSheet);
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
@@ -393,7 +393,7 @@ public class ItemTest {
     }
 
     private Queue<Item> getShuffledHutsFromExcel(Workbook wb) {
-        Sheet hutSheet = wb.getSheet(ExcelSheet.HUTS.toString());
+        Sheet hutSheet = wb.getSheet(SheetName.HUTS.toString());
         assertNotNull(hutSheet);
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
@@ -418,7 +418,7 @@ public class ItemTest {
     }
 
     private Queue<Item> getShuffledVillages(Workbook wb) {
-        Sheet sheet = wb.getSheet(ExcelSheet.VILLAGES.toString());
+        Sheet sheet = wb.getSheet(SheetName.VILLAGES.toString());
         assertNotNull(sheet);
 
         List<Cell> unfilteredCivCells = new ArrayList<>();

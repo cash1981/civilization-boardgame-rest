@@ -3,24 +3,28 @@ package no.asgari.civilization.representations;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import no.asgari.civilization.ExcelSheet;
+import no.asgari.civilization.SheetName;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.mongojack.Id;
 import org.mongojack.ObjectId;
 
 @ToString(of = "name")
 @Getter
 @Setter
 @JsonTypeName("citystate")
+@NoArgsConstructor
 public class Citystate implements Item {
-    @JsonProperty("_id")
     @ObjectId
+    @Id
     private String id;
 
     @JsonProperty
     @NotEmpty
-    private final String name;
+    private String name;
+
     @JsonProperty
     private String type;
     @JsonProperty
@@ -39,8 +43,8 @@ public class Citystate implements Item {
     }
 
     @Override
-    public ExcelSheet getSheetName() {
-        return ExcelSheet.CITY_STATES;
+    public SheetName getSheetName() {
+        return SheetName.CITY_STATES;
     }
 
 }

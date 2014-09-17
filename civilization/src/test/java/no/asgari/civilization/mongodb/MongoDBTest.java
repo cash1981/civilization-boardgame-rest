@@ -1,7 +1,6 @@
 package no.asgari.civilization.mongodb;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import lombok.Cleanup;
@@ -9,6 +8,7 @@ import no.asgari.civilization.application.CivBoardGameRandomizerConfiguration;
 import no.asgari.civilization.representations.PBF;
 import no.asgari.civilization.representations.Player;
 import no.asgari.civilization.test.PBFBuilder;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mongojack.DBCursor;
@@ -23,25 +23,34 @@ public class MongoDBTest {
     private static JacksonDBCollection<PBF, String> pbfCollection;
     private static JacksonDBCollection<Player, String> playerCollection;
 
+    private static MongoClient mongo;
+
     @BeforeClass
     public static void setup() throws Exception {
         CivBoardGameRandomizerConfiguration configuration = new CivBoardGameRandomizerConfiguration();
 
-        MongoClient mongo = new MongoClient(configuration.mongohost, configuration.mongoport);
+        mongo = new MongoClient(configuration.mongohost, configuration.mongoport);
         DB db = mongo.getDB(configuration.mongodb);
 
-        MongoDBTest.pbfCollection = JacksonDBCollection.wrap(db.getCollection("pbf"), PBF.class, String.class);
-        MongoDBTest.playerCollection = JacksonDBCollection.wrap(db.getCollection("player"), Player.class, String.class);
+        MongoDBTest.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
+        MongoDBTest.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
 
         @Cleanup DBCursor<PBF> dbCursor = pbfCollection.find();
 
-        if(dbCursor.size() == 0) {
+        if (dbCursor.size() == 0) {
             createNewPBFGame();
         }
     }
 
+    @AfterClass
+    public static void cleanup() {
+        if (mongo != null) {
+            mongo.close();
+        }
+    }
+
     @Test
-    public void testConvertToJSON() throws IOException {
+    public void printAllPBFGames() throws IOException {
         @Cleanup DBCursor<PBF> cursor = pbfCollection.find();
         while (cursor.hasNext()) {
             PBF pbf = cursor.next();
@@ -53,11 +62,9 @@ public class MongoDBTest {
     private static void createNewPBFGame() throws IOException {
         PBFBuilder pbfBuilder = new PBFBuilder();
         PBF pbf = pbfBuilder.createNewGame();
-       WriteResult<PBF, String> writeResult = pbfCollection.insert(pbf);
-        //TODO This is just test data, should be gotten from somewhere, perhaps retrieved from logged in user, or pathparam
+        WriteResult<PBF, String> writeResult = pbfCollection.insert(pbf);
         pbf.getPlayers().add(createPlayer("cash1981", writeResult.getSavedId()));
         pbf.getPlayers().add(createPlayer("Itchi", writeResult.getSavedId()));
-        pbf.getPlayers().add(createPlayer("Karandras1", writeResult.getSavedId()));
         pbf.getPlayers().add(createPlayer("Chul", writeResult.getSavedId()));
     }
 

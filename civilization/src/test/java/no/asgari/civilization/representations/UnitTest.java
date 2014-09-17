@@ -3,7 +3,7 @@ package no.asgari.civilization.representations;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import no.asgari.civilization.ExcelSheet;
+import no.asgari.civilization.SheetName;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -35,7 +35,7 @@ public class UnitTest {
     private void createInfantryTest() throws Exception {
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
         Workbook wb = new XSSFWorkbook(in);
-        Sheet infantrySheet = wb.getSheet(ExcelSheet.INFANTRY.toString());
+        Sheet infantrySheet = wb.getSheet(SheetName.INFANTRY.toString());
         assertNotNull(infantrySheet);
 
         List<Cell> unfilteredCells = new ArrayList<>();
@@ -61,7 +61,7 @@ public class UnitTest {
     private void createMountedTest() throws Exception {
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
         Workbook wb = new XSSFWorkbook(in);
-        Sheet mountedsheet = wb.getSheet(ExcelSheet.MOUNTED.toString());
+        Sheet mountedsheet = wb.getSheet(SheetName.MOUNTED.toString());
         assertNotNull(mountedsheet);
 
         List<Cell> unfilteredCells = new ArrayList<>();
@@ -87,7 +87,7 @@ public class UnitTest {
     private void createArtilleryTest() throws Exception {
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
         Workbook wb = new XSSFWorkbook(in);
-        Sheet artillerySheet = wb.getSheet(ExcelSheet.ARTILLERY.toString());
+        Sheet artillerySheet = wb.getSheet(SheetName.ARTILLERY.toString());
         assertNotNull(artillerySheet);
 
         List<Cell> unfilteredCells = new ArrayList<>();
@@ -113,7 +113,7 @@ public class UnitTest {
     private void createAircraftTest() throws Exception {
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
         Workbook wb = new XSSFWorkbook(in);
-        Sheet aircraftSheet = wb.getSheet(ExcelSheet.AIRCRAFT.toString());
+        Sheet aircraftSheet = wb.getSheet(SheetName.AIRCRAFT.toString());
         assertNotNull(aircraftSheet);
 
         List<Cell> unfilteredCells = new ArrayList<>();

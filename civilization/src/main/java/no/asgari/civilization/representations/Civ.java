@@ -7,8 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import no.asgari.civilization.ExcelSheet;
+import no.asgari.civilization.SheetName;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.mongojack.Id;
+import org.mongojack.ObjectId;
 
 @Getter
 @Setter
@@ -19,6 +21,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class Civ implements Item {
     @NotEmpty
     private String name;
+    @ObjectId
+    @Id
     private String id;
     private String type;
     private String description;
@@ -35,8 +39,8 @@ public class Civ implements Item {
 
     @JsonIgnore
     @Override
-    public ExcelSheet getSheetName() {
-        return ExcelSheet.CIV;
+    public SheetName getSheetName() {
+        return SheetName.CIV;
     }
 
 }

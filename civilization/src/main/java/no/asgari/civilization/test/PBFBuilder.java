@@ -1,11 +1,11 @@
 package no.asgari.civilization.test;
 
-import java.io.IOException;
-
 import no.asgari.civilization.excel.ItemReader;
 import no.asgari.civilization.excel.UnitReader;
 import no.asgari.civilization.representations.GameType;
 import no.asgari.civilization.representations.PBF;
+
+import java.io.IOException;
 
 public class PBFBuilder {
 

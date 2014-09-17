@@ -1,17 +1,5 @@
 package no.asgari.civilization.resource;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Preconditions;
@@ -25,6 +13,17 @@ import no.asgari.civilization.test.PBFBuilder;
 import org.mongojack.DBCursor;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Path("/games")
 @Produces(value = MediaType.APPLICATION_JSON)
@@ -104,11 +103,4 @@ public class GameResource {
         return player;
     }
 
-    /*@POST
-    @Timed
-    public Response createNewGame(PBF PBF) {
-        pbfCollection.insert(PBF);
-        return Response.noContent().build();
-    }
-    */
 }
