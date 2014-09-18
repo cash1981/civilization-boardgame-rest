@@ -3,11 +3,12 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>no.asgari</groupId>
-    <artifactId>civilization</artifactId>
+    <groupId>no.asgari.civilization</groupId>
+    <artifactId>civilization-server</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>Civilization the board game randomizer</name>
+    <name>Civilization-Server</name>
+    <description>Server that creates PBF games and shuffles and gives out items</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -171,7 +172,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>no.asgari.civilization.application.CivBoardgameRandomizerApplication</mainClass>
+                    <mainClass>no.asgari.civilization.server.application.CivBoardgameRandomizerApplication</mainClass>
                 </configuration>
             </plugin>
             <plugin>
@@ -201,7 +202,7 @@
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>no.asgari.civilization.application.CivBoardgameRandomizerApplication</mainClass>
+                                    <mainClass>no.asgari.civilization.server.application.CivBoardgameRandomizerApplication</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
