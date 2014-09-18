@@ -34,51 +34,40 @@ public class ItemReader {
     public LinkedList<GreatPerson> shuffledGPs;
     public LinkedList<Hut> shuffledHuts;
     public LinkedList<Village> shuffledVillages;
-    public List<Wonder> modernWonder;
-    public List<Wonder> medivalWonder;
-    public List<Wonder> ancientWonders;
+    public LinkedList<Wonder> modernWonders;
+    public LinkedList<Wonder> medievalWonders;
+    public LinkedList<Wonder> ancientWonders;
     public LinkedList<Tile> shuffledTiles;
     public LinkedList<Citystate> shuffledCityStates;
     
-    private final Predicate<Cell> notEmptyPredicate = p -> !p.toString().isEmpty();
-    private final Predicate<Cell> notRandomPredicate = p -> !p.toString().equals("RAND()");
-    private final Predicate<Cell> rowNotZeroPredicate = p -> p.getRow().getRowNum() != 0;
-    private final Predicate<Cell> columnIndexZeroPredicate = cell -> cell.getColumnIndex() == 0;
+    static final Predicate<Cell> notEmptyPredicate = cell -> !cell.toString().isEmpty();
+    static final Predicate<Cell> notRandomPredicate = cell -> !cell.toString().equals("RAND()");
+    static final Predicate<Cell> rowNotZeroPredicate = cell -> cell.getRow().getRowNum() != 0;
+    static final Predicate<Cell> columnIndexZeroPredicate = cell -> cell.getColumnIndex() == 0;
+    private static final String WONDERS = "wonders";
 
     @SuppressWarnings("unchecked")
     public void readItemsFromExcel() throws IOException {
         InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
-        Workbook wb = new XSSFWorkbook(in);
-
-        shuffledCivs = (LinkedList<Civ>) getShuffledCivsFromExcel(wb);
-
-        shuffledCultureI = (LinkedList<CultureI>) getShuffledCultureIFromExcel(wb);
-
-        shuffledCultureII = (LinkedList<CultureII>) getShuffledCultureIIFromExcel(wb);
-
-        shuffledCultureIII = (LinkedList<CultureIII>) getShuffledCultureIIIFromExcel(wb);
-
-        shuffledGPs = (LinkedList<GreatPerson>) getShuffledGreatPersonFromExcel(wb);
-
-        shuffledHuts = (LinkedList<Hut>) getShuffledHutsFromExcel(wb);
-
-        shuffledVillages = (LinkedList<Village>) getShuffledVillages(wb);
-
-        shuffledCityStates = (LinkedList<Citystate>) getShuffledCityStates(wb);
-
-        extractShuffledWonderFromExcel(wb);
-
-        shuffledTiles = (LinkedList<Tile>) getShuffledTilesFromExcel(wb);
-        wb.close();
+        try (Workbook wb = new XSSFWorkbook(in)) {
+            shuffledCivs = (LinkedList<Civ>) getShuffledCivsFromExcel(wb);
+            shuffledCultureI = (LinkedList<CultureI>) getShuffledCultureIFromExcel(wb);
+            shuffledCultureII = (LinkedList<CultureII>) getShuffledCultureIIFromExcel(wb);
+            shuffledCultureIII = (LinkedList<CultureIII>) getShuffledCultureIIIFromExcel(wb);
+            shuffledGPs = (LinkedList<GreatPerson>) getShuffledGreatPersonFromExcel(wb);
+            shuffledHuts = (LinkedList<Hut>) getShuffledHutsFromExcel(wb);
+            shuffledVillages = (LinkedList<Village>) getShuffledVillages(wb);
+            shuffledCityStates = (LinkedList<Citystate>) getShuffledCityStates(wb);
+            shuffledTiles = (LinkedList<Tile>) getShuffledTilesFromExcel(wb);
+            extractShuffledWondersFromExcel(wb);
+        }
     }
 
     private LinkedList<? extends Item> getShuffledCityStates(Workbook wb) {
         Sheet civSheet = wb.getSheet(SheetName.CITY_STATES.toString());
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
-        civSheet.forEach(row -> row.forEach(cell -> unfilteredCivCells.add(cell))
-        );
-
+        civSheet.forEach(row -> row.forEach(unfilteredCivCells::add));
 
         List<Citystate> cityStates = unfilteredCivCells.stream()
                 .filter(notEmptyPredicate)
@@ -89,16 +78,14 @@ public class ItemReader {
                 .collect(Collectors.toList());
 
         Collections.shuffle(cityStates);
-        LinkedList<Item> shuffled = new LinkedList<>(cityStates);
-        return shuffled;
+        return new LinkedList<>(cityStates);
     }
 
     private LinkedList<? extends Item> getShuffledCivsFromExcel(Workbook wb) {
         Sheet civSheet = wb.getSheet(SheetName.CIV.toString());
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
-        civSheet.forEach(row -> row.forEach(cell -> unfilteredCivCells.add(cell))
-        );
+        civSheet.forEach(row -> row.forEach(unfilteredCivCells::add));
 
         List<Civ> civs = unfilteredCivCells.stream()
                 .filter(notEmptyPredicate)
@@ -109,19 +96,16 @@ public class ItemReader {
                 .collect(Collectors.toList());
 
         Collections.shuffle(civs);
-        LinkedList<Civ> shuffledCivs = new LinkedList<>(civs);
-
-        return shuffledCivs;
+        return new LinkedList<>(civs);
     }
 
     private LinkedList<? extends Item> getShuffledCultureIFromExcel(Workbook wb) {
         Sheet culture1Sheet = wb.getSheet(SheetName.CULTURE_1.toString());
 
         List<Cell> unfilteredCells = new ArrayList<>();
-        culture1Sheet.forEach(row -> row.forEach(unfilteredCells::add)
-        );
+        culture1Sheet.forEach(row -> row.forEach(unfilteredCells::add));
 
-        List<CultureI> cultures = unfilteredCells.parallelStream()
+        List<CultureI> cultures = unfilteredCells.stream()
                 .filter(notEmptyPredicate)
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
@@ -130,7 +114,7 @@ public class ItemReader {
                 .collect(Collectors.toList());
 
 
-        List<String> description = unfilteredCells.parallelStream()
+        List<String> description = unfilteredCells.stream()
                 .filter(notEmptyPredicate)
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
@@ -145,20 +129,16 @@ public class ItemReader {
         }
 
         Collections.shuffle(cultures);
-
-        //Now we want to take every other one
-        LinkedList<CultureI> culture1 = new LinkedList<>(cultures);
-        return culture1;
+        return new LinkedList<>(cultures);
     }
 
     private LinkedList<? extends Item> getShuffledCultureIIFromExcel(Workbook wb) {
         Sheet culture2Sheet = wb.getSheet(SheetName.CULTURE_2.toString());
 
         List<Cell> unfilteredCells = new ArrayList<>();
-        culture2Sheet.forEach(row -> row.forEach(unfilteredCells::add)
-        );
+        culture2Sheet.forEach(row -> row.forEach(unfilteredCells::add));
 
-        List<CultureII> cultures = unfilteredCells.stream()
+        List<CultureII> culture2s = unfilteredCells.stream()
                 .filter(notEmptyPredicate)
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
@@ -166,7 +146,7 @@ public class ItemReader {
                 .map(cell -> new CultureII(cell.toString()))
                 .collect(Collectors.toList());
 
-        List<String> description = unfilteredCells.parallelStream()
+        List<String> description = unfilteredCells.stream()
                 .filter(notEmptyPredicate)
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
@@ -174,17 +154,14 @@ public class ItemReader {
                 .map(Object::toString)
                 .collect(Collectors.toList());
 
-        //Description should be in the same order as cultures
-        for(int i = 0; i < cultures.size(); i++) {
-            CultureII item = cultures.get(i);
+        //Description should be in the same order as culture2s
+        for(int i = 0; i < culture2s.size(); i++) {
+            CultureII item = culture2s.get(i);
             item.setDescription(description.get(i));
         }
 
-        Collections.shuffle(cultures);
-
-        //Now we want to take every other one
-        LinkedList<CultureII> culture2 = new LinkedList<>(cultures);
-        return culture2;
+        Collections.shuffle(culture2s);
+        return new LinkedList<>(culture2s);
     }
 
     private LinkedList<? extends Item> getShuffledCultureIIIFromExcel(Workbook wb) {
@@ -193,7 +170,7 @@ public class ItemReader {
         List<Cell> unfilteredCells = new ArrayList<>();
         culture3Sheet.forEach(row -> row.forEach(unfilteredCells::add));
 
-        List<CultureIII> cultures = unfilteredCells.stream()
+        List<CultureIII> culture3s = unfilteredCells.stream()
                 .filter(notEmptyPredicate)
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
@@ -201,7 +178,7 @@ public class ItemReader {
                 .map(cell -> new CultureIII(cell.toString()))
                 .collect(Collectors.toList());
 
-        List<String> description = unfilteredCells.parallelStream()
+        List<String> description = unfilteredCells.stream()
                 .filter(notEmptyPredicate)
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
@@ -209,17 +186,14 @@ public class ItemReader {
                 .map(Object::toString)
                 .collect(Collectors.toList());
 
-        //Description should be in the same order as cultures
-        for(int i = 0; i < cultures.size(); i++) {
-            CultureIII item = cultures.get(i);
+        //Description should be in the same order as culture3s
+        for(int i = 0; i < culture3s.size(); i++) {
+            CultureIII item = culture3s.get(i);
             item.setDescription(description.get(i));
         }
 
-        Collections.shuffle(cultures);
-
-        //Now we want to take every other one
-        LinkedList<CultureIII> culture3 = new LinkedList<>(cultures);
-        return culture3;
+        Collections.shuffle(culture3s);
+        return new LinkedList<>(culture3s);
     }
 
     private LinkedList<? extends Item> getShuffledGreatPersonFromExcel(Workbook wb) {
@@ -236,7 +210,7 @@ public class ItemReader {
                 .map(cell -> new GreatPerson(cell.toString()))
                 .collect(Collectors.toList());
 
-        List<String> tile = unfilteredCells.parallelStream()
+        List<String> tile = unfilteredCells.stream()
                 .filter(notEmptyPredicate)
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
@@ -244,7 +218,7 @@ public class ItemReader {
                 .map(Object::toString)
                 .collect(Collectors.toList());
 
-        List<String> description = unfilteredCells.parallelStream()
+        List<String> description = unfilteredCells.stream()
                 .filter(notEmptyPredicate)
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
@@ -266,7 +240,7 @@ public class ItemReader {
         return gpLinkedList;
     }
 
-    private void extractShuffledWonderFromExcel(Workbook wb) {
+    private void extractShuffledWondersFromExcel(Workbook wb) {
         Sheet wonderSheet = wb.getSheet(SheetName.WONDERS.toString());
 
         List<Cell> unfilteredCells = new ArrayList<>();
@@ -282,7 +256,7 @@ public class ItemReader {
                 .map(Object::toString)
                 .collect(Collectors.toList());
 
-        List<String> description = unfilteredCells.parallelStream()
+        List<String> description = unfilteredCells.stream()
                 .filter(p -> !p.toString().trim().isEmpty())
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
@@ -291,52 +265,51 @@ public class ItemReader {
                 .collect(Collectors.toList());
 
         LinkedList<String> wondersName = new LinkedList<>(wonderName);
-        LinkedList<String> desciptions = new LinkedList<>(description);
+        LinkedList<String> descriptions = new LinkedList<>(description);
 
         //Kun ancient
-        ancientWonders = new ArrayList<>();
+        ancientWonders = new LinkedList<>();
+        //There is no break in java 8 forEach, thus we use the old for
         for (int i = 0; i < wondersName.size(); i++) {
             String wonder = wondersName.poll();
-            String desc = desciptions.poll();
-            if (wonder.toLowerCase().contains("wonders")) {
+            String desc = descriptions.poll();
+            if (wonder.toLowerCase().contains(WONDERS)) {
                 break;
             }
-
             ancientWonders.add(new Wonder(wonder, desc, Wonder.ANCIENT));
         }
         Collections.shuffle(ancientWonders);
 
         //Kun ancient
-        medivalWonder = new ArrayList<>();
+        medievalWonders = new LinkedList<>();
         for (int i = 0; i < wondersName.size(); i++) {
             String wonder = wondersName.poll();
-            String desc = desciptions.poll();
-            if (wonder.toLowerCase().contains("wonders")) {
+            String desc = descriptions.poll();
+            if (wonder.toLowerCase().contains(WONDERS)) {
                 break;
             }
-            medivalWonder.add(new Wonder(wonder, desc, Wonder.MEDIEVAL));
+            medievalWonders.add(new Wonder(wonder, desc, Wonder.MEDIEVAL));
         }
-        Collections.shuffle(medivalWonder);
+        Collections.shuffle(medievalWonders);
 
         //Kun ancient
-        modernWonder = new ArrayList<>();
+        modernWonders = new LinkedList<>();
 
         int remainingSize = wondersName.size();
 
         for (int i = 0; i < remainingSize; i++) {
             String wonder = wondersName.poll();
-            String desc = desciptions.poll();
-            modernWonder.add(new Wonder(wonder, desc, Wonder.MODERN));
+            String desc = descriptions.poll();
+            modernWonders.add(new Wonder(wonder, desc, Wonder.MODERN));
         }
-        Collections.shuffle(modernWonder);
+        Collections.shuffle(modernWonders);
     }
 
     private LinkedList<? extends Item> getShuffledTilesFromExcel(Workbook wb) {
         Sheet tileSheet = wb.getSheet(SheetName.TILES.toString());
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
-        tileSheet.forEach(row -> row.forEach(unfilteredCivCells::add)
-        );
+        tileSheet.forEach(row -> row.forEach(unfilteredCivCells::add));
 
         List<Tile> tiles = unfilteredCivCells.stream()
                 .filter(notEmptyPredicate)
@@ -347,16 +320,14 @@ public class ItemReader {
                 .collect(Collectors.toList());
 
         Collections.shuffle(tiles);
-        LinkedList<Tile> shuffledTiles = new LinkedList<>(tiles);
-        return shuffledTiles;
+        return new LinkedList<>(tiles);
     }
 
     private LinkedList<? extends Item> getShuffledHutsFromExcel(Workbook wb) {
         Sheet hutSheet = wb.getSheet(SheetName.HUTS.toString());
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
-        hutSheet.forEach(row -> row.forEach(unfilteredCivCells::add)
-        );
+        hutSheet.forEach(row -> row.forEach(unfilteredCivCells::add));
 
         List<Hut> huts = unfilteredCivCells.stream()
                 .filter(notEmptyPredicate)
@@ -367,17 +338,14 @@ public class ItemReader {
                 .collect(Collectors.toList());
 
         Collections.shuffle(huts);
-        LinkedList<Hut> shuffledHuts = new LinkedList<>(huts);
-
-        return shuffledHuts;
+        return new LinkedList<>(huts);
     }
 
     private LinkedList<? extends Item> getShuffledVillages(Workbook wb) {
         Sheet sheet = wb.getSheet(SheetName.VILLAGES.toString());
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
-        sheet.forEach(row -> row.forEach(unfilteredCivCells::add)
-        );
+        sheet.forEach(row -> row.forEach(unfilteredCivCells::add));
 
         List<Village> villages = unfilteredCivCells.stream()
                 .filter(notEmptyPredicate)
@@ -388,8 +356,6 @@ public class ItemReader {
                 .collect(Collectors.toList());
 
         Collections.shuffle(villages);
-        LinkedList<Village> shuffledVillages = new LinkedList<>(villages);
-
-        return shuffledVillages;
+        return new LinkedList<>(villages);
     }
 }

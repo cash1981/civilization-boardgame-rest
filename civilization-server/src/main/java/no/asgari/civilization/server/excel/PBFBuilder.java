@@ -1,24 +1,23 @@
 package no.asgari.civilization.server.excel;
 
-import no.asgari.civilization.server.excel.ItemReader;
-import no.asgari.civilization.server.excel.UnitReader;
+import java.io.IOException;
+
 import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.PBF;
-
-import java.io.IOException;
 
 public class PBFBuilder {
 
     /**
      * Will create a new game and read the content from the Excel sheet, and shuffle the content
+     *
      * @return - A newly created PBF
      * @throws IOException
      */
     public PBF createNewGame() throws IOException {
         PBF pbf = new PBF();
-        pbf.setNumOfPlayers(4); //TODO
-        pbf.setName("First civ game"); //TODO
-        pbf.setType(GameType.WAW);  //TODO
+        pbf.setNumOfPlayers(4); //TODO test only
+        pbf.setName("First civ game"); //TODO test only
+        pbf.setType(GameType.WAW);  //TODO test only
 
         ItemReader items = new ItemReader();
         items.readItemsFromExcel();
@@ -41,10 +40,9 @@ public class PBFBuilder {
         pbf.setTiles(items.shuffledTiles);
         pbf.getCitystates().addAll(items.shuffledCityStates);
         pbf.getWonders().addAll(items.ancientWonders);
-        pbf.getWonders().addAll(items.medivalWonder);
-        pbf.getWonders().addAll(items.modernWonder);
+        pbf.getWonders().addAll(items.medievalWonders);
+        pbf.getWonders().addAll(items.modernWonders);
 
         return pbf;
     }
-
 }

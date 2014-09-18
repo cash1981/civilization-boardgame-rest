@@ -1,4 +1,4 @@
-package no.asgari.civilization.server;
+package no.asgari.civilization.server.excel;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -102,11 +102,4 @@ public class ExcelTest {
         assertEquals(sizeOfHuts - 1, shuffledHuts.size());
     }
 
-    public static <T> Stream<T> stream(Iterable<T> in) {
-        return StreamSupport.stream(in.spliterator(), false);
-    }
-
-    public static <T> Stream<T> parallelStream(Iterable<T> in) {
-        return StreamSupport.stream(in.spliterator(), true);
-    }
 }

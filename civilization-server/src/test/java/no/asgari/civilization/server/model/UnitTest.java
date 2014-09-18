@@ -1,13 +1,9 @@
-package no.asgari.civilization.server.representations;
+package no.asgari.civilization.server.model;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import no.asgari.civilization.server.SheetName;
-import no.asgari.civilization.server.model.Aircraft;
-import no.asgari.civilization.server.model.Artillery;
-import no.asgari.civilization.server.model.Infantry;
-import no.asgari.civilization.server.model.Mounted;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -21,6 +17,7 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+//TODO Must change class to test UnitReader
 public class UnitTest {
 
     public Queue<Aircraft> aircraftQueue;

@@ -1,17 +1,6 @@
-package no.asgari.civilization.server.representations;
+package no.asgari.civilization.server.model;
 
 import no.asgari.civilization.server.SheetName;
-import no.asgari.civilization.server.model.Citystate;
-import no.asgari.civilization.server.model.Civ;
-import no.asgari.civilization.server.model.CultureI;
-import no.asgari.civilization.server.model.CultureII;
-import no.asgari.civilization.server.model.CultureIII;
-import no.asgari.civilization.server.model.GreatPerson;
-import no.asgari.civilization.server.model.Hut;
-import no.asgari.civilization.server.model.Item;
-import no.asgari.civilization.server.model.Tile;
-import no.asgari.civilization.server.model.Village;
-import no.asgari.civilization.server.model.Wonder;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -25,6 +14,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
+//TODO Must change class to test ItemReader
 public class ItemTest {
     public Queue<? extends Item> civs;
     public Queue<? extends Item> shuffledCultureI;

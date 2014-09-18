@@ -54,9 +54,7 @@ public class GameResource {
             PBF pbf = dbCursor.next();
             pbfs.add(pbf);
         }
-
         return pbfs;
-
     }
 
     @POST
