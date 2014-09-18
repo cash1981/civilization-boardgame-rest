@@ -1,6 +1,7 @@
 package no.asgari.civilization.representations;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -20,6 +21,8 @@ import java.util.List;
  */
 @Data
 @JsonRootName(value="pbf")
+@JsonInclude
+//@JsonIgnoreProperties Perhaps use this when the object keep getting changed, otherwise jackson throws exception when it cannot map
 public class PBF {
     @JsonIgnore
     public static final String COL_NAME = "pbf";
