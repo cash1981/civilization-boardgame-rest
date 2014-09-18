@@ -19,9 +19,9 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertNotNull;
 
-public class MongoDBTest {
-    private static JacksonDBCollection<PBF, String> pbfCollection;
-    private static JacksonDBCollection<Player, String> playerCollection;
+public abstract class MongoDBBaseTest {
+    protected static JacksonDBCollection<PBF, String> pbfCollection;
+    protected static JacksonDBCollection<Player, String> playerCollection;
 
     private static MongoClient mongo;
 
@@ -32,8 +32,8 @@ public class MongoDBTest {
         mongo = new MongoClient(configuration.mongohost, configuration.mongoport);
         DB db = mongo.getDB(configuration.mongodb);
 
-        MongoDBTest.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
-        MongoDBTest.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
+        MongoDBBaseTest.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
+        MongoDBBaseTest.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
 
         @Cleanup DBCursor<PBF> dbCursor = pbfCollection.find();
 

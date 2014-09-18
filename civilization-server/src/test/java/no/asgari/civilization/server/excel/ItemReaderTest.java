@@ -1,4 +1,4 @@
-package no.asgari.civilization.server.model;
+package no.asgari.civilization.server.excel;
 
 import no.asgari.civilization.server.excel.ItemReader;
 import org.junit.Test;
