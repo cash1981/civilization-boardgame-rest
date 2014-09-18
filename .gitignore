@@ -24,3 +24,4 @@ Thumbs.db
 target/
 *.iml
 .idea/
+atlassian-ide-plugin.xml
