@@ -1,11 +1,13 @@
-package no.asgari.civilization.server.excel;
+package no.asgari.civilization.server.action;
 
 import java.io.IOException;
 
+import no.asgari.civilization.server.excel.ItemReader;
+import no.asgari.civilization.server.excel.UnitReader;
 import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.PBF;
 
-public class PBFBuilder {
+public class PBFAction {
 
     /**
      * Will create a new game and read the content from the Excel sheet, and shuffle the content

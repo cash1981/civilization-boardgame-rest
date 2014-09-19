@@ -6,10 +6,10 @@ import com.google.common.base.Preconditions;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
+import no.asgari.civilization.server.action.PBFAction;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.rest.CreateGameDTO;
-import no.asgari.civilization.server.excel.PBFBuilder;
 import org.mongojack.DBCursor;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
@@ -77,8 +77,8 @@ public class GameResource {
 
     @SneakyThrows(IOException.class)
     private void createNewPBFGame() {
-        PBFBuilder pbfBuilder = new PBFBuilder();
-        PBF pbf = pbfBuilder.createNewGame();
+        PBFAction pbfAction = new PBFAction();
+        PBF pbf = pbfAction.createNewGame();
         WriteResult<PBF, String> writeResult = pbfCollection.insert(pbf);
         log.info("Saved new PBF " + writeResult + " with _id " + writeResult.getSavedId());
 

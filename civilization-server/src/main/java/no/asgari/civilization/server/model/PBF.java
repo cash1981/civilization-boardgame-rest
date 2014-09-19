@@ -1,6 +1,7 @@
 package no.asgari.civilization.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -22,7 +23,7 @@ import java.util.List;
 @Data
 @JsonRootName(value="pbf")
 @JsonInclude
-//@JsonIgnoreProperties Perhaps use this when the object keep getting changed, otherwise jackson throws exception when it cannot map
+@JsonIgnoreProperties(ignoreUnknown = true) //Perhaps use this when the object keep getting changed, otherwise jackson throws exception when it cannot map
 public class PBF {
     @JsonIgnore
     public static final String COL_NAME = "pbf";
@@ -42,7 +43,7 @@ public class PBF {
     private int numOfPlayers;
     private boolean active = true;
 
-    private List<Draw> draws = Lists.newArrayList();
+//    private List<Draw> draws = Lists.newArrayList();
     private List<Player> players = Lists.newArrayList();
     private List<Civ> civs = Lists.newArrayList();
     private List<Citystate> citystates = Lists.newArrayList();

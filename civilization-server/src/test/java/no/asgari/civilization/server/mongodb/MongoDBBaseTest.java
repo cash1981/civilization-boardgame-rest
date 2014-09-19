@@ -1,13 +1,15 @@
 package no.asgari.civilization.server.mongodb;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import lombok.Cleanup;
+import no.asgari.civilization.server.action.PBFAction;
 import no.asgari.civilization.server.application.CivBoardGameRandomizerConfiguration;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
-import no.asgari.civilization.server.excel.PBFBuilder;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,38 +19,10 @@ import org.mongojack.WriteResult;
 
 import java.io.IOException;
 
+import static org.fest.assertions.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 
-public abstract class MongoDBBaseTest {
-    protected static JacksonDBCollection<PBF, String> pbfCollection;
-    protected static JacksonDBCollection<Player, String> playerCollection;
-
-    private static MongoClient mongo;
-
-    @BeforeClass
-    public static void setup() throws Exception {
-        CivBoardGameRandomizerConfiguration configuration = new CivBoardGameRandomizerConfiguration();
-
-        mongo = new MongoClient(configuration.mongohost, configuration.mongoport);
-        DB db = mongo.getDB(configuration.mongodb);
-
-        MongoDBBaseTest.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
-        MongoDBBaseTest.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
-
-        @Cleanup DBCursor<PBF> dbCursor = pbfCollection.find();
-
-        if (dbCursor.size() == 0) {
-            createNewPBFGame();
-        }
-    }
-
-    @AfterClass
-    public static void cleanup() {
-        if (mongo != null) {
-            mongo.close();
-        }
-    }
-
+public class MongoDBBaseTest extends AbstractMongoDBTest {
     @Test
     public void printAllPBFGames() throws IOException {
         @Cleanup DBCursor<PBF> cursor = pbfCollection.find();
@@ -59,13 +33,9 @@ public abstract class MongoDBBaseTest {
         }
     }
 
-    private static void createNewPBFGame() throws IOException {
-        PBFBuilder pbfBuilder = new PBFBuilder();
-        PBF pbf = pbfBuilder.createNewGame();
-        WriteResult<PBF, String> writeResult = pbfCollection.insert(pbf);
-        pbf.getPlayers().add(createPlayer("cash1981", writeResult.getSavedId()));
-        pbf.getPlayers().add(createPlayer("Itchi", writeResult.getSavedId()));
-        pbf.getPlayers().add(createPlayer("Chul", writeResult.getSavedId()));
+    @Test(expected = com.mongodb.MongoException.class)
+    public void testThatCreatingSameUserThrowsException() throws JsonProcessingException {
+        createPlayer("cash1981", pbfId);
     }
 
     private static Player createPlayer(String username, String pbfId) throws JsonProcessingException {
@@ -75,7 +45,7 @@ public abstract class MongoDBBaseTest {
         player.getGameIds().add(pbfId);
 
         WriteResult<Player, String> writeResult = playerCollection.insert(player);
-        System.out.println("Lagret player " + writeResult.toString());
+        System.out.println("Saved player " + writeResult.toString());
         assertNotNull(writeResult.getSavedId());
         return player;
     }

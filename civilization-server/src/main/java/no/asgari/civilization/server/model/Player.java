@@ -1,6 +1,7 @@
 package no.asgari.civilization.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.collect.Lists;
 import lombok.Data;
 import org.hibernate.validator.constraints.Email;
@@ -12,7 +13,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.UniqueConstraint;
+
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Player {
     @JsonIgnore
     public static final String COL_NAME = "player";
@@ -22,6 +26,7 @@ public class Player {
     private String id;
 
     @NotBlank
+    //Unique
     private String username;
 
     @Email
@@ -31,7 +36,8 @@ public class Player {
     private String password;
 
     /** A list of all the private draws a player has made in one game * */
-    private List<Draw> draws = Lists.newArrayList();
+    //the draw will be moved to its own collection
+//    private List<Draw> draws = Lists.newArrayList();
     private List<Item> items = Lists.newArrayList();
     /** Set of unique active games * */
     private Set<String> gameIds = new HashSet<>();
