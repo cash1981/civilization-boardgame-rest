@@ -1,5 +1,6 @@
 package no.asgari.civilization.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,13 +33,28 @@ public class UndoAction {
     private String drawId;
 
     /** If undo has been performed **/
-    private boolean done = false;
+    private boolean done;
+
+    /** Although we can find this number each time, its easier to cache it here **/
+    private int numberOfVotesRequired;
 
     /** Each player_id gets to vote **/
     private Map<String, Boolean> votes = new HashMap<>();
 
     public UndoAction(String drawId) {
         this.drawId = drawId;
+        done = false;
+        numberOfVotesRequired = 0;
+    }
+
+    @JsonIgnore
+    public boolean hasAllVotedYes() {
+        if(numberOfVotesRequired != votes.size()) {
+            //Not everyone has voted yet
+            return false;
+        }
+
+        return !votes.values().contains(false);
     }
 
 }
