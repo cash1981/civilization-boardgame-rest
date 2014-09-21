@@ -1,6 +1,5 @@
 package no.asgari.civilization.server.excel;
 
-import no.asgari.civilization.server.excel.UnitReader;
 import org.junit.Test;
 
 import java.io.IOException;

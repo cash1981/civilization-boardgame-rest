@@ -3,4 +3,4 @@ mongoport: 27017
 mongodb: civilization
 
 #Application config
-authenticationCachePolicy: maximumSize=100, expireAfterAccess=10m
+#authenticationCachePolicy: maximumSize=100, expireAfterAccess=10m

@@ -20,6 +20,12 @@ Alle actions/metoder logger til et visst sted. Denne loggen blir alltid displaye
 1.5 - Random brett #public
 1.6 - Gi ut units #private
 1.6.1 - Noen civs skal ha flere units, dette kan hardkodes basert på civ
+2.0 - Adding security
+2.1 All rest calls except listing all games should be secure
+2.2 Only the players can see their games
+
+3.0 Create User
+4.0 
 
 
 #Inne i spillet

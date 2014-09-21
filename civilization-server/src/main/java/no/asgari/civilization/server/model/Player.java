@@ -2,6 +2,7 @@ package no.asgari.civilization.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import com.google.common.collect.Lists;
 import lombok.Data;
 import org.hibernate.validator.constraints.Email;
@@ -13,10 +14,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.UniqueConstraint;
-
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonRootName("player")
 public class Player {
     @JsonIgnore
     public static final String COL_NAME = "player";

@@ -60,6 +60,7 @@ public class GameResource {
     @POST
     @Timed
     @Path("/create")
+    //TODO Secure it
     public Response createGame(CreateGameDTO createGame) {
         Preconditions.checkNotNull(createGame);
 

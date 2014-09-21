@@ -1,8 +1,6 @@
 package no.asgari.civilization.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
  * The item you pull for instance Great Person, Wonder, Civ etc
@@ -32,13 +30,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  * used = true
  * hidden = true;
  */
-@JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include= JsonTypeInfo.As.WRAPPER_OBJECT, property="type")
-@JsonSubTypes({
-        @JsonSubTypes.Type(value=Infantry.class, name="infantry"),
-        @JsonSubTypes.Type(value=Mounted.class, name="mounted"),
-        @JsonSubTypes.Type(value=Artillery.class, name="artillery"),
-        @JsonSubTypes.Type(value=Aircraft.class, name="aircraft")
-})
+//@JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include= JsonTypeInfo.As.WRAPPER_OBJECT, property="type")
+//@JsonSubTypes({
+//        @JsonSubTypes.Type(value=Infantry.class, name="infantry"),
+//        @JsonSubTypes.Type(value=Mounted.class, name="mounted"),
+//        @JsonSubTypes.Type(value=Artillery.class, name="artillery"),
+//        @JsonSubTypes.Type(value=Aircraft.class, name="aircraft")
+//})
 public interface Unit extends Spreadsheet {
     @JsonIgnore
     static final int LEVEL_1 = 1;

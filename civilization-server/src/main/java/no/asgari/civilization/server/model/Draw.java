@@ -8,7 +8,6 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import no.asgari.civilization.server.SheetName;
 import org.hibernate.validator.constraints.NotBlank;
 import org.mongojack.Id;
 import org.mongojack.ObjectId;
@@ -29,6 +28,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @JsonRootName(value = "draw")
 public class Draw<T extends Spreadsheet> {
+    public static final String COL_NAME = "draw";
     @ObjectId
     @Id
     /** Will be used to identify a draw so that voting of undo can be performed **/
@@ -37,7 +37,7 @@ public class Draw<T extends Spreadsheet> {
     /** Typically implementation of Unit or Item. Should have #getSheetName() to determine the type **/
     private T item;
 
-    public Draw(String playerId, String pbfId) {
+    public Draw(String pbfId, String playerId) {
         this.pbfId = pbfId;
         this.playerId = playerId;
 
