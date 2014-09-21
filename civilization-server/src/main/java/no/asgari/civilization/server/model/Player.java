@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.google.common.collect.Lists;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.mongojack.Id;
@@ -17,6 +18,7 @@ import java.util.Set;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonRootName("player")
+@NoArgsConstructor
 public class Player {
     @JsonIgnore
     public static final String COL_NAME = "player";
@@ -35,11 +37,12 @@ public class Player {
     @NotBlank
     private String password;
 
-    /** A list of all the private draws a player has made in one game * */
-    //the draw will be moved to its own collection
-//    private List<Draw> draws = Lists.newArrayList();
     private List<Item> items = Lists.newArrayList();
     /** Set of unique active games * */
     private Set<String> gameIds = new HashSet<>();
     private List<Unit> units = Lists.newArrayList();
+
+    public Player(String username) {
+        this.username = username;
+    }
 }

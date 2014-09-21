@@ -10,6 +10,7 @@ import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.UndoAction;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.mongojack.JacksonDBCollection;
@@ -43,7 +44,6 @@ public abstract class AbstractMongoDBTest {
         AbstractMongoDBTest.drawCollection = JacksonDBCollection.wrap(db.getCollection(Draw.COL_NAME), Draw.class, String.class);
         AbstractMongoDBTest.undoActionCollection = JacksonDBCollection.wrap(db.getCollection(UndoAction.COL_NAME), UndoAction.class, String.class);
         playerCollection.drop();
-        ;
         pbfCollection.drop();
         drawCollection.drop();
         undoActionCollection.drop();
@@ -89,6 +89,7 @@ public abstract class AbstractMongoDBTest {
         Player player = new Player();
         player.setUsername(username);
         player.getGameIds().add(pbfId);
+        player.setPassword(DigestUtils.sha1Hex("foo"));
 
         WriteResult<Player, String> writeResult = playerCollection.insert(player);
         System.out.println("Saved player " + writeResult.toString());

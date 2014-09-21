@@ -5,6 +5,7 @@ import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.auth.basic.BasicAuthProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
@@ -13,6 +14,7 @@ import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.UndoAction;
 import no.asgari.civilization.server.resource.GameResource;
+import no.asgari.civilization.server.resource.LoginResource;
 import org.mongojack.JacksonDBCollection;
 
 public class CivBoardgameRandomizerApplication extends Application<CivBoardGameRandomizerConfiguration> {
@@ -44,7 +46,11 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
 
         environment.healthChecks().register("MongoHealthCheck", new MongoHealthCheck(mongo));
 
-        environment.jersey().register(new GameResource(pbfCollection, playerCollection));
+        environment.jersey().register(new GameResource(pbfCollection, playerCollection, drawCollection, undoActionCollection));
+        environment.jersey().register(new LoginResource(playerCollection));
+
+                                                                                               //realm
+        environment.jersey().register(new BasicAuthProvider<>(new SimpleAuthenticator(playerCollection), "civilization"));
     }
 
     private void createIndexForPlayer(JacksonDBCollection<Player, String> playerCollection) {

@@ -3,13 +3,16 @@ package no.asgari.civilization.server.resource;
 import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Preconditions;
+import io.dropwizard.auth.Auth;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.PBFAction;
+import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
-import no.asgari.civilization.server.rest.CreateGameDTO;
+import no.asgari.civilization.server.model.UndoAction;
+import no.asgari.civilization.server.dto.CreateGameDTO;
 import org.mongojack.DBCursor;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
@@ -31,12 +34,17 @@ import java.util.List;
 @Log4j
 public class GameResource {
 
-    JacksonDBCollection<PBF, String> pbfCollection;
-    JacksonDBCollection<Player, String> playerCollection;
+    private final JacksonDBCollection<Draw, String> drawCollection;
+    private final JacksonDBCollection<PBF, String> pbfCollection;
+    private final JacksonDBCollection<Player, String> playerCollection;
+    private final JacksonDBCollection<UndoAction, String> undoActionCollection;
 
-    public GameResource(JacksonDBCollection<PBF, String> pbfCollection, JacksonDBCollection<Player, String> playerCollection) {
+    public GameResource(JacksonDBCollection<PBF, String> pbfCollection, JacksonDBCollection<Player, String> playerCollection,
+                        JacksonDBCollection<Draw, String> drawCollection, JacksonDBCollection<UndoAction, String> undoActionCollection) {
         this.playerCollection = playerCollection;
         this.pbfCollection = pbfCollection;
+        this.drawCollection = drawCollection;
+        this.undoActionCollection = undoActionCollection;
     }
 
     @GET
@@ -61,7 +69,7 @@ public class GameResource {
     @Timed
     @Path("/create")
     //TODO Secure it
-    public Response createGame(CreateGameDTO createGame) {
+    public Response createGame(@Auth Player player, CreateGameDTO createGame) {
         Preconditions.checkNotNull(createGame);
 
         log.info("Creating game " + createGame);
