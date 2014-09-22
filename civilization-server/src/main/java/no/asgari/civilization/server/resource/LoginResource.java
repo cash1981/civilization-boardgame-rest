@@ -1,8 +1,17 @@
 package no.asgari.civilization.server.resource;
 
-import java.net.URI;
+import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
+import io.dropwizard.auth.Auth;
+import io.dropwizard.auth.basic.BasicCredentials;
+import lombok.extern.log4j.Log4j;
+import no.asgari.civilization.server.application.SimpleAuthenticator;
+import no.asgari.civilization.server.model.Player;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.mongojack.JacksonDBCollection;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -11,15 +20,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-
-import com.google.common.base.Optional;
-import com.google.common.base.Preconditions;
-import io.dropwizard.auth.basic.BasicCredentials;
-import lombok.extern.log4j.Log4j;
-import no.asgari.civilization.server.application.SimpleAuthenticator;
-import no.asgari.civilization.server.model.Player;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.mongojack.JacksonDBCollection;
+import java.net.URI;
 
 @Path("/login")
 @Produces(value = MediaType.APPLICATION_JSON)
@@ -53,10 +54,18 @@ public class LoginResource {
                     .build();
             return Response.ok()
                     .location(games)
+                    .entity(playerOptional.get())
                     .build();
         }
         return Response.status(Response.Status.FORBIDDEN).build();
     }
+
+    @GET
+    @Path("/test")
+    public Response testSecret(@Auth Player player) {
+        return Response.ok().build();
+    }
+
 
     private String createDigest(String password) {
         return DigestUtils.sha1Hex(password);

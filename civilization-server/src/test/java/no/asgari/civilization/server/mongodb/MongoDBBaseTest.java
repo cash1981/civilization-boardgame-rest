@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.Cleanup;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Test;
 import org.mongojack.DBCursor;
 import org.mongojack.WriteResult;
@@ -17,6 +18,7 @@ public class MongoDBBaseTest extends AbstractMongoDBTest {
         //The Player object should be cached and retrieved from cache
         Player player = new Player();
         player.setUsername(username);
+        player.setPassword(DigestUtils.sha1Hex("foo"));
         player.getGameIds().add(pbfId);
 
         WriteResult<Player, String> writeResult = playerCollection.insert(player);

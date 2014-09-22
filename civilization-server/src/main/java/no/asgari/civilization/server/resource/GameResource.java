@@ -49,13 +49,9 @@ public class GameResource {
 
     @GET
     @Timed
+
     public List<PBF> getAllGames() {
         @Cleanup DBCursor<PBF> dbCursor = pbfCollection.find();
-
-        if (dbCursor.size() == 0) {
-            //FIXME REMOVE, ONLY FOR TESTING PURPOSES
-            createNewPBFGame();
-        }
 
         List<PBF> pbfs = new ArrayList<>();
         while (dbCursor.hasNext()) {
