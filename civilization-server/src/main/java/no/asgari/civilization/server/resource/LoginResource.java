@@ -1,56 +1,61 @@
 package no.asgari.civilization.server.resource;
 
-import com.google.common.base.Preconditions;
-import lombok.extern.log4j.Log4j;
-import no.asgari.civilization.server.model.Player;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.mongojack.DBCursor;
-import org.mongojack.DBQuery;
-import org.mongojack.JacksonDBCollection;
+import java.net.URI;
 
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import java.net.URI;
+import javax.ws.rs.core.UriInfo;
+
+import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
+import io.dropwizard.auth.basic.BasicCredentials;
+import lombok.extern.log4j.Log4j;
+import no.asgari.civilization.server.application.SimpleAuthenticator;
+import no.asgari.civilization.server.model.Player;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.mongojack.JacksonDBCollection;
 
 @Path("/login")
 @Produces(value = MediaType.APPLICATION_JSON)
-@Consumes(value = MediaType.APPLICATION_JSON)
+//@Consumes(value = MediaType.APPLICATION_JSON)
 @Log4j
 public class LoginResource {
 
     private final JacksonDBCollection<Player, String> playerCollection;
+
+    @Context
+    private UriInfo uriInfo;
 
     public LoginResource(JacksonDBCollection<Player, String> playerCollection) {
         this.playerCollection = playerCollection;
     }
 
     @POST
-    public Response login(@NotNull @FormParam("username") String username, @NotNull @FormParam("password") String password) {
+    @Consumes(value = MediaType.TEXT_PLAIN)
+    public Response login(@QueryParam("username") String username, @QueryParam("password") String password) {
         Preconditions.checkNotNull(username);
         Preconditions.checkNotNull(password);
+
         String passDigest = createDigest(password);
+        log.debug("Passdigest is " + passDigest);
 
-        //TODO Add password directly in find
-        DBCursor<Player> cursor = playerCollection.find(DBQuery.is("username", username));
-        if(!cursor.hasNext() && !cursor.next().getPassword().equals(passDigest)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+        SimpleAuthenticator auth = new SimpleAuthenticator(playerCollection);
+        Optional<Player> playerOptional = auth.authenticate(new BasicCredentials(username, passDigest));
+        if (playerOptional.isPresent()) {
+            URI games = uriInfo.getAbsolutePathBuilder()
+                    .path("/games")
+                    .build();
+            return Response.ok()
+                    .location(games)
+                    .build();
         }
-
-        //TODO Get base URI from somewhere
-        URI games = UriBuilder.fromUri("http://localhost:8080/")
-                .path("games")
-                .build();
-        //Include link to games?
-        return Response.ok()
-                .location(games)
-                .build();
+        return Response.status(Response.Status.FORBIDDEN).build();
     }
 
     private String createDigest(String password) {

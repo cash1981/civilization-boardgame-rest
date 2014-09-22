@@ -10,7 +10,8 @@ import javax.validation.constraints.Min;
 //TODO: Fiks openshift env name
 public class CivBoardGameRandomizerConfiguration extends Configuration {
 
-    public String CIVILIZATION = "civilization";
+    //FIXME, during testing, we use another db so to not clutter prod database
+    public String CIVILIZATION = "civ-test";
 
     @JsonProperty
     @NotEmpty

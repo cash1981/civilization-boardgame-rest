@@ -18,9 +18,10 @@ public class SimpleAuthenticator implements Authenticator<BasicCredentials, Play
     @Override
     public Optional<Player> authenticate(BasicCredentials credentials) {
         DBCursor<Player> username = playerCollection.find(DBQuery.is("username", credentials.getUsername()));
-        if(username == null) return Optional.absent();
+        if(username == null || !username.hasNext()) return Optional.absent();
 
-        if (username.equals(credentials.getPassword())) {
+        Player player = username.next();
+        if(player.getPassword().equals(credentials.getPassword())) {
             return Optional.of(new Player(credentials.getUsername()));
         }
         return Optional.absent();
