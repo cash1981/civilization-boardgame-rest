@@ -56,4 +56,5 @@ public class Draw<T extends Spreadsheet> {
     /**A draw must always belong to a game. The pbf game id **/
     @NotBlank
     private String pbfId;
+
 }

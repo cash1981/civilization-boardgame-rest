@@ -30,13 +30,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * used = true
  * hidden = true;
  */
-//@JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include= JsonTypeInfo.As.WRAPPER_OBJECT, property="type")
-//@JsonSubTypes({
-//        @JsonSubTypes.Type(value=Infantry.class, name="infantry"),
-//        @JsonSubTypes.Type(value=Mounted.class, name="mounted"),
-//        @JsonSubTypes.Type(value=Artillery.class, name="artillery"),
-//        @JsonSubTypes.Type(value=Aircraft.class, name="aircraft")
-//})
 public interface Unit extends Spreadsheet {
     @JsonIgnore
     static final int LEVEL_1 = 1;

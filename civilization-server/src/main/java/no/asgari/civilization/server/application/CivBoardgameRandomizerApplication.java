@@ -1,5 +1,6 @@
 package no.asgari.civilization.server.application;
 
+import com.google.common.eventbus.EventBus;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
@@ -9,7 +10,9 @@ import io.dropwizard.auth.basic.BasicAuthProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
+import no.asgari.civilization.server.action.GameLogAction;
 import no.asgari.civilization.server.model.Draw;
+import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.UndoAction;
@@ -38,6 +41,7 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
         JacksonDBCollection<Player, String> playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
         JacksonDBCollection<Draw, String> drawCollection = JacksonDBCollection.wrap(db.getCollection(Draw.COL_NAME), Draw.class, String.class);
         JacksonDBCollection<UndoAction, String> undoActionCollection = JacksonDBCollection.wrap(db.getCollection(UndoAction.COL_NAME), UndoAction.class, String.class);
+        JacksonDBCollection<GameLog, String> gameLogCollection= JacksonDBCollection.wrap(db.getCollection(GameLog.COL_NAME), GameLog.class, String.class);
         //TODO Insert draw and undoaction collections to some resource
 
         createIndexForPlayer(playerCollection);
@@ -51,7 +55,12 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
 
                                                                                                //realm
         environment.jersey().register(new BasicAuthProvider<>(new SimpleAuthenticator(playerCollection), "civilization"));
+
+        EventBus eventBus = new EventBus();
+        eventBus.register(new GameLogAction(gameLogCollection));
     }
+
+
 
     private void createIndexForPlayer(JacksonDBCollection<Player, String> playerCollection) {
         playerCollection.createIndex(new BasicDBObject("username", 1), new BasicDBObject("unique", true));

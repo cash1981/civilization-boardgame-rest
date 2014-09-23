@@ -29,4 +29,9 @@ public class DrawTest extends AbstractMongoDBTest {
         assertThat(pbfCollection.findOneById(pbf.getId()).getCivs().size()).isEqualTo(initialSizeOfCiv-1);
     }
 
+    @Test
+    public void createLogFromEachDraw() throws Exception {
+
+    }
+
 }

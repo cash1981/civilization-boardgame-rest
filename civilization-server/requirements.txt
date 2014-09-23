@@ -1,7 +1,7 @@
 #Server
 1. Lage et nytt spill (Setup)
 2. Se liste over eksisterende spill
-3. Joine eksisterende spill (som ikke er påbegynt)
+3. Joine eksisterende spill (som ikke er pï¿½begynt)
 4. Logge inn med brukernavn/passord (kanskje bruke en open API, facebook, google login etc)
 
 #Game funksjonalitet
@@ -10,31 +10,31 @@ Alle actions/metoder logger til et visst sted. Denne loggen blir alltid displaye
 
 
 #Setup
-1.0 - Server starter en asynchronous tråd der alle random ting blir laget. Wonder velget, kultur kort, units, huts, tiles, city states, civs.
-1.0.1 - Hvordan lagring av dette skal bli vet jeg ikke enda. Beste er å cache det i minnet først. Vil helst ikke commite randomiseringen. Mulig det beste er å enten bare skrive til disk. (Enten serialisering eller filer der ting er sortert ut fra random), så bare velger man fra første linje osv
-1.0.2 - Lage unit test for reshuffle. Så dersom alle ting er brukt opp, så skal det reshuffles og skrives over i filen igjen
-1.1 - Når man lager et nytt spill skal man velge antall spillere. Kan eventuelt begynne med fixed 4 player
+1.0 - Server starter en asynchronous trï¿½d der alle random ting blir laget. Wonder velget, kultur kort, units, huts, tiles, city states, civs.
+1.0.1 - Hvordan lagring av dette skal bli vet jeg ikke enda. Beste er ï¿½ cache det i minnet fï¿½rst. Vil helst ikke commite randomiseringen. Mulig det beste er ï¿½ enten bare skrive til disk. (Enten serialisering eller filer der ting er sortert ut fra random), sï¿½ bare velger man fra fï¿½rste linje osv
+1.0.2 - Lage unit test for reshuffle. Sï¿½ dersom alle ting er brukt opp, sï¿½ skal det reshuffles og skrives over i filen igjen
+1.1 - Nï¿½r man lager et nytt spill skal man velge antall spillere. Kan eventuelt begynne med fixed 4 player
 1.2 - Random CIV #public
 1.3 - Random color #public
-1.4 - Random Wonders #public, #server må lage midieval og modern, lagre
+1.4 - Random Wonders #public, #server mï¿½ lage midieval og modern, lagre
 1.5 - Random brett #public
 1.6 - Gi ut units #private
-1.6.1 - Noen civs skal ha flere units, dette kan hardkodes basert på civ
+1.6.1 - Noen civs skal ha flere units, dette kan hardkodes basert pï¿½ civ
 2.0 - Adding security
 2.1 All rest calls except listing all games should be secure
 2.2 Only the players can see their games
 
 3.0 Create User
-4.0 
+4.0 Logging everything
 
 
 #Inne i spillet
 
-Hver gang det gjøres en action, skal dette logges på siden av skjermen, f.eks <<User>> chose civ Japan
+Hver gang det gjï¿½res en action, skal dette logges pï¿½ siden av skjermen, f.eks <<User>> chose civ Japan
 
 #Battle
 
-Her må jeg tenke ut hvordan jeg skal gjøre det enklest mulig.
+Her mï¿½ jeg tenke ut hvordan jeg skal gjï¿½re det enklest mulig.
 
 
 5. Choose CIV (En del av setup)
