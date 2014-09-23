@@ -42,7 +42,4 @@ public class Player {
     private Set<String> gameIds = new HashSet<>();
     private List<Unit> units = Lists.newArrayList();
 
-    public Player(String username) {
-        this.username = username;
-    }
 }

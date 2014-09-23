@@ -11,6 +11,7 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 
 import static org.fest.assertions.api.Assertions.assertThat;
@@ -66,7 +67,7 @@ public class LoginResourceTest extends AbstractMongoDBTest {
         ClientResponse response = client.resource(
                 UriBuilder.fromPath(String.format(BASE_URL + "/login/test", RULE.getLocalPort()))
                         .build()
-        )
+        ).entity(new Player())
             .get(ClientResponse.class);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED_401);
@@ -80,10 +81,12 @@ public class LoginResourceTest extends AbstractMongoDBTest {
             shouldLoginCorrectly();
         }
 
-        ClientResponse response = client.resource(
-                UriBuilder.fromPath(String.format(BASE_URL + "/login/test", RULE.getLocalPort()))
-                        .build()
-        )
+        ClientResponse response =
+                client.resource(
+                        UriBuilder.fromPath(String.format(BASE_URL + "/login/test", RULE.getLocalPort()))
+                                .build()
+                ).entity(loggedInPlayer)
+                .type(MediaType.APPLICATION_JSON)
                 .get(ClientResponse.class);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);

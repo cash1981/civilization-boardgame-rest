@@ -3,6 +3,7 @@ package no.asgari.civilization.server.application;
 import com.google.common.base.Optional;
 import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.basic.BasicCredentials;
+import lombok.Cleanup;
 import no.asgari.civilization.server.model.Player;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
@@ -17,12 +18,12 @@ public class SimpleAuthenticator implements Authenticator<BasicCredentials, Play
 
     @Override
     public Optional<Player> authenticate(BasicCredentials credentials) {
-        DBCursor<Player> username = playerCollection.find(DBQuery.is("username", credentials.getUsername()));
+        @Cleanup DBCursor<Player> username = playerCollection.find(DBQuery.is("username", credentials.getUsername()));
         if(username == null || !username.hasNext()) return Optional.absent();
 
         Player player = username.next();
         if(player.getPassword().equals(credentials.getPassword())) {
-            return Optional.of(new Player(credentials.getUsername()));
+            return Optional.of(player);
         }
         return Optional.absent();
     }

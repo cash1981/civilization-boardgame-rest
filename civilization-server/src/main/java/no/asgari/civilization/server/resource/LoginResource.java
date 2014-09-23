@@ -23,8 +23,6 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
 @Path("/login")
-@Produces(value = MediaType.APPLICATION_JSON)
-//@Consumes(value = MediaType.APPLICATION_JSON)
 @Log4j
 public class LoginResource {
 
@@ -39,6 +37,7 @@ public class LoginResource {
 
     @POST
     @Consumes(value = MediaType.TEXT_PLAIN)
+    @Produces(value = MediaType.APPLICATION_JSON)
     public Response login(@QueryParam("username") String username, @QueryParam("password") String password) {
         Preconditions.checkNotNull(username);
         Preconditions.checkNotNull(password);
@@ -62,7 +61,8 @@ public class LoginResource {
 
     @GET
     @Path("/test")
-    public Response testSecret(@Auth Player player) {
+    @Consumes(value = MediaType.APPLICATION_JSON)
+    public Response testSecret(@Auth(required = false) Player player) {
         return Response.ok().build();
     }
 
