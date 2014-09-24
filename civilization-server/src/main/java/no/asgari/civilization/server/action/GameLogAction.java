@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 public class GameLogAction {
 
     private final JacksonDBCollection<GameLog, String> collection;
+
     public GameLogAction(JacksonDBCollection<GameLog, String> gameLogCollection) {
         this.collection = gameLogCollection;
     }

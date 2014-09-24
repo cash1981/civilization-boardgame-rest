@@ -1,5 +1,8 @@
 package no.asgari.civilization.server.application;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.RemovalListener;
 import com.google.common.eventbus.EventBus;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -10,6 +13,7 @@ import io.dropwizard.auth.basic.BasicAuthProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
+import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.GameLogAction;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
@@ -20,6 +24,10 @@ import no.asgari.civilization.server.resource.GameResource;
 import no.asgari.civilization.server.resource.LoginResource;
 import org.mongojack.JacksonDBCollection;
 
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
+@Log4j
 public class CivBoardgameRandomizerApplication extends Application<CivBoardGameRandomizerConfiguration> {
 
     public static void main(String[] args) throws Exception {
@@ -46,18 +54,28 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
 
         createIndexForPlayer(playerCollection);
         MongoManaged mongoManaged = new MongoManaged(mongo);
+        //Database
         environment.lifecycle().manage(mongoManaged);
 
+        //healtcheck
         environment.healthChecks().register("MongoHealthCheck", new MongoHealthCheck(mongo));
 
+        //Resources
         environment.jersey().register(new GameResource(pbfCollection, playerCollection, drawCollection, undoActionCollection));
         environment.jersey().register(new LoginResource(playerCollection));
 
-                                                                                               //realm
+        //Authentication                                                                                               //realm
         environment.jersey().register(new BasicAuthProvider<>(new SimpleAuthenticator(playerCollection), "civilization"));
 
         EventBus eventBus = new EventBus();
         eventBus.register(new GameLogAction(gameLogCollection));
+
+        Cache<String, UUID> tokenCache = CacheBuilder.newBuilder()
+                .initialCapacity(20)
+                .expireAfterWrite(5, TimeUnit.HOURS)
+                .removalListener((RemovalListener) listener -> log.debug("Removing username " + listener.getKey() + " from cache"))
+                .build();
+
     }
 
 

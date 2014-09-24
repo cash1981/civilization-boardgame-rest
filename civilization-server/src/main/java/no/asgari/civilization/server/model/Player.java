@@ -14,6 +14,7 @@ import org.mongojack.ObjectId;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -26,6 +27,10 @@ public class Player {
     @ObjectId
     @Id
     private String id;
+
+    /**Will use this token to authorize the user. This UUID should be cached once the user logs in */
+    @JsonIgnore
+    private UUID token = UUID.randomUUID();
 
     @NotBlank
     //Unique
