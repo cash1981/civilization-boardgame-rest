@@ -11,7 +11,8 @@ import no.asgari.civilization.server.action.PBFAction;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
-import no.asgari.civilization.server.model.UndoAction;
+import no.asgari.civilization.server.model.Undo;
+import no.asgari.civilization.server.model.Undo;
 import no.asgari.civilization.server.dto.CreateGameDTO;
 import org.mongojack.DBCursor;
 import org.mongojack.JacksonDBCollection;
@@ -37,10 +38,10 @@ public class GameResource {
     private final JacksonDBCollection<Draw, String> drawCollection;
     private final JacksonDBCollection<PBF, String> pbfCollection;
     private final JacksonDBCollection<Player, String> playerCollection;
-    private final JacksonDBCollection<UndoAction, String> undoActionCollection;
+    private final JacksonDBCollection<Undo, String> undoActionCollection;
 
     public GameResource(JacksonDBCollection<PBF, String> pbfCollection, JacksonDBCollection<Player, String> playerCollection,
-                        JacksonDBCollection<Draw, String> drawCollection, JacksonDBCollection<UndoAction, String> undoActionCollection) {
+                        JacksonDBCollection<Draw, String> drawCollection, JacksonDBCollection<Undo, String> undoActionCollection) {
         this.playerCollection = playerCollection;
         this.pbfCollection = pbfCollection;
         this.drawCollection = drawCollection;

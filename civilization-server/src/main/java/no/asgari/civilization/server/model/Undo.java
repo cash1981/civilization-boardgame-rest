@@ -19,13 +19,13 @@ import java.util.Map;
  */
 @Data
 @NoArgsConstructor
-@JsonRootName(value = "undoaction")
-public class UndoAction {
-    public static final String COL_NAME = "undoaction";
+@JsonRootName(value = "undo")
+public class Undo {
+    public static final String COL_NAME = "undo";
 
     @ObjectId
     @Id
-    /** Will be used to identify a draw so that voting of undo can be performed **/
+    /** Will be used to identify a  so that voting of undo can be performed **/
     private String id;
 
     /** draw_id that is going to be undoed **/
@@ -38,23 +38,24 @@ public class UndoAction {
     /** Although we can find this number each time, its easier to cache it here **/
     private int numberOfVotesRequired;
 
-    /** Each player_id gets to vote **/
+    /** Each player_id gets to vote
+     * The value can be true, false or null. Null means not voted yet **/
     private Map<String, Boolean> votes = new HashMap<>();
 
-    public UndoAction(String drawId) {
+    public Undo(String drawId) {
         this.drawId = drawId;
         done = false;
-        numberOfVotesRequired = 0;
+        //We will default it to 4 just in case
+        numberOfVotesRequired = 4;
     }
 
+    /**
+     * Return the number of votes
+     */
     @JsonIgnore
-    public boolean hasAllVotedYes() {
-        if(numberOfVotesRequired != votes.size()) {
-            //Not everyone has voted yet
-            return false;
-        }
+    public int numberOfVotesPerformed() {
+        return votes.size();
 
-        return !votes.values().contains(false);
     }
 
 }

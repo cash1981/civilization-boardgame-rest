@@ -9,7 +9,7 @@ import no.asgari.civilization.server.application.CivBoardGameRandomizerConfigura
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
-import no.asgari.civilization.server.model.UndoAction;
+import no.asgari.civilization.server.model.Undo;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -24,7 +24,7 @@ public abstract class AbstractMongoDBTest {
     protected static JacksonDBCollection<PBF, String> pbfCollection;
     protected static JacksonDBCollection<Player, String> playerCollection;
     protected static JacksonDBCollection<Draw, String> drawCollection;
-    protected static JacksonDBCollection<UndoAction, String> undoActionCollection;
+    protected static JacksonDBCollection<Undo, String> undoCollection;
 
     protected static String pbfId;
     protected static String playerId;
@@ -42,11 +42,11 @@ public abstract class AbstractMongoDBTest {
         AbstractMongoDBTest.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
         AbstractMongoDBTest.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
         AbstractMongoDBTest.drawCollection = JacksonDBCollection.wrap(db.getCollection(Draw.COL_NAME), Draw.class, String.class);
-        AbstractMongoDBTest.undoActionCollection = JacksonDBCollection.wrap(db.getCollection(UndoAction.COL_NAME), UndoAction.class, String.class);
+        AbstractMongoDBTest.undoCollection = JacksonDBCollection.wrap(db.getCollection(Undo.COL_NAME), Undo.class, String.class);
         playerCollection.drop();
         pbfCollection.drop();
         drawCollection.drop();
-        undoActionCollection.drop();
+        undoCollection.drop();
 
         playerCollection.createIndex(new BasicDBObject("username", 1), new BasicDBObject("unique", true));
 

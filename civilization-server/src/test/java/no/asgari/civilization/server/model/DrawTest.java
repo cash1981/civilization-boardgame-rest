@@ -1,37 +1,61 @@
 package no.asgari.civilization.server.model;
 
+import no.asgari.civilization.server.action.DrawAction;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
 import org.junit.Test;
-import org.mongojack.WriteResult;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
 public class DrawTest extends AbstractMongoDBTest {
 
     @Test
-    public void drawCivAndUpdateCollectionByRemovingTheDraw() throws Exception {
+    public void drawCivAndMakeSureItsNoLongerInPBFCollection() throws Exception {
+        DrawAction drawAction = new DrawAction(pbfCollection, drawCollection, undoCollection);
+        Draw<Civ> draw = drawAction.drawCiv(pbfId, playerId);
+
         PBF pbf = pbfCollection.findOneById(pbfId);
         assertThat(pbf).isNotNull();
-        int initialSizeOfCiv = pbf.getCivs().size();
+        assertThat(draw.getPbfId()).isEqualTo(pbfId);
+        assertThat(pbf.getCivs()).doesNotContain(draw.getItem());
+    }
 
-        Civ civ = pbf.getCivs().remove(0);
-        assertThat(civ).isNotNull();
+    @Test
+    public void drawAircraftAndMakeSureItsNoLongerInPBFCollection() throws Exception {
+        DrawAction drawAction = new DrawAction(pbfCollection, drawCollection, undoCollection);
+        Draw<Aircraft> draw = drawAction.drawAircraft(pbfId, playerId);
 
-        Draw<Civ> draw = new Draw<>(pbfId, playerId);
-        draw.setItem(civ);
-        WriteResult<Draw, String> drawInsert = drawCollection.insert(draw);
-        assertThat(drawCollection.findOneById(drawInsert.getSavedId())).isNotNull();
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        assertThat(pbf).isNotNull();
+        assertThat(draw.getPbfId()).isEqualTo(pbfId);
+        assertThat(pbf.getAircraft()).doesNotContain(draw.getItem());
+    }
 
-        //update pdf
-        WriteResult<PBF, String> updateResult = pbfCollection.updateById(pbf.getId(), pbf);
-        System.out.println(updateResult);
+    @Test
+    public void drawArtilleryAndMakeSureItsNoLongerInPBFCollection() throws Exception {
+        DrawAction drawAction = new DrawAction(pbfCollection, drawCollection, undoCollection);
+        Draw<Artillery> draw = drawAction.drawArtillery(pbfId, playerId);
 
-        assertThat(pbfCollection.findOneById(pbf.getId()).getCivs().size()).isEqualTo(initialSizeOfCiv-1);
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        assertThat(pbf).isNotNull();
+        assertThat(draw.getPbfId()).isEqualTo(pbfId);
+        assertThat(pbf.getArtillery()).doesNotContain(draw.getItem());
+    }
+
+    @Test
+    public void drawCitystateAndMakeSureItsNoLongerInPBFCollection() throws Exception {
+        DrawAction drawAction = new DrawAction(pbfCollection, drawCollection, undoCollection);
+        Draw<Citystate> draw = drawAction.drawCitystate(pbfId, playerId);
+
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        assertThat(pbf).isNotNull();
+        assertThat(draw.getPbfId()).isEqualTo(pbfId);
+        assertThat(pbf.getCitystates()).doesNotContain(draw.getItem());
     }
 
     @Test
     public void createLogFromEachDraw() throws Exception {
 
     }
+
 
 }

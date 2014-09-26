@@ -19,7 +19,8 @@ import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
-import no.asgari.civilization.server.model.UndoAction;
+import no.asgari.civilization.server.model.Undo;
+import no.asgari.civilization.server.model.Undo;
 import no.asgari.civilization.server.resource.GameResource;
 import no.asgari.civilization.server.resource.LoginResource;
 import org.mongojack.JacksonDBCollection;
@@ -48,7 +49,7 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
         JacksonDBCollection<PBF, String> pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
         JacksonDBCollection<Player, String> playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
         JacksonDBCollection<Draw, String> drawCollection = JacksonDBCollection.wrap(db.getCollection(Draw.COL_NAME), Draw.class, String.class);
-        JacksonDBCollection<UndoAction, String> undoActionCollection = JacksonDBCollection.wrap(db.getCollection(UndoAction.COL_NAME), UndoAction.class, String.class);
+        JacksonDBCollection<Undo, String> undoActionCollection = JacksonDBCollection.wrap(db.getCollection(Undo.COL_NAME), Undo.class, String.class);
         JacksonDBCollection<GameLog, String> gameLogCollection= JacksonDBCollection.wrap(db.getCollection(GameLog.COL_NAME), GameLog.class, String.class);
         //TODO Insert draw and undoaction collections to some resource
 

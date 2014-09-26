@@ -1,16 +1,28 @@
 package no.asgari.civilization.server.model;
 
+import no.asgari.civilization.server.action.UndoAction;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
+import org.junit.Before;
 import org.junit.Test;
 import org.mongojack.DBQuery;
 import org.mongojack.WriteResult;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-public class UndoActionTest extends AbstractMongoDBTest {
+@SuppressWarnings("unchecked")
+public class UndoTest extends AbstractMongoDBTest {
+    private static Undo undo = null;
 
-    @Test
-    public void createADrawAndUndoIt() throws Exception {
+    @Before
+    public void before() throws Exception {
+        undo = undoCollection.findOne();
+        if(undo == null) {
+            createADrawAndUndoIt();
+            undo = undoCollection.findOne();
+        }
+    }
+
+    private void createADrawAndUndoIt() throws Exception {
         //First create one UndoAction
 
         //Pick one item
@@ -22,7 +34,7 @@ public class UndoActionTest extends AbstractMongoDBTest {
         System.out.println(civ);
         Draw drawCiv = createDraw(pbfId, playerId, civ);
 
-        UndoAction undo = new UndoAction(drawCiv.getId());
+        Undo undo = new Undo(drawCiv.getId());
         assertThat(undo.getDrawId()).isNotEmpty();
 
         undo.getVotes().put(playerId, Boolean.TRUE);
@@ -31,31 +43,35 @@ public class UndoActionTest extends AbstractMongoDBTest {
         undo.setNumberOfVotesRequired(pbf.getNumOfPlayers());
         assertThat(undo.getNumberOfVotesRequired()).isEqualTo(pbf.getNumOfPlayers());
 
-        WriteResult<UndoAction, String> insert = undoActionCollection.insert(undo);
+        WriteResult<Undo, String> insert = undoCollection.insert(undo);
         System.out.println("Created undo action " + insert.getSavedId());
     }
 
     @Test
     public void makeVote() throws Exception {
-        UndoAction undo = undoActionCollection.findOne();
-        if(undo == null) {
-            createADrawAndUndoIt();
-        }
         undo.getVotes().put(getAnotherPlayerId(), true);
-        undoActionCollection.updateById(undo.getId(), undo);
+        undoCollection.updateById(undo.getId(), undo);
 
-        assertThat(undoActionCollection.findOneById(undo.getId()).getVotes().size()).isEqualTo(2);
+        assertThat(undoCollection.findOneById(undo.getId()).getVotes().size()).isEqualTo(2);
     }
 
     @Test
     public void putUndoItemBackInPBF() throws Exception {
-        UndoAction undo = undoActionCollection.findOne();
+        Undo undo = undoCollection.findOne();
         if(undo == null) {
             createADrawAndUndoIt();
+            undo = undoCollection.findOne();
         }
+        //TODO
+    }
 
+    @Test
+    public void countRemaingVotes() throws Exception{
 
-
+        //make another vote
+        undo.getVotes().put("Karandras1", Boolean.FALSE);
+        UndoAction action = new UndoAction(pbfCollection, drawCollection);
+        assertThat(action.votesRemaining(undo)).isEqualTo(2);
     }
 
     private Draw createDraw(String pbfId, String playerId, Item item) {
