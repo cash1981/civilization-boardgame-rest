@@ -43,8 +43,7 @@ public class PBF {
     private int numOfPlayers;
     private boolean active = true;
 
-//    private List<Draw> draws = Lists.newArrayList();
-    private List<Player> players = Lists.newArrayList();
+    private List<Playerhand> players = Lists.newArrayList();
     private List<Civ> civs = Lists.newArrayList();
     private List<Citystate> citystates = Lists.newArrayList();
     private List<CultureI> cultureIs = Lists.newArrayList();

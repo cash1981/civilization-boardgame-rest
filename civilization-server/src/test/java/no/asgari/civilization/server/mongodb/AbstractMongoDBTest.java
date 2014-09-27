@@ -9,6 +9,7 @@ import no.asgari.civilization.server.application.CivBoardGameRandomizerConfigura
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
+import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.model.Undo;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.AfterClass;
@@ -67,10 +68,14 @@ public abstract class AbstractMongoDBTest {
         PBF pbf = pbfAction.createNewGame();
         WriteResult<PBF, String> writeResult = pbfCollection.insert(pbf);
         pbfId = writeResult.getSavedId();
-        pbf.getPlayers().add(createPlayer("cash1981", pbfId));
-        pbf.getPlayers().add(createPlayer("Karandras1", pbfId));
-        pbf.getPlayers().add(createPlayer("Itchi", pbfId));
-        pbf.getPlayers().add(createPlayer("Chul", pbfId));
+
+        PBF oneById = pbfCollection.findOneById(pbfId);
+        oneById.getPlayers().add(createPlayerhand(createPlayer("cash1981", pbfId)));
+        oneById.getPlayers().add(createPlayerhand(createPlayer("Karandras1", pbfId)));
+        oneById.getPlayers().add(createPlayerhand(createPlayer("Itchi", pbfId)));
+        oneById.getPlayers().add(createPlayerhand(createPlayer("Chul", pbfId)));
+        pbfCollection.updateById(pbfId, oneById);
+
     }
 
     private static void createAnotherPBF() throws IOException {
@@ -78,10 +83,20 @@ public abstract class AbstractMongoDBTest {
         PBF pbf = pbfAction.createNewGame();
         WriteResult<PBF, String> writeResult = pbfCollection.insert(pbf);
         pbfId_2 = writeResult.getSavedId();
-        pbf.getPlayers().add(createPlayer("Morthai", pbfId_2));
-        pbf.getPlayers().add(createPlayer("CJWF", pbfId_2));
-        pbf.getPlayers().add(createPlayer("DaveLuca", pbfId_2));
-        pbf.getPlayers().add(createPlayer("Foobar", pbfId_2));
+
+        PBF oneById = pbfCollection.findOneById(pbfId_2);
+        oneById.getPlayers().add(createPlayerhand(createPlayer("Morthai", pbfId_2)));
+        oneById.getPlayers().add(createPlayerhand(createPlayer("CJWF", pbfId_2)));
+        oneById.getPlayers().add(createPlayerhand(createPlayer("DaveLuca", pbfId_2)));
+        oneById.getPlayers().add(createPlayerhand(createPlayer("Foobar", pbfId_2)));
+        pbfCollection.updateById(pbfId_2, oneById);
+    }
+
+    private static Playerhand createPlayerhand(Player player) {
+        Playerhand playerhand = new Playerhand();
+        playerhand.setUsername(player.getUsername());
+        playerhand.setPlayerId(player.getId());
+        return playerhand;
     }
 
     private static Player createPlayer(String username, String pbfId) throws JsonProcessingException {
@@ -94,6 +109,7 @@ public abstract class AbstractMongoDBTest {
         WriteResult<Player, String> writeResult = playerCollection.insert(player);
         System.out.println("Saved player " + writeResult.toString());
         assertNotNull(writeResult.getSavedId());
+        player.setId(writeResult.getSavedId());
         return player;
     }
 

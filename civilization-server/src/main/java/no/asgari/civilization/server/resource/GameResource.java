@@ -1,22 +1,17 @@
 package no.asgari.civilization.server.resource;
 
 import com.codahale.metrics.annotation.Timed;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Preconditions;
 import io.dropwizard.auth.Auth;
 import lombok.Cleanup;
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
-import no.asgari.civilization.server.action.PBFAction;
+import no.asgari.civilization.server.dto.CreateGameDTO;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Undo;
-import no.asgari.civilization.server.model.Undo;
-import no.asgari.civilization.server.dto.CreateGameDTO;
 import org.mongojack.DBCursor;
 import org.mongojack.JacksonDBCollection;
-import org.mongojack.WriteResult;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -25,7 +20,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,32 +73,6 @@ public class GameResource {
         //TODO Get id back and return the link to the created game
 
         return Response.status(200).entity(new PBF()).build();
-    }
-
-    @SneakyThrows(IOException.class)
-    private void createNewPBFGame() {
-        PBFAction pbfAction = new PBFAction();
-        PBF pbf = pbfAction.createNewGame();
-        WriteResult<PBF, String> writeResult = pbfCollection.insert(pbf);
-        log.info("Saved new PBF " + writeResult + " with _id " + writeResult.getSavedId());
-
-        //TODO This is just test data, should be gotten from somewhere, perhaps retrieved from logged in user, or pathparam
-        pbf.getPlayers().add(createPlayer("cash1981", writeResult.getSavedId()));
-        pbf.getPlayers().add(createPlayer("Itchi", writeResult.getSavedId()));
-        pbf.getPlayers().add(createPlayer("Karandras1", writeResult.getSavedId()));
-        pbf.getPlayers().add(createPlayer("Chul", writeResult.getSavedId()));
-    }
-
-    private Player createPlayer(String username, String gameId) throws JsonProcessingException {
-        //The Player object should be cached and retrieved from cache
-        Player player = new Player();
-        player.setUsername(username);
-        player.getGameIds().add(gameId);
-
-        WriteResult<Player, String> writeResult = playerCollection.insert(player);
-        log.info("Saved Player to MongoDB " + writeResult);
-
-        return player;
     }
 
 }
