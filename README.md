@@ -8,7 +8,7 @@ The client will be a web application that can create games, let players join the
 
 The first version will be pretty basic, but the hope is that it will become a fully playable game where the players can play the boardgame online by moving items over the board.
 
-#REQUIRES
+##REQUIRES
 * Java 8
 * MongoDB
 * [Lombok](www.projectlombok.org) 
