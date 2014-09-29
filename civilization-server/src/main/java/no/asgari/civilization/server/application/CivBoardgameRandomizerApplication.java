@@ -21,7 +21,7 @@ import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Undo;
 import no.asgari.civilization.server.resource.GameResource;
 import no.asgari.civilization.server.resource.LoginResource;
-import no.asgari.civilization.server.resource.UserResource;
+import no.asgari.civilization.server.resource.PlayerResource;
 import org.mongojack.JacksonDBCollection;
 
 import java.util.UUID;
@@ -67,7 +67,7 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
 
         //Authentication                                                                                               //realm
         environment.jersey().register(new BasicAuthProvider<>(new SimpleAuthenticator(playerCollection), "civilization"));
-        environment.jersey().register(new UserResource(playerCollection));
+        environment.jersey().register(new PlayerResource(playerCollection));
 
         EventBus eventBus = new EventBus();
         eventBus.register(new GameLogAction(gameLogCollection));

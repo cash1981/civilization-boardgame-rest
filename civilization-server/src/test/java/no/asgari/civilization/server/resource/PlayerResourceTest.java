@@ -17,7 +17,7 @@ import javax.ws.rs.core.UriBuilder;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-public class UserResourceTest extends AbstractMongoDBTest {
+public class PlayerResourceTest extends AbstractMongoDBTest {
 
     //@ClassRule
     public static final DropwizardAppRule<CivBoardGameRandomizerConfiguration> RULE =
@@ -40,7 +40,7 @@ public class UserResourceTest extends AbstractMongoDBTest {
 
 
         ClientResponse response = client.resource(
-                        UriBuilder.fromPath(String.format(BASE_URL + "/user", RULE.getLocalPort()))
+                        UriBuilder.fromPath(String.format(BASE_URL + "/player", RULE.getLocalPort()))
                             .build()
                         )
                 .entity(playerDtoJson)

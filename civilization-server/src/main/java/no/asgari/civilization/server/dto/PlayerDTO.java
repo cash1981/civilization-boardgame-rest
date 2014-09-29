@@ -1,13 +1,15 @@
 package no.asgari.civilization.server.dto;
 
-import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Data;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
-@JsonRootName("playerDTO")
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 @Data
 public class PlayerDTO {
+    @NotBlank
     private String username;
 
     @Email

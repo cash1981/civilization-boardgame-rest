@@ -1,37 +1,30 @@
 package no.asgari.civilization.server.application;
 
 import com.google.common.base.Optional;
-import com.mongodb.BasicDBObject;
 import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.basic.BasicCredentials;
-import lombok.Cleanup;
+import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.model.Player;
-import org.mongojack.DBCursor;
-import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 
 public class SimpleAuthenticator implements Authenticator<BasicCredentials, Player> {
     private final JacksonDBCollection<Player, String> playerCollection;
+    private final PlayerAction playerAction;
 
     public SimpleAuthenticator(JacksonDBCollection<Player, String> playerCollection) {
         this.playerCollection = playerCollection;
+        playerAction = new PlayerAction(playerCollection);
     }
 
     @Override
     public Optional<Player> authenticate(BasicCredentials credentials) {
-        //@Cleanup DBCursor<Player> username = playerCollection.find(
-                //DBQuery.all("username, password", credentials.getUsername(), credentials.getPassword()),
-                //new BasicDBObject());
+        java.util.Optional<Player> username = playerAction.findPlayerByUsername(credentials.getUsername());
 
-        @Cleanup DBCursor<Player> username = playerCollection.find(
-                DBQuery.is("username", credentials.getUsername()),
-                new BasicDBObject());
-
-        if(username == null || !username.hasNext()) {
+        if(!username.isPresent()) {
             return Optional.absent();
         }
 
-        Player player = username.next();
+        Player player = username.get();
         if(player.getPassword().equals(credentials.getPassword())) {
             return Optional.of(player);
         }
