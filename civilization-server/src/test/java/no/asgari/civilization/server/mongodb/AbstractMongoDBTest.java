@@ -104,6 +104,7 @@ public abstract class AbstractMongoDBTest {
         Player player = new Player();
         player.setUsername(username);
         player.getGameIds().add(pbfId);
+        player.setEmail(username + "@mailinator.com");
         player.setPassword(DigestUtils.sha1Hex("foo"));
 
         WriteResult<Player, String> writeResult = playerCollection.insert(player);

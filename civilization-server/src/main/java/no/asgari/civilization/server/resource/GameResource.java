@@ -2,7 +2,6 @@ package no.asgari.civilization.server.resource;
 
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Preconditions;
-import io.dropwizard.auth.Auth;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.dto.CreateGameDTO;
@@ -58,9 +57,8 @@ public class GameResource {
 
     @POST
     @Timed
-    @Path("/create")
     //TODO Secure it
-    public Response createGame(@Auth Player player, CreateGameDTO createGame) {
+    public Response createGame(CreateGameDTO createGame) {
         Preconditions.checkNotNull(createGame);
 
         log.info("Creating game " + createGame);

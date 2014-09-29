@@ -1,6 +1,5 @@
 package no.asgari.civilization.server.application;
 
-import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.RemovalListener;
 import com.google.common.eventbus.EventBus;
@@ -20,15 +19,16 @@ import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Undo;
-import no.asgari.civilization.server.model.Undo;
 import no.asgari.civilization.server.resource.GameResource;
 import no.asgari.civilization.server.resource.LoginResource;
+import no.asgari.civilization.server.resource.UserResource;
 import org.mongojack.JacksonDBCollection;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Log4j
+@SuppressWarnings("unchecked")
 public class CivBoardgameRandomizerApplication extends Application<CivBoardGameRandomizerConfiguration> {
 
     public static void main(String[] args) throws Exception {
@@ -67,15 +67,16 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
 
         //Authentication                                                                                               //realm
         environment.jersey().register(new BasicAuthProvider<>(new SimpleAuthenticator(playerCollection), "civilization"));
+        environment.jersey().register(new UserResource(playerCollection));
 
         EventBus eventBus = new EventBus();
         eventBus.register(new GameLogAction(gameLogCollection));
 
-        Cache<String, UUID> tokenCache = CacheBuilder.newBuilder()
+        CivCache.getInstance(CacheBuilder.<String, UUID>newBuilder()
                 .initialCapacity(20)
                 .expireAfterWrite(5, TimeUnit.HOURS)
                 .removalListener((RemovalListener) listener -> log.debug("Removing username " + listener.getKey() + " from cache"))
-                .build();
+                .build());
 
     }
 

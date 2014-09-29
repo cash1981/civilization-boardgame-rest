@@ -1,6 +1,7 @@
 package no.asgari.civilization.server.application;
 
 import com.google.common.base.Optional;
+import com.mongodb.BasicDBObject;
 import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.basic.BasicCredentials;
 import lombok.Cleanup;
@@ -18,8 +19,17 @@ public class SimpleAuthenticator implements Authenticator<BasicCredentials, Play
 
     @Override
     public Optional<Player> authenticate(BasicCredentials credentials) {
-        @Cleanup DBCursor<Player> username = playerCollection.find(DBQuery.is("username", credentials.getUsername()));
-        if(username == null || !username.hasNext()) return Optional.absent();
+        //@Cleanup DBCursor<Player> username = playerCollection.find(
+                //DBQuery.all("username, password", credentials.getUsername(), credentials.getPassword()),
+                //new BasicDBObject());
+
+        @Cleanup DBCursor<Player> username = playerCollection.find(
+                DBQuery.is("username", credentials.getUsername()),
+                new BasicDBObject());
+
+        if(username == null || !username.hasNext()) {
+            return Optional.absent();
+        }
 
         Player player = username.next();
         if(player.getPassword().equals(credentials.getPassword())) {

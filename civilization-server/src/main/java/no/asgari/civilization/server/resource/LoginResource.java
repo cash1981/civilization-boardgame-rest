@@ -24,6 +24,7 @@ import java.net.URI;
 
 @Path("/login")
 @Log4j
+@Produces(value = MediaType.APPLICATION_JSON)
 public class LoginResource {
 
     private final JacksonDBCollection<Player, String> playerCollection;
@@ -37,7 +38,6 @@ public class LoginResource {
 
     @POST
     @Consumes(value = MediaType.TEXT_PLAIN)
-    @Produces(value = MediaType.APPLICATION_JSON)
     public Response login(@QueryParam("username") String username, @QueryParam("password") String password) {
         Preconditions.checkNotNull(username);
         Preconditions.checkNotNull(password);
@@ -65,6 +65,7 @@ public class LoginResource {
     public Response testSecret(@Auth(required = false) Player player) {
         return Response.ok().build();
     }
+
 
 
     private String createDigest(String password) {

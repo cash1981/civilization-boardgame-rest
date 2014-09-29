@@ -1,6 +1,7 @@
 package no.asgari.civilization.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @Data
 @JsonRootName("player")
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Player {
     @JsonIgnore
     public static final String COL_NAME = "player";
