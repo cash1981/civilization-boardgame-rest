@@ -16,4 +16,4 @@ Future version will be a fully playable web client with drag and drop play
 ##REQUIRES
 * Java 8
 * MongoDB
-* [Lombok](www.projectlombok.org) 
+* [Lombok!] (www.projectlombok.org) 
