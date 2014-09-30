@@ -6,10 +6,13 @@ import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.exception.PlayerExistException;
 import no.asgari.civilization.server.model.Player;
 import org.mongojack.JacksonDBCollection;
+import org.mongojack.WriteResult;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -33,6 +36,7 @@ public class PlayerResource {
 
     @POST
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Response createPlayer(PlayerDTO playerDTO) {
         log.debug("Entering create player");
 
@@ -48,5 +52,15 @@ public class PlayerResource {
                     .type(MediaType.APPLICATION_JSON)
                     .build();
         }
+    }
+
+    @DELETE
+    @Path("{id}")
+    public Response deletePlayer(@PathParam("id") String playerId) {
+        //Throws IllegalArgumentException if id not found, so NOT_FOUND is never returned, but 500 servlet error instead
+        WriteResult<Player, String> result = playerCollection.removeById(playerId);
+        if(result.getError() == null)
+            return Response.status(Response.Status.NO_CONTENT).build();
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 }

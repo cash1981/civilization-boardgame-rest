@@ -2,7 +2,6 @@ package no.asgari.civilization.server.resource;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
-import io.dropwizard.auth.Auth;
 import io.dropwizard.auth.basic.BasicCredentials;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.application.SimpleAuthenticator;
@@ -11,7 +10,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.mongojack.JacksonDBCollection;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -59,12 +57,13 @@ public class LoginResource {
         return Response.status(Response.Status.FORBIDDEN).build();
     }
 
-    @GET
+    /*@GET
     @Path("/test")
     @Consumes(value = MediaType.APPLICATION_JSON)
     public Response testSecret(@Auth(required = false) Player player) {
         return Response.ok().build();
     }
+    */
 
 
 

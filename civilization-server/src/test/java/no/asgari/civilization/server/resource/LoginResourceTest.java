@@ -7,13 +7,13 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import io.dropwizard.testing.junit.DropwizardAppRule;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import no.asgari.civilization.server.application.CivBoardGameRandomizerConfiguration;
 import no.asgari.civilization.server.application.CivBoardgameRandomizerApplication;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.core.MediaType;
@@ -65,6 +65,7 @@ public class LoginResourceTest extends AbstractMongoDBTest {
     }
 
     @Test
+    @Ignore
     public void shouldGetAccessDenied() {
         Client client = Client.create();
 
