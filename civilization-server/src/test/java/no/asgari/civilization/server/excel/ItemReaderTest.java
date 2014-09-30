@@ -1,5 +1,6 @@
 package no.asgari.civilization.server.excel;
 
+import no.asgari.civilization.server.model.GameType;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ public class ItemReaderTest {
         assertNull(itemReader.shuffledCultureII);
         assertNull(itemReader.shuffledCultureIII);
 
-        itemReader.readItemsFromExcel();
+        itemReader.readItemsFromExcel(GameType.WAW);
 
         assertThat(itemReader.shuffledCivs).isNotEmpty();
         assertThat(itemReader.shuffledCultureI).isNotEmpty();

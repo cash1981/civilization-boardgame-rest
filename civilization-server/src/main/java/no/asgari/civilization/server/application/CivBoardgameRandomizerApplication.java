@@ -11,7 +11,6 @@ import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.basic.BasicAuthProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import io.dropwizard.views.ViewBundle;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.GameLogAction;
 import no.asgari.civilization.server.model.Draw;
@@ -37,7 +36,6 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
 
     @Override
     public void initialize(Bootstrap<CivBoardGameRandomizerConfiguration> bootstrap) {
-        bootstrap.addBundle(new ViewBundle());
         bootstrap.addBundle(new AssetsBundle());
     }
 
