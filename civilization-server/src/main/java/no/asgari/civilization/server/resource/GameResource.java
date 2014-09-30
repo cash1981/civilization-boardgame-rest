@@ -4,7 +4,8 @@ import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Preconditions;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
-import no.asgari.civilization.server.dto.CreateGameDTO;
+import no.asgari.civilization.server.action.GameAction;
+import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
@@ -17,16 +18,20 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-@Path("/games")
-@Produces(value = MediaType.APPLICATION_JSON)
-@Consumes(value = MediaType.APPLICATION_JSON)
+@Path("/game")
+@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 @Log4j
 public class GameResource {
+    @Context
+    private UriInfo uriInfo;
 
     private final JacksonDBCollection<Draw, String> drawCollection;
     private final JacksonDBCollection<PBF, String> pbfCollection;
@@ -57,20 +62,16 @@ public class GameResource {
 
     @POST
     @Timed
-    //TODO Secure it
-    public Response createGame(CreateGameDTO createGame) {
-        Preconditions.checkNotNull(createGame);
+    //TODO Secure it and put @Valid
+    public Response createGame(CreateNewGameDTO dto) {
+        Preconditions.checkNotNull(dto);
 
-        log.info("Creating game " + createGame);
-        //TODO Validate input data
-
-        //TODO Get stuff from Excel
-
-        //TODO Save stuff in mongodb
-
-        //TODO Get id back and return the link to the created game
-
-        return Response.status(200).entity(new PBF()).build();
+        log.info("Creating game " + dto);
+        GameAction gameAction = new GameAction(pbfCollection, playerCollection);
+        String id = gameAction.createNewGame(dto);
+        return Response.status(Response.Status.CREATED)
+                .location(uriInfo.getAbsolutePathBuilder().path(id).build())
+                .build();
     }
 
 }

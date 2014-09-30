@@ -37,6 +37,7 @@ public class PlayerResource {
     @POST
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    //TODO Add @Valid on PlayerDTO, right now it doesnt work
     public Response createPlayer(PlayerDTO playerDTO) {
         log.debug("Entering create player");
 
@@ -46,9 +47,9 @@ public class PlayerResource {
             return Response.status(Response.Status.CREATED)
                     .location(URI.create(uriInfo.getPath() + "/" + playerId)
                     ).build();
-        } catch (PlayerExistException ex) {
-            return Response.status(ex.getStatus())
-                    .entity(ex)
+        } catch (PlayerExistException | IllegalArgumentException ex) {
+            return Response.status(Response.Status.FORBIDDEN)
+                    .entity(ex.getMessage())
                     .type(MediaType.APPLICATION_JSON)
                     .build();
         }

@@ -120,4 +120,47 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         assertThat(response.getStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR_500);
     }
 
+    @Test
+    public void checkWrongPasswordMatch() throws Exception {
+        Client client = Client.create();
+
+        PlayerDTO playerDTO = new PlayerDTO();
+        playerDTO.setUsername("foobar2");
+        playerDTO.setPassword("foobar2");
+        playerDTO.setPasswordCopy("foobar");
+        playerDTO.setEmail("foobar@mailinator.com");
+
+        ObjectMapper mapper = new ObjectMapper();
+        String playerDtoJson = mapper.writeValueAsString(playerDTO);
+
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player", RULE.getLocalPort())).build();
+        ClientResponse response = client.resource(uri)
+                .type(MediaType.APPLICATION_JSON)
+                .entity(playerDtoJson)
+                .post(ClientResponse.class);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.FORBIDDEN_403);
+    }
+
+    @Test
+    public void checkMissingUsername() throws Exception {
+        Client client = Client.create();
+
+        PlayerDTO playerDTO = new PlayerDTO();
+        playerDTO.setPassword("foobar");
+        playerDTO.setPasswordCopy("foobar");
+        playerDTO.setEmail("foobar@mailinator.com");
+
+        ObjectMapper mapper = new ObjectMapper();
+        String playerDtoJson = mapper.writeValueAsString(playerDTO);
+
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player", RULE.getLocalPort())).build();
+        ClientResponse response = client.resource(uri)
+                .type(MediaType.APPLICATION_JSON)
+                .entity(playerDtoJson)
+                .post(ClientResponse.class);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.FORBIDDEN_403);
+    }
+
 }
