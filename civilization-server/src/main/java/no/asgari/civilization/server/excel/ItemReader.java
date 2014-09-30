@@ -6,6 +6,7 @@ import no.asgari.civilization.server.model.Civ;
 import no.asgari.civilization.server.model.CultureI;
 import no.asgari.civilization.server.model.CultureII;
 import no.asgari.civilization.server.model.CultureIII;
+import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.GreatPerson;
 import no.asgari.civilization.server.model.Hut;
 import no.asgari.civilization.server.model.Item;
@@ -47,8 +48,20 @@ public class ItemReader {
     private static final String WONDERS = "wonders";
 
     @SuppressWarnings("unchecked")
-    public void readItemsFromExcel() throws IOException {
-        InputStream in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
+    public void readItemsFromExcel(GameType gameType) throws IOException {
+        InputStream in;
+        switch (gameType) {
+            case WAW:
+                in = getClass().getClassLoader().getResourceAsStream("assets/gamedata-faf-waw.xlsx");
+                break;
+            case FAF:
+                throw new IOException("FAF not supported yet");
+            case BASE:
+                throw new IOException("FAF not supported yet");
+            default:
+                throw new IOException("For now we only support WAW");
+        }
+
         try (Workbook wb = new XSSFWorkbook(in)) {
             shuffledCivs = (LinkedList<Civ>) getShuffledCivsFromExcel(wb);
             shuffledCultureI = (LinkedList<CultureI>) getShuffledCultureIFromExcel(wb);

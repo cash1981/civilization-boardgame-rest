@@ -1,11 +1,11 @@
 package no.asgari.civilization.server.action;
 
-import java.io.IOException;
-
 import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.excel.UnitReader;
 import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.PBF;
+
+import java.io.IOException;
 
 public class PBFAction {
 
@@ -17,12 +17,12 @@ public class PBFAction {
      */
     public PBF createNewGame() throws IOException {
         PBF pbf = new PBF();
-        pbf.setNumOfPlayers(4); //TODO test only
-        pbf.setName("First civ game"); //TODO test only
-        pbf.setType(GameType.WAW);  //TODO test only
+        pbf.setNumOfPlayers(4);
+        pbf.setName("First civ game");
+        pbf.setType(GameType.WAW);
 
         ItemReader items = new ItemReader();
-        items.readItemsFromExcel();
+        items.readItemsFromExcel(pbf.getType());
 
         UnitReader unit = new UnitReader();
         unit.readAllUnitsFromExcel();

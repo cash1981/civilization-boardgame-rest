@@ -41,7 +41,7 @@ public class GameAction {
         pbf.setNumOfPlayers(dto.getNumOfPlayers());
         ItemReader items = new ItemReader();
         try {
-            items.readItemsFromExcel();
+            items.readItemsFromExcel(dto.getType());
         } catch (IOException e) {
             log.error("Couldn't read items from Excel file", e);
             throw new WebApplicationException(Response.Status.NOT_FOUND);
