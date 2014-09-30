@@ -98,7 +98,7 @@ public class GameResource {
     @Path("{pbfId}")
     //TODO Implement Auth. For now its done manually with cookies and token
     public Response joinGame(@PathParam("pbfId") String pbfId, @CookieParam("username") String username, @CookieParam("token") String token) {
-        if(hasCookies(username, token)) {
+        if(!hasCookies(username, token)) {
             return Response.temporaryRedirect(
                     uriInfo.getBaseUriBuilder().path("/login").build())
                     .build();
