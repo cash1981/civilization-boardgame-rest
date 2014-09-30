@@ -28,7 +28,7 @@ public class Player {
 
     /**Will use this token to authorize the user. This UUID should be cached once the user logs in */
     @JsonIgnore
-    private UUID token = UUID.randomUUID();
+    private final UUID token = UUID.randomUUID();
 
     @NotBlank
     //Unique

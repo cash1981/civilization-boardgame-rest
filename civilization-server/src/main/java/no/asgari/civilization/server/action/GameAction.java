@@ -1,12 +1,16 @@
 package no.asgari.civilization.server.action;
 
 import com.mongodb.BasicDBObject;
+import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
+import no.asgari.civilization.server.dto.PbfDTO;
+import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.excel.UnitReader;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
+import no.asgari.civilization.server.model.Playerhand;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
@@ -15,6 +19,9 @@ import org.mongojack.WriteResult;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Log4j
 public class GameAction {
@@ -81,5 +88,68 @@ public class GameAction {
         playerCollection.updateById(player.getId(), player);
         log.debug("Added pbf to player");
         return pbf.getId();
+    }
+
+    public List<PbfDTO> getAllActiveGames(JacksonDBCollection<PBF, String> pbfCollection) {
+        @Cleanup DBCursor<PBF> dbCursor = pbfCollection.find(DBQuery.is("active", true), new BasicDBObject());
+
+        List<PbfDTO> pbfs = new ArrayList<>();
+        while (dbCursor.hasNext()) {
+            PBF pbf = dbCursor.next();
+
+            PbfDTO dto = new PbfDTO();
+            dto.setType(pbf.getType());
+            dto.setId(pbf.getId());
+            dto.setName(pbf.getName());
+            dto.setActive(pbf.isActive());
+            dto.setCreated(pbf.getCreated());
+            dto.setNumOfPlayers(pbf.getNumOfPlayers());
+            dto.setPlayers(pbf.getPlayers().stream()
+                    .map(this::createFoo)
+                            //.map(p -> createFoo(p))
+                    .collect(Collectors.toList()));
+            pbfs.add(dto);
+        }
+
+        return pbfs;
+    }
+
+    private PlayerDTO createFoo(Playerhand player) {
+        PlayerDTO dto = new PlayerDTO();
+        player.setUsername(player.getUsername());
+        player.setPlayerId(player.getPlayerId());
+        return dto;
+    }
+
+
+    public void joinGame(String pbfId, String username) {
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        if(pbf.getNumOfPlayers() == pbf.getPlayers().size()) {
+            log.warn("Cannot join the game. Its full");
+            Response badReq = Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Cannot join the game. Its full.")
+                    .build();
+            throw new WebApplicationException(badReq);
+        }
+
+        DBCursor<Player> dbCursor = playerCollection.find(DBQuery.is("username", username), new BasicDBObject());
+        if(!dbCursor.hasNext()) {
+            log.error("Couldn't find dbCursor by username " + username);
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        }
+
+        //TODO Better to use update instead of find & update
+        Player player = dbCursor.next();
+        player.getGameIds().add(pbfId);
+
+        playerCollection.updateById(player.getId(), player);
+
+        Playerhand playerhand = new Playerhand();
+        playerhand.setPlayerId(player.getId());
+        playerhand.setUsername(player.getUsername());
+
+        pbf.getPlayers().add(playerhand);
+
+        pbfCollection.updateById(pbf.getId(), pbf);
     }
 }

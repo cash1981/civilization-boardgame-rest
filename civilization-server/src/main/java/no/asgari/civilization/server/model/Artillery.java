@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import no.asgari.civilization.server.SheetName;
-import org.mongojack.Id;
-import org.mongojack.ObjectId;
 
 /**
  * Type should describe the unit type, for instance
@@ -19,9 +17,6 @@ import org.mongojack.ObjectId;
 @JsonTypeName("artillery")
 @NoArgsConstructor
 public class Artillery implements Unit {
-    @ObjectId
-    @Id
-    private String id;
     private int level = LEVEL_1;
     private String owner;
     private boolean hidden;
@@ -55,5 +50,33 @@ public class Artillery implements Unit {
             default:
                 return "Unknown level" + attack + "." + health;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Artillery artillery = (Artillery) o;
+
+        if (attack != artillery.attack) return false;
+        if (dead != artillery.dead) return false;
+        if (health != artillery.health) return false;
+        if (hidden != artillery.hidden) return false;
+        if (used != artillery.used) return false;
+        if (owner != null ? !owner.equals(artillery.owner) : artillery.owner != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = attack;
+        result = 31 * result + (owner != null ? owner.hashCode() : 0);
+        result = 31 * result + (hidden ? 1 : 0);
+        result = 31 * result + (used ? 1 : 0);
+        result = 31 * result + (dead ? 1 : 0);
+        result = 31 * result + health;
+        return result;
     }
 }

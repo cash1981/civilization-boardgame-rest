@@ -73,7 +73,7 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
         eventBus.register(new GameLogAction(gameLogCollection));
 
         CivCache.getInstance(CacheBuilder.<String, UUID>newBuilder()
-                .initialCapacity(20)
+                .initialCapacity(100)
                 .expireAfterWrite(5, TimeUnit.HOURS)
                 .removalListener((RemovalListener) listener -> log.debug("Removing username " + listener.getKey() + " from cache"))
                 .build());

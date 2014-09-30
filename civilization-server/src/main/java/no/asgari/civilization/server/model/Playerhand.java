@@ -5,19 +5,16 @@ import com.google.common.collect.Lists;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
-import org.mongojack.Id;
-import org.mongojack.ObjectId;
 
 import java.util.List;
 
+/**
+ * Each PBF has a playerhand consisting of the player and its items
+ */
 @Data
 @JsonRootName("players")
 @NoArgsConstructor
 public class Playerhand {
-    @ObjectId
-    @Id
-    private String id;
-
     @NotBlank
     //Can consider using the playerId also
     private String username;

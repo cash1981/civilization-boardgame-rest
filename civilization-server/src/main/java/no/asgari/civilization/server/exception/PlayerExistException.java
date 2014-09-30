@@ -1,19 +1,15 @@
 package no.asgari.civilization.server.exception;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.bind.annotation.XmlTransient;
 
-public class PlayerExistException extends Exception {
-
+public class PlayerExistException extends WebApplicationException {
     public PlayerExistException() {
-        super("Player already exists");
+        super(Response.status(Response.Status.FORBIDDEN)
+                .entity("Player already exists")
+                .type(MediaType.TEXT_PLAIN)
+                .build());
     }
 
-    @JsonIgnore
-    @XmlTransient
-    public Response.Status getStatus() {
-        return Response.Status.FORBIDDEN;
-    }
 }

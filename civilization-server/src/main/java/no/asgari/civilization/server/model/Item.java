@@ -28,6 +28,7 @@ package no.asgari.civilization.server.model;
  * used = true
  * hidden = true;
  */
+
 public interface Item extends Spreadsheet {
 
     /**
@@ -42,8 +43,6 @@ public interface Item extends Spreadsheet {
     public boolean isUsed();
 
     public String getDescription();
-
-    public String getId();
 
     /**
      * For instance general

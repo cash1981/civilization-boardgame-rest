@@ -5,9 +5,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.mongojack.Id;
 import org.mongojack.ObjectId;
@@ -23,12 +22,12 @@ import java.time.LocalDateTime;
  * <T> - Typically implementation of Unit or Item
  *
  */
-@Setter
-@Getter
 @NoArgsConstructor
 @JsonRootName(value = "draw")
+@Data
 public class Draw<T extends Spreadsheet> {
     public static final String COL_NAME = "draw";
+
     @ObjectId
     @Id
     /** Will be used to identify a draw so that voting of undo can be performed **/

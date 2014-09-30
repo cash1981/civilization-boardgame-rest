@@ -53,8 +53,6 @@ public interface Unit extends Spreadsheet {
 
     public int getLevel();
 
-    public String getId();
-
     public int getAttack();
 
     public int getHealth();

@@ -22,4 +22,7 @@ public class PlayerDTO {
 
     @NotBlank
     private String passwordCopy;
+
+    private String pbfId;
+
 }

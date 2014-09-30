@@ -3,7 +3,6 @@ package no.asgari.civilization.server.resource;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.dto.PlayerDTO;
-import no.asgari.civilization.server.exception.PlayerExistException;
 import no.asgari.civilization.server.model.Player;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
@@ -14,6 +13,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -35,7 +35,6 @@ public class PlayerResource {
     }
 
     @POST
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     //TODO Add @Valid on PlayerDTO, right now it doesnt work
     public Response createPlayer(PlayerDTO playerDTO) {
@@ -47,11 +46,8 @@ public class PlayerResource {
             return Response.status(Response.Status.CREATED)
                     .location(URI.create(uriInfo.getPath() + "/" + playerId)
                     ).build();
-        } catch (PlayerExistException | IllegalArgumentException ex) {
-            return Response.status(Response.Status.FORBIDDEN)
-                    .entity(ex.getMessage())
-                    .type(MediaType.APPLICATION_JSON)
-                    .build();
+        } catch (WebApplicationException ex) {
+            return ex.getResponse();
         }
     }
 

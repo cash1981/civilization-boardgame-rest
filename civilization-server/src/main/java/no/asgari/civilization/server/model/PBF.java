@@ -14,14 +14,18 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.mongojack.Id;
 import org.mongojack.ObjectId;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * PBF stands for Play By Forum
  */
 @Data
 @JsonRootName(value="pbf")
+@XmlRootElement
 @JsonInclude
 @JsonIgnoreProperties(ignoreUnknown = true) //Perhaps use this when the object keep getting changed, otherwise jackson throws exception when it cannot map
 public class PBF {
@@ -43,7 +47,7 @@ public class PBF {
     private int numOfPlayers;
     private boolean active = true;
 
-    private List<Playerhand> players = Lists.newArrayList();
+    private Set<Playerhand> players = new HashSet<>();
     private List<Civ> civs = Lists.newArrayList();
     private List<Citystate> citystates = Lists.newArrayList();
     private List<CultureI> cultureIs = Lists.newArrayList();

@@ -12,6 +12,8 @@ import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import java.util.Optional;
 
 @Log4j
@@ -32,7 +34,9 @@ public class PlayerAction {
     public String createPlayer(PlayerDTO playerDTO) throws PlayerExistException {
         Preconditions.checkNotNull(playerDTO);
         if(!playerDTO.getPassword().equals(playerDTO.getPasswordCopy())) {
-            throw new IllegalArgumentException("Passwords are not identical");
+            throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN)
+                                            .entity("Passwords are not identical")
+                                            .build());
         }
         if(findPlayerByUsername(playerDTO.getUsername()).isPresent()) {
             throw new PlayerExistException();

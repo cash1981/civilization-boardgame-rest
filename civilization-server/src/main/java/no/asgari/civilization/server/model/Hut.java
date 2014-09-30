@@ -8,8 +8,6 @@ import lombok.Setter;
 import lombok.ToString;
 import no.asgari.civilization.server.SheetName;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.mongojack.Id;
-import org.mongojack.ObjectId;
 
 @Getter
 @Setter
@@ -19,9 +17,6 @@ import org.mongojack.ObjectId;
 public class Hut implements Item {
     @NotEmpty
     private String name;
-    @ObjectId
-    @Id
-    private String id;
     private String type;
     private String description;
     private boolean used;
@@ -39,4 +34,31 @@ public class Hut implements Item {
         return SheetName.HUTS;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Hut hut = (Hut) o;
+
+        if (hidden != hut.hidden) return false;
+        if (used != hut.used) return false;
+        if (description != null ? !description.equals(hut.description) : hut.description != null) return false;
+        if (!name.equals(hut.name)) return false;
+        if (owner != null ? !owner.equals(hut.owner) : hut.owner != null) return false;
+        if (type != null ? !type.equals(hut.type) : hut.type != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (used ? 1 : 0);
+        result = 31 * result + (hidden ? 1 : 0);
+        result = 31 * result + (owner != null ? owner.hashCode() : 0);
+        return result;
+    }
 }

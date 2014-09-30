@@ -8,8 +8,6 @@ import lombok.Setter;
 import lombok.ToString;
 import no.asgari.civilization.server.SheetName;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.mongojack.Id;
-import org.mongojack.ObjectId;
 
 @ToString(of = "name")
 @Getter
@@ -17,10 +15,6 @@ import org.mongojack.ObjectId;
 @JsonTypeName("citystate")
 @NoArgsConstructor
 public class Citystate implements Item {
-    @ObjectId
-    @Id
-    private String id;
-
     @JsonProperty
     @NotEmpty
     private String name;
@@ -47,4 +41,32 @@ public class Citystate implements Item {
         return SheetName.CITY_STATES;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Citystate citystate = (Citystate) o;
+
+        if (hidden != citystate.hidden) return false;
+        if (used != citystate.used) return false;
+        if (description != null ? !description.equals(citystate.description) : citystate.description != null)
+            return false;
+        if (!name.equals(citystate.name)) return false;
+        if (owner != null ? !owner.equals(citystate.owner) : citystate.owner != null) return false;
+        if (type != null ? !type.equals(citystate.type) : citystate.type != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (used ? 1 : 0);
+        result = 31 * result + (hidden ? 1 : 0);
+        result = 31 * result + (owner != null ? owner.hashCode() : 0);
+        return result;
+    }
 }

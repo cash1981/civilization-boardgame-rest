@@ -4,6 +4,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import io.dropwizard.auth.basic.BasicCredentials;
 import lombok.extern.log4j.Log4j;
+import no.asgari.civilization.server.application.CivCache;
 import no.asgari.civilization.server.application.SimpleAuthenticator;
 import no.asgari.civilization.server.model.Player;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -16,6 +17,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
@@ -36,6 +38,7 @@ public class LoginResource {
 
     @POST
     @Consumes(value = MediaType.TEXT_PLAIN)
+    @Produces(value = MediaType.TEXT_PLAIN)
     public Response login(@QueryParam("username") String username, @QueryParam("password") String password) {
         Preconditions.checkNotNull(username);
         Preconditions.checkNotNull(password);
@@ -46,14 +49,27 @@ public class LoginResource {
         SimpleAuthenticator auth = new SimpleAuthenticator(playerCollection);
         Optional<Player> playerOptional = auth.authenticate(new BasicCredentials(username, passDigest));
         if (playerOptional.isPresent()) {
-            URI games = uriInfo.getAbsolutePathBuilder()
+
+            // player/12395/games
+
+            Player player = playerOptional.get();
+            URI games = uriInfo.getBaseUriBuilder()
+                    .path("/player/")
+                    .path(player.getId())
                     .path("/games")
                     .build();
+
+            CivCache.getInstance().put(player);
+
+            NewCookie usernameCookie = new NewCookie("username", player.getUsername());
+            NewCookie tokenCookie = new NewCookie("token", player.getToken().toString());
+
             return Response.ok()
                     .location(games)
-                    .entity(playerOptional.get())
+                    .cookie(usernameCookie, tokenCookie)
                     .build();
         }
+
         return Response.status(Response.Status.FORBIDDEN).build();
     }
 
@@ -65,9 +81,8 @@ public class LoginResource {
     }
     */
 
-
-
     private String createDigest(String password) {
         return DigestUtils.sha1Hex(password);
     }
+
 }
