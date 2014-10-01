@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>Civilization-Server</name>
-    <description>Server that creates PBF games and shuffles and gives out items</description>
+    <description>Rest server that creates PBF games and shuffles and gives out items</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -63,12 +63,6 @@
             <artifactId>dropwizard-auth</artifactId>
             <version>${dropwizard.version}</version>
         </dependency>
-        <dependency>
-            <groupId>io.dropwizard</groupId>
-            <artifactId>dropwizard-validation</artifactId>
-            <version>${dropwizard.version}</version>
-        </dependency>
-
 
         <!-- !dropwizard -->
         <dependency>
@@ -116,19 +110,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
-        <!--
-                <dependency>
-                    <groupId>org.glassfish.jersey.core</groupId>
-                    <artifactId>jersey-client</artifactId>
-                    <scope>test</scope>
-                </dependency>
-        -->
     </dependencies>
 
     <build>
