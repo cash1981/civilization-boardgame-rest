@@ -8,6 +8,7 @@ import no.asgari.civilization.server.application.CivCache;
 import no.asgari.civilization.server.application.SimpleAuthenticator;
 import no.asgari.civilization.server.model.Player;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.mongojack.JacksonDBCollection;
 
 import javax.ws.rs.Consumes;
@@ -39,7 +40,7 @@ public class LoginResource {
     @POST
     @Consumes(value = MediaType.TEXT_PLAIN)
     @Produces(value = MediaType.TEXT_PLAIN)
-    public Response login(@QueryParam("username") String username, @QueryParam("password") String password) {
+    public Response login(@QueryParam("username") @NotEmpty String username, @QueryParam("password") @NotEmpty String password) {
         Preconditions.checkNotNull(username);
         Preconditions.checkNotNull(password);
 
@@ -49,9 +50,6 @@ public class LoginResource {
         SimpleAuthenticator auth = new SimpleAuthenticator(playerCollection);
         Optional<Player> playerOptional = auth.authenticate(new BasicCredentials(username, passDigest));
         if (playerOptional.isPresent()) {
-
-            // player/12395/games
-
             Player player = playerOptional.get();
             URI games = uriInfo.getBaseUriBuilder()
                     .path("/player/")

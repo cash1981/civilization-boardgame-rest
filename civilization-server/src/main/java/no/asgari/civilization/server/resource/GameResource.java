@@ -14,6 +14,7 @@ import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Undo;
 import org.mongojack.JacksonDBCollection;
 
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.CookieParam;
 import javax.ws.rs.GET;
@@ -29,8 +30,8 @@ import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 @Path("/game")
-@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 @Log4j
 public class GameResource {
     @Context
@@ -68,8 +69,7 @@ public class GameResource {
 
     @POST
     @Timed
-    //TODO @Valid
-    public Response createGame(CreateNewGameDTO dto, @CookieParam("username") String username, @CookieParam("token") String token) {
+    public Response createGame(@Valid CreateNewGameDTO dto, @CookieParam("username") String username, @CookieParam("token") String token) {
         Preconditions.checkNotNull(dto);
 
         if(!hasCookies(username, token)) {

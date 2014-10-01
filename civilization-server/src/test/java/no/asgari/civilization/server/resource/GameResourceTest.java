@@ -75,6 +75,33 @@ public class GameResourceTest extends MongoDBBaseTest {
         assertTrue(location.getPath().matches(".*civilization/game/.*"));
     }
 
+    @Test
+    public void createGameShouldFailBecauseUsernameIsMissing() throws Exception {
+        List<NewCookie> cookies = performLogin();
+        assertThat(cookies.size()).isEqualTo(2);
+
+        Client client = Client.create();
+
+        CreateNewGameDTO dto = new CreateNewGameDTO();
+        dto.setNumOfPlayers(4);
+        dto.setUsername(null);
+        dto.setName("First waw game");
+        dto.setType(GameType.WAW);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String dtoAsJSon = mapper.writeValueAsString(dto);
+
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/game", RULE.getLocalPort())).build();
+        ClientResponse response = client.resource(uri)
+                .type(MediaType.APPLICATION_JSON)
+                .cookie(cookies.get(0))
+                .cookie(cookies.get(1))
+                .entity(dtoAsJSon)
+                .post(ClientResponse.class);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY_422);
+    }
+
     private List<NewCookie> performLogin() {
         Client client = Client.create();
         ClientResponse response = client.resource(

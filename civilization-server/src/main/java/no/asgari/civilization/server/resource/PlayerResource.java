@@ -4,9 +4,11 @@ import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.model.Player;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
 
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
@@ -37,7 +39,7 @@ public class PlayerResource {
     @POST
     @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     //TODO Add @Valid on PlayerDTO, right now it doesnt work
-    public Response createPlayer(PlayerDTO playerDTO) {
+    public Response createPlayer(@Valid PlayerDTO playerDTO) {
         log.debug("Entering create player");
 
         PlayerAction playerAction = new PlayerAction(playerCollection);
@@ -53,7 +55,7 @@ public class PlayerResource {
 
     @DELETE
     @Path("{id}")
-    public Response deletePlayer(@PathParam("id") String playerId) {
+    public Response deletePlayer(@PathParam("id") @NotEmpty String playerId) {
         //Throws IllegalArgumentException if id not found, so NOT_FOUND is never returned, but 500 servlet error instead
         WriteResult<Player, String> result = playerCollection.removeById(playerId);
         if(result.getError() == null)

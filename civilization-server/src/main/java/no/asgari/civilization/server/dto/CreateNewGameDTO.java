@@ -8,11 +8,9 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @Data
 @JsonRootName(value="CreateNewGame")
-@XmlRootElement
 public class CreateNewGameDTO {
     @NotEmpty
     public String name;
