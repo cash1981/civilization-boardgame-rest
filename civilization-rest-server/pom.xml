@@ -7,7 +7,7 @@
     <artifactId>civilization-server</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>Civilization-Server</name>
+    <name>civilization-server</name>
     <description>Rest server that creates PBF games and shuffles and gives out items</description>
 
     <properties>
