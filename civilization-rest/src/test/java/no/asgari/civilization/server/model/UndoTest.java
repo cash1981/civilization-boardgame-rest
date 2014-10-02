@@ -3,6 +3,7 @@ package no.asgari.civilization.server.model;
 import no.asgari.civilization.server.action.UndoAction;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mongojack.DBQuery;
 import org.mongojack.WriteResult;
@@ -56,6 +57,7 @@ public class UndoTest extends AbstractMongoDBTest {
     }
 
     @Test
+    @Ignore
     public void putUndoItemBackInPBF() throws Exception {
         Undo undo = undoCollection.findOne();
         if(undo == null) {
@@ -66,6 +68,7 @@ public class UndoTest extends AbstractMongoDBTest {
     }
 
     @Test
+    @Ignore
     public void countRemaingVotes() throws Exception{
 
         //make another vote
