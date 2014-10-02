@@ -11,6 +11,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.mongojack.Id;
 import org.mongojack.ObjectId;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 /**
@@ -34,6 +35,7 @@ public class Draw<T extends Type> {
     private String id;
 
     /** Typically implementation of Unit or Item. Should have #getSheetName() to determine the type **/
+    @NotNull
     private T item;
 
     public Draw(String pbfId, String playerId) {

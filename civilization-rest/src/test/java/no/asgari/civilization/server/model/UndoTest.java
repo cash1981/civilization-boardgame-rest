@@ -1,5 +1,6 @@
 package no.asgari.civilization.server.model;
 
+import no.asgari.civilization.server.action.DrawAction;
 import no.asgari.civilization.server.action.UndoAction;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
 import org.junit.Before;
@@ -8,7 +9,11 @@ import org.junit.Test;
 import org.mongojack.DBQuery;
 import org.mongojack.WriteResult;
 
+import java.util.Optional;
+
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("unchecked")
 public class UndoTest extends AbstractMongoDBTest {
@@ -18,12 +23,12 @@ public class UndoTest extends AbstractMongoDBTest {
     public void before() throws Exception {
         undo = undoCollection.findOne();
         if(undo == null) {
-            createADrawAndUndoIt();
+            createADrawAndPerformVoteForUndo();
             undo = undoCollection.findOne();
         }
     }
 
-    private void createADrawAndUndoIt() throws Exception {
+    private void createADrawAndPerformVoteForUndo() throws Exception {
         //First create one UndoAction
 
         //Pick one item
@@ -31,14 +36,13 @@ public class UndoTest extends AbstractMongoDBTest {
         assertThat(pbf).isNotNull();
         assertThat(pbf.getCivs()).isNotEmpty();
 
-        Civ civ = pbf.getCivs().get(0);
-        System.out.println(civ);
-        Draw drawCiv = createDraw(pbfId, playerId, civ);
+        DrawAction drawAction = new DrawAction(pbfCollection, drawCollection, undoCollection);
+        Draw drawCiv = drawAction.drawCiv(pbfId, playerId);
 
         Undo undo = new Undo(drawCiv.getId());
         assertThat(undo.getDrawId()).isNotEmpty();
 
-        undo.getVotes().put(playerId, Boolean.TRUE);
+        undo.vote(playerId, Boolean.TRUE);
         assertThat(undo.getVotes().size()).isEqualTo(1);
 
         undo.setNumberOfVotesRequired(pbf.getNumOfPlayers());
@@ -49,22 +53,41 @@ public class UndoTest extends AbstractMongoDBTest {
     }
 
     @Test
-    public void makeVote() throws Exception {
-        undo.getVotes().put(getAnotherPlayerId(), true);
+    public void performAVoteAndCheckIt() throws Exception {
+        undo.vote(getAnotherPlayerId(), Boolean.TRUE);
         undoCollection.updateById(undo.getId(), undo);
 
         assertThat(undoCollection.findOneById(undo.getId()).getVotes().size()).isEqualTo(2);
     }
 
     @Test
-    @Ignore
-    public void putUndoItemBackInPBF() throws Exception {
-        Undo undo = undoCollection.findOne();
-        if(undo == null) {
-            createADrawAndUndoIt();
-            undo = undoCollection.findOne();
-        }
-        //TODO
+    public void allPlayersVoteYesThenPerformUndo() throws Exception {
+        Draw drawToUndo = drawCollection.findOneById(undo.getDrawId());
+        PBF pbf = pbfCollection.findOneById(drawToUndo.getPbfId());
+        //Get the same undo, since I need it to be final
+        final Undo sameUndo = undoCollection.findOneById(undo.getId());
+
+        pbf.getPlayers().stream()
+                .filter(p -> !sameUndo.getVotes().containsKey(p.getUsername()))
+                .forEach(p -> sameUndo.vote(p.getUsername(), Boolean.TRUE));
+
+        assertThat(sameUndo.getVotes()).doesNotContainValue(Boolean.FALSE);
+        UndoAction undoAction = new UndoAction(pbfCollection, drawCollection);
+        final Optional<Boolean> resultOfVotes = undoAction.getResultOfVotes(sameUndo);
+        assertTrue(resultOfVotes.isPresent());
+        assertThat(resultOfVotes.get()).isTrue();
+
+        //First find out how many votes are done, and then each player will vote yes and undo made
+        final Type item = drawToUndo.getItem();
+        System.out.println("Item to put back is type: " + item.getType());
+        assertThat(item).isInstanceOf(Civ.class);
+
+        //First check that its not in the pbf
+        assertFalse(pbf.getCivs().contains(item));
+
+        undoAction.putDrawnItemBackInPBF(drawToUndo);
+
+        assertTrue(pbfCollection.findOneById(drawToUndo.getPbfId()).getCivs().contains(item));
     }
 
     @Test
@@ -72,18 +95,9 @@ public class UndoTest extends AbstractMongoDBTest {
     public void countRemaingVotes() throws Exception{
 
         //make another vote
-        undo.getVotes().put("Karandras1", Boolean.FALSE);
+        undo.getVotes().put("Karandras1", Boolean.TRUE);
         UndoAction action = new UndoAction(pbfCollection, drawCollection);
         assertThat(action.votesRemaining(undo)).isEqualTo(2);
-    }
-
-    private Draw createDraw(String pbfId, String playerId, Item item) {
-        Draw draw = new Draw(pbfId, playerId);
-        draw.setItem(item);
-        WriteResult<Draw, String> insert = drawCollection.insert(draw);
-        draw.setId(insert.getSavedId());
-        System.out.println("Created draw " + insert.getSavedId());
-        return draw;
     }
 
     private String getAnotherPlayerId() {

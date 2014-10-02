@@ -16,11 +16,11 @@ import org.hibernate.validator.constraints.NotEmpty;
 @NoArgsConstructor
 public class Wonder implements Item {
     @JsonIgnore
-    public static String ANCIENT = "Ancient";
+    public static final String ANCIENT = "Ancient";
     @JsonIgnore
-    public static String MEDIEVAL = "Medieval";
+    public static final String MEDIEVAL = "Medieval";
     @JsonIgnore
-    public static String MODERN = "Modern";
+    public static final String MODERN = "Modern";
     @NotEmpty
     private String name;
     private String type;

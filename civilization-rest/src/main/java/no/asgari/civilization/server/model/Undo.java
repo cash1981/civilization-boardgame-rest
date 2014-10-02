@@ -58,4 +58,9 @@ public class Undo {
 
     }
 
+    @JsonIgnore
+    public void vote(String username, Boolean vote) {
+        votes.put(username, vote);
+    }
+
 }

@@ -57,6 +57,8 @@ public abstract class AbstractMongoDBTest {
         pbfCollection.drop();
         drawCollection.drop();
         undoCollection.drop();
+        privateLogCollection.drop();
+        publicLogCollection.drop();
 
         playerCollection.createIndex(new BasicDBObject("username", 1), new BasicDBObject("unique", true));
 

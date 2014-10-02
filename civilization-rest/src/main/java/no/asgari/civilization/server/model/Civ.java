@@ -13,6 +13,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Getter
 @Setter
 @ToString(of="name")
+//TODO Consider adding typename to all models
 @JsonTypeName("civ")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "objectType")
 @NoArgsConstructor
