@@ -4,10 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>no.asgari.civilization</groupId>
-    <artifactId>civilization-server</artifactId>
+    <artifactId>civilization-rest</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>civilization-server</name>
+    <name>civilization-rest</name>
     <description>Rest server that creates PBF games and shuffles and gives out items</description>
 
     <properties>
