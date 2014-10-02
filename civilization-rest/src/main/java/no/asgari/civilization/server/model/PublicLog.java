@@ -1,5 +1,10 @@
 package no.asgari.civilization.server.model;
 
+import java.time.LocalDateTime;
+
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -11,27 +16,22 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.mongojack.Id;
 import org.mongojack.ObjectId;
 
-import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
-
 /**
  * This class will be used to store all the actions performed in the game.
  * It can be creating game, joining game, drawing items
  *
- * Typically it will be
- *
- * <14.04.2014 - 14:24 - cash1981 drew Civ Japan - <undo button>
- * <14.04.2014 - 14:25 - cash1981 drew Civ Greece - <undo>
- * <14.04.2014 - 14:25 - cash1981 drew Infantry - <undo>
- * <14.04.2014 - 14:25 - cash1981 drew Mounted - <undo>
- * <14.04.2014 - 14:25 - cash1981 drew Artillery - <undo>
+ * Example of log can be
+ * Public view:
+ * <14.04.2014 - 14:25 - cash1981 drew Infantry
+ * <14.04.2014 - 14:25 - cash1981 drew Mounted
+ * <14.04.2014 - 14:25 - cash1981 drew Artillery
  *
  */
 @Data
-@JsonRootName("gamelog")
+@JsonRootName("privateLog")
 @NoArgsConstructor
-public class GameLog {
-    public static final String COL_NAME = "gamelog";
+public class PublicLog {
+    public static final String COL_NAME = "publicLog";
 
     @Id
     @ObjectId
@@ -55,4 +55,16 @@ public class GameLog {
     @NotNull
     private Draw draw;
 
+    /**
+     * Creates the log and sets it in the log field
+     */
+    @JsonIgnore
+    public void createAndSetLog() {
+        final String SPACE = " - ";
+        StringBuilder sb = new StringBuilder();
+        sb.append(created + SPACE );
+        sb.append(username + SPACE);
+        sb.append("drew " + draw.getItem().getType());
+        log = sb.toString();
+    }
 }

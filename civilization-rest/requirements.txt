@@ -1,4 +1,4 @@
-#Server
+#Requirements for the Server
 #DONE 1. Lage et nytt spill (Setup)
 #DONE 2. Se liste over eksisterende spill
 #DONE 3. Joine eksisterende spill (som ikke er p�begynt)
@@ -8,12 +8,11 @@
 Alle actions/metoder logger til et visst sted. Denne loggen blir alltid displayet for alle spillerne. Bedre med for mye info enn for lite
 <<User>> <<Action>>
 
-
 #Setup (server side)
 1.0 - Server starter en asynchronous tr�d der alle random ting blir laget. Wonder velget, kultur kort, units, huts, tiles, city states, civs.
 #DONE 1.0.1 - Hvordan lagring av dette skal bli vet jeg ikke enda. Beste er � cache det i minnet f�rst. Vil helst ikke commite randomiseringen. Mulig det beste er � enten bare skrive til disk. (Enten serialisering eller filer der ting er sortert ut fra random), s� bare velger man fra f�rste linje osv
 #DONE 1.0.2 - Lage unit test for reshuffle. S� dersom alle ting er brukt opp, s� skal det reshuffles og skrives over i filen igjen
-1.1 - N�r man lager et nytt spill skal man velge antall spillere. Kan eventuelt begynne med fixed 4 player
+#DONE 1.1 - N�r man lager et nytt spill skal man velge antall spillere. Kan eventuelt begynne med fixed 4 player
 #DONE 1.2 - Random CIV #public
 #DONE 1.3 - Random color #public
 #DONE 1.4 - Random Wonders #public, #server m� lage midieval og modern, lagre
@@ -25,22 +24,32 @@ Alle actions/metoder logger til et visst sted. Denne loggen blir alltid displaye
 2.2 Only the players can see their games
 
 #DONE 3.0 Create User
-4.0 Logging everything
+Logging and Draws
+4.0 Every action user takes must be logged
+4.1 Logging is both private and public. The private should include the item name
+whilst public should just have the type.
+4.2 Every draw can be undoed, <-- Will create a voting where all players must agree before it is undoed
+4.3 Each private log/draw can be revealed public. This is done when user picks a civ, and then reveals it
+
+Nice to have
+4.4 A tab, where every player can see what other players have as hidden items which have not yet been revealed
 
 
-#Inside the game
-Implement client for all stuff in the server side
+Example:
+private:
+<date & time> - You drew civ Japan - <Request undo>
+public
+<date & time> - <<user>> drew Civ
+
+
 
 Hver gang det gj�res en action, skal dette logges p� siden av skjermen, f.eks <<User>> chose civ Japan
 
 #Battle
 
-Her m� jeg tenke ut hvordan jeg skal gj�re det enklest mulig.
-
-
-5. Choose CIV (En del av setup)
+Need to decide how to proceed with battle
 
 
 #TODO
 - Create method that logs draw and prints nicely
-- Method that can perform undo, find the type and item and put back in the deck and reshuffle. Either put the item in the back, or pick random index and put it back
+#DONE - Method that can perform undo, find the type and item and put back in the deck and reshuffle. Either put the item in the back, or pick random index and put it back

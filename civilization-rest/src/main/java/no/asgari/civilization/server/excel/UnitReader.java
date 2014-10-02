@@ -22,6 +22,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+
 @Log4j
 public class UnitReader {
     public LinkedList<Aircraft> aircraftList;
@@ -41,6 +42,7 @@ public class UnitReader {
 
     private void createInfantryTest(Workbook wb) throws IOException {
         Sheet infantrySheet = wb.getSheet(SheetName.INFANTRY.toString());
+
 
         List<Cell> unfilteredCells = new ArrayList<>();
         infantrySheet.forEach(row -> row.forEach(unfilteredCells::add));

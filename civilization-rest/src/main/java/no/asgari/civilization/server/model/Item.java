@@ -29,7 +29,7 @@ package no.asgari.civilization.server.model;
  * hidden = true;
  */
 
-public interface Item extends Spreadsheet {
+public interface Item extends Spreadsheet, Type {
 
     /**
      * Either the username or pbf name, both of which must be unique *
@@ -43,10 +43,5 @@ public interface Item extends Spreadsheet {
     public boolean isUsed();
 
     public String getDescription();
-
-    /**
-     * For instance general
-     */
-    public String getType();
 
 }

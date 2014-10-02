@@ -1,16 +1,13 @@
 package no.asgari.civilization.server.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import no.asgari.civilization.server.SheetName;
 
-/**
- * Type should describe the unit type, for instance
- * Spearmen, Pikemen, Riflemen etc
- */
 @Getter
 @Setter
 @JsonTypeName("infantry")
@@ -27,6 +24,12 @@ public class Infantry implements Unit {
     public Infantry(int attack, int health) {
         this.attack = attack;
         this.health = health;
+    }
+
+    @JsonIgnore
+    @Override
+    public String getType() {
+        return "Infantry";
     }
 
     @Override

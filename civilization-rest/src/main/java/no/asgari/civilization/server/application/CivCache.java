@@ -1,6 +1,8 @@
 package no.asgari.civilization.server.application;
 
 import com.google.common.cache.Cache;
+import com.google.common.eventbus.EventBus;
+import com.sun.jersey.spi.resource.Singleton;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.model.Player;
 
@@ -9,13 +11,14 @@ import java.util.UUID;
 /**
  * Application cache
  */
-@Log4j
 @SuppressWarnings("unchecked")
+@Log4j
+//This class is a @Singleton
 public final class CivCache {
 
     private static Cache<String, UUID> tokenCache;
     private static CivCache civCache = new CivCache();
-
+    private static EventBus eventBus = new EventBus();
     private CivCache() {
     }
 
@@ -56,5 +59,13 @@ public final class CivCache {
      */
     public Cache<String, UUID> getCache() {
         return tokenCache;
+    }
+
+    public EventBus getEventBus() {
+        return eventBus;
+    }
+
+    public void postToEventBus(Object event) {
+        eventBus.post(event);
     }
 }

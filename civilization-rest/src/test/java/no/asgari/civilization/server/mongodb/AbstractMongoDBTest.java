@@ -4,12 +4,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
+import no.asgari.civilization.server.action.LogListener;
 import no.asgari.civilization.server.action.PBFAction;
 import no.asgari.civilization.server.application.CivBoardGameRandomizerConfiguration;
+import no.asgari.civilization.server.application.CivCache;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
+import no.asgari.civilization.server.model.PrivateLog;
+import no.asgari.civilization.server.model.PublicLog;
 import no.asgari.civilization.server.model.Undo;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.AfterClass;
@@ -26,6 +30,8 @@ public abstract class AbstractMongoDBTest {
     protected static JacksonDBCollection<Player, String> playerCollection;
     protected static JacksonDBCollection<Draw, String> drawCollection;
     protected static JacksonDBCollection<Undo, String> undoCollection;
+    protected static JacksonDBCollection<PrivateLog, String> privateLogCollection;
+    protected static JacksonDBCollection<PublicLog, String> publicLogCollection;
 
     protected static String pbfId;
     protected static String playerId;
@@ -44,6 +50,9 @@ public abstract class AbstractMongoDBTest {
         AbstractMongoDBTest.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
         AbstractMongoDBTest.drawCollection = JacksonDBCollection.wrap(db.getCollection(Draw.COL_NAME), Draw.class, String.class);
         AbstractMongoDBTest.undoCollection = JacksonDBCollection.wrap(db.getCollection(Undo.COL_NAME), Undo.class, String.class);
+        AbstractMongoDBTest.privateLogCollection= JacksonDBCollection.wrap(db.getCollection(PrivateLog.COL_NAME), PrivateLog.class, String.class);
+        AbstractMongoDBTest.publicLogCollection = JacksonDBCollection.wrap(db.getCollection(PublicLog.COL_NAME), PublicLog.class, String.class);
+
         playerCollection.drop();
         pbfCollection.drop();
         drawCollection.drop();
@@ -54,6 +63,8 @@ public abstract class AbstractMongoDBTest {
         createNewPBFGame();
         createAnotherPBF();
         playerId = playerCollection.findOne().getId();
+
+        CivCache.getInstance().getEventBus().register(new LogListener(privateLogCollection, publicLogCollection));
     }
 
     @AfterClass
@@ -61,6 +72,8 @@ public abstract class AbstractMongoDBTest {
         if (mongo != null) {
             mongo.close();
         }
+
+        //CivCache.getInstance().getEventBus().unregister(new LogListener(privateLogCollection, publicLogCollection));
     }
 
     private static void createNewPBFGame() throws IOException {

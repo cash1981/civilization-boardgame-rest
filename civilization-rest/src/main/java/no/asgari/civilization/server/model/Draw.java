@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @JsonRootName(value = "draw")
 @Data
-public class Draw<T extends Spreadsheet> {
+public class Draw<T extends Type> {
     public static final String COL_NAME = "draw";
 
     @ObjectId

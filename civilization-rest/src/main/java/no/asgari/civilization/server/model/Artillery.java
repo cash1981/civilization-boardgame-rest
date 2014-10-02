@@ -8,10 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import no.asgari.civilization.server.SheetName;
 
-/**
- * Type should describe the unit type, for instance
- * Spearmen, Pikemen, Riflemen etc
- */
 @Getter
 @Setter
 @JsonTypeName("artillery")
@@ -28,6 +24,12 @@ public class Artillery implements Unit {
     public Artillery(int attack, int health) {
         this.attack = attack;
         this.health = health;
+    }
+
+    @JsonIgnore
+    @Override
+    public String getType() {
+        return "Artillery";
     }
 
     @JsonIgnore
