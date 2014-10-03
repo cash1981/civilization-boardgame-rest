@@ -22,7 +22,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
-@Path("/player")
+@Path("player")
 @Produces(value = MediaType.APPLICATION_JSON)
 @Consumes(value = MediaType.APPLICATION_JSON)
 @Log4j
@@ -37,7 +37,7 @@ public class PlayerResource {
     }
 
     @POST
-    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Consumes(MediaType.APPLICATION_JSON)
     //TODO Add @Valid on PlayerDTO, right now it doesnt work
     public Response createPlayer(@Valid PlayerDTO playerDTO) {
         log.debug("Entering create player");

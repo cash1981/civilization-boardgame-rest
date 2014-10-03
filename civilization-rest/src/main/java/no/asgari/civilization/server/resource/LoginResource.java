@@ -1,6 +1,5 @@
 package no.asgari.civilization.server.resource;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import io.dropwizard.auth.basic.BasicCredentials;
 import lombok.extern.log4j.Log4j;
@@ -22,8 +21,9 @@ import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.Optional;
 
-@Path("/login")
+@Path("login")
 @Log4j
 @Produces(value = MediaType.APPLICATION_JSON)
 public class LoginResource {

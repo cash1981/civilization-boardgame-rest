@@ -10,14 +10,32 @@
     <name>civilization-rest</name>
     <description>Rest server that creates PBF games and shuffles and gives out items</description>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <dropwizard.version>0.7.1</dropwizard.version>
-        <jackson.version>2.3.3</jackson.version>
-        <apache-poi.version>3.11-beta2</apache-poi.version>
-        <mongo-driver.version>2.12.3</mongo-driver.version>
-    </properties>
+    <licenses>
+        <license>
+            <name>Apache 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <developerConnection>scm:git:git@github.com:cash1981/civilization-boardgame.git</developerConnection>
+        <connection>scm:git:https://github.com/cash1981/civilization-boardgame.git</connection>
+        <url>https://github.com/cash1981/civilization-boardgame</url>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/cash1981/civilization-boardgame/issues</url>
+    </issueManagement>
+
+    <developers>
+        <developer>
+            <id>cash1981</id>
+            <name>Shervin Asgari</name>
+            <email>shervin@asgari.no</email>
+        </developer>
+    </developers>
 
     <repositories>
         <repository>
@@ -26,6 +44,16 @@
             <url>http://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
     </repositories>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <dropwizard.version>0.7.1</dropwizard.version>
+        <jackson.version>2.3.3</jackson.version>
+        <apache-poi.version>3.11-beta2</apache-poi.version>
+        <mongo-driver.version>2.12.3</mongo-driver.version>
+        <dropwizard-java8.version>[0.7.0,0.8.0)</dropwizard-java8.version>
+    </properties>
 
     <dependencyManagement>
         <dependencies>
@@ -61,9 +89,14 @@
             <version>${dropwizard.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.dropwizard</groupId>
-            <artifactId>dropwizard-auth</artifactId>
-            <version>${dropwizard.version}</version>
+            <groupId>io.dropwizard.modules</groupId>
+            <artifactId>dropwizard-java8</artifactId>
+            <version>${dropwizard-java8.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.dropwizard.modules</groupId>
+            <artifactId>dropwizard-java8-auth</artifactId>
+            <version>${dropwizard-java8.version}</version>
         </dependency>
 
         <!-- !dropwizard -->
