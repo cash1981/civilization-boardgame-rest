@@ -40,7 +40,7 @@ public class LoginResourceTest extends AbstractMongoDBTest {
     @ClassRule
     public static final DropwizardAppRule<CivBoardGameRandomizerConfiguration> RULE =
             new DropwizardAppRule<>(CivBoardgameRandomizerApplication.class, "src/main/resources/config.yml");
-    private static final String BASE_URL = "http://localhost:%d/civilization";
+    private static final String BASE_URL = "http://localhost:%d";
     private List<NewCookie> cookies;
 
     @Override
@@ -58,26 +58,21 @@ public class LoginResourceTest extends AbstractMongoDBTest {
         Player player = players.next();
         assertThat(player.getUsername()).isEqualToIgnoringCase("cash1981");
         assertThat(player.getPassword()).isEqualToIgnoringCase("0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33");
-
-
-
-        String authEncoded = B64Code.encode(player.getUsername() + ":" + player.getPassword(), StringUtil.__ISO_8859_1);
+        ObjectMapper mapper = new ObjectMapper();
+        String authEncoded = B64Code.encode("cash1981" + ":" + "foo", StringUtil.__ISO_8859_1);
 
         assertThat(client().resource(UriBuilder.fromPath(String.format(BASE_URL + "/login/secret", RULE.getLocalPort())).build())
-                //.header(HttpHeaders.AUTHORIZATION, "Basic Z29vZC1ndXk6c2VjcmV0")
                 .header(HttpHeaders.AUTHORIZATION, "Basic " + authEncoded)
+                .entity(mapper.writeValueAsString(player))
                 .type(MediaType.APPLICATION_JSON)
                 .get(String.class))
-                .isEqualTo("good-guy");
+                .isEqualTo("ack");
     }
 
 
     @Test
-    @Ignore
     public void shouldGet403WithWrongUsernamePass() {
-        Client client = Client.create();
-
-        ClientResponse response = client.resource(
+        ClientResponse response = client().resource(
                 UriBuilder.fromPath(String.format(BASE_URL + "/login", RULE.getLocalPort()))
                         .queryParam("username", "cash1981")
                         .queryParam("password", "fifafoo")
@@ -89,10 +84,8 @@ public class LoginResourceTest extends AbstractMongoDBTest {
     }
 
     @Test
-    @Ignore
     public void shouldLoginCorrectly() {
-        Client client = Client.create();
-        ClientResponse response = client.resource(
+        ClientResponse response = client().resource(
                 UriBuilder.fromPath(String.format(BASE_URL + "/login", RULE.getLocalPort()))
                         .queryParam("username", "cash1981")
                         .queryParam("password", "foo")
@@ -107,31 +100,5 @@ public class LoginResourceTest extends AbstractMongoDBTest {
         cookies = response.getCookies();
         assertThat(cookies).isNotEmpty();
     }
-
-    @Test
-    @Ignore
-    public void testSecret() throws JsonProcessingException {
-        DBCursor<Player> players = playerCollection.find(DBQuery.is("username", "cash1981"), new BasicDBObject());
-        Player player = players.next();
-        shouldLoginCorrectly();
-
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(player);
-
-        String authEncoded = B64Code.encode(player.getUsername() + ":" + player.getPassword(), StringUtil.__ISO_8859_1);
-
-        final DropwizardResourceConfig config = DropwizardResourceConfig.forTesting(new MetricRegistry());
-        config.getSingletons().add(new BasicAuthProvider<>(new SimpleAuthenticator(playerCollection), "realm"));
-
-        Client client = Client.create();
-        ClientResponse response = client.resource(UriBuilder.fromPath(String.format(BASE_URL + "/login", RULE.getLocalPort())).build())
-                .entity(json)
-                .header(HttpHeaders.AUTHORIZATION, "Basic " + authEncoded)
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .put(ClientResponse.class);
-
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
-    }
-
 
 }

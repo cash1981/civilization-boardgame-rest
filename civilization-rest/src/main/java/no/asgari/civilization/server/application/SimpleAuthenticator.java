@@ -6,6 +6,7 @@ import io.dropwizard.auth.basic.BasicCredentials;
 import io.dropwizard.java8.auth.Authenticator;
 import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.model.Player;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.mongojack.JacksonDBCollection;
 
 public class SimpleAuthenticator implements Authenticator<BasicCredentials, Player> {
@@ -24,7 +25,7 @@ public class SimpleAuthenticator implements Authenticator<BasicCredentials, Play
         }
 
         Player player = username.get();
-        if(player.getPassword().equals(credentials.getPassword())) {
+        if(player.getPassword().equals(DigestUtils.sha1Hex(credentials.getPassword()))) {
             return Optional.of(player);
         }
         return Optional.empty();
