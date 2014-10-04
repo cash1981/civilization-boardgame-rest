@@ -13,7 +13,7 @@ public class SimpleAuthenticator implements Authenticator<BasicCredentials, Play
     private final PlayerAction playerAction;
 
     public SimpleAuthenticator(JacksonDBCollection<Player, String> playerCollection) {
-        playerAction = new PlayerAction(playerCollection);
+        playerAction = new PlayerAction(playerCollection, pbfCollection);
     }
 
     @Override

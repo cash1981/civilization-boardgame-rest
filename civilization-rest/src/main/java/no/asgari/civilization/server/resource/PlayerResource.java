@@ -1,26 +1,21 @@
 package no.asgari.civilization.server.resource;
 
+import io.dropwizard.auth.Auth;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.PlayerAction;
-import no.asgari.civilization.server.dto.PlayerDTO;
+import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.mongojack.JacksonDBCollection;
-import org.mongojack.WriteResult;
 
-import javax.validation.Valid;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.POST;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.net.URI;
+import java.util.List;
 
 @Path("player")
 @Produces(value = MediaType.APPLICATION_JSON)
@@ -31,35 +26,18 @@ public class PlayerResource {
     private UriInfo uriInfo;
 
     private final JacksonDBCollection<Player, String> playerCollection;
+    private final JacksonDBCollection<PBF, String> pbfCollection;
 
-    public PlayerResource(JacksonDBCollection<Player, String> playerCollection) {
+    public PlayerResource(JacksonDBCollection<Player, String> playerCollection, JacksonDBCollection<PBF, String> pbfCollection) {
         this.playerCollection = playerCollection;
+        this.pbfCollection = pbfCollection;
     }
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    //TODO Add @Valid on PlayerDTO, right now it doesnt work
-    public Response createPlayer(@Valid PlayerDTO playerDTO) {
-        log.debug("Entering create player");
+    @GET
+    public Response getGamesForPlayer(@Auth Player player) {
+        PlayerAction playerAction = new PlayerAction(playerCollection, pbfCollection);
+        List<PBF> games = playerAction.getGames(player);
 
-        PlayerAction playerAction = new PlayerAction(playerCollection);
-        try {
-            String playerId = playerAction.createPlayer(playerDTO);
-            return Response.status(Response.Status.CREATED)
-                    .location(URI.create(uriInfo.getPath() + "/" + playerId)
-                    ).build();
-        } catch (WebApplicationException ex) {
-            return ex.getResponse();
-        }
-    }
-
-    @DELETE
-    @Path("{id}")
-    public Response deletePlayer(@PathParam("id") @NotEmpty String playerId) {
-        //Throws IllegalArgumentException if id not found, so NOT_FOUND is never returned, but 500 servlet error instead
-        WriteResult<Player, String> result = playerCollection.removeById(playerId);
-        if(result.getError() == null)
-            return Response.status(Response.Status.NO_CONTENT).build();
-        return Response.status(Response.Status.NOT_FOUND).build();
+        return Response.ok().entity(games).build();
     }
 }

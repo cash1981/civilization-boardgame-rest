@@ -6,6 +6,7 @@ import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.exception.PlayerExistException;
+import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.mongojack.DBCursor;
@@ -15,15 +16,19 @@ import org.mongojack.WriteResult;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Log4j
 public class PlayerAction {
 
     private final JacksonDBCollection<Player, String> playerCollection;
+    private final JacksonDBCollection<PBF, String> pbfCollection;
 
-    public PlayerAction(JacksonDBCollection<Player, String> playerCollection) {
+    public PlayerAction(JacksonDBCollection<Player, String> playerCollection, JacksonDBCollection<PBF, String> pbfCollection) {
         this.playerCollection = playerCollection;
+        this.pbfCollection = pbfCollection;
     }
 
     /**
@@ -64,5 +69,21 @@ public class PlayerAction {
         }
 
         return Optional.of(player.next());
+    }
+
+    public List<PBF> getGames(Player player) {
+        Preconditions.checkNotNull(player);
+        log.debug("Getting all games for player " + player.getUsername());
+
+        return player.getGameIds()
+                .stream()
+                .map(this::getPBF)
+                .filter(PBF::isActive)
+                .collect(Collectors.toList());
+
+    }
+
+    private PBF getPBF(String pbfId) {
+        return pbfCollection.findOneById(pbfId);
     }
 }

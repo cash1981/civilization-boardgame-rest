@@ -13,9 +13,9 @@ import io.dropwizard.setup.Environment;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.LogListener;
 import no.asgari.civilization.server.model.Draw;
-import no.asgari.civilization.server.model.PrivateLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
+import no.asgari.civilization.server.model.PrivateLog;
 import no.asgari.civilization.server.model.PublicLog;
 import no.asgari.civilization.server.model.Undo;
 import no.asgari.civilization.server.resource.GameResource;
@@ -50,7 +50,6 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
         JacksonDBCollection<Undo, String> undoActionCollection = JacksonDBCollection.wrap(db.getCollection(Undo.COL_NAME), Undo.class, String.class);
         JacksonDBCollection<PrivateLog, String> privateLogCollection= JacksonDBCollection.wrap(db.getCollection(PrivateLog.COL_NAME), PrivateLog.class, String.class);
         JacksonDBCollection<PublicLog, String> publicLogCollection = JacksonDBCollection.wrap(db.getCollection(PublicLog.COL_NAME), PublicLog.class, String.class);
-        //TODO Insert draw and undoaction collections to some resource
 
         createIndexForPlayer(playerCollection);
         MongoManaged mongoManaged = new MongoManaged(mongo);
@@ -63,10 +62,10 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
         //Resources
         environment.jersey().register(new GameResource(pbfCollection, playerCollection, drawCollection, undoActionCollection));
         environment.jersey().register(new LoginResource(playerCollection));
+        environment.jersey().register(new PlayerResource(playerCollection, pbfCollection));
 
-        //Authentication                                                                                               //realm
+        //Authentication
         environment.jersey().register(new BasicAuthProvider<>(new SimpleAuthenticator(playerCollection), "civilization"));
-        environment.jersey().register(new PlayerResource(playerCollection));
 
         CivCache.getInstance().getEventBus().register(new LogListener(privateLogCollection, publicLogCollection));
 
@@ -78,10 +77,8 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
 
     }
 
-
-
     private void createIndexForPlayer(JacksonDBCollection<Player, String> playerCollection) {
-        playerCollection.createIndex(new BasicDBObject("username", 1), new BasicDBObject("unique", true));
+        playerCollection.createIndex(new BasicDBObject(Player.USERNAME, 1), new BasicDBObject("unique", true));
     }
 
 }
