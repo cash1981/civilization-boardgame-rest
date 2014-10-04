@@ -5,6 +5,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import no.asgari.civilization.server.action.LogListener;
+import com.sun.jersey.test.framework.JerseyTest;
 import no.asgari.civilization.server.action.PBFAction;
 import no.asgari.civilization.server.application.CivBoardGameRandomizerConfiguration;
 import no.asgari.civilization.server.application.CivCache;
@@ -25,7 +26,7 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertNotNull;
 
-public abstract class AbstractMongoDBTest {
+public abstract class AbstractMongoDBTest extends JerseyTest {
     protected static JacksonDBCollection<PBF, String> pbfCollection;
     protected static JacksonDBCollection<Player, String> playerCollection;
     protected static JacksonDBCollection<Draw, String> drawCollection;

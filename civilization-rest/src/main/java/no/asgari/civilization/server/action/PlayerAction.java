@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.exception.PlayerExistException;
 import no.asgari.civilization.server.model.Player;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
@@ -42,10 +43,9 @@ public class PlayerAction {
             throw new PlayerExistException();
         }
 
-
         Player player = new Player();
         player.setUsername(playerDTO.getUsername());
-        player.setPassword(playerDTO.getPassword());
+        player.setPassword(DigestUtils.sha1Hex(playerDTO.getPassword()));
         player.setEmail(playerDTO.getEmail());
         WriteResult<Player, String> insert = playerCollection.insert(player);
 

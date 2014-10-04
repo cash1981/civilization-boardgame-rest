@@ -29,7 +29,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
-@Path("/game")
+@Path("game")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Log4j
@@ -95,7 +95,7 @@ public class GameResource {
 
     @PUT
     @Timed
-    @Path("{pbfId}")
+    @Path("/{pbfId}")
     //TODO Implement Auth. For now its done manually with cookies and token
     public Response joinGame(@PathParam("pbfId") String pbfId, @CookieParam("username") String username, @CookieParam("token") String token) {
         if(!hasCookies(username, token)) {

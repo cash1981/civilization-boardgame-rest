@@ -1,7 +1,7 @@
 package no.asgari.civilization.server.resource;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
+import io.dropwizard.auth.Auth;
 import io.dropwizard.auth.basic.BasicCredentials;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.application.CivCache;
@@ -12,6 +12,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.mongojack.JacksonDBCollection;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -22,8 +23,9 @@ import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.Optional;
 
-@Path("/login")
+@Path("login")
 @Log4j
 @Produces(value = MediaType.APPLICATION_JSON)
 public class LoginResource {
@@ -44,11 +46,8 @@ public class LoginResource {
         Preconditions.checkNotNull(username);
         Preconditions.checkNotNull(password);
 
-        String passDigest = createDigest(password);
-        log.debug("Passdigest is " + passDigest);
-
         SimpleAuthenticator auth = new SimpleAuthenticator(playerCollection);
-        Optional<Player> playerOptional = auth.authenticate(new BasicCredentials(username, passDigest));
+        Optional<Player> playerOptional = auth.authenticate(new BasicCredentials(username, password));
         if (playerOptional.isPresent()) {
             Player player = playerOptional.get();
             URI games = uriInfo.getBaseUriBuilder()
@@ -71,16 +70,11 @@ public class LoginResource {
         return Response.status(Response.Status.FORBIDDEN).build();
     }
 
-    /*@GET
-    @Path("/test")
+    @GET
+    @Path("/secret")
     @Consumes(value = MediaType.APPLICATION_JSON)
-    public Response testSecret(@Auth(required = false) Player player) {
-        return Response.ok().build();
-    }
-    */
-
-    private String createDigest(String password) {
-        return DigestUtils.sha1Hex(password);
+    public String testSecret(@Auth(required = false) Player player) {
+        return "ack";
     }
 
 }

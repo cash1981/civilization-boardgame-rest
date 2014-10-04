@@ -1,18 +1,18 @@
 package no.asgari.civilization.server.application;
 
-import com.google.common.base.Optional;
-import io.dropwizard.auth.Authenticator;
+import java.util.Optional;
+
 import io.dropwizard.auth.basic.BasicCredentials;
+import io.dropwizard.java8.auth.Authenticator;
 import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.model.Player;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.mongojack.JacksonDBCollection;
 
 public class SimpleAuthenticator implements Authenticator<BasicCredentials, Player> {
-    private final JacksonDBCollection<Player, String> playerCollection;
     private final PlayerAction playerAction;
 
     public SimpleAuthenticator(JacksonDBCollection<Player, String> playerCollection) {
-        this.playerCollection = playerCollection;
         playerAction = new PlayerAction(playerCollection);
     }
 
@@ -21,13 +21,13 @@ public class SimpleAuthenticator implements Authenticator<BasicCredentials, Play
         java.util.Optional<Player> username = playerAction.findPlayerByUsername(credentials.getUsername());
 
         if(!username.isPresent()) {
-            return Optional.absent();
+            return Optional.empty();
         }
 
         Player player = username.get();
-        if(player.getPassword().equals(credentials.getPassword())) {
+        if(player.getPassword().equals(DigestUtils.sha1Hex(credentials.getPassword()))) {
             return Optional.of(player);
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 }
