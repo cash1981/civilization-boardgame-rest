@@ -19,7 +19,7 @@ public class Infantry implements Unit {
     private String owner;
     private boolean hidden;
     private boolean used;
-    private boolean dead;
+    private boolean killed;
 
     public Infantry(int attack, int health) {
         this.attack = attack;
@@ -61,7 +61,7 @@ public class Infantry implements Unit {
         Infantry infantry = (Infantry) o;
 
         if (attack != infantry.attack) return false;
-        if (dead != infantry.dead) return false;
+        if (killed != infantry.killed) return false;
         if (health != infantry.health) return false;
         if (hidden != infantry.hidden) return false;
         if (used != infantry.used) return false;
@@ -76,7 +76,7 @@ public class Infantry implements Unit {
         result = 31 * result + (owner != null ? owner.hashCode() : 0);
         result = 31 * result + (hidden ? 1 : 0);
         result = 31 * result + (used ? 1 : 0);
-        result = 31 * result + (dead ? 1 : 0);
+        result = 31 * result + (killed ? 1 : 0);
         result = 31 * result + attack;
 
         return result;

@@ -64,4 +64,12 @@ public class PBF {
     private List<Artillery> artillery = Lists.newArrayList();
     private List<Aircraft> aircraft = Lists.newArrayList();
 
+    //TODO implement
+    /*
+    private List<Item> levelITechs = Lists.newArrayList();
+    private List<Item> levelIITechs = Lists.newArrayList();
+    private List<Item> levelIIITechs = Lists.newArrayList();
+    private List<Item> levelIIIITechs = Lists.newArrayList();
+    */
+    private List<Tech> techs = Lists.newArrayList();
 }

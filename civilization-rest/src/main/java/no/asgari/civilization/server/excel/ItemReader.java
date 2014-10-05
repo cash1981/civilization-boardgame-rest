@@ -10,6 +10,7 @@ import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.GreatPerson;
 import no.asgari.civilization.server.model.Hut;
 import no.asgari.civilization.server.model.Item;
+import no.asgari.civilization.server.model.Tech;
 import no.asgari.civilization.server.model.Tile;
 import no.asgari.civilization.server.model.Village;
 import no.asgari.civilization.server.model.Wonder;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+//TODO Make this file more generic by looping through all the sheets
 public class ItemReader {
     public LinkedList<Civ> shuffledCivs;
     public LinkedList<CultureI> shuffledCultureI;
@@ -40,6 +42,7 @@ public class ItemReader {
     public LinkedList<Wonder> ancientWonders;
     public LinkedList<Tile> shuffledTiles;
     public LinkedList<Citystate> shuffledCityStates;
+    public LinkedList<Tech> shuffledTechs;
     
     static final Predicate<Cell> notEmptyPredicate = cell -> !cell.toString().isEmpty();
     static final Predicate<Cell> notRandomPredicate = cell -> !cell.toString().equals("RAND()");
@@ -73,6 +76,7 @@ public class ItemReader {
             shuffledCityStates = (LinkedList<Citystate>) getShuffledCityStates(wb);
             shuffledTiles = (LinkedList<Tile>) getShuffledTilesFromExcel(wb);
             extractShuffledWondersFromExcel(wb);
+            shuffledTechs = (LinkedList<Tech>) getShuffledTechsFromExcel(wb);
         }
     }
 
@@ -371,4 +375,54 @@ public class ItemReader {
         Collections.shuffle(villages);
         return new LinkedList<>(villages);
     }
+
+    private LinkedList<? extends Item> getShuffledTechsFromExcel(Workbook wb) {
+        //Start with level 1 techs
+        Sheet sheet = wb.getSheet(SheetName.LEVEL_1_TECH.toString());
+        List<Cell> level1Cells = new ArrayList<>();
+        sheet.forEach(row -> row.forEach(level1Cells::add));
+
+        List<Tech> level1Techs = level1Cells.stream()
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
+                .filter(columnIndexZeroPredicate)
+                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_1))
+                .collect(Collectors.toList());
+
+        sheet = wb.getSheet(SheetName.LEVEL_2_TECH.toString());
+        List<Cell> level2Cells = new ArrayList<>();
+        sheet.forEach(row -> row.forEach(level2Cells::add));
+
+        List<Tech> level1Techs = level1Cells.stream()
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
+                .filter(columnIndexZeroPredicate)
+                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_1))
+                .collect(Collectors.toList());
+
+        List<Tech> level1Techs = level1Cells.stream()
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
+                .filter(columnIndexZeroPredicate)
+                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_1))
+                .collect(Collectors.toList());
+
+        List<Tech> level1Techs = level1Cells.stream()
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
+                .filter(columnIndexZeroPredicate)
+                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_1))
+                .collect(Collectors.toList());
+
+
+
+        return null;
+    }
+
+
+
 }

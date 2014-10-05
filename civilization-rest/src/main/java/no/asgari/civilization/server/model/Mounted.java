@@ -26,7 +26,7 @@ public class Mounted implements Unit {
     private String owner;
     private boolean hidden;
     private boolean used;
-    private boolean dead;
+    private boolean killed;
     private int attack;
     private int health;
 
@@ -70,7 +70,7 @@ public class Mounted implements Unit {
         Mounted mounted = (Mounted) o;
 
         if (attack != mounted.attack) return false;
-        if (dead != mounted.dead) return false;
+        if (killed != mounted.killed) return false;
         if (health != mounted.health) return false;
         if (hidden != mounted.hidden) return false;
         if (used != mounted.used) return false;
@@ -85,7 +85,7 @@ public class Mounted implements Unit {
         result = 31 * result + (owner != null ? owner.hashCode() : 0);
         result = 31 * result + (hidden ? 1 : 0);
         result = 31 * result + (used ? 1 : 0);
-        result = 31 * result + (dead ? 1 : 0);
+        result = 31 * result + (killed ? 1 : 0);
         result = 31 * result + attack;
         return result;
     }

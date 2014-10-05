@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * used = true
  * hidden = true;
  */
-public interface Unit extends Spreadsheet, Type {
+public interface Unit extends Spreadsheet, Type, Level {
     @JsonIgnore
     static final int LEVEL_1 = 1;
     @JsonIgnore
@@ -49,9 +49,7 @@ public interface Unit extends Spreadsheet, Type {
 
     public boolean isUsed();
 
-    public boolean isDead();
-
-    public int getLevel();
+    public boolean isKilled();
 
     public int getAttack();
 

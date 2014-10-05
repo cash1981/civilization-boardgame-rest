@@ -15,7 +15,7 @@ public class Aircraft implements Unit {
     private String owner;
     private boolean hidden;
     private boolean used;
-    private boolean dead;
+    private boolean killed;
     private int attack;
     private int health;
 
@@ -58,7 +58,7 @@ public class Aircraft implements Unit {
         Aircraft aircraft = (Aircraft) o;
 
         if (attack != aircraft.attack) return false;
-        if (dead != aircraft.dead) return false;
+        if (killed != aircraft.killed) return false;
         if (health != aircraft.health) return false;
         if (hidden != aircraft.hidden) return false;
         if (used != aircraft.used) return false;
@@ -72,7 +72,7 @@ public class Aircraft implements Unit {
         int result = owner != null ? owner.hashCode() : 0;
         result = 31 * result + (hidden ? 1 : 0);
         result = 31 * result + (used ? 1 : 0);
-        result = 31 * result + (dead ? 1 : 0);
+        result = 31 * result + (killed ? 1 : 0);
         result = 31 * result + attack;
         result = 31 * result + health;
         return result;

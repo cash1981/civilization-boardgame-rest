@@ -17,7 +17,7 @@ public class Artillery implements Unit {
     private String owner;
     private boolean hidden;
     private boolean used;
-    private boolean dead;
+    private boolean killed;
     private int attack;
     private int health;
 
@@ -62,7 +62,7 @@ public class Artillery implements Unit {
         Artillery artillery = (Artillery) o;
 
         if (attack != artillery.attack) return false;
-        if (dead != artillery.dead) return false;
+        if (killed != artillery.killed) return false;
         if (health != artillery.health) return false;
         if (hidden != artillery.hidden) return false;
         if (used != artillery.used) return false;
@@ -77,7 +77,7 @@ public class Artillery implements Unit {
         result = 31 * result + (owner != null ? owner.hashCode() : 0);
         result = 31 * result + (hidden ? 1 : 0);
         result = 31 * result + (used ? 1 : 0);
-        result = 31 * result + (dead ? 1 : 0);
+        result = 31 * result + (killed ? 1 : 0);
         result = 31 * result + health;
         return result;
     }
