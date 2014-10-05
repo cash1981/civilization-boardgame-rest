@@ -2,21 +2,20 @@ package no.asgari.civilization.server.resource;
 
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
+import io.dropwizard.auth.Auth;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.GameAction;
-import no.asgari.civilization.server.application.CivCache;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Undo;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.mongojack.JacksonDBCollection;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.CookieParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -53,6 +52,7 @@ public class GameResource {
     /**
      * This is the default method for this resource.
      * It will return all active games
+     *
      * @return
      */
     @GET
@@ -62,64 +62,38 @@ public class GameResource {
         GameAction gameAction = new GameAction(pbfCollection, playerCollection);
         List<PbfDTO> games = gameAction.getAllActiveGames(pbfCollection);
 
-        return  Response.ok()
+        return Response.ok()
                 .entity(games)
                 .build();
     }
 
     @POST
     @Timed
-    public Response createGame(@Valid CreateNewGameDTO dto, @CookieParam("username") String username, @CookieParam("token") String token) {
+    public Response createGame(@Valid CreateNewGameDTO dto, @Auth Player player) {
         Preconditions.checkNotNull(dto);
-
-        if(!hasCookies(username, token)) {
-            return Response.temporaryRedirect(
-                    uriInfo.getBaseUriBuilder().path("/login").build())
-                    .build();
-        }
-
-        boolean isLoggedIn = CivCache.getInstance().findUser(username, token);
-        if(!isLoggedIn) {
-            return Response.status(Response.Status.FORBIDDEN)
-                    .location(uriInfo.getBaseUriBuilder().path("/login").build())
-                    .build();
-        }
+        Preconditions.checkNotNull(player);
 
         log.info("Creating game " + dto);
         GameAction gameAction = new GameAction(pbfCollection, playerCollection);
         String id = gameAction.createNewGame(dto);
         return Response.status(Response.Status.CREATED)
                 .location(uriInfo.getAbsolutePathBuilder().path(id).build())
+                .entity(id)
                 .build();
     }
 
     @PUT
     @Timed
     @Path("/{pbfId}")
-    //TODO Implement Auth. For now its done manually with cookies and token
-    public Response joinGame(@PathParam("pbfId") String pbfId, @CookieParam("username") String username, @CookieParam("token") String token) {
-        if(!hasCookies(username, token)) {
-            return Response.temporaryRedirect(
-                    uriInfo.getBaseUriBuilder().path("/login").build())
-                    .build();
-        }
-
-        boolean isLoggedIn = CivCache.getInstance().findUser(username, token);
-        if(!isLoggedIn) {
-            return Response.status(Response.Status.FORBIDDEN)
-                    .location(uriInfo.getBaseUriBuilder().path("/login").build())
-                    .build();
-        }
+    public Response joinGame(@NotEmpty @PathParam("pbfId") String pbfId, @Auth Player player) {
+        Preconditions.checkNotNull(pbfId);
+        Preconditions.checkNotNull(player);
 
         GameAction gameAction = new GameAction(pbfCollection, playerCollection);
-        gameAction.joinGame(pbfId, username);
+        gameAction.joinGame(pbfId, player.getUsername());
         return Response.ok()
-                .location(uriInfo.getAbsolutePath())
+                .location(uriInfo.getAbsolutePathBuilder().path(pbfId).build())
                 .build();
-    }
-
-    private boolean hasCookies(String username, String token) {
-        return !(Strings.isNullOrEmpty(username) || Strings.isNullOrEmpty(token));
     }
 
 }

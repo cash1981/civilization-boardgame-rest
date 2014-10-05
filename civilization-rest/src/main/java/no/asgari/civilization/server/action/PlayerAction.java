@@ -39,8 +39,13 @@ public class PlayerAction {
      */
     public String createPlayer(PlayerDTO playerDTO) throws PlayerExistException {
         Preconditions.checkNotNull(playerDTO);
+        Preconditions.checkNotNull(playerDTO.getUsername());
+        Preconditions.checkNotNull(playerDTO.getEmail());
+        Preconditions.checkNotNull(playerDTO.getPassword());
+        Preconditions.checkNotNull(playerDTO.getPasswordCopy());
+
         if(!playerDTO.getPassword().equals(playerDTO.getPasswordCopy())) {
-            throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN)
+            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
                                             .entity("Passwords are not identical")
                                             .build());
         }

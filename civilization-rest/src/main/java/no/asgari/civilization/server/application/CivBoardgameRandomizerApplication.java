@@ -1,7 +1,5 @@
 package no.asgari.civilization.server.application;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.RemovalListener;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
@@ -11,7 +9,6 @@ import io.dropwizard.java8.auth.basic.BasicAuthProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import lombok.extern.log4j.Log4j;
-import no.asgari.civilization.server.action.LogListener;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
@@ -22,9 +19,6 @@ import no.asgari.civilization.server.resource.GameResource;
 import no.asgari.civilization.server.resource.LoginResource;
 import no.asgari.civilization.server.resource.PlayerResource;
 import org.mongojack.JacksonDBCollection;
-
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 @Log4j
 @SuppressWarnings("unchecked")
@@ -67,14 +61,8 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
         //Authentication
         environment.jersey().register(new BasicAuthProvider<>(new CivAuthenticator(playerCollection), "civilization"));
 
-        CivCache.getInstance().getEventBus().register(new LogListener(privateLogCollection, publicLogCollection));
-
-        CivCache.getInstance(CacheBuilder.<String, UUID>newBuilder()
-                .initialCapacity(100)
-                .expireAfterWrite(5, TimeUnit.HOURS)
-                .removalListener((RemovalListener) listener -> log.debug("Removing username " + listener.getKey() + " from cache"))
-                .build());
-
+        // TODO Fix eventbus
+        // CivSingleton.getInstance().getEventBus().register(new LogListener(privateLogCollection, publicLogCollection));
     }
 
     private void createIndexForPlayer(JacksonDBCollection<Player, String> playerCollection) {

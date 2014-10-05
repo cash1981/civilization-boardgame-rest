@@ -6,9 +6,9 @@ import javax.ws.rs.core.Response;
 
 public class PlayerExistException extends WebApplicationException {
     public PlayerExistException() {
-        super(Response.status(Response.Status.FORBIDDEN)
+        super(Response.status(Response.Status.BAD_REQUEST)
                 .entity("Player already exists")
-                .type(MediaType.TEXT_PLAIN)
+                .type(MediaType.APPLICATION_JSON)
                 .build());
     }
 

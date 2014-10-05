@@ -3,7 +3,7 @@ package no.asgari.civilization.server.eventbus;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 import no.asgari.civilization.server.action.DrawAction;
-import no.asgari.civilization.server.application.CivCache;
+import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.model.Artillery;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.PublicLog;
@@ -24,7 +24,7 @@ public class EventBusTest extends AbstractMongoDBTest {
         pl.setPbfId(pbfId);
         pl.setUsername("cash1981");
         pl.createAndSetLog();
-        CivCache.getInstance().postToEventBus(pl);
+        CivSingleton.getInstance().postToEventBus(pl);
 
         long afterInsert = publicLogCollection.count();
         assertThat(beforeInsert).isLessThan(afterInsert);

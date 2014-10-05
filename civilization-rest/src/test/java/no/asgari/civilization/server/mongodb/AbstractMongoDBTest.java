@@ -16,7 +16,7 @@ import no.asgari.civilization.server.action.LogListener;
 import no.asgari.civilization.server.action.PBFAction;
 import no.asgari.civilization.server.application.CivAuthenticator;
 import no.asgari.civilization.server.application.CivBoardGameRandomizerConfiguration;
-import no.asgari.civilization.server.application.CivCache;
+import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
@@ -28,6 +28,8 @@ import no.asgari.civilization.server.resource.GameResource;
 import no.asgari.civilization.server.resource.LoginResource;
 import no.asgari.civilization.server.resource.PlayerResource;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.eclipse.jetty.util.B64Code;
+import org.eclipse.jetty.util.StringUtil;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.mongojack.JacksonDBCollection;
@@ -78,7 +80,7 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         createAnotherPBF();
         playerId = playerCollection.findOne().getId();
 
-        CivCache.getInstance().getEventBus().register(new LogListener(privateLogCollection, publicLogCollection));
+        CivSingleton.getInstance().getEventBus().register(new LogListener(privateLogCollection, publicLogCollection));
     }
 
     @Override
@@ -89,6 +91,7 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         config.getSingletons().add(new LoginResource(playerCollection, pbfCollection));
         config.getSingletons().add(new PlayerResource(playerCollection, pbfCollection));
         config.getSingletons().add(new GameResource(pbfCollection, playerCollection, drawCollection, undoCollection));
+
         return new LowLevelAppDescriptor.Builder(config).build();
     }
 
@@ -99,6 +102,10 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         }
 
         //CivCache.getInstance().getEventBus().unregister(new LogListener(privateLogCollection, publicLogCollection));
+    }
+
+    protected static String getUsernameAndPassEncoded() {
+        return B64Code.encode("cash1981" + ":" + "foo", StringUtil.__ISO_8859_1);
     }
 
     private static void createNewPBFGame() throws IOException {

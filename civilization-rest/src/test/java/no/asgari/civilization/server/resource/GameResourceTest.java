@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
 
 public class GameResourceTest extends MongoDBBaseTest {
 
@@ -67,7 +66,8 @@ public class GameResourceTest extends MongoDBBaseTest {
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED_201);
         URI location = response.getLocation();
-        assertTrue(location.getPath().matches(".*civilization/game/.*"));
+        final String id = response.getEntity(String.class);
+        assertThat(location.getPath()).isEqualTo("/game/" + id);
     }
 
     @Test
