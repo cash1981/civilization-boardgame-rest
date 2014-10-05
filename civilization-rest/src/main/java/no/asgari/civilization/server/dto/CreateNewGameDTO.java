@@ -17,6 +17,7 @@ public class CreateNewGameDTO {
 
     @NotNull
     private GameType type;
+
     @NotBlank
     private String username;
 

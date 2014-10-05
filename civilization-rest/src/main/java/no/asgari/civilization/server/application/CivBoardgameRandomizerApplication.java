@@ -61,11 +61,11 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
 
         //Resources
         environment.jersey().register(new GameResource(pbfCollection, playerCollection, drawCollection, undoActionCollection));
-        environment.jersey().register(new LoginResource(playerCollection));
+        environment.jersey().register(new LoginResource(playerCollection, pbfCollection));
         environment.jersey().register(new PlayerResource(playerCollection, pbfCollection));
 
         //Authentication
-        environment.jersey().register(new BasicAuthProvider<>(new SimpleAuthenticator(playerCollection), "civilization"));
+        environment.jersey().register(new BasicAuthProvider<>(new CivAuthenticator(playerCollection), "civilization"));
 
         CivCache.getInstance().getEventBus().register(new LogListener(privateLogCollection, publicLogCollection));
 

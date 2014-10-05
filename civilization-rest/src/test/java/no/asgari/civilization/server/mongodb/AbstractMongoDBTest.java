@@ -1,12 +1,20 @@
 package no.asgari.civilization.server.mongodb;
 
+import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
-import no.asgari.civilization.server.action.LogListener;
+import com.sun.jersey.test.framework.AppDescriptor;
 import com.sun.jersey.test.framework.JerseyTest;
+import com.sun.jersey.test.framework.LowLevelAppDescriptor;
+import io.dropwizard.auth.basic.BasicCredentials;
+import io.dropwizard.java8.auth.Authenticator;
+import io.dropwizard.java8.auth.basic.BasicAuthProvider;
+import io.dropwizard.jersey.DropwizardResourceConfig;
+import no.asgari.civilization.server.action.LogListener;
 import no.asgari.civilization.server.action.PBFAction;
+import no.asgari.civilization.server.application.CivAuthenticator;
 import no.asgari.civilization.server.application.CivBoardGameRandomizerConfiguration;
 import no.asgari.civilization.server.application.CivCache;
 import no.asgari.civilization.server.model.Draw;
@@ -16,6 +24,9 @@ import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.model.PrivateLog;
 import no.asgari.civilization.server.model.PublicLog;
 import no.asgari.civilization.server.model.Undo;
+import no.asgari.civilization.server.resource.GameResource;
+import no.asgari.civilization.server.resource.LoginResource;
+import no.asgari.civilization.server.resource.PlayerResource;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -68,6 +79,17 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         playerId = playerCollection.findOne().getId();
 
         CivCache.getInstance().getEventBus().register(new LogListener(privateLogCollection, publicLogCollection));
+    }
+
+    @Override
+    protected AppDescriptor configure() {
+        final DropwizardResourceConfig config = DropwizardResourceConfig.forTesting(new MetricRegistry());
+        final Authenticator<BasicCredentials, Player> authenticator = new CivAuthenticator(playerCollection);
+        config.getSingletons().add(new BasicAuthProvider<>(authenticator, "civilization"));
+        config.getSingletons().add(new LoginResource(playerCollection, pbfCollection));
+        config.getSingletons().add(new PlayerResource(playerCollection, pbfCollection));
+        config.getSingletons().add(new GameResource(pbfCollection, playerCollection, drawCollection, undoCollection));
+        return new LowLevelAppDescriptor.Builder(config).build();
     }
 
     @AfterClass

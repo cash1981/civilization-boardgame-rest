@@ -5,9 +5,10 @@ import io.dropwizard.auth.Auth;
 import io.dropwizard.auth.basic.BasicCredentials;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.PlayerAction;
+import no.asgari.civilization.server.application.CivAuthenticator;
 import no.asgari.civilization.server.application.CivCache;
-import no.asgari.civilization.server.application.SimpleAuthenticator;
 import no.asgari.civilization.server.dto.PlayerDTO;
+import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.mongojack.JacksonDBCollection;
@@ -37,12 +38,14 @@ import java.util.Optional;
 public class LoginResource {
 
     private final JacksonDBCollection<Player, String> playerCollection;
+    private final JacksonDBCollection<PBF, String> pbfCollection;
 
     @Context
     private UriInfo uriInfo;
 
-    public LoginResource(JacksonDBCollection<Player, String> playerCollection) {
+    public LoginResource(JacksonDBCollection<Player, String> playerCollection, JacksonDBCollection<PBF, String> pbfCollection) {
         this.playerCollection = playerCollection;
+        this.pbfCollection = pbfCollection;
     }
 
     @POST
@@ -52,7 +55,7 @@ public class LoginResource {
         Preconditions.checkNotNull(username);
         Preconditions.checkNotNull(password);
 
-        SimpleAuthenticator auth = new SimpleAuthenticator(playerCollection);
+        CivAuthenticator auth = new CivAuthenticator(playerCollection);
         Optional<Player> playerOptional = auth.authenticate(new BasicCredentials(username, password));
         if (playerOptional.isPresent()) {
             Player player = playerOptional.get();

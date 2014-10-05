@@ -1,7 +1,6 @@
 package no.asgari.civilization.server.resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import no.asgari.civilization.server.application.CivBoardGameRandomizerConfiguration;
@@ -29,13 +28,11 @@ public class GameResourceTest extends MongoDBBaseTest {
     @ClassRule
     public static final DropwizardAppRule<CivBoardGameRandomizerConfiguration> RULE =
             new DropwizardAppRule<CivBoardGameRandomizerConfiguration>(CivBoardgameRandomizerApplication.class, "src/main/resources/config.yml");
-    private static final String BASE_URL = "http://localhost:%d/civilization";
+    private static final String BASE_URL = "http://localhost:%d";
 
     @Test
     public void shouldGetActiveGames() {
-        Client client = Client.create();
-
-        ClientResponse response = client.resource(
+        ClientResponse response = client().resource(
                 UriBuilder.fromPath(String.format(BASE_URL + "/game", RULE.getLocalPort()))
                         .build())
                 .type(MediaType.APPLICATION_JSON)
@@ -51,8 +48,6 @@ public class GameResourceTest extends MongoDBBaseTest {
         List<NewCookie> cookies = performLogin();
         assertThat(cookies.size()).isEqualTo(2);
 
-        Client client = Client.create();
-
         CreateNewGameDTO dto = new CreateNewGameDTO();
         dto.setNumOfPlayers(4);
         dto.setUsername("cash1981");
@@ -63,7 +58,7 @@ public class GameResourceTest extends MongoDBBaseTest {
         String dtoAsJSon = mapper.writeValueAsString(dto);
 
         URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/game", RULE.getLocalPort())).build();
-        ClientResponse response = client.resource(uri)
+        ClientResponse response = client().resource(uri)
                 .type(MediaType.APPLICATION_JSON)
                 .cookie(cookies.get(0))
                 .cookie(cookies.get(1))
@@ -80,8 +75,6 @@ public class GameResourceTest extends MongoDBBaseTest {
         List<NewCookie> cookies = performLogin();
         assertThat(cookies.size()).isEqualTo(2);
 
-        Client client = Client.create();
-
         CreateNewGameDTO dto = new CreateNewGameDTO();
         dto.setNumOfPlayers(4);
         dto.setUsername(null);
@@ -92,19 +85,18 @@ public class GameResourceTest extends MongoDBBaseTest {
         String dtoAsJSon = mapper.writeValueAsString(dto);
 
         URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/game", RULE.getLocalPort())).build();
-        ClientResponse response = client.resource(uri)
+        ClientResponse response = client().resource(uri)
                 .type(MediaType.APPLICATION_JSON)
                 .cookie(cookies.get(0))
                 .cookie(cookies.get(1))
                 .entity(dtoAsJSon)
                 .post(ClientResponse.class);
 
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY_422);
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST_400);
     }
 
     private List<NewCookie> performLogin() {
-        Client client = Client.create();
-        ClientResponse response = client.resource(
+        ClientResponse response = client().resource(
                 UriBuilder.fromPath(String.format(BASE_URL + "/login", RULE.getLocalPort()))
                         .queryParam("username", "cash1981")
                         .queryParam("password", "foo")
