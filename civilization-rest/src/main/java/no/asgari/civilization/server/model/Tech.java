@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Data
 @NoArgsConstructor
-public class Tech implements Item, Level {
+public class Tech implements Item, Level, Comparable<Tech> {
     @JsonIgnore
     public static final int LEVEL_1 = 1;
     @JsonIgnore
@@ -59,5 +59,14 @@ public class Tech implements Item, Level {
     @Override
     public String getType() {
         return null;
+    }
+
+    @Override
+    public int compareTo(Tech o) {
+        int v = Integer.valueOf(level).compareTo(o.getLevel());
+        if(v != 0) return v;
+
+        return name.compareTo(o.getName());
+
     }
 }

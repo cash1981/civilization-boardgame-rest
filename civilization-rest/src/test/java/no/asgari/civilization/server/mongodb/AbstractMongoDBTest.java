@@ -2,6 +2,7 @@ package no.asgari.civilization.server.mongodb;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.common.cache.CacheBuilderSpec;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
@@ -9,7 +10,7 @@ import com.sun.jersey.test.framework.AppDescriptor;
 import com.sun.jersey.test.framework.JerseyTest;
 import com.sun.jersey.test.framework.LowLevelAppDescriptor;
 import io.dropwizard.auth.basic.BasicCredentials;
-import io.dropwizard.java8.auth.Authenticator;
+import io.dropwizard.java8.auth.CachingAuthenticator;
 import io.dropwizard.java8.auth.basic.BasicAuthProvider;
 import io.dropwizard.jersey.DropwizardResourceConfig;
 import no.asgari.civilization.server.action.LogListener;
@@ -86,7 +87,10 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
     @Override
     protected AppDescriptor configure() {
         final DropwizardResourceConfig config = DropwizardResourceConfig.forTesting(new MetricRegistry());
-        final Authenticator<BasicCredentials, Player> authenticator = new CivAuthenticator(playerCollection);
+        final CachingAuthenticator<BasicCredentials, Player> authenticator =
+                new CachingAuthenticator<>(new MetricRegistry(),
+                                           new CivAuthenticator(playerCollection),
+                                           CacheBuilderSpec.parse("maximumSize=1"));
         config.getSingletons().add(new BasicAuthProvider<>(authenticator, "civilization"));
         config.getSingletons().add(new LoginResource(playerCollection, pbfCollection));
         config.getSingletons().add(new PlayerResource(playerCollection, pbfCollection));
@@ -105,7 +109,7 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
     }
 
     protected static String getUsernameAndPassEncoded() {
-        return B64Code.encode("cash1981" + ":" + "foo", StringUtil.__ISO_8859_1);
+        return "Basic " + B64Code.encode("cash1981" + ":" + "foo", StringUtil.__ISO_8859_1);
     }
 
     private static void createNewPBFGame() throws IOException {

@@ -1,5 +1,6 @@
 package no.asgari.civilization.server.action;
 
+import com.google.common.base.Preconditions;
 import com.mongodb.BasicDBObject;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
@@ -11,6 +12,7 @@ import no.asgari.civilization.server.excel.UnitReader;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
+import no.asgari.civilization.server.model.Tech;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
@@ -72,6 +74,7 @@ public class GameAction {
         pbf.getWonders().addAll(items.ancientWonders);
         pbf.getWonders().addAll(items.medievalWonders);
         pbf.getWonders().addAll(items.modernWonders);
+        pbf.getTechs().addAll(items.allTechs);
 
         WriteResult<PBF, String> pbfInsert = pbfCollection.insert(pbf);
         pbf.setId(pbfInsert.getSavedId());
@@ -151,5 +154,23 @@ public class GameAction {
         pbf.getPlayers().add(playerhand);
 
         pbfCollection.updateById(pbf.getId(), pbf);
+    }
+
+    public List<Tech> getAllTechs(String pbfId) {
+        Preconditions.checkNotNull(pbfId);
+        return findPBFById(pbfId);
+    }
+
+    private List<Tech> findPBFById(String pbfId) {
+        try {
+            final PBF pbf = pbfCollection.findOneById(pbfId);
+            return pbf.getTechs();
+        } catch(Exception ex) {
+            log.error("Couldn't find pbf");
+            Response badReq = Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Cannot find pbf")
+                    .build();
+            throw new WebApplicationException(badReq);
+        }
     }
 }

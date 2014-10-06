@@ -10,6 +10,7 @@ import no.asgari.civilization.server.dto.PbfDTO;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
+import no.asgari.civilization.server.model.Tech;
 import no.asgari.civilization.server.model.Undo;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.mongojack.JacksonDBCollection;
@@ -93,6 +94,25 @@ public class GameResource {
         gameAction.joinGame(pbfId, player.getUsername());
         return Response.ok()
                 .location(uriInfo.getAbsolutePathBuilder().path(pbfId).build())
+                .build();
+    }
+
+    /**
+     * Gets all the available techs
+     * @param pbfId - The PBF
+     * @param player - The Authenticated player
+     * @return - Response ok with a list of techs
+     */
+    @GET
+    @Timed
+    @Path("/{pbfId}/techs")
+    //TODO test
+    public Response chooseTech(@NotEmpty @PathParam("pbfId") String pbfId, @Auth Player player) {
+        GameAction gameAction = new GameAction(pbfCollection, playerCollection);
+        List<Tech> techs = gameAction.getAllTechs(pbfId);
+        return Response.ok()
+                .location(uriInfo.getAbsolutePath())
+                .entity(techs)
                 .build();
     }
 

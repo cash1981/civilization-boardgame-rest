@@ -34,7 +34,8 @@ public class ItemReaderTest {
         assertThat(itemReader.ancientWonders).isNotEmpty();
         assertThat(itemReader.shuffledTiles).isNotEmpty();
         assertThat(itemReader.shuffledCityStates).isNotEmpty();
-        assertThat(itemReader.shuffledTechs).isNotEmpty();
-        assertThat(itemReader.shuffledTechs).contains(Tech.SPACE_FLIGHT);
+        assertThat(itemReader.allTechs).isNotEmpty();
+        assertThat(itemReader.allTechs).contains(Tech.SPACE_FLIGHT);
+        assertThat(itemReader.allTechs).isSorted();
     }
 }

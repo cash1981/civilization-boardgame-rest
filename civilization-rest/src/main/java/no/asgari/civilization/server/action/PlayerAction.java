@@ -4,10 +4,13 @@ import com.google.common.base.Preconditions;
 import com.mongodb.BasicDBObject;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
+import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.exception.PlayerExistException;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
+import no.asgari.civilization.server.model.Playerhand;
+import no.asgari.civilization.server.model.Tech;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
@@ -18,6 +21,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Log4j
@@ -85,10 +89,43 @@ public class PlayerAction {
                 .map(this::getPBF)
                 .filter(PBF::isActive)
                 .collect(Collectors.toList());
+    }
 
+    /**
+     * Choose a tech for player and store back in the pbf collection
+     * @param pbfId - The pbf id
+     * @param item - The tech
+     * @param username - The username of player
+     */
+    public void chooseTech(String pbfId, ItemDTO item, String username) {
+        Preconditions.checkNotNull(pbfId);
+        Preconditions.checkNotNull(item);
+        Preconditions.checkNotNull(item.getName());
+        final PBF pbf = getPBF(pbfId);
+        final Optional<Tech> tech = pbf.getTechs().stream()
+                .filter(techToFind -> techToFind.getName().equals(item.getName()))
+                .findFirst();
+
+        final Tech chosenTech = tech.orElseThrow(cannotFindItem());
+        final Playerhand playerhand = pbf.getPlayers()
+                .stream().filter(p -> p.getUsername().equals(username))
+                .findFirst()
+                .orElseThrow(cannotFindItem());
+
+        playerhand.getTechsChosen().add(chosenTech);
+
+        pbfCollection.updateById(pbf.getId(), pbf);
+        log.debug("Player " + username + " chose tech " + chosenTech.getName());
+    }
+
+    private Supplier<WebApplicationException> cannotFindItem() {
+        throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+                .entity("Could not find item")
+                .build());
     }
 
     private PBF getPBF(String pbfId) {
         return pbfCollection.findOneById(pbfId);
     }
+
 }

@@ -22,6 +22,12 @@ public class Playerhand {
     @NotBlank
     private String playerId;
 
+    //Only one starting player each turn
+    private boolean startingPlayer = false;
+
     private List<Item> items = Lists.newArrayList();
     private List<Unit> units = Lists.newArrayList();
+    private List<Tech> techsChosen = Lists.newArrayList();
+
+
 }

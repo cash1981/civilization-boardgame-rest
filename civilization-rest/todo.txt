@@ -1,0 +1,25 @@
+- Create revealing; possibility to reveal items/units/techs
+- Choose Techs
+	-- Techs will not be revealed until all players have pushed submit/reveal button (Same functionality as voting)
+- Choose starting player
+	-- Should be randomly chosen, only when all players have joined
+	-- All drawing is disabled until all players have joined
+	-- Should be triggered when a player joins a game
+- End of turn button which will disable drawing for players
+	-- Each this happens, system will enable for next player in line
+- Send player items
+	-- Allowing players to send Huts, Villages, Culture cards privately to other players
+	-- That player should get the item sent, plus logged both publicly that trading has taken place, plus privatly
+- No players should be able to draw items when it is not their turn
+	-- Except, they should be able to send stuff to other players, and choosing techs, because these are done simultanously, or if it is too difficult, then everything is turn based
+- Logging
+	-- Would be nice to get eventbus for private and public logging so that their will be loose coupling
+
+Nice to have
+- Chat with scrolling capabilites.
+	-- Websocket?
+- Each item can have path to a picture so that client can show it
+- Create a battlefield, for now only use the reveal option
+- Option to leave a game
+	-- Haven't thought of all the details about this
+

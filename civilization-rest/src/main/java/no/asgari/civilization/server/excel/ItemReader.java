@@ -42,7 +42,7 @@ public class ItemReader {
     public LinkedList<Wonder> ancientWonders;
     public LinkedList<Tile> shuffledTiles;
     public LinkedList<Citystate> shuffledCityStates;
-    public LinkedList<Tech> shuffledTechs;
+    public List<Tech> allTechs; //Not linked list because all players can choose the same tech
     
     static final Predicate<Cell> notEmptyPredicate = cell -> !cell.toString().isEmpty();
     static final Predicate<Cell> notRandomPredicate = cell -> !cell.toString().equals("RAND()");
@@ -76,7 +76,7 @@ public class ItemReader {
             shuffledCityStates = (LinkedList<Citystate>) getShuffledCityStates(wb);
             shuffledTiles = (LinkedList<Tile>) getShuffledTilesFromExcel(wb);
             extractShuffledWondersFromExcel(wb);
-            shuffledTechs = (LinkedList<Tech>) getShuffledTechsFromExcel(wb);
+            allTechs = getTechsFromExcel(wb);
         }
     }
 
@@ -376,7 +376,7 @@ public class ItemReader {
         return new LinkedList<>(villages);
     }
 
-    private LinkedList<? extends Item> getShuffledTechsFromExcel(Workbook wb) {
+    private List<Tech> getTechsFromExcel(Workbook wb) {
         //Start with level 1 techs
         Sheet sheet = wb.getSheet(SheetName.LEVEL_1_TECH.toString());
         List<Cell> level1Cells = new ArrayList<>();
@@ -389,7 +389,6 @@ public class ItemReader {
                 .filter(columnIndexZeroPredicate)
                 .map(tech -> new Tech(tech.toString(), Tech.LEVEL_1))
                 .collect(Collectors.toList());
-        Collections.shuffle(level1Techs);
 
         sheet = wb.getSheet(SheetName.LEVEL_2_TECH.toString());
         List<Cell> level2Cells = new ArrayList<>();
@@ -400,9 +399,8 @@ public class ItemReader {
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
-                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_1))
+                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_2))
                 .collect(Collectors.toList());
-        Collections.shuffle(level2Techs);
 
         sheet = wb.getSheet(SheetName.LEVEL_3_TECH.toString());
         List<Cell> level3Cells = new ArrayList<>();
@@ -413,11 +411,10 @@ public class ItemReader {
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
-                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_1))
+                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_3))
                 .collect(Collectors.toList());
-        Collections.shuffle(level3Techs);
 
-        sheet = wb.getSheet(SheetName.LEVEL_3_TECH.toString());
+        sheet = wb.getSheet(SheetName.LEVEL_4_TECH.toString());
         List<Cell> level4Cells = new ArrayList<>();
         sheet.forEach(row -> row.forEach(level4Cells::add));
 
@@ -426,15 +423,15 @@ public class ItemReader {
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
-                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_1))
+                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_4))
                 .collect(Collectors.toList());
-        Collections.shuffle(level4Techs);
 
-        LinkedList<Tech> allTechs = new LinkedList<>(level1Techs);
+        List<Tech> allTechs = new ArrayList<>(level1Techs);
         allTechs.addAll(level2Techs);
         allTechs.addAll(level3Techs);
         allTechs.addAll(level4Techs);
         allTechs.add(Tech.SPACE_FLIGHT);
+        Collections.sort(allTechs);
 
         return allTechs;
     }

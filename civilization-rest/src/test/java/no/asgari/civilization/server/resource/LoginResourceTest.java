@@ -3,13 +3,14 @@ package no.asgari.civilization.server.resource;
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.cache.CacheBuilderSpec;
 import com.mongodb.BasicDBObject;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.test.framework.AppDescriptor;
 import com.sun.jersey.test.framework.LowLevelAppDescriptor;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.auth.basic.BasicCredentials;
-import io.dropwizard.java8.auth.Authenticator;
+import io.dropwizard.java8.auth.CachingAuthenticator;
 import io.dropwizard.java8.auth.basic.BasicAuthProvider;
 import io.dropwizard.jersey.DropwizardResourceConfig;
 import io.dropwizard.testing.junit.DropwizardAppRule;
@@ -59,7 +60,11 @@ public class LoginResourceTest extends AbstractMongoDBTest {
     @Override
     protected AppDescriptor configure() {
         final DropwizardResourceConfig config = DropwizardResourceConfig.forTesting(new MetricRegistry());
-        final Authenticator<BasicCredentials, Player> authenticator = new CivAuthenticator(playerCollection);
+        //final Authenticator<BasicCredentials, Player> authenticator = new CivAuthenticator(playerCollection);
+        final CachingAuthenticator<BasicCredentials, Player> authenticator =
+        new CachingAuthenticator<>(new MetricRegistry(), new CivAuthenticator(playerCollection),
+                CacheBuilderSpec.parse("maximumSize=1"));
+
         config.getSingletons().add(new BasicAuthProvider<>(authenticator, "civilization"));
         config.getSingletons().add(new ExampleResource());
         config.getSingletons().add(new LoginResource(playerCollection, pbfCollection));
@@ -74,7 +79,7 @@ public class LoginResourceTest extends AbstractMongoDBTest {
         ObjectMapper mapper = new ObjectMapper();
 
         assertThat(client().resource("/test/")
-                .header(HttpHeaders.AUTHORIZATION, "Basic " + getUsernameAndPassEncoded())
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .entity(mapper.writeValueAsString(player))
                 .type(MediaType.APPLICATION_JSON)
                 .get(String.class))

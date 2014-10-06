@@ -13,8 +13,8 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.ArrayList;
@@ -44,9 +44,6 @@ public class GameResourceTest extends MongoDBBaseTest {
 
     @Test
     public void createGame() throws Exception {
-        List<NewCookie> cookies = performLogin();
-        assertThat(cookies.size()).isEqualTo(2);
-
         CreateNewGameDTO dto = new CreateNewGameDTO();
         dto.setNumOfPlayers(4);
         dto.setUsername("cash1981");
@@ -59,8 +56,7 @@ public class GameResourceTest extends MongoDBBaseTest {
         URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/game", RULE.getLocalPort())).build();
         ClientResponse response = client().resource(uri)
                 .type(MediaType.APPLICATION_JSON)
-                .cookie(cookies.get(0))
-                .cookie(cookies.get(1))
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .entity(dtoAsJSon)
                 .post(ClientResponse.class);
 
@@ -72,9 +68,6 @@ public class GameResourceTest extends MongoDBBaseTest {
 
     @Test
     public void createGameShouldFailBecauseUsernameIsMissing() throws Exception {
-        List<NewCookie> cookies = performLogin();
-        assertThat(cookies.size()).isEqualTo(2);
-
         CreateNewGameDTO dto = new CreateNewGameDTO();
         dto.setNumOfPlayers(4);
         dto.setUsername(null);
@@ -87,23 +80,14 @@ public class GameResourceTest extends MongoDBBaseTest {
         URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/game", RULE.getLocalPort())).build();
         ClientResponse response = client().resource(uri)
                 .type(MediaType.APPLICATION_JSON)
-                .cookie(cookies.get(0))
-                .cookie(cookies.get(1))
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .entity(dtoAsJSon)
                 .post(ClientResponse.class);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST_400);
     }
 
-    private List<NewCookie> performLogin() {
-        ClientResponse response = client().resource(
-                UriBuilder.fromPath(String.format(BASE_URL + "/login", RULE.getLocalPort()))
-                        .queryParam("username", "cash1981")
-                        .queryParam("password", "foo")
-                        .build()
-        )
-                .type(MediaType.TEXT_PLAIN)
-                .post(ClientResponse.class);
-        return response.getCookies();
-    }
+
+
+
 }

@@ -73,8 +73,6 @@
                 <version>${mongo-driver.version}</version>
             </dependency>
         </dependencies>
-
-
     </dependencyManagement>
 
     <dependencies>
@@ -111,25 +109,20 @@
             <version>${apache-poi.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>17.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
             <version>${mongo-driver.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mongojack</groupId>
+            <artifactId>mongojack</artifactId>
+            <version>2.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.14.6</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mongojack</groupId>
-            <artifactId>mongojack</artifactId>
-            <version>2.1.0</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
