@@ -23,6 +23,9 @@ public class Tech implements Item, Level {
     @JsonIgnore
     public static final int LEVEL_5 = 5;
 
+    @JsonIgnore
+    public static final Tech SPACE_FLIGHT = new Tech("Space Flight", LEVEL_5);
+
     @NotEmpty
     private String name;
     private String type;

@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-//TODO Make this file more generic by looping through all the sheets
+//TODO Nice to have: Make this reader more generic by looping through all the sheets dynamically
 public class ItemReader {
     public LinkedList<Civ> shuffledCivs;
     public LinkedList<CultureI> shuffledCultureI;
@@ -389,40 +389,54 @@ public class ItemReader {
                 .filter(columnIndexZeroPredicate)
                 .map(tech -> new Tech(tech.toString(), Tech.LEVEL_1))
                 .collect(Collectors.toList());
+        Collections.shuffle(level1Techs);
 
         sheet = wb.getSheet(SheetName.LEVEL_2_TECH.toString());
         List<Cell> level2Cells = new ArrayList<>();
         sheet.forEach(row -> row.forEach(level2Cells::add));
 
-        List<Tech> level1Techs = level1Cells.stream()
+        List<Tech> level2Techs = level2Cells.stream()
                 .filter(notEmptyPredicate)
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
                 .map(tech -> new Tech(tech.toString(), Tech.LEVEL_1))
                 .collect(Collectors.toList());
+        Collections.shuffle(level2Techs);
 
-        List<Tech> level1Techs = level1Cells.stream()
+        sheet = wb.getSheet(SheetName.LEVEL_3_TECH.toString());
+        List<Cell> level3Cells = new ArrayList<>();
+        sheet.forEach(row -> row.forEach(level3Cells::add));
+
+        List<Tech> level3Techs = level3Cells.stream()
                 .filter(notEmptyPredicate)
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
                 .map(tech -> new Tech(tech.toString(), Tech.LEVEL_1))
                 .collect(Collectors.toList());
+        Collections.shuffle(level3Techs);
 
-        List<Tech> level1Techs = level1Cells.stream()
+        sheet = wb.getSheet(SheetName.LEVEL_3_TECH.toString());
+        List<Cell> level4Cells = new ArrayList<>();
+        sheet.forEach(row -> row.forEach(level4Cells::add));
+
+        List<Tech> level4Techs = level4Cells.stream()
                 .filter(notEmptyPredicate)
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
                 .map(tech -> new Tech(tech.toString(), Tech.LEVEL_1))
                 .collect(Collectors.toList());
+        Collections.shuffle(level4Techs);
 
+        LinkedList<Tech> allTechs = new LinkedList<>(level1Techs);
+        allTechs.addAll(level2Techs);
+        allTechs.addAll(level3Techs);
+        allTechs.addAll(level4Techs);
+        allTechs.add(Tech.SPACE_FLIGHT);
 
-
-        return null;
+        return allTechs;
     }
-
-
 
 }

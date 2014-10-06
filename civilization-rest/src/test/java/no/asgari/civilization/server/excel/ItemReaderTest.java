@@ -1,6 +1,7 @@
 package no.asgari.civilization.server.excel;
 
 import no.asgari.civilization.server.model.GameType;
+import no.asgari.civilization.server.model.Tech;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -33,5 +34,7 @@ public class ItemReaderTest {
         assertThat(itemReader.ancientWonders).isNotEmpty();
         assertThat(itemReader.shuffledTiles).isNotEmpty();
         assertThat(itemReader.shuffledCityStates).isNotEmpty();
+        assertThat(itemReader.shuffledTechs).isNotEmpty();
+        assertThat(itemReader.shuffledTechs).contains(Tech.SPACE_FLIGHT);
     }
 }
