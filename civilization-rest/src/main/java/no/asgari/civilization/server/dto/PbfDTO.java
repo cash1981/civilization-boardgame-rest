@@ -17,7 +17,6 @@ import java.util.List;
 
 @Data
 @JsonRootName("pbfDTO")
-@XmlRootElement
 public class PbfDTO {
     @NotEmpty
     private String id;

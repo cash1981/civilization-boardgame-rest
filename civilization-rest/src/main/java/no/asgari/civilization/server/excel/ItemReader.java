@@ -43,7 +43,7 @@ public class ItemReader {
     public LinkedList<Tile> shuffledTiles;
     public LinkedList<Citystate> shuffledCityStates;
     public List<Tech> allTechs; //Not linked list because all players can choose the same tech
-    
+
     static final Predicate<Cell> notEmptyPredicate = cell -> !cell.toString().isEmpty();
     static final Predicate<Cell> notRandomPredicate = cell -> !cell.toString().equals("RAND()");
     static final Predicate<Cell> rowNotZeroPredicate = cell -> cell.getRow().getRowNum() != 0;
@@ -60,7 +60,7 @@ public class ItemReader {
             case FAF:
                 throw new IOException("FAF not supported yet");
             case BASE:
-                throw new IOException("FAF not supported yet");
+                throw new IOException("Base is not supported yet");
             default:
                 throw new IOException("For now we only support WAW");
         }
@@ -376,6 +376,11 @@ public class ItemReader {
         return new LinkedList<>(villages);
     }
 
+    /**
+     * Tech cards do not need to be shuffled as the player is supposed to pick the card they want
+     * @param wb
+     * @return
+     */
     private List<Tech> getTechsFromExcel(Workbook wb) {
         //Start with level 1 techs
         Sheet sheet = wb.getSheet(SheetName.LEVEL_1_TECH.toString());
@@ -433,7 +438,6 @@ public class ItemReader {
         allTechs.add(Tech.SPACE_FLIGHT);
         Collections.sort(allTechs);
 
-        return allTechs;
+        return level1Techs;
     }
-
 }

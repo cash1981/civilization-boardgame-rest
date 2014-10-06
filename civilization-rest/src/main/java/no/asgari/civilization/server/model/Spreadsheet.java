@@ -22,6 +22,7 @@ import no.asgari.civilization.server.SheetName;
         @JsonSubTypes.Type(value=Artillery.class, name="artillery"),
         @JsonSubTypes.Type(value=Aircraft.class, name="aircraft")
 })
+@FunctionalInterface
 public interface Spreadsheet {
 
     @JsonIgnore

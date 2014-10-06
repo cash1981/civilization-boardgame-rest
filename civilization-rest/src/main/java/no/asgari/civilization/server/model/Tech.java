@@ -32,7 +32,7 @@ public class Tech implements Item, Level, Comparable<Tech> {
     private String description;
     private boolean used;
     private boolean hidden = true;
-    private String owner; // game_id or player_id (username)
+    private String owner; // player_id or (username)
     private int level;
 
     public Tech(String name, int level) {
@@ -55,11 +55,6 @@ public class Tech implements Item, Level, Comparable<Tech> {
         }
 
         return SheetName.LEVEL_1_TECH;
-    }
-
-    @Override
-    public String getType() {
-        return null;
     }
 
     @Override
