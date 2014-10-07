@@ -153,7 +153,8 @@ public class GameAction {
         playerhand.setPlayerId(player.getId());
         playerhand.setUsername(player.getUsername());
 
-        pbf.getPlayers().add(playerhand);
+        if(!pbf.getPlayers().contains(playerhand))
+            pbf.getPlayers().add(playerhand);
         startIfAllPlayers(pbf);
         pbfCollection.updateById(pbf.getId(), pbf);
 

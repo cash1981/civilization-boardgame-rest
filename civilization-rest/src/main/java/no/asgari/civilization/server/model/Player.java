@@ -35,6 +35,6 @@ public class Player {
     @NotBlank
     private String password;
 
-    /** Set of unique active games * */
+    /** Set of unique active games This may be reduntant as it can be calculated by looping through all pbfs.players and finding match. */
     private Set<String> gameIds = new HashSet<>();
 }

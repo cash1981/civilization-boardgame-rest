@@ -54,14 +54,14 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
                 .entity(dtoAsJSon)
                 .put(ClientResponse.class);
 
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT_204);
         pbf = pbfCollection.findOneById(pbfId);
         Optional<Playerhand> cash1981 = pbf.getPlayers().stream()
                 .filter(p -> p.getUsername().equals("cash1981"))
                 .findFirst();
         assertTrue(cash1981.isPresent());
         assertThat(cash1981.get().getTechsChosen()).isNotEmpty();
-        assertThat(cash1981.get().getTechsChosen().get(0).getName()).isEqualTo("Agriculture");
+        assertThat(cash1981.get().getTechsChosen().iterator().next().getName()).isEqualTo("Agriculture");
     }
 
 }

@@ -111,10 +111,15 @@ public class PlayerAction {
                 .findFirst()
                 .orElseThrow(PlayerAction::cannotFindItem);
 
+        chosenTech.setHidden(true);
+        chosenTech.setOwner(username);
+
         playerhand.getTechsChosen().add(chosenTech);
 
         pbfCollection.updateById(pbf.getId(), pbf);
         log.debug("Player " + username + " chose tech " + chosenTech.getName());
+
+        //TODO private and public log
     }
 
     private static WebApplicationException cannotFindItem() {
@@ -127,4 +132,35 @@ public class PlayerAction {
         return pbfCollection.findOneById(pbfId);
     }
 
+    public boolean endTurn(String pbfId, String username) {
+        Preconditions.checkNotNull(pbfId);
+        Preconditions.checkNotNull(username);
+
+        PBF pbf = getPBF(pbfId);
+
+        //Loop through the list and find next starting player
+        for(int i = 0; i < pbf.getPlayers().size(); i++) {
+            Playerhand playerhand = pbf.getPlayers().get(i);
+            if(playerhand.getUsername().equals(username)) {
+                playerhand.setStartingPlayer(false);
+                if(pbf.getPlayers().size() == (i+1)) {
+                    //We are at the end, pick the first player
+                    pbf.getPlayers().get(0).setStartingPlayer(true);
+                }
+                //Choose next player in line to be starting player
+                pbf.getPlayers().get(i+1).setStartingPlayer(true);
+                try {
+                    pbfCollection.updateById(pbf.getId(), pbf);
+                    return true;
+                } catch (Exception ex) {
+                    log.error("Couldn't update pbf " + ex.getMessage(), ex);
+                    throw new WebApplicationException(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                            .entity("Couldn't update pbf")
+                            .build());
+                }
+            }
+
+        }
+        return false;
+    }
 }

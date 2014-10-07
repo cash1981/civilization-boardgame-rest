@@ -2,11 +2,13 @@ package no.asgari.civilization.server.model;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Each PBF has a playerhand consisting of the player and its items
@@ -28,7 +30,7 @@ public class Playerhand {
 
     private List<Item> items = Lists.newArrayList();
     private List<Unit> units = Lists.newArrayList();
-    private List<Tech> techsChosen = Lists.newArrayList();
+    private Set<Tech> techsChosen = Sets.newTreeSet();
 
 
 }

@@ -31,13 +31,14 @@ public class Tech implements Item, Level, Comparable<Tech> {
     private String type;
     private String description;
     private boolean used;
-    private boolean hidden;
+    private boolean hidden = true;
     private String owner; // game_id or player_id (username)
     private int level;
 
     public Tech(String name, int level) {
         this.name = name;
         this.level = level;
+        hidden = true;
     }
 
     @Override

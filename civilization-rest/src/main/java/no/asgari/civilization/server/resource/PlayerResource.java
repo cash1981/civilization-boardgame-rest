@@ -21,6 +21,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
+/**
+ * Contains player specific resources
+ */
 @Path("player")
 @Produces(value = MediaType.APPLICATION_JSON)
 @Consumes(value = MediaType.APPLICATION_JSON)
@@ -57,6 +60,27 @@ public class PlayerResource {
     public Response chooseTech(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
         PlayerAction playerAction = new PlayerAction(playerCollection, pbfCollection);
         playerAction.chooseTech(pbfId, item, player.getUsername());
-        return Response.ok().build();
+        return Response.noContent().build();
     }
+
+    /**
+     * Will end the turn for a given player, and take the next player from the list and
+     * make that player current starting player.
+     * @param player
+     * @param pbfId
+     * @return
+     */
+    @PUT
+    @Path("{pbfId}/endturn")
+    //TODO test
+    public Response endTurn(@Auth Player player, @PathParam("pbfId") String pbfId) {
+        PlayerAction playerAction = new PlayerAction(playerCollection, pbfCollection);
+        boolean success = playerAction.endTurn(pbfId, player.getUsername());
+
+        if(success) return Response.noContent().build();
+
+        return Response.serverError().build();
+
+    }
+
 }

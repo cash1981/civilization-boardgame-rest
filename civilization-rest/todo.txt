@@ -1,10 +1,14 @@
 - Create revealing; possibility to reveal items/units/techs
+    -- Either let players when fighting do it as now, and then after battle reveal all units
+- Battle, will need to draw units. Perhaps a dropdown with number of units to draw
+    -- After battle, perhaps have a end battle button, it will show all the draws that where made
+    -- Both players will need to push this button, it will reveal their units
 - Choose Techs
 	-- Techs will not be revealed until all players have pushed submit/reveal button (Same functionality as voting)
-- Choose starting player
-	-- Should be randomly chosen, only when all players have joined
-	-- All drawing is disabled until all players have joined. (If only the starting player can draw, then in theory this should be redundant)
-	-- Should be triggered when a player joins a game
+#DONE - Choose starting player
+	#DONE -- Should be randomly chosen, only when all players have joined
+	#DONE -- All drawing is disabled until all players have joined. (If only the starting player can draw, then in theory this should be redundant)
+	#DONE -- Should be triggered when a player joins a game
 - End of turn button which will disable drawing for players
 	-- Each this happens, system will enable for next player in line
 - Send player items
@@ -22,4 +26,6 @@ Nice to have
 - Create a battlefield, for now only use the reveal option
 - Option to leave a game
 	-- Haven't thought of all the details about this
+- Possibility to request undo of end of turn?
+    -- For now, this can only be done if all players just push end of turn until it goes back to the correct player
 
