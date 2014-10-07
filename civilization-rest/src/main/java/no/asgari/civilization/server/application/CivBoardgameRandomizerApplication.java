@@ -1,10 +1,13 @@
 package no.asgari.civilization.server.application;
 
+import com.codahale.metrics.MetricRegistry;
+import com.google.common.cache.CacheBuilderSpec;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.java8.auth.CachingAuthenticator;
 import io.dropwizard.java8.auth.basic.BasicAuthProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -42,7 +45,7 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
         JacksonDBCollection<Player, String> playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
         JacksonDBCollection<Draw, String> drawCollection = JacksonDBCollection.wrap(db.getCollection(Draw.COL_NAME), Draw.class, String.class);
         JacksonDBCollection<Undo, String> undoActionCollection = JacksonDBCollection.wrap(db.getCollection(Undo.COL_NAME), Undo.class, String.class);
-        JacksonDBCollection<PrivateLog, String> privateLogCollection= JacksonDBCollection.wrap(db.getCollection(PrivateLog.COL_NAME), PrivateLog.class, String.class);
+        JacksonDBCollection<PrivateLog, String> privateLogCollection = JacksonDBCollection.wrap(db.getCollection(PrivateLog.COL_NAME), PrivateLog.class, String.class);
         JacksonDBCollection<PublicLog, String> publicLogCollection = JacksonDBCollection.wrap(db.getCollection(PublicLog.COL_NAME), PublicLog.class, String.class);
 
         createIndexForPlayer(playerCollection);
@@ -59,7 +62,9 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
         environment.jersey().register(new PlayerResource(playerCollection, pbfCollection));
 
         //Authentication
-        environment.jersey().register(new BasicAuthProvider<>(new CivAuthenticator(playerCollection), "civilization"));
+
+        environment.jersey().register(new BasicAuthProvider<>(new CachingAuthenticator<>(new MetricRegistry(), new CivAuthenticator(playerCollection),
+                CacheBuilderSpec.parse("expireAfterWrite=120m")), "civilization"));
 
         // TODO Fix eventbus
         // CivSingleton.getInstance().getEventBus().register(new LogListener(privateLogCollection, publicLogCollection));

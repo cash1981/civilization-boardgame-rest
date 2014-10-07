@@ -52,7 +52,6 @@ public class PlayerResource {
      * @param item
      * @return
      */
-    //TODO Test
     @PUT
     @Path("{pbfId}/tech/choose")
     public Response chooseTech(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {

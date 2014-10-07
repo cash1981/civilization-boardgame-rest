@@ -3,7 +3,7 @@
 	-- Techs will not be revealed until all players have pushed submit/reveal button (Same functionality as voting)
 - Choose starting player
 	-- Should be randomly chosen, only when all players have joined
-	-- All drawing is disabled until all players have joined
+	-- All drawing is disabled until all players have joined. (If only the starting player can draw, then in theory this should be redundant)
 	-- Should be triggered when a player joins a game
 - End of turn button which will disable drawing for players
 	-- Each this happens, system will enable for next player in line

@@ -106,14 +106,15 @@ public class GameResource {
     @GET
     @Timed
     @Path("/{pbfId}/techs")
-    //TODO test
-    public Response chooseTech(@NotEmpty @PathParam("pbfId") String pbfId, @Auth Player player) {
+    public List<Tech> getAllTechs(@NotEmpty @PathParam("pbfId") String pbfId, @Auth Player player) {
         GameAction gameAction = new GameAction(pbfCollection, playerCollection);
+        //TODO This will never change, so really it should be cached
         List<Tech> techs = gameAction.getAllTechs(pbfId);
-        return Response.ok()
+        return techs;
+        /*return Response.ok()
                 .location(uriInfo.getAbsolutePath())
                 .entity(techs)
-                .build();
+                .build();*/
     }
 
 }

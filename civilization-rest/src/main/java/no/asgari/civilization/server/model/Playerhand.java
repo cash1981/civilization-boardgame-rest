@@ -16,13 +16,14 @@ import java.util.List;
 @NoArgsConstructor
 public class Playerhand {
     @NotBlank
-    //Can consider using the playerId also
+    //Can consider using the playerId instead or removing @NotBlank
     private String username;
 
     @NotBlank
     private String playerId;
 
     //Only one starting player each turn
+    /** Determines whos turn it is each turn **/
     private boolean startingPlayer = false;
 
     private List<Item> items = Lists.newArrayList();

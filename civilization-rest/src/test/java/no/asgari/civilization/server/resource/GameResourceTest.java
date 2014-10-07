@@ -87,7 +87,16 @@ public class GameResourceTest extends MongoDBBaseTest {
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST_400);
     }
 
+    @Test
+    public void shouldGetAllTechs() throws Exception {
+        final ArrayList list = client().resource(
+                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/techs", RULE.getLocalPort(), pbfId))
+                        .build())
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .type(MediaType.APPLICATION_JSON)
+                .get(ArrayList.class);
 
-
+        assertThat(list).isNotEmpty();
+    }
 
 }

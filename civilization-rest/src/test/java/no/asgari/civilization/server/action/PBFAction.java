@@ -44,7 +44,7 @@ public class PBFAction {
         pbf.getWonders().addAll(items.ancientWonders);
         pbf.getWonders().addAll(items.medievalWonders);
         pbf.getWonders().addAll(items.modernWonders);
-
+        pbf.getTechs().addAll(items.allTechs);
         return pbf;
     }
 }

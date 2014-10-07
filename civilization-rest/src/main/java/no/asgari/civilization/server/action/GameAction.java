@@ -23,6 +23,8 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Log4j
@@ -152,19 +154,19 @@ public class GameAction {
         playerhand.setUsername(player.getUsername());
 
         pbf.getPlayers().add(playerhand);
-
+        startIfAllPlayers(pbf);
         pbfCollection.updateById(pbf.getId(), pbf);
+
     }
 
     public List<Tech> getAllTechs(String pbfId) {
         Preconditions.checkNotNull(pbfId);
-        return findPBFById(pbfId);
+        return findPBFById(pbfId).getTechs();
     }
 
-    private List<Tech> findPBFById(String pbfId) {
+    private PBF findPBFById(String pbfId) {
         try {
-            final PBF pbf = pbfCollection.findOneById(pbfId);
-            return pbf.getTechs();
+            return pbfCollection.findOneById(pbfId);
         } catch(Exception ex) {
             log.error("Couldn't find pbf");
             Response badReq = Response.status(Response.Status.BAD_REQUEST)
@@ -172,5 +174,25 @@ public class GameAction {
                     .build();
             throw new WebApplicationException(badReq);
         }
+    }
+
+    private void startIfAllPlayers(PBF pbf) {
+        final int numOfPlayersNeeded = pbf.getNumOfPlayers();
+        if(numOfPlayersNeeded == pbf.getPlayers().size()) {
+            Playerhand randomPlayer = getRandomPlayerFromSet(pbf.getPlayers());
+            log.debug("Setting starting player");
+            randomPlayer.setStartingPlayer(true);
+        }
+    }
+
+    private Playerhand getRandomPlayerFromSet(Set<Playerhand> players) {
+        int item = new Random().nextInt(players.size());
+        int i = -1;
+
+        for(Playerhand p : players) {
+            if(++i == item) return p;
+        }
+        //Should not be possible to come here
+        return null;
     }
 }

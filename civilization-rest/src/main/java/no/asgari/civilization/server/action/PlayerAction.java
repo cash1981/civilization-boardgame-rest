@@ -21,7 +21,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Log4j
@@ -101,16 +100,16 @@ public class PlayerAction {
         Preconditions.checkNotNull(pbfId);
         Preconditions.checkNotNull(item);
         Preconditions.checkNotNull(item.getName());
-        final PBF pbf = getPBF(pbfId);
-        final Optional<Tech> tech = pbf.getTechs().stream()
+        PBF pbf = getPBF(pbfId);
+        Optional<Tech> tech = pbf.getTechs().stream()
                 .filter(techToFind -> techToFind.getName().equals(item.getName()))
                 .findFirst();
-
-        final Tech chosenTech = tech.orElseThrow(cannotFindItem());
-        final Playerhand playerhand = pbf.getPlayers()
+                                           //if not static then this::cannotFindItem
+        Tech chosenTech = tech.orElseThrow(PlayerAction::cannotFindItem);
+        Playerhand playerhand = pbf.getPlayers()
                 .stream().filter(p -> p.getUsername().equals(username))
                 .findFirst()
-                .orElseThrow(cannotFindItem());
+                .orElseThrow(PlayerAction::cannotFindItem);
 
         playerhand.getTechsChosen().add(chosenTech);
 
@@ -118,8 +117,8 @@ public class PlayerAction {
         log.debug("Player " + username + " chose tech " + chosenTech.getName());
     }
 
-    private Supplier<WebApplicationException> cannotFindItem() {
-        throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+    private static WebApplicationException cannotFindItem() {
+        return new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
                 .entity("Could not find item")
                 .build());
     }
