@@ -54,6 +54,7 @@ public class UndoTest extends AbstractMongoDBTest {
 
     @Test
     public void performAVoteAndCheckIt() throws Exception {
+        assertThat(undoCollection.findOneById(undo.getId()).getVotes().size()).isEqualTo(1);
         undo.vote(getAnotherPlayerId(), Boolean.TRUE);
         undoCollection.updateById(undo.getId(), undo);
 

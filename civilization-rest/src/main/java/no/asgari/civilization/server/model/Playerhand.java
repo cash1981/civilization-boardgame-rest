@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -16,6 +17,7 @@ import java.util.Set;
 @Data
 @JsonRootName("players")
 @NoArgsConstructor
+@EqualsAndHashCode(of={"username", "playerId"})
 public class Playerhand {
     @NotBlank
     //Can consider using the playerId instead or removing @NotBlank

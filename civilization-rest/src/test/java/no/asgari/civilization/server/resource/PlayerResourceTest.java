@@ -20,6 +20,7 @@ import java.net.URI;
 import java.util.Optional;
 
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class PlayerResourceTest extends AbstractMongoDBTest {
@@ -62,6 +63,44 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         assertTrue(cash1981.isPresent());
         assertThat(cash1981.get().getTechsChosen()).isNotEmpty();
         assertThat(cash1981.get().getTechsChosen().iterator().next().getName()).isEqualTo("Agriculture");
+    }
+
+    @Test
+    public void endTurnAndChooseNextPlayer() throws Exception {
+        PBF pbf = pbfCollection.findOneById(pbfId);
+
+        int i = -1;
+        Playerhand nextPlayer = null;
+        boolean found = false;
+        for(Playerhand p : pbf.getPlayers()) {
+            i++;
+            if(p.getUsername().equals("cash1981")) {
+                nextPlayer = pbf.getPlayers().get(++i);
+                assertFalse(nextPlayer.isStartingPlayer());
+                found = true;
+                break;
+            }
+        }
+        assertTrue(found);
+
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/endturn", RULE.getLocalPort(), pbfId)).build();
+        ClientResponse response = client().resource(uri)
+                .type(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .put(ClientResponse.class);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT_204);
+
+        pbf = pbfCollection.findOneById(pbfId);
+        found = false;
+        for(Playerhand p : pbf.getPlayers()) {
+            if(p.equals(nextPlayer)) {
+                assertTrue(p.isStartingPlayer());
+                found = true;
+                break;
+            }
+        }
+        assertTrue(found);
     }
 
 }

@@ -22,9 +22,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Log4j
@@ -110,8 +109,8 @@ public class GameAction {
             dto.setCreated(pbf.getCreated());
             dto.setNumOfPlayers(pbf.getNumOfPlayers());
             dto.setPlayers(pbf.getPlayers().stream()
-                    .map(this::createFoo)
-                            //.map(p -> createFoo(p))
+                    .map(this::createPlayerDTO)
+                            //.map(p -> createPlayerDTO(p))
                     .collect(Collectors.toList()));
             pbfs.add(dto);
         }
@@ -119,7 +118,7 @@ public class GameAction {
         return pbfs;
     }
 
-    private PlayerDTO createFoo(Playerhand player) {
+    private PlayerDTO createPlayerDTO(Playerhand player) {
         PlayerDTO dto = new PlayerDTO();
         player.setUsername(player.getUsername());
         player.setPlayerId(player.getPlayerId());
@@ -180,20 +179,14 @@ public class GameAction {
     private void startIfAllPlayers(PBF pbf) {
         final int numOfPlayersNeeded = pbf.getNumOfPlayers();
         if(numOfPlayersNeeded == pbf.getPlayers().size()) {
-            Playerhand randomPlayer = getRandomPlayerFromSet(pbf.getPlayers());
+            Playerhand randomPlayer = getRandomPlayer(pbf.getPlayers());
             log.debug("Setting starting player");
             randomPlayer.setStartingPlayer(true);
         }
     }
 
-    private Playerhand getRandomPlayerFromSet(Set<Playerhand> players) {
-        int item = new Random().nextInt(players.size());
-        int i = -1;
-
-        for(Playerhand p : players) {
-            if(++i == item) return p;
-        }
-        //Should not be possible to come here
-        return null;
+    private Playerhand getRandomPlayer(List<Playerhand> players) {
+        Collections.shuffle(players);
+        return players.get(0);
     }
 }
