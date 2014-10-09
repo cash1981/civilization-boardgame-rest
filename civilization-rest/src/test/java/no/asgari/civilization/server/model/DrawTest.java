@@ -10,7 +10,7 @@ public class DrawTest extends AbstractMongoDBTest {
 
     @Test
     public void drawCivAndMakeSureItsNoLongerInPBFCollection() throws Exception {
-        DrawAction drawAction = new DrawAction(pbfCollection, drawCollection, undoCollection);
+        DrawAction drawAction = new DrawAction(pbfCollection, drawCollection);
         Draw<Civ> draw = drawAction.drawCiv(pbfId, playerId);
 
         PBF pbf = pbfCollection.findOneById(pbfId);
@@ -21,7 +21,7 @@ public class DrawTest extends AbstractMongoDBTest {
 
     @Test
     public void drawAircraftAndMakeSureItsNoLongerInPBFCollection() throws Exception {
-        DrawAction drawAction = new DrawAction(pbfCollection, drawCollection, undoCollection);
+        DrawAction drawAction = new DrawAction(pbfCollection, drawCollection);
         //Before draw
         int aircrafts = pbfCollection.findOneById(pbfId).getAircraft().size();
 
@@ -36,7 +36,7 @@ public class DrawTest extends AbstractMongoDBTest {
 
     @Test
     public void drawArtilleryAndMakeSureItsNoLongerInPBFCollection() throws Exception {
-        DrawAction drawAction = new DrawAction(pbfCollection, drawCollection, undoCollection);
+        DrawAction drawAction = new DrawAction(pbfCollection, drawCollection);
         //Before draw
         int artilleries = pbfCollection.findOneById(pbfId).getArtillery().size();
         Draw<Artillery> draw = drawAction.drawArtillery(pbfId, playerId);
@@ -50,7 +50,7 @@ public class DrawTest extends AbstractMongoDBTest {
 
     @Test
     public void drawCitystateAndMakeSureItsNoLongerInPBFCollection() throws Exception {
-        DrawAction drawAction = new DrawAction(pbfCollection, drawCollection, undoCollection);
+        DrawAction drawAction = new DrawAction(pbfCollection, drawCollection);
         Draw<Citystate> draw = drawAction.drawCitystate(pbfId, playerId);
 
         PBF pbf = pbfCollection.findOneById(pbfId);

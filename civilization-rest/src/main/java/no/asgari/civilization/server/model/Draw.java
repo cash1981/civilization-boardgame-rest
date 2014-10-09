@@ -14,8 +14,6 @@ import org.mongojack.ObjectId;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Class that handles drawing of things.
@@ -33,9 +31,9 @@ import java.util.List;
 public class Draw<T extends Type> {
     public static final String COL_NAME = "draw";
 
+    /** Will be used to identify a draw so that voting of undo can be performed **/
     @ObjectId
     @Id
-    /** Will be used to identify a draw so that voting of undo can be performed **/
     private String id;
 
     /** Typically implementation of Unit or Item. Should have #getSheetName() to determine the type **/

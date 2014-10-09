@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.NotBlank;
-import org.mongojack.Id;
-import org.mongojack.ObjectId;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -24,7 +24,6 @@ import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.model.PrivateLog;
 import no.asgari.civilization.server.model.PublicLog;
-import no.asgari.civilization.server.model.Undo;
 import no.asgari.civilization.server.resource.GameResource;
 import no.asgari.civilization.server.resource.LoginResource;
 import no.asgari.civilization.server.resource.PlayerResource;
@@ -63,7 +62,7 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         AbstractMongoDBTest.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
         AbstractMongoDBTest.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
         AbstractMongoDBTest.drawCollection = JacksonDBCollection.wrap(db.getCollection(Draw.COL_NAME), Draw.class, String.class);
-        AbstractMongoDBTest.privateLogCollection= JacksonDBCollection.wrap(db.getCollection(PrivateLog.COL_NAME), PrivateLog.class, String.class);
+        AbstractMongoDBTest.privateLogCollection = JacksonDBCollection.wrap(db.getCollection(PrivateLog.COL_NAME), PrivateLog.class, String.class);
         AbstractMongoDBTest.publicLogCollection = JacksonDBCollection.wrap(db.getCollection(PublicLog.COL_NAME), PublicLog.class, String.class);
 
         playerCollection.drop();
@@ -86,8 +85,8 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         final DropwizardResourceConfig config = DropwizardResourceConfig.forTesting(new MetricRegistry());
         final CachingAuthenticator<BasicCredentials, Player> authenticator =
                 new CachingAuthenticator<>(new MetricRegistry(),
-                                           new CivAuthenticator(playerCollection),
-                                           CacheBuilderSpec.parse("maximumSize=1"));
+                        new CivAuthenticator(playerCollection),
+                        CacheBuilderSpec.parse("maximumSize=1"));
         config.getSingletons().add(new BasicAuthProvider<>(authenticator, "civilization"));
         config.getSingletons().add(new LoginResource(playerCollection, pbfCollection));
         config.getSingletons().add(new PlayerResource(playerCollection, pbfCollection));

@@ -4,10 +4,8 @@ import no.asgari.civilization.server.action.DrawAction;
 import no.asgari.civilization.server.action.UndoAction;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mongojack.DBQuery;
-import org.mongojack.WriteResult;
 
 import java.util.Optional;
 
@@ -20,7 +18,7 @@ public class UndoTest extends AbstractMongoDBTest {
 
     @Before
     public void before() throws Exception {
-        if(undoCollection.findOne() == null) {
+        if(drawCollection.findOne() == null) {
             createADrawAndPerformVoteForUndo();
         }
     }
@@ -35,59 +33,51 @@ public class UndoTest extends AbstractMongoDBTest {
 
         DrawAction drawAction = new DrawAction(pbfCollection, drawCollection);
         Draw drawCiv = drawAction.drawCiv(pbfId, playerId);
+        UndoAction undoAction = new UndoAction(pbfCollection, drawCollection);
+        drawCiv = undoAction.vote(drawCiv, playerId, true);
 
-        Undo undo = new Undo(drawCiv.getId());
-        assertThat(undo.getDrawId()).isNotEmpty();
-
-        undo.vote(playerId, Boolean.TRUE);
-        assertThat(undo.getVotes().size()).isEqualTo(1);
-
-        undo.setNumberOfVotesRequired(pbf.getNumOfPlayers());
-        assertThat(undo.getNumberOfVotesRequired()).isEqualTo(pbf.getNumOfPlayers());
-
-        WriteResult<Undo, String> insert = undoCollection.insert(undo);
-        System.out.println("Created undo action " + insert.getSavedId());
+        assertThat(drawCiv.getUndo().getVotes().size()).isEqualTo(1);
+        drawCollection.insert(drawCiv);
     }
 
     @Test
     public void performAVoteAndCheckIt() throws Exception {
-        Undo undo = undoCollection.findOne();
-        assertThat(undo.getVotes().size()).isEqualTo(1);
-        undo.vote(getAnotherPlayerId(), Boolean.TRUE);
-        undoCollection.updateById(undo.getId(), undo);
+        Draw draw = drawCollection.findOne();
+        assertThat(draw.getUndo()).isNotNull();
+        assertThat(draw.getUndo().getVotes().size()).isEqualTo(1);
+        UndoAction undoAction = new UndoAction(pbfCollection,drawCollection);
 
-        assertThat(undo.getVotes().size()).isEqualTo(2);
+        undoAction.vote(draw, getAnotherPlayerId(), Boolean.TRUE);
+        assertThat(drawCollection.findOneById(draw.getId()).getUndo().getVotes().size()).isEqualTo(2);
     }
 
     @Test
     public void allPlayersVoteYesThenPerformUndo() throws Exception {
-        Undo undo = undoCollection.findOne();
-        Draw drawToUndo = drawCollection.findOneById(undo.getDrawId());
-        PBF pbf = pbfCollection.findOneById(drawToUndo.getPbfId());
+        Draw draw = drawCollection.findOne();
+        PBF pbf = pbfCollection.findOneById(draw.getPbfId());
         //Get the same undo, since I need it to be final
-        final Undo sameUndo = undoCollection.findOneById(undo.getId());
+        UndoAction undoAction = new UndoAction(pbfCollection,drawCollection);
 
         pbf.getPlayers().stream()
-                .filter(p -> !sameUndo.getVotes().containsKey(p.getUsername()))
-                .forEach(p -> sameUndo.vote(p.getUsername(), Boolean.TRUE));
+                .filter(p -> !draw.getUndo().getVotes().keySet().contains(p.getUsername()))
+                .forEach(p -> undoAction.vote(draw, p.getUsername(), Boolean.TRUE));
 
-        assertThat(sameUndo.getVotes()).doesNotContainValue(Boolean.FALSE);
-        UndoAction undoAction = new UndoAction(pbfCollection, drawCollection);
-        final Optional<Boolean> resultOfVotes = undoAction.getResultOfVotes(drawToUndo);
+        assertThat(drawCollection.findOneById(draw.getId()).getUndo().getVotes()).doesNotContainValue(Boolean.FALSE);
+        Optional<Boolean> resultOfVotes = undoAction.getResultOfVotes(draw);
         assertTrue(resultOfVotes.isPresent());
         assertThat(resultOfVotes.get()).isTrue();
 
-        //First find out how many votes are done, and then each player will vote yes and undo made
-        final Type item = drawToUndo.getItem();
+        //Put item back
+        final Type item = draw.getItem();
         System.out.println("Item to put back is type: " + item.getType());
         assertThat(item).isInstanceOf(Civ.class);
 
         //First check that its not in the pbf
         assertFalse(pbf.getCivs().contains(item));
 
-        undoAction.putDrawnItemBackInPBF(drawToUndo);
+        undoAction.putDrawnItemBackInPBF(draw);
 
-        assertTrue(pbfCollection.findOneById(drawToUndo.getPbfId()).getCivs().contains(item));
+        assertTrue(pbfCollection.findOneById(draw.getPbfId()).getCivs().contains(item));
     }
 
     @Test

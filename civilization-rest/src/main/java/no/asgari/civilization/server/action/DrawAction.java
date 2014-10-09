@@ -423,7 +423,6 @@ public class DrawAction {
         return draw;
     }
 
-
     private Undo createUndo(int numOfPlayer) {
         Undo undo = new Undo(numOfPlayer);
         return undo;

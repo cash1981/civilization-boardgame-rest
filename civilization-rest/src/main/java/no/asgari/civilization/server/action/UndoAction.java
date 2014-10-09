@@ -107,7 +107,6 @@ public class UndoAction {
         }
 
         pbfCollection.updateById(pbf.getId(), pbf);
-
     }
 
     public Draw vote(Draw draw, String playerId, boolean vote) {
