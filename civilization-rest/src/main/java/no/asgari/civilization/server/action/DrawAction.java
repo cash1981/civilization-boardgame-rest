@@ -32,7 +32,6 @@ public class DrawAction {
 
     private final JacksonDBCollection<PBF, String> pbfCollection;
     private final JacksonDBCollection<Draw, String> drawCollection;
-    private final JacksonDBCollection<Undo, String> undoCollection;
 
     /**
      * Will make a draw of a Civ and store the draw in the collection
@@ -58,7 +57,6 @@ public class DrawAction {
         //TODO call event for adding a undo
         //For now we manually add undo. Its nicer to call event
         draw.setId(drawInsert.getSavedId());
-        createUndo(draw, pbf.getNumOfPlayers());
         return draw;
     }
 
@@ -86,8 +84,6 @@ public class DrawAction {
         //TOOD call event for adding undo
 
         draw.setId(drawInsert.getSavedId());
-        createUndo(draw, pbf.getNumOfPlayers());
-
         return draw;
     }
 
@@ -115,7 +111,6 @@ public class DrawAction {
         //TOOD call event for adding undo
 
         draw.setId(drawInsert.getSavedId());
-        createUndo(draw, pbf.getNumOfPlayers());
 
         return draw;
     }
@@ -144,7 +139,6 @@ public class DrawAction {
         //TOOD call event for adding undo
 
         draw.setId(drawInsert.getSavedId());
-        createUndo(draw, pbf.getNumOfPlayers());
 
         return draw;
     }
@@ -173,7 +167,6 @@ public class DrawAction {
         //TOOD call event for adding undo
 
         draw.setId(drawInsert.getSavedId());
-        createUndo(draw, pbf.getNumOfPlayers());
 
         return draw;
     }
@@ -202,7 +195,6 @@ public class DrawAction {
         //TOOD call event for adding undo
 
         draw.setId(drawInsert.getSavedId());
-        createUndo(draw, pbf.getNumOfPlayers());
 
         return draw;
     }
@@ -231,7 +223,6 @@ public class DrawAction {
         //TOOD call event for adding undo
 
         draw.setId(drawInsert.getSavedId());
-        createUndo(draw, pbf.getNumOfPlayers());
 
         return draw;
     }
@@ -260,7 +251,6 @@ public class DrawAction {
         //TOOD call event for adding undo
 
         draw.setId(drawInsert.getSavedId());
-        createUndo(draw, pbf.getNumOfPlayers());
 
         return draw;
     }
@@ -289,7 +279,6 @@ public class DrawAction {
         //TOOD call event for adding undo
 
         draw.setId(drawInsert.getSavedId());
-        createUndo(draw, pbf.getNumOfPlayers());
 
         return draw;
     }
@@ -318,7 +307,6 @@ public class DrawAction {
         //TOOD call event for adding undo
 
         draw.setId(drawInsert.getSavedId());
-        createUndo(draw, pbf.getNumOfPlayers());
 
         return draw;
     }
@@ -347,7 +335,6 @@ public class DrawAction {
         //TOOD call event for adding undo
 
         draw.setId(drawInsert.getSavedId());
-        createUndo(draw, pbf.getNumOfPlayers());
 
         return draw;
     }
@@ -376,7 +363,6 @@ public class DrawAction {
         //TOOD call event for adding undo
 
         draw.setId(drawInsert.getSavedId());
-        createUndo(draw, pbf.getNumOfPlayers());
 
         return draw;
     }
@@ -405,7 +391,6 @@ public class DrawAction {
         //TOOD call event for adding undo
 
         draw.setId(drawInsert.getSavedId());
-        createUndo(draw, pbf.getNumOfPlayers());
 
         return draw;
     }
@@ -434,16 +419,13 @@ public class DrawAction {
         //TOOD call event for adding undo
 
         draw.setId(drawInsert.getSavedId());
-        createUndo(draw, pbf.getNumOfPlayers());
 
         return draw;
     }
 
 
-    private Undo createUndo(Draw draw, int numOfPlayer) {
-        Undo undo = new Undo(draw.getId());
-        undo.setNumberOfVotesRequired(numOfPlayer);
-        undoCollection.insert(undo);
+    private Undo createUndo(int numOfPlayer) {
+        Undo undo = new Undo(numOfPlayer);
         return undo;
     }
 

@@ -40,14 +40,12 @@ public class GameResource {
     private final JacksonDBCollection<Draw, String> drawCollection;
     private final JacksonDBCollection<PBF, String> pbfCollection;
     private final JacksonDBCollection<Player, String> playerCollection;
-    private final JacksonDBCollection<Undo, String> undoActionCollection;
 
     public GameResource(JacksonDBCollection<PBF, String> pbfCollection, JacksonDBCollection<Player, String> playerCollection,
-                        JacksonDBCollection<Draw, String> drawCollection, JacksonDBCollection<Undo, String> undoActionCollection) {
+            JacksonDBCollection<Draw, String> drawCollection) {
         this.playerCollection = playerCollection;
         this.pbfCollection = pbfCollection;
         this.drawCollection = drawCollection;
-        this.undoActionCollection = undoActionCollection;
     }
 
     /**
@@ -111,10 +109,6 @@ public class GameResource {
         //TODO This will never change, so really it should be cached
         List<Tech> techs = gameAction.getAllTechs(pbfId);
         return techs;
-        /*return Response.ok()
-                .location(uriInfo.getAbsolutePath())
-                .entity(techs)
-                .build();*/
     }
 
 }

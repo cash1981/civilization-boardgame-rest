@@ -9,6 +9,7 @@
 	#DONE -- Should be randomly chosen, only when all players have joined
 	#DONE -- All drawing is disabled until all players have joined. (If only the starting player can draw, then in theory this should be redundant)
 	#DONE -- Should be triggered when a player joins a game
+	-- Perhaps players tech should be intersection between pbf.getTech() and player.getTech() so that only distinct techs shows
 - End of turn button which will disable drawing for players
 	-- Each this happens, system will enable for next player in line
 - Send player items
@@ -18,7 +19,8 @@
 	-- Except, they should be able to send stuff to other players, and choosing techs, because these are done simultanously, or if it is too difficult, then everything is turn based
 - Logging
 	-- Would be nice to get eventbus for private and public logging so that their will be loose coupling
-
+- CachingAuthentication
+	
 Nice to have
 - Chat with scrolling capabilites.
 	-- Websocket?
@@ -28,4 +30,5 @@ Nice to have
 	-- Haven't thought of all the details about this
 - Possibility to request undo of end of turn?
     -- For now, this can only be done if all players just push end of turn until it goes back to the correct player
+- Instead of Basic authentication, it would be nice to support OAUTH
 

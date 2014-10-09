@@ -21,17 +21,6 @@ import java.util.Map;
 @NoArgsConstructor
 @JsonRootName(value = "undo")
 public class Undo {
-    public static final String COL_NAME = "undo";
-
-    @ObjectId
-    @Id
-    /** Will be used to identify a  so that voting of undo can be performed **/
-    private String id;
-
-    /** draw_id that is going to be undoed **/
-    @NotBlank
-    private String drawId;
-
     /** If undo has been performed **/
     private boolean done;
 
@@ -42,11 +31,9 @@ public class Undo {
      * The value can be true, false or null. Null means not voted yet **/
     private Map<String, Boolean> votes = new HashMap<>();
 
-    public Undo(String drawId) {
-        this.drawId = drawId;
+    public Undo(int numberOfVotesRequired) {
+        this.numberOfVotesRequired = numberOfVotesRequired;
         done = false;
-        //We will default it to 4 just in case
-        numberOfVotesRequired = 4;
     }
 
     /**
@@ -55,12 +42,18 @@ public class Undo {
     @JsonIgnore
     public int numberOfVotesPerformed() {
         return votes.size();
-
     }
 
     @JsonIgnore
-    public void vote(String username, Boolean vote) {
-        votes.put(username, vote);
+    public void vote(String playerId, Boolean vote) {
+        votes.put(playerId, vote);
     }
 
+    /**
+     * Get the number of votes remaining
+     */
+    @JsonIgnore
+    public int votesRemaining() {
+        return Math.abs(votes.size() - numberOfVotesRequired);
+    }
 }

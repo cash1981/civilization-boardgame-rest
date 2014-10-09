@@ -438,6 +438,6 @@ public class ItemReader {
         allTechs.add(Tech.SPACE_FLIGHT);
         Collections.sort(allTechs);
 
-        return level1Techs;
+        return allTechs;
     }
 }

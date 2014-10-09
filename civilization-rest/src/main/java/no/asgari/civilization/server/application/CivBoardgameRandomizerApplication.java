@@ -44,7 +44,6 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
         JacksonDBCollection<PBF, String> pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
         JacksonDBCollection<Player, String> playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
         JacksonDBCollection<Draw, String> drawCollection = JacksonDBCollection.wrap(db.getCollection(Draw.COL_NAME), Draw.class, String.class);
-        JacksonDBCollection<Undo, String> undoActionCollection = JacksonDBCollection.wrap(db.getCollection(Undo.COL_NAME), Undo.class, String.class);
         JacksonDBCollection<PrivateLog, String> privateLogCollection = JacksonDBCollection.wrap(db.getCollection(PrivateLog.COL_NAME), PrivateLog.class, String.class);
         JacksonDBCollection<PublicLog, String> publicLogCollection = JacksonDBCollection.wrap(db.getCollection(PublicLog.COL_NAME), PublicLog.class, String.class);
 
@@ -57,7 +56,7 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
         environment.healthChecks().register("MongoHealthCheck", new MongoHealthCheck(mongo));
 
         //Resources
-        environment.jersey().register(new GameResource(pbfCollection, playerCollection, drawCollection, undoActionCollection));
+        environment.jersey().register(new GameResource(pbfCollection, playerCollection, drawCollection));
         environment.jersey().register(new LoginResource(playerCollection, pbfCollection));
         environment.jersey().register(new PlayerResource(playerCollection, pbfCollection));
 

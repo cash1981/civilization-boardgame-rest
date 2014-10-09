@@ -1,5 +1,6 @@
 package no.asgari.civilization.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -13,12 +14,15 @@ import org.mongojack.ObjectId;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class that handles drawing of things.
  * This class will log all the draws and output them publicly and privatly
  *
  * It will support undo of draws, which will put the item back in the deck and shuffle
+ * Each draw will have a collection of Undo, which contains information about a possible undo with votes and outcome
  *
  * <T> - Typically implementation of Unit or Item
  *
@@ -57,5 +61,16 @@ public class Draw<T extends Type> {
     /**A draw must always belong to a game. The pbf game id **/
     @NotBlank
     private String pbfId;
+
+    /** If null, then no undo has been performed **/
+    private Undo undo = null;
+
+    /**
+     * Returns true if undo has been requested
+     */
+    @JsonIgnore
+    private boolean isUndoInitiated() {
+        return undo != null;
+    }
 
 }

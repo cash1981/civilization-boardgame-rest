@@ -94,6 +94,7 @@ public class LoginResourceTest extends AbstractMongoDBTest {
                         .queryParam("password", "fifafoo")
                         .build()
         )
+                .type(MediaType.TEXT_PLAIN)
                 .post(ClientResponse.class);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FORBIDDEN_403);

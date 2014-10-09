@@ -44,7 +44,6 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
     protected static JacksonDBCollection<PBF, String> pbfCollection;
     protected static JacksonDBCollection<Player, String> playerCollection;
     protected static JacksonDBCollection<Draw, String> drawCollection;
-    protected static JacksonDBCollection<Undo, String> undoCollection;
     protected static JacksonDBCollection<PrivateLog, String> privateLogCollection;
     protected static JacksonDBCollection<PublicLog, String> publicLogCollection;
 
@@ -64,14 +63,12 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         AbstractMongoDBTest.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
         AbstractMongoDBTest.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
         AbstractMongoDBTest.drawCollection = JacksonDBCollection.wrap(db.getCollection(Draw.COL_NAME), Draw.class, String.class);
-        AbstractMongoDBTest.undoCollection = JacksonDBCollection.wrap(db.getCollection(Undo.COL_NAME), Undo.class, String.class);
         AbstractMongoDBTest.privateLogCollection= JacksonDBCollection.wrap(db.getCollection(PrivateLog.COL_NAME), PrivateLog.class, String.class);
         AbstractMongoDBTest.publicLogCollection = JacksonDBCollection.wrap(db.getCollection(PublicLog.COL_NAME), PublicLog.class, String.class);
 
         playerCollection.drop();
         pbfCollection.drop();
         drawCollection.drop();
-        undoCollection.drop();
         privateLogCollection.drop();
         publicLogCollection.drop();
 
@@ -94,7 +91,7 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         config.getSingletons().add(new BasicAuthProvider<>(authenticator, "civilization"));
         config.getSingletons().add(new LoginResource(playerCollection, pbfCollection));
         config.getSingletons().add(new PlayerResource(playerCollection, pbfCollection));
-        config.getSingletons().add(new GameResource(pbfCollection, playerCollection, drawCollection, undoCollection));
+        config.getSingletons().add(new GameResource(pbfCollection, playerCollection, drawCollection));
 
         return new LowLevelAppDescriptor.Builder(config).build();
     }

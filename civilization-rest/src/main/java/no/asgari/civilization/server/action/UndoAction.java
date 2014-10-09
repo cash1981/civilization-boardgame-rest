@@ -32,32 +32,26 @@ public class UndoAction {
     private final JacksonDBCollection<Draw, String> drawCollection;
 
     /**
-     * All must agree for undo to be performed.
+     * All must agree for draw to be performed.
      * If absent/empty, then all players have not voted
+     * @param draw
      */
-    public Optional<Boolean> getResultOfVotes(Undo undo) {
-        Draw draw = drawCollection.findOneById(undo.getDrawId());
+    public Optional<Boolean> getResultOfVotes(Draw draw) {
         PBF pbf = pbfCollection.findOneById(draw.getPbfId());
 
-        if(undo.getVotes().size() < pbf.getNumOfPlayers()) {
-            //Not everyone has voted yet
+        if(draw.getUndo() == null || draw.getUndo().getVotes().size() < pbf.getNumOfPlayers()) {
+            //No draw initiated or not enough votes
             return Optional.empty();
         }
 
-        if(undo.getVotes().containsValue(Boolean.FALSE)) {
+        if(draw.getUndo().getVotes().containsValue(Boolean.FALSE)) {
             return Optional.of(Boolean.FALSE);
         }
 
         return Optional.of(Boolean.TRUE);
     }
 
-    public int votesRemaining(Undo undo) {
-        PBF pbf = findPBF(undo);
-        return Math.abs(undo.getVotes().size() - pbf.getNumOfPlayers());
-    }
-
-    private PBF findPBF(Undo undo) {
-        Draw draw = drawCollection.findOneById(undo.getDrawId());
+    private PBF findPBF(Draw draw) {
         return pbfCollection.findOneById(draw.getPbfId());
     }
 
@@ -116,6 +110,13 @@ public class UndoAction {
 
     }
 
-
-
+    public Draw vote(Draw draw, String playerId, boolean vote) {
+        if(draw.getUndo() == null) {
+            int numberOfPlayers = pbfCollection.findOneById(draw.getPbfId()).getNumOfPlayers();
+            draw.setUndo(new Undo(numberOfPlayers));
+        }
+        draw.getUndo().vote(playerId,vote);
+        drawCollection.updateById(draw.getId(), draw);
+        return draw;
+    }
 }
