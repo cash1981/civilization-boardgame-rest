@@ -110,9 +110,13 @@ public class UndoAction {
     }
 
     public Draw vote(Draw draw, String playerId, boolean vote) {
+        PBF pbf = pbfCollection.findOneById(draw.getPbfId());
+        if(!pbf.getPlayers().stream().anyMatch(p -> p.getPlayerId().equals(playerId))) {
+            log.error("Couldn't find playerId " + playerId + " in PBF's players");
+            throw new IllegalArgumentException("Wrong playerId");
+        }
         if(draw.getUndo() == null) {
-            int numberOfPlayers = pbfCollection.findOneById(draw.getPbfId()).getNumOfPlayers();
-            draw.setUndo(new Undo(numberOfPlayers));
+            draw.setUndo(new Undo(pbf.getNumOfPlayers()));
         }
         draw.getUndo().vote(playerId,vote);
         drawCollection.updateById(draw.getId(), draw);

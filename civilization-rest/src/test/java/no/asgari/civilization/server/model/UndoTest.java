@@ -7,7 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mongojack.DBQuery;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
@@ -37,18 +39,28 @@ public class UndoTest extends AbstractMongoDBTest {
         drawCiv = undoAction.vote(drawCiv, playerId, true);
 
         assertThat(drawCiv.getUndo().getVotes().size()).isEqualTo(1);
-        drawCollection.insert(drawCiv);
     }
 
     @Test
     public void performAVoteAndCheckIt() throws Exception {
         Draw draw = drawCollection.findOne();
+        int votes = draw.getUndo().getVotes().size();
         assertThat(draw.getUndo()).isNotNull();
-        assertThat(draw.getUndo().getVotes().size()).isEqualTo(1);
         UndoAction undoAction = new UndoAction(pbfCollection,drawCollection);
 
-        undoAction.vote(draw, getAnotherPlayerId(), Boolean.TRUE);
-        assertThat(drawCollection.findOneById(draw.getId()).getUndo().getVotes().size()).isEqualTo(2);
+        List<Playerhand> players = pbfCollection.findOneById(draw.getPbfId()).getPlayers();
+        Set<String> playerIds = draw.getUndo().getVotes().keySet();
+        Optional<String> playerId = players.stream()
+                .map(p -> p.getPlayerId())
+                .filter(p -> !playerIds.contains(p))
+                .limit(1)
+                .findFirst();
+
+        votes = votes + 1;
+        assertThat(playerId.isPresent()).isTrue();
+        Draw vote = undoAction.vote(draw, playerId.get(), Boolean.TRUE);
+        assertThat(vote.getUndo().getVotes().size()).isEqualTo(votes);
+        assertThat(drawCollection.findOneById(draw.getId()).getUndo().getVotes().size()).isEqualTo(votes);
     }
 
     @Test
@@ -60,7 +72,7 @@ public class UndoTest extends AbstractMongoDBTest {
 
         pbf.getPlayers().stream()
                 .filter(p -> !draw.getUndo().getVotes().keySet().contains(p.getUsername()))
-                .forEach(p -> undoAction.vote(draw, p.getUsername(), Boolean.TRUE));
+                .forEach(p -> undoAction.vote(draw, p.getPlayerId(), Boolean.TRUE));
 
         assertThat(drawCollection.findOneById(draw.getId()).getUndo().getVotes()).doesNotContainValue(Boolean.FALSE);
         Optional<Boolean> resultOfVotes = undoAction.getResultOfVotes(draw);
@@ -81,7 +93,7 @@ public class UndoTest extends AbstractMongoDBTest {
     }
 
     @Test
-    public void countRemaingVotes() throws Exception{
+    public void voteAndCountRemaingVotes() throws Exception{
         Draw draw = drawCollection.findOne();
         //make another vote
 
