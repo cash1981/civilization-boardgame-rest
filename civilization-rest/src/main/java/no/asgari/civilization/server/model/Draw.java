@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 
 /**
  * Class that handles drawing of things.
- * This class will log all the draws and output them publicly and privatly
+ * This class will log all the draws and output them publicly and privately
  *
  * It will support undo of draws, which will put the item back in the deck and shuffle
  * Each draw will have a collection of Undo, which contains information about a possible undo with votes and outcome
@@ -31,14 +31,17 @@ import java.time.LocalDateTime;
 public class Draw<T extends Type> {
     public static final String COL_NAME = "draw";
 
-    /** Will be used to identify a draw so that voting of undo can be performed **/
+    /** Will be used to identify a draw so that voting of undo can be performed */
     @ObjectId
     @Id
     private String id;
 
-    /** Typically implementation of Unit or Item. Should have #getSheetName() to determine the type **/
+    /** Typically implementation of Unit or Item. Should have #getSheetName() to determine the type */
     @NotNull
     private T item;
+
+    /** Used to reveal draw, which will make it public */
+    private boolean reveal = false;
 
     public Draw(String pbfId, String playerId) {
         this.pbfId = pbfId;
@@ -51,16 +54,14 @@ public class Draw<T extends Type> {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime created;
 
-    /** The user that made the draw. Its always a player that initiates a draw, so this cannot be blank.
-     * TODO: Can consider using username instead if that is made unique
-     **/
+    /** The user that made the draw. Its always a player that initiates a draw, so this cannot be blank. */
     @NotBlank
     private String playerId;
-    /**A draw must always belong to a game. The pbf game id **/
+    /**A draw must always belong to a game. The pbf game id */
     @NotBlank
     private String pbfId;
 
-    /** If null, then no undo has been performed **/
+    /** If null, then no undo has been performed */
     private Undo undo = null;
 
     /**
