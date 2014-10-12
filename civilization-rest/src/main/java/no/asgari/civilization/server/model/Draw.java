@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @JsonRootName(value = "draw")
 @Data
-public class Draw<T extends Type> {
+public class Draw<T extends Spreadsheet> {
     public static final String COL_NAME = "draw";
 
     /** Will be used to identify a draw so that voting of undo can be performed */
@@ -48,6 +48,7 @@ public class Draw<T extends Type> {
         this.playerId = playerId;
 
         created = LocalDateTime.now();
+        reveal = false;
     }
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)

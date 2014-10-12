@@ -61,4 +61,9 @@ public class CultureII implements Item {
         result = 31 * result + (owner != null ? owner.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public int compareTo(Spreadsheet o) {
+        return getSheetName().compareTo(o.getSheetName());
+    }
 }

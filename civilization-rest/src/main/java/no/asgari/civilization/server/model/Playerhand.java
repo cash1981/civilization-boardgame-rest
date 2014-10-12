@@ -27,8 +27,8 @@ public class Playerhand {
     private String playerId;
 
     //Only one starting player each turn
-    /** Determines whos turn it is each turn **/
-    private boolean startingPlayer = false;
+    /** Determines whos turn it is each round **/
+    private boolean yourTurn = false;
 
     private List<Item> items = Lists.newArrayList();
     private List<Unit> units = Lists.newArrayList();

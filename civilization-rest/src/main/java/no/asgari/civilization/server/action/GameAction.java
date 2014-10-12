@@ -42,40 +42,34 @@ public class GameAction {
         pbf.setName(dto.getName());
         pbf.setType(dto.getType());
         pbf.setNumOfPlayers(dto.getNumOfPlayers());
-        ItemReader items = new ItemReader();
-        try {
-            items.readItemsFromExcel(dto.getType());
-        } catch (IOException e) {
-            log.error("Couldn't read items from Excel file", e);
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        }
-
+        ItemReader itemReader = new ItemReader();
         UnitReader unit = new UnitReader();
         try {
+            itemReader.readItemsFromExcel(dto.getType());
             unit.readAllUnitsFromExcel();
         } catch (IOException e) {
-            log.error("Coludn't read units from Excel file", e);
+            log.error("Couldn't read from Excel file", e);
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 
-        pbf.setMounted(unit.mountedList);
-        pbf.setAircraft(unit.aircraftList);
-        pbf.setArtillery(unit.artilleryList);
-        pbf.setInfantry(unit.infantryList);
+        pbf.getItems().addAll(unit.mountedList);
+        pbf.getItems().addAll(unit.aircraftList);
+        pbf.getItems().addAll(unit.artilleryList);
+        pbf.getItems().addAll(unit.infantryList);
 
-        pbf.setCivs(items.shuffledCivs);
-        pbf.setCultureIs(items.shuffledCultureI);
-        pbf.setCultureIIs(items.shuffledCultureII);
-        pbf.setCultureIIIs(items.shuffledCultureIII);
-        pbf.setGreatPersons(items.shuffledGPs);
-        pbf.setHuts(items.shuffledHuts);
-        pbf.setVillages(items.shuffledVillages);
-        pbf.setTiles(items.shuffledTiles);
-        pbf.getCitystates().addAll(items.shuffledCityStates);
-        pbf.getWonders().addAll(items.ancientWonders);
-        pbf.getWonders().addAll(items.medievalWonders);
-        pbf.getWonders().addAll(items.modernWonders);
-        pbf.getTechs().addAll(items.allTechs);
+        pbf.getItems().addAll(itemReader.shuffledCivs);
+        pbf.getItems().addAll(itemReader.shuffledCultureI);
+        pbf.getItems().addAll(itemReader.shuffledCultureII);
+        pbf.getItems().addAll(itemReader.shuffledCultureIII);
+        pbf.getItems().addAll(itemReader.shuffledGPs);
+        pbf.getItems().addAll(itemReader.shuffledHuts);
+        pbf.getItems().addAll(itemReader.shuffledVillages);
+        pbf.getItems().addAll(itemReader.shuffledTiles);
+        pbf.getItems().addAll(itemReader.shuffledCityStates);
+        pbf.getItems().addAll(itemReader.ancientWonders);
+        pbf.getItems().addAll(itemReader.medievalWonders);
+        pbf.getItems().addAll(itemReader.modernWonders);
+        pbf.getTechs().addAll(itemReader.allTechs);
 
         WriteResult<PBF, String> pbfInsert = pbfCollection.insert(pbf);
         pbf.setId(pbfInsert.getSavedId());
@@ -164,8 +158,6 @@ public class GameAction {
         return findPBFById(pbfId).getTechs();
     }
 
-
-
     private PBF findPBFById(String pbfId) {
         try {
             return pbfCollection.findOneById(pbfId);
@@ -183,7 +175,7 @@ public class GameAction {
         if(numOfPlayersNeeded == pbf.getPlayers().size()) {
             Playerhand randomPlayer = getRandomPlayer(pbf.getPlayers());
             log.debug("Setting starting player");
-            randomPlayer.setStartingPlayer(true);
+            randomPlayer.setYourTurn(true);
         }
     }
 

@@ -89,4 +89,9 @@ public class Mounted implements Unit {
         result = 31 * result + attack;
         return result;
     }
+
+    @Override
+    public int compareTo(Spreadsheet o) {
+        return getSheetName().compareTo(o.getSheetName());
+    }
 }

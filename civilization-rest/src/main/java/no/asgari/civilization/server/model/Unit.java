@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * used = true
  * hidden = true;
  */
-public interface Unit extends Spreadsheet, Type, Level {
+public interface Unit extends Spreadsheet, Type, Level, Comparable<Spreadsheet> {
     @JsonIgnore
     static final int LEVEL_1 = 1;
     @JsonIgnore

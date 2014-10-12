@@ -1,14 +1,11 @@
 package no.asgari.civilization.server.resource;
 
 import com.mongodb.DB;
-import com.mongodb.MongoClient;
 import io.dropwizard.auth.Auth;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.dto.ItemDTO;
-import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
-import org.mongojack.JacksonDBCollection;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -21,7 +18,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Contains player specific resources
@@ -32,19 +29,19 @@ import java.util.List;
 @Log4j
 public class PlayerResource {
     private final DB db;
+    private final PlayerAction playerAction;
 
     @Context
     private UriInfo uriInfo;
 
-
     public PlayerResource(DB db) {
         this.db = db;
+        playerAction = new PlayerAction(db);
     }
 
     @GET
     public Response getGamesForPlayer(@Auth Player player) {
-        PlayerAction playerAction = new PlayerAction(db);
-        List<PBF> games = playerAction.getGames(player);
+        Set<String> games = playerAction.getGames(player);
         //TODO Perhaps nice to create location for all the games
         return Response.ok().entity(games).build();
     }
@@ -59,8 +56,7 @@ public class PlayerResource {
     @PUT
     @Path("{pbfId}/tech/choose")
     public Response chooseTech(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
-        PlayerAction playerAction = new PlayerAction(db);
-        playerAction.chooseTech(pbfId, item, player.getUsername());
+        playerAction.chooseTech(pbfId, item, player.getId());
         return Response.noContent().build();
     }
 
@@ -75,13 +71,26 @@ public class PlayerResource {
     @Path("{pbfId}/endturn")
     //TODO test
     public Response endTurn(@Auth Player player, @PathParam("pbfId") String pbfId) {
-        PlayerAction playerAction = new PlayerAction(db);
         boolean success = playerAction.endTurn(pbfId, player.getUsername());
 
         if(success) return Response.noContent().build();
 
         return Response.serverError().build();
+    }
 
+    /**
+     * This method checks whether it is the players turn
+     * @param player
+     * @param pbfId
+     * @return
+     */
+    @GET
+    @Path("{pbfId}/yourturn")
+    public Response isYourTurn(@Auth Player player, @PathParam("pbfId") String pbfId) {
+        boolean yourTurn = playerAction.isYourTurn(pbfId, player.getId());
+        if(yourTurn) return Response.ok().build();
+
+        return Response.status(Response.Status.FORBIDDEN).build();
     }
 
 }

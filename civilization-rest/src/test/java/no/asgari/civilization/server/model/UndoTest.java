@@ -1,5 +1,6 @@
 package no.asgari.civilization.server.model;
 
+import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.action.DrawAction;
 import no.asgari.civilization.server.action.UndoAction;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
@@ -31,10 +32,12 @@ public class UndoTest extends AbstractMongoDBTest {
         //Pick one item
         PBF pbf = pbfCollection.findOneById(pbfId);
         assertThat(pbf).isNotNull();
-        assertThat(pbf.getCivs()).isNotEmpty();
+        assertThat(pbf.getItems()).isNotEmpty();
 
         DrawAction drawAction = new DrawAction(db);
-        Draw drawCiv = drawAction.drawCiv(pbfId, playerId);
+        Optional<Draw<? extends Spreadsheet>> drawOptional = drawAction.draw(pbfId, playerId, SheetName.CIV);
+        assertTrue(drawOptional.isPresent());
+        Draw drawCiv = drawOptional.get();
         UndoAction undoAction = new UndoAction(db);
         drawCiv = undoAction.vote(drawCiv, playerId, true);
 
@@ -80,16 +83,16 @@ public class UndoTest extends AbstractMongoDBTest {
         assertThat(resultOfVotes.get()).isTrue();
 
         //Put item back
-        final Type item = draw.getItem();
-        System.out.println("Item to put back is type: " + item.getType());
+        final Spreadsheet item = draw.getItem();
+        System.out.println("Item to put back is type: " + item.getSheetName());
         assertThat(item).isInstanceOf(Civ.class);
 
         //First check that its not in the pbf
-        assertFalse(pbf.getCivs().contains(item));
+        assertFalse(pbf.getItems().contains(item));
 
         undoAction.putDrawnItemBackInPBF(draw);
 
-        assertTrue(pbfCollection.findOneById(draw.getPbfId()).getCivs().contains(item));
+        assertTrue(pbfCollection.findOneById(draw.getPbfId()).getItems().contains(item));
     }
 
     @Test

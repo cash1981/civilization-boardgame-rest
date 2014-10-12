@@ -106,7 +106,7 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
             mongo.close();
         }
 
-        //CivCache.getInstance().getEventBus().unregister(new LogListener(privateLogCollection, publicLogCollection));
+        //CivCache.instance().getEventBus().unregister(new LogListener(privateLogCollection, publicLogCollection));
     }
 
     protected static String getUsernameAndPassEncoded() {
@@ -174,7 +174,7 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
                     }
                 });
 
-        CivSingleton.getInstance().setUsernameCache(usernameCache);
+        CivSingleton.instance().setPlayerCache(usernameCache);
     }
 
 }

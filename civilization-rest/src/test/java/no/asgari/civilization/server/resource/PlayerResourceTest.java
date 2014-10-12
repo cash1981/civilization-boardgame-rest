@@ -20,6 +20,7 @@ import java.net.URI;
 import java.util.Optional;
 
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -33,8 +34,12 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
 
     @Test
     public void getAllActiveGamesForPlayer() throws Exception {
-
-
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player", RULE.getLocalPort())).build();
+        ClientResponse response = client().resource(uri)
+                .type(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .get(ClientResponse.class);
+        assertEquals(response.getStatus(), HttpStatus.OK_200);
     }
 
     @Test
@@ -76,7 +81,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
             i++;
             if(p.getUsername().equals("cash1981")) {
                 nextPlayer = pbf.getPlayers().get(++i);
-                assertFalse(nextPlayer.isStartingPlayer());
+                assertFalse(nextPlayer.isYourTurn());
                 found = true;
                 break;
             }
@@ -95,7 +100,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         found = false;
         for(Playerhand p : pbf.getPlayers()) {
             if(p.equals(nextPlayer)) {
-                assertTrue(p.isStartingPlayer());
+                assertTrue(p.isYourTurn());
                 found = true;
                 break;
             }

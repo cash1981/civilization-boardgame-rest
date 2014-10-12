@@ -29,7 +29,7 @@ package no.asgari.civilization.server.model;
  * hidden = true;
  */
 
-public interface Item extends Spreadsheet, Type {
+public interface Item extends Spreadsheet, Type, Comparable<Spreadsheet> {
 
     /**
      * Either the username or pbf name, both of which must be unique *

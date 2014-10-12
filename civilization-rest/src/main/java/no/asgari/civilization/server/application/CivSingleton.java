@@ -12,20 +12,24 @@ import lombok.extern.log4j.Log4j;
 public final class CivSingleton {
 
     private static CivSingleton civSingleton = new CivSingleton();
+    //Key is playerId and value is username
     private LoadingCache<String, String> usernameCache;
 
     private CivSingleton() {
     }
 
-    public static CivSingleton getInstance() {
+    public static CivSingleton instance() {
         return civSingleton;
     }
 
-    public void setUsernameCache(LoadingCache<String, String> usernameCache) {
+    public void setPlayerCache(LoadingCache<String, String> usernameCache) {
         this.usernameCache = usernameCache;
     }
 
-    public LoadingCache<String, String> getUsernameCache() {
+    /**
+     * Key is playerId and value is username
+     */
+    public LoadingCache<String, String> playerCache() {
         return usernameCache;
     }
 }

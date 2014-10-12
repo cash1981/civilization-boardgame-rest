@@ -1,7 +1,6 @@
 package no.asgari.civilization.server.application;
 
 import com.codahale.metrics.MetricRegistry;
-import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheBuilderSpec;
 import com.google.common.cache.CacheLoader;
@@ -16,12 +15,7 @@ import io.dropwizard.java8.auth.basic.BasicAuthProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import lombok.extern.log4j.Log4j;
-import no.asgari.civilization.server.model.Draw;
-import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
-import no.asgari.civilization.server.model.PrivateLog;
-import no.asgari.civilization.server.model.PublicLog;
-import no.asgari.civilization.server.model.Undo;
 import no.asgari.civilization.server.resource.GameResource;
 import no.asgari.civilization.server.resource.LoginResource;
 import no.asgari.civilization.server.resource.PlayerResource;
@@ -81,7 +75,7 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
                             }
                        });
 
-        CivSingleton.getInstance().setUsernameCache(usernameCache);
+        CivSingleton.instance().setPlayerCache(usernameCache);
     }
 
     private void createIndexForPlayer(JacksonDBCollection<Player, String> playerCollection) {

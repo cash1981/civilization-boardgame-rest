@@ -1,7 +1,7 @@
 package no.asgari.civilization.server.model;
 
 public enum GameType {
-    BASE("Base game"), FAF("Fame and Fortune"), WAW("Wisdom and Warfare");
+    BASE("Base game"), FAF("Fame and Fortune"), WAW("Wisdom and Warfare"), DOC("Dawn of Civilization");
 
     private String label;
 

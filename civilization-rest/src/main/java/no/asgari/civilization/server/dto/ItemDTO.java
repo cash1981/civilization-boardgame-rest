@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.model.Item;
+import no.asgari.civilization.server.model.Spreadsheet;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @JsonRootName("itemDTO")
@@ -26,4 +27,9 @@ public class ItemDTO implements Item {
     private String type;
     /** ie Great Person */
     private SheetName sheetName;
+
+    @Override
+    public int compareTo(Spreadsheet o) {
+        return sheetName.compareTo(o.getSheetName());
+    }
 }

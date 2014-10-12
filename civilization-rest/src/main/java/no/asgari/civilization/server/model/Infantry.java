@@ -81,4 +81,9 @@ public class Infantry implements Unit {
 
         return result;
     }
+
+    @Override
+    public int compareTo(Spreadsheet o) {
+        return getSheetName().compareTo(o.getSheetName());
+    }
 }

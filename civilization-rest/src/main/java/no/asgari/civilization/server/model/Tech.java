@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Data
 @NoArgsConstructor
-public class Tech implements Item, Level, Comparable<Tech> {
+public class Tech implements Item, Level {
     @JsonIgnore
     public static final int LEVEL_1 = 1;
     @JsonIgnore
@@ -57,12 +57,9 @@ public class Tech implements Item, Level, Comparable<Tech> {
         return SheetName.LEVEL_1_TECH;
     }
 
+
     @Override
-    public int compareTo(Tech o) {
-        int v = Integer.valueOf(level).compareTo(o.getLevel());
-        if(v != 0) return v;
-
-        return name.compareTo(o.getName());
-
+    public int compareTo(Spreadsheet o) {
+        return getSheetName().compareTo(o.getSheetName());
     }
 }

@@ -1,10 +1,9 @@
 package no.asgari.civilization.server.action;
 
 import com.google.common.base.Preconditions;
-import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
-import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
+import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.exception.PlayerExistException;
@@ -13,16 +12,13 @@ import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.model.Tech;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.mongojack.DBCursor;
-import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Log4j
 public class PlayerAction {
@@ -53,7 +49,7 @@ public class PlayerAction {
                                             .entity("Passwords are not identical")
                                             .build());
         }
-        if(findPlayerByUsername(playerDTO.getUsername()).isPresent()) {
+        if(CivSingleton.instance().playerCache().asMap().containsValue(playerDTO.getUsername())) {
             throw new PlayerExistException();
         }
 
@@ -68,36 +64,19 @@ public class PlayerAction {
         return insert.getSavedId();
     }
 
-    public Optional<Player> findPlayerByUsername(String username) {
-        @Cleanup DBCursor<Player> player = playerCollection.find(
-                DBQuery.is("username", username),
-                new BasicDBObject());
-
-        if(player == null || !player.hasNext()) {
-            return Optional.empty();
-        }
-
-        return Optional.of(player.next());
-    }
-
-    public List<PBF> getGames(Player player) {
+    public Set<String> getGames(Player player) {
         Preconditions.checkNotNull(player);
         log.debug("Getting all games for player " + player.getUsername());
-
-        return player.getGameIds()
-                .stream()
-                .map(this::getPBF)
-                .filter(PBF::isActive)
-                .collect(Collectors.toList());
+        return player.getGameIds();
     }
 
     /**
      * Choose a tech for player and store back in the pbf collection
      * @param pbfId - The pbf id
      * @param item - The tech
-     * @param username - The username of player
+     * @param playerId - The id of player
      */
-    public void chooseTech(String pbfId, ItemDTO item, String username) {
+    public void chooseTech(String pbfId, ItemDTO item, String playerId) {
         Preconditions.checkNotNull(pbfId);
         Preconditions.checkNotNull(item);
         Preconditions.checkNotNull(item.getName());
@@ -107,18 +86,15 @@ public class PlayerAction {
                 .findFirst();
                                            //if not static then this::cannotFindItem
         Tech chosenTech = tech.orElseThrow(PlayerAction::cannotFindItem);
-        Playerhand playerhand = pbf.getPlayers()
-                .stream().filter(p -> p.getUsername().equals(username))
-                .findFirst()
-                .orElseThrow(PlayerAction::cannotFindItem);
+        Playerhand playerhand = getPlayerhandFromPlayerId(playerId, pbf);
 
         chosenTech.setHidden(true);
-        chosenTech.setOwner(username);
+        chosenTech.setOwner(playerId);
 
         playerhand.getTechsChosen().add(chosenTech);
 
         pbfCollection.updateById(pbf.getId(), pbf);
-        log.debug("Player " + username + " chose tech " + chosenTech.getName());
+        log.debug("Player " + playerId + " chose tech " + chosenTech.getName());
 
         //TODO private and public log
     }
@@ -143,13 +119,13 @@ public class PlayerAction {
         for(int i = 0; i < pbf.getPlayers().size(); i++) {
             Playerhand playerhand = pbf.getPlayers().get(i);
             if(playerhand.getUsername().equals(username)) {
-                playerhand.setStartingPlayer(false);
+                playerhand.setYourTurn(false);
                 if(pbf.getPlayers().size() == (i+1)) {
                     //We are at the end, pick the first player
-                    pbf.getPlayers().get(0).setStartingPlayer(true);
+                    pbf.getPlayers().get(0).setYourTurn(true);
                 }
                 //Choose next player in line to be starting player
-                pbf.getPlayers().get(i+1).setStartingPlayer(true);
+                pbf.getPlayers().get(i+1).setYourTurn(true);
                 try {
                     pbfCollection.updateById(pbf.getId(), pbf);
                     return true;
@@ -160,8 +136,20 @@ public class PlayerAction {
                             .build());
                 }
             }
-
         }
         return false;
+    }
+
+    public boolean isYourTurn(String pbfId, String playerId) {
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        Playerhand playerhand = getPlayerhandFromPlayerId(playerId, pbf);
+        return playerhand.isYourTurn();
+    }
+
+    private static Playerhand getPlayerhandFromPlayerId(String playerId, PBF pbf) {
+        return pbf.getPlayers()
+                .stream().filter(p -> p.getPlayerId().equals(playerId))
+                .findFirst()
+                .orElseThrow(PlayerAction::cannotFindItem);
     }
 }

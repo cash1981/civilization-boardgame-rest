@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -436,7 +437,7 @@ public class ItemReader {
         allTechs.addAll(level3Techs);
         allTechs.addAll(level4Techs);
         allTechs.add(Tech.SPACE_FLIGHT);
-        Collections.sort(allTechs);
+        Collections.sort(allTechs, (o1, o2) -> Integer.valueOf(o1.getLevel()).compareTo(o2.getLevel()));
 
         return allTechs;
     }

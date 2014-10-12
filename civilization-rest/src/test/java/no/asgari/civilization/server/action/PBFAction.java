@@ -27,23 +27,23 @@ public class PBFAction {
         UnitReader unit = new UnitReader();
         unit.readAllUnitsFromExcel();
 
-        pbf.setMounted(unit.mountedList);
-        pbf.setAircraft(unit.aircraftList);
-        pbf.setArtillery(unit.artilleryList);
-        pbf.setInfantry(unit.infantryList);
+        pbf.getItems().addAll(unit.mountedList);
+        pbf.getItems().addAll(unit.aircraftList);
+        pbf.getItems().addAll(unit.artilleryList);
+        pbf.getItems().addAll(unit.infantryList);
 
-        pbf.setCivs(items.shuffledCivs);
-        pbf.setCultureIs(items.shuffledCultureI);
-        pbf.setCultureIIs(items.shuffledCultureII);
-        pbf.setCultureIIIs(items.shuffledCultureIII);
-        pbf.setGreatPersons(items.shuffledGPs);
-        pbf.setHuts(items.shuffledHuts);
-        pbf.setVillages(items.shuffledVillages);
-        pbf.setTiles(items.shuffledTiles);
-        pbf.getCitystates().addAll(items.shuffledCityStates);
-        pbf.getWonders().addAll(items.ancientWonders);
-        pbf.getWonders().addAll(items.medievalWonders);
-        pbf.getWonders().addAll(items.modernWonders);
+        pbf.getItems().addAll(items.shuffledCivs);
+        pbf.getItems().addAll(items.shuffledCultureI);
+        pbf.getItems().addAll(items.shuffledCultureII);
+        pbf.getItems().addAll(items.shuffledCultureIII);
+        pbf.getItems().addAll(items.shuffledGPs);
+        pbf.getItems().addAll(items.shuffledHuts);
+        pbf.getItems().addAll(items.shuffledVillages);
+        pbf.getItems().addAll(items.shuffledTiles);
+        pbf.getItems().addAll(items.shuffledCityStates);
+        pbf.getItems().addAll(items.ancientWonders);
+        pbf.getItems().addAll(items.medievalWonders);
+        pbf.getItems().addAll(items.modernWonders);
         pbf.getTechs().addAll(items.allTechs);
         return pbf;
     }
