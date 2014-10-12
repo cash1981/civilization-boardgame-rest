@@ -59,4 +59,15 @@ public class DrawTest extends AbstractMongoDBTest {
         assertThat(pbf.getCitystates()).doesNotContain(draw.getItem());
     }
 
+    @Test
+    public void drawItemAndMakeSureLogsAreStored() throws Exception {
+        long publicLog = publicLogCollection.count();
+        long privateLog = privateLogCollection.count();
+        DrawAction drawAction = new DrawAction(db);
+        drawAction.drawCultureI(pbfId, playerId);
+        assertThat(publicLogCollection.count()).isEqualTo(++publicLog);
+        assertThat(privateLogCollection.count()).isEqualTo(++privateLog);
+    }
+
+
 }

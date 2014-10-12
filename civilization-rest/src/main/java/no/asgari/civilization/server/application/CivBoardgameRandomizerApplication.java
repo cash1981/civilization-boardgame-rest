@@ -68,6 +68,10 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
                 CacheBuilderSpec.parse("expireAfterWrite=120m")), "civilization"));
 
 
+        createUsernameCache(playerCollection);
+    }
+
+    private void createUsernameCache(final JacksonDBCollection<Player, String> playerCollection) {
         LoadingCache<String, String> usernameCache = CacheBuilder.newBuilder()
                 .expireAfterWrite(2, TimeUnit.HOURS)
                 .maximumSize(100)

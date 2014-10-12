@@ -26,8 +26,6 @@ public class GameLogActionTest extends AbstractMongoDBTest {
         pl.setPbfId(pbfId);
         pl.setUsername("cash1981");
         pl.createAndSetLog();
-        GameLogAction action = new GameLogAction(db);
-        action.recordPublicLog(pl);
 
         long afterInsert = publicLogCollection.count();
         assertThat(beforeInsert).isLessThan(afterInsert);
@@ -45,8 +43,6 @@ public class GameLogActionTest extends AbstractMongoDBTest {
         pl.setPbfId(pbfId);
         pl.setUsername("cash1981");
         pl.createAndSetLog();
-        GameLogAction action = new GameLogAction(db);
-        action.recordPrivateLog(pl);
 
         long afterInsert = privateLogCollection.count();
         assertThat(beforeInsert).isLessThan(afterInsert);

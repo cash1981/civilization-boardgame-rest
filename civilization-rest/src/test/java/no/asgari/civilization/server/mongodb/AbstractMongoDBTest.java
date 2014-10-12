@@ -2,7 +2,10 @@ package no.asgari.civilization.server.mongodb;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheBuilderSpec;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
@@ -16,6 +19,7 @@ import io.dropwizard.jersey.DropwizardResourceConfig;
 import no.asgari.civilization.server.action.PBFAction;
 import no.asgari.civilization.server.application.CivAuthenticator;
 import no.asgari.civilization.server.application.CivBoardGameRandomizerConfiguration;
+import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
@@ -34,6 +38,7 @@ import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -76,6 +81,8 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         createNewPBFGame();
         createAnotherPBF();
         playerId = playerCollection.findOne().getId();
+
+        createUsernameCache(playerCollection);
     }
 
     @Override
@@ -155,6 +162,19 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         assertNotNull(writeResult.getSavedId());
         player.setId(writeResult.getSavedId());
         return player;
+    }
+
+    private static void createUsernameCache(final JacksonDBCollection<Player, String> playerCollection) {
+        LoadingCache<String, String> usernameCache = CacheBuilder.newBuilder()
+                .expireAfterWrite(2, TimeUnit.HOURS)
+                .maximumSize(100)
+                .build(new CacheLoader<String, String>() {
+                    public String load(String playerId) {
+                        return playerCollection.findOneById(playerId).getUsername();
+                    }
+                });
+
+        CivSingleton.getInstance().setUsernameCache(usernameCache);
     }
 
 }
