@@ -2,6 +2,8 @@ package no.asgari.civilization.server.resource;
 
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Preconditions;
+import com.mongodb.DB;
+import com.mongodb.MongoClient;
 import io.dropwizard.auth.Auth;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.GameAction;
@@ -34,18 +36,12 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 @Log4j
 public class GameResource {
+    private final DB db;
     @Context
     private UriInfo uriInfo;
 
-    private final JacksonDBCollection<Draw, String> drawCollection;
-    private final JacksonDBCollection<PBF, String> pbfCollection;
-    private final JacksonDBCollection<Player, String> playerCollection;
-
-    public GameResource(JacksonDBCollection<PBF, String> pbfCollection, JacksonDBCollection<Player, String> playerCollection,
-            JacksonDBCollection<Draw, String> drawCollection) {
-        this.playerCollection = playerCollection;
-        this.pbfCollection = pbfCollection;
-        this.drawCollection = drawCollection;
+    public GameResource(DB db) {
+        this.db = db;
     }
 
     /**
@@ -58,8 +54,8 @@ public class GameResource {
     @Timed
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllGames() {
-        GameAction gameAction = new GameAction(pbfCollection, playerCollection);
-        List<PbfDTO> games = gameAction.getAllActiveGames(pbfCollection);
+        GameAction gameAction = new GameAction(db);
+        List<PbfDTO> games = gameAction.getAllActiveGames();
 
         return Response.ok()
                 .entity(games)
@@ -73,7 +69,7 @@ public class GameResource {
         Preconditions.checkNotNull(player);
 
         log.info("Creating game " + dto);
-        GameAction gameAction = new GameAction(pbfCollection, playerCollection);
+        GameAction gameAction = new GameAction(db);
         String id = gameAction.createNewGame(dto);
         return Response.status(Response.Status.CREATED)
                 .location(uriInfo.getAbsolutePathBuilder().path(id).build())
@@ -88,7 +84,7 @@ public class GameResource {
         Preconditions.checkNotNull(pbfId);
         Preconditions.checkNotNull(player);
 
-        GameAction gameAction = new GameAction(pbfCollection, playerCollection);
+        GameAction gameAction = new GameAction(db);
         gameAction.joinGame(pbfId, player.getUsername());
         return Response.ok()
                 .location(uriInfo.getAbsolutePathBuilder().path(pbfId).build())
@@ -105,7 +101,7 @@ public class GameResource {
     @Timed
     @Path("/{pbfId}/techs")
     public List<Tech> getAllTechs(@NotEmpty @PathParam("pbfId") String pbfId, @Auth Player player) {
-        GameAction gameAction = new GameAction(pbfCollection, playerCollection);
+        GameAction gameAction = new GameAction(db);
         //TODO This will never change, so really it should be cached
         List<Tech> techs = gameAction.getAllTechs(pbfId);
         return techs;

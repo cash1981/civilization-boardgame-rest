@@ -2,6 +2,7 @@ package no.asgari.civilization.server.action;
 
 import com.google.common.base.Preconditions;
 import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.dto.ItemDTO;
@@ -29,9 +30,9 @@ public class PlayerAction {
     private final JacksonDBCollection<Player, String> playerCollection;
     private final JacksonDBCollection<PBF, String> pbfCollection;
 
-    public PlayerAction(JacksonDBCollection<Player, String> playerCollection, JacksonDBCollection<PBF, String> pbfCollection) {
-        this.playerCollection = playerCollection;
-        this.pbfCollection = pbfCollection;
+    public PlayerAction(DB db) {
+        this.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
+        this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
     }
 
     /**

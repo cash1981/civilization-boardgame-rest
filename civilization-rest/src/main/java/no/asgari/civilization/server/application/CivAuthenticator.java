@@ -1,5 +1,6 @@
 package no.asgari.civilization.server.application;
 
+import com.mongodb.DB;
 import io.dropwizard.auth.basic.BasicCredentials;
 import io.dropwizard.java8.auth.Authenticator;
 import no.asgari.civilization.server.action.PlayerAction;
@@ -12,8 +13,8 @@ import java.util.Optional;
 public class CivAuthenticator implements Authenticator<BasicCredentials, Player> {
     private final PlayerAction playerAction;
 
-    public CivAuthenticator(JacksonDBCollection<Player, String> playerCollection) {
-        playerAction = new PlayerAction(playerCollection, null);
+    public CivAuthenticator(DB db) {
+        playerAction = new PlayerAction(db);
     }
 
     @Override

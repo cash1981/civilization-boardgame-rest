@@ -33,9 +33,9 @@ public class UndoTest extends AbstractMongoDBTest {
         assertThat(pbf).isNotNull();
         assertThat(pbf.getCivs()).isNotEmpty();
 
-        DrawAction drawAction = new DrawAction(pbfCollection, drawCollection);
+        DrawAction drawAction = new DrawAction(db);
         Draw drawCiv = drawAction.drawCiv(pbfId, playerId);
-        UndoAction undoAction = new UndoAction(pbfCollection, drawCollection);
+        UndoAction undoAction = new UndoAction(db);
         drawCiv = undoAction.vote(drawCiv, playerId, true);
 
         assertThat(drawCiv.getUndo().getVotes().size()).isEqualTo(1);
@@ -46,7 +46,7 @@ public class UndoTest extends AbstractMongoDBTest {
         Draw draw = drawCollection.findOne();
         int votes = draw.getUndo().getVotes().size();
         assertThat(draw.getUndo()).isNotNull();
-        UndoAction undoAction = new UndoAction(pbfCollection,drawCollection);
+        UndoAction undoAction = new UndoAction(db);
 
         List<Playerhand> players = pbfCollection.findOneById(draw.getPbfId()).getPlayers();
         Set<String> playerIds = draw.getUndo().getVotes().keySet();
@@ -68,7 +68,7 @@ public class UndoTest extends AbstractMongoDBTest {
         Draw draw = drawCollection.findOne();
         PBF pbf = pbfCollection.findOneById(draw.getPbfId());
         //Get the same undo, since I need it to be final
-        UndoAction undoAction = new UndoAction(pbfCollection,drawCollection);
+        UndoAction undoAction = new UndoAction(db);
 
         pbf.getPlayers().stream()
                 .filter(p -> !draw.getUndo().getVotes().keySet().contains(p.getUsername()))
@@ -97,7 +97,7 @@ public class UndoTest extends AbstractMongoDBTest {
         Draw draw = drawCollection.findOne();
         //make another vote
 
-        UndoAction undoAction = new UndoAction(pbfCollection,drawCollection);
+        UndoAction undoAction = new UndoAction(db);
         assertThat(draw.getUndo()).isNotNull();
         draw = undoAction.vote(draw, getAnotherPlayerId(), Boolean.TRUE);
         assertThat(draw.getUndo().votesRemaining()).isEqualTo(2);

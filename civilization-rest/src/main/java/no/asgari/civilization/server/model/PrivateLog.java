@@ -1,5 +1,6 @@
 package no.asgari.civilization.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -58,4 +59,13 @@ public class PrivateLog {
      */
     private boolean reveal = false;
 
+    @JsonIgnore
+    public void createAndSetLog() {
+        final String SPACE = " - ";
+        StringBuilder sb = new StringBuilder();
+        sb.append(created + SPACE );
+        sb.append(username + SPACE);
+        sb.append("drew " + SPACE + draw.getItem().toString());
+        log = sb.toString();
+    }
 }

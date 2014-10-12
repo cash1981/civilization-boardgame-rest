@@ -62,12 +62,12 @@ public class LoginResourceTest extends AbstractMongoDBTest {
         final DropwizardResourceConfig config = DropwizardResourceConfig.forTesting(new MetricRegistry());
         //final Authenticator<BasicCredentials, Player> authenticator = new CivAuthenticator(playerCollection);
         final CachingAuthenticator<BasicCredentials, Player> authenticator =
-        new CachingAuthenticator<>(new MetricRegistry(), new CivAuthenticator(playerCollection),
+        new CachingAuthenticator<>(new MetricRegistry(), new CivAuthenticator(db),
                 CacheBuilderSpec.parse("maximumSize=1"));
 
         config.getSingletons().add(new BasicAuthProvider<>(authenticator, "civilization"));
         config.getSingletons().add(new ExampleResource());
-        config.getSingletons().add(new LoginResource(playerCollection, pbfCollection));
+        config.getSingletons().add(new LoginResource(db));
 
         return new LowLevelAppDescriptor.Builder(config).build();
     }

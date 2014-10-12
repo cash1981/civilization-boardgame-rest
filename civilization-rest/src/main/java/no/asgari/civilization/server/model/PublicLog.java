@@ -64,7 +64,7 @@ public class PublicLog {
         StringBuilder sb = new StringBuilder();
         sb.append(created + SPACE );
         sb.append(username + SPACE);
-        sb.append("drew " + draw.getItem().getType());
+        sb.append("drew " + SPACE + draw.getItem().getType());
         log = sb.toString();
     }
 }

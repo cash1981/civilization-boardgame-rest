@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 @Getter
 @Setter
-@ToString(of="name")
+@ToString(of={"name", "type"})
 @JsonTypeName("greatperson")
 @NoArgsConstructor
 public class GreatPerson implements Item {

@@ -1,6 +1,8 @@
 package no.asgari.civilization.server.resource;
 
 import com.google.common.base.Preconditions;
+import com.mongodb.DB;
+import com.mongodb.MongoClient;
 import io.dropwizard.auth.basic.BasicCredentials;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.PlayerAction;
@@ -34,15 +36,15 @@ import java.util.Optional;
 @Consumes(MediaType.APPLICATION_JSON)
 public class LoginResource {
 
+    private final DB db;
     private final JacksonDBCollection<Player, String> playerCollection;
-    private final JacksonDBCollection<PBF, String> pbfCollection;
 
     @Context
     private UriInfo uriInfo;
 
-    public LoginResource(JacksonDBCollection<Player, String> playerCollection, JacksonDBCollection<PBF, String> pbfCollection) {
-        this.playerCollection = playerCollection;
-        this.pbfCollection = pbfCollection;
+    public LoginResource(DB db) {
+        this.db = db;
+        this.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
     }
 
     @POST
@@ -52,7 +54,7 @@ public class LoginResource {
         Preconditions.checkNotNull(username);
         Preconditions.checkNotNull(password);
 
-        CivAuthenticator auth = new CivAuthenticator(playerCollection);
+        CivAuthenticator auth = new CivAuthenticator(db);
         Optional<Player> playerOptional = auth.authenticate(new BasicCredentials(username, password));
         if (playerOptional.isPresent()) {
             Player player = playerOptional.get();
@@ -77,7 +79,7 @@ public class LoginResource {
         Preconditions.checkNotNull(playerDTO);
         log.debug("Entering create player");
 
-        PlayerAction playerAction = new PlayerAction(playerCollection, pbfCollection);
+        PlayerAction playerAction = new PlayerAction(db);
         try {
             String playerId = playerAction.createPlayer(playerDTO);
             return Response.status(Response.Status.CREATED)

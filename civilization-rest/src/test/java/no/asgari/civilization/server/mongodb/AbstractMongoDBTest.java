@@ -13,11 +13,9 @@ import io.dropwizard.auth.basic.BasicCredentials;
 import io.dropwizard.java8.auth.CachingAuthenticator;
 import io.dropwizard.java8.auth.basic.BasicAuthProvider;
 import io.dropwizard.jersey.DropwizardResourceConfig;
-import no.asgari.civilization.server.action.LogListener;
 import no.asgari.civilization.server.action.PBFAction;
 import no.asgari.civilization.server.application.CivAuthenticator;
 import no.asgari.civilization.server.application.CivBoardGameRandomizerConfiguration;
-import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
@@ -50,6 +48,8 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
     protected static String playerId;
     protected static String pbfId_2;
 
+    protected static DB db;
+
     private static MongoClient mongo;
 
     @BeforeClass
@@ -57,7 +57,7 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         CivBoardGameRandomizerConfiguration configuration = new CivBoardGameRandomizerConfiguration();
 
         mongo = new MongoClient(configuration.mongohost, configuration.mongoport);
-        DB db = mongo.getDB(configuration.mongodb);
+        db = mongo.getDB(configuration.mongodb);
 
         AbstractMongoDBTest.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
         AbstractMongoDBTest.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
@@ -76,8 +76,6 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         createNewPBFGame();
         createAnotherPBF();
         playerId = playerCollection.findOne().getId();
-
-        CivSingleton.getInstance().getEventBus().register(new LogListener(privateLogCollection, publicLogCollection));
     }
 
     @Override
@@ -85,12 +83,12 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         final DropwizardResourceConfig config = DropwizardResourceConfig.forTesting(new MetricRegistry());
         final CachingAuthenticator<BasicCredentials, Player> authenticator =
                 new CachingAuthenticator<>(new MetricRegistry(),
-                        new CivAuthenticator(playerCollection),
+                        new CivAuthenticator(db),
                         CacheBuilderSpec.parse("maximumSize=1"));
         config.getSingletons().add(new BasicAuthProvider<>(authenticator, "civilization"));
-        config.getSingletons().add(new LoginResource(playerCollection, pbfCollection));
-        config.getSingletons().add(new PlayerResource(playerCollection, pbfCollection));
-        config.getSingletons().add(new GameResource(pbfCollection, playerCollection, drawCollection));
+        config.getSingletons().add(new LoginResource(db));
+        config.getSingletons().add(new PlayerResource(db));
+        config.getSingletons().add(new GameResource(db));
 
         return new LowLevelAppDescriptor.Builder(config).build();
     }

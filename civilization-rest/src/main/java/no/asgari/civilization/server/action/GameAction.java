@@ -2,6 +2,7 @@ package no.asgari.civilization.server.action;
 
 import com.google.common.base.Preconditions;
 import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
@@ -28,13 +29,12 @@ import java.util.stream.Collectors;
 
 @Log4j
 public class GameAction {
-
     private final JacksonDBCollection<PBF, String> pbfCollection;
     private final JacksonDBCollection<Player, String> playerCollection;
 
-    public GameAction(JacksonDBCollection<PBF, String> pbfCollection, JacksonDBCollection<Player, String> playerCollection) {
-        this.pbfCollection = pbfCollection;
-        this.playerCollection = playerCollection;
+    public GameAction(DB db) {
+        this.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
+        this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
     }
 
     public String createNewGame(CreateNewGameDTO dto) {
@@ -94,7 +94,7 @@ public class GameAction {
         return pbf.getId();
     }
 
-    public List<PbfDTO> getAllActiveGames(JacksonDBCollection<PBF, String> pbfCollection) {
+    public List<PbfDTO> getAllActiveGames() {
         @Cleanup DBCursor<PBF> dbCursor = pbfCollection.find(DBQuery.is("active", true), new BasicDBObject());
 
         List<PbfDTO> pbfs = new ArrayList<>();

@@ -1,6 +1,7 @@
 package no.asgari.civilization.server.action;
 
 import com.google.common.base.Preconditions;
+import com.mongodb.DB;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.model.Aircraft;
@@ -16,6 +17,8 @@ import no.asgari.civilization.server.model.Hut;
 import no.asgari.civilization.server.model.Infantry;
 import no.asgari.civilization.server.model.Mounted;
 import no.asgari.civilization.server.model.PBF;
+import no.asgari.civilization.server.model.PrivateLog;
+import no.asgari.civilization.server.model.PublicLog;
 import no.asgari.civilization.server.model.Tile;
 import no.asgari.civilization.server.model.Type;
 import no.asgari.civilization.server.model.Undo;
@@ -26,10 +29,14 @@ import org.mongojack.JacksonDBCollection;
 import java.util.Optional;
 
 @Log4j
-@RequiredArgsConstructor
 public class UndoAction {
     private final JacksonDBCollection<PBF, String> pbfCollection;
     private final JacksonDBCollection<Draw, String> drawCollection;
+
+    public UndoAction(DB db) {
+        this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
+        this.drawCollection = JacksonDBCollection.wrap(db.getCollection(Draw.COL_NAME), Draw.class, String.class);
+    }
 
     /**
      * All must agree for draw to be performed.

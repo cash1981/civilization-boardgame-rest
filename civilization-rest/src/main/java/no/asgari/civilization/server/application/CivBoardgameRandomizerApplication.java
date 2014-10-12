@@ -41,11 +41,7 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
         MongoClient mongo = new MongoClient(configuration.mongohost, configuration.mongoport);
         DB db = mongo.getDB(configuration.mongodb);
 
-        JacksonDBCollection<PBF, String> pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
         JacksonDBCollection<Player, String> playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
-        JacksonDBCollection<Draw, String> drawCollection = JacksonDBCollection.wrap(db.getCollection(Draw.COL_NAME), Draw.class, String.class);
-        JacksonDBCollection<PrivateLog, String> privateLogCollection = JacksonDBCollection.wrap(db.getCollection(PrivateLog.COL_NAME), PrivateLog.class, String.class);
-        JacksonDBCollection<PublicLog, String> publicLogCollection = JacksonDBCollection.wrap(db.getCollection(PublicLog.COL_NAME), PublicLog.class, String.class);
 
         createIndexForPlayer(playerCollection);
         MongoManaged mongoManaged = new MongoManaged(mongo);
@@ -56,13 +52,13 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
         environment.healthChecks().register("MongoHealthCheck", new MongoHealthCheck(mongo));
 
         //Resources
-        environment.jersey().register(new GameResource(pbfCollection, playerCollection, drawCollection));
-        environment.jersey().register(new LoginResource(playerCollection, pbfCollection));
-        environment.jersey().register(new PlayerResource(playerCollection, pbfCollection));
+        environment.jersey().register(new GameResource(db));
+        environment.jersey().register(new LoginResource(db));
+        environment.jersey().register(new PlayerResource(db));
 
         //Authentication
 
-        environment.jersey().register(new BasicAuthProvider<>(new CachingAuthenticator<>(new MetricRegistry(), new CivAuthenticator(playerCollection),
+        environment.jersey().register(new BasicAuthProvider<>(new CachingAuthenticator<>(new MetricRegistry(), new CivAuthenticator(db),
                 CacheBuilderSpec.parse("expireAfterWrite=120m")), "civilization"));
 
         // TODO Fix eventbus
