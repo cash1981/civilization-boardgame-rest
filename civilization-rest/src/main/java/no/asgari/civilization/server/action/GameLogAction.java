@@ -24,19 +24,19 @@ public class GameLogAction {
         this.publicLogCollection = JacksonDBCollection.wrap(db.getCollection(PublicLog.COL_NAME), PublicLog.class, String.class);
     }
 
-    public void recordPrivateLog(@NotNull @Valid PrivateLog privateLog) {
-        Preconditions.checkNotNull(privateLogCollection);
+    public String record(@NotNull @Valid PrivateLog privateLog) {
         Preconditions.checkNotNull(privateLog);
 
         WriteResult<PrivateLog, String> insert = privateLogCollection.insert(privateLog);
         log.debug("Saved Gamelog with _id " + insert.getSavedId());
+        return insert.getSavedId();
     }
 
-    public void recordPublicLog(@NotNull @Valid PublicLog publicLog) {
-        Preconditions.checkNotNull(publicLogCollection);
+    public String record(@NotNull @Valid PublicLog publicLog) {
         Preconditions.checkNotNull(publicLog);
 
         WriteResult<PublicLog, String> insert = publicLogCollection.insert(publicLog);
         log.debug("Saved Gamelog with _id " + insert.getSavedId());
+        return insert.getSavedId();
     }
 }

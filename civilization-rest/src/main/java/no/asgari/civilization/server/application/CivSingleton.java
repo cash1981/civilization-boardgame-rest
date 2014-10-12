@@ -1,10 +1,10 @@
 package no.asgari.civilization.server.application;
 
-import com.google.common.eventbus.EventBus;
+import com.google.common.cache.LoadingCache;
 import lombok.extern.log4j.Log4j;
 
 /**
- * Application cache
+ * Application singleton
  */
 @SuppressWarnings("unchecked")
 @Log4j
@@ -12,7 +12,7 @@ import lombok.extern.log4j.Log4j;
 public final class CivSingleton {
 
     private static CivSingleton civSingleton = new CivSingleton();
-    private static EventBus eventBus = new EventBus();
+    private LoadingCache<String, String> usernameCache;
 
     private CivSingleton() {
     }
@@ -21,11 +21,11 @@ public final class CivSingleton {
         return civSingleton;
     }
 
-    public EventBus getEventBus() {
-        return eventBus;
+    public void setUsernameCache(LoadingCache<String, String> usernameCache) {
+        this.usernameCache = usernameCache;
     }
 
-    public void postToEventBus(Object event) {
-        eventBus.post(event);
+    public LoadingCache<String, String> getUsernameCache() {
+        return usernameCache;
     }
 }

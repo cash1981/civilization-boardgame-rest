@@ -1,7 +1,11 @@
 package no.asgari.civilization.server.application;
 
 import com.codahale.metrics.MetricRegistry;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheBuilderSpec;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
@@ -22,6 +26,8 @@ import no.asgari.civilization.server.resource.GameResource;
 import no.asgari.civilization.server.resource.LoginResource;
 import no.asgari.civilization.server.resource.PlayerResource;
 import org.mongojack.JacksonDBCollection;
+
+import java.util.concurrent.TimeUnit;
 
 @Log4j
 @SuppressWarnings("unchecked")
@@ -61,8 +67,17 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
         environment.jersey().register(new BasicAuthProvider<>(new CachingAuthenticator<>(new MetricRegistry(), new CivAuthenticator(db),
                 CacheBuilderSpec.parse("expireAfterWrite=120m")), "civilization"));
 
-        // TODO Fix eventbus
-        // CivSingleton.getInstance().getEventBus().register(new LogListener(privateLogCollection, publicLogCollection));
+
+        LoadingCache<String, String> usernameCache = CacheBuilder.newBuilder()
+                .expireAfterWrite(2, TimeUnit.HOURS)
+                .maximumSize(100)
+                .build(new CacheLoader<String, String>() {
+                            public String load(String playerId) {
+                                return playerCollection.findOneById(playerId).getUsername();
+                            }
+                       });
+
+        CivSingleton.getInstance().setUsernameCache(usernameCache);
     }
 
     private void createIndexForPlayer(JacksonDBCollection<Player, String> playerCollection) {

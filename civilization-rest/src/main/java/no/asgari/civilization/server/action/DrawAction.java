@@ -2,8 +2,8 @@ package no.asgari.civilization.server.action;
 
 import com.google.common.base.Preconditions;
 import com.mongodb.DB;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.model.Aircraft;
 import no.asgari.civilization.server.model.Artillery;
 import no.asgari.civilization.server.model.Citystate;
@@ -17,14 +17,18 @@ import no.asgari.civilization.server.model.Hut;
 import no.asgari.civilization.server.model.Infantry;
 import no.asgari.civilization.server.model.Mounted;
 import no.asgari.civilization.server.model.PBF;
+import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.PrivateLog;
 import no.asgari.civilization.server.model.PublicLog;
 import no.asgari.civilization.server.model.Tile;
+import no.asgari.civilization.server.model.Type;
 import no.asgari.civilization.server.model.Undo;
 import no.asgari.civilization.server.model.Village;
 import no.asgari.civilization.server.model.Wonder;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * Class that will perform draws and log them
@@ -33,16 +37,20 @@ import org.mongojack.WriteResult;
 public class DrawAction {
     private final JacksonDBCollection<PBF, String> pbfCollection;
     private final JacksonDBCollection<Draw, String> drawCollection;
+    private final JacksonDBCollection<Player, String> playerCollection;
+    private final GameLogAction logAction;
 
     public DrawAction(DB db) {
         this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
         this.drawCollection = JacksonDBCollection.wrap(db.getCollection(Draw.COL_NAME), Draw.class, String.class);
+        this.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
+        logAction = new GameLogAction(db);
     }
 
     /**
      * Will make a draw of a Civ and store the draw in the collection
      *
-     * @param pbfId - The PBF
+     * @param pbfId    - The PBF
      * @param playerId - The player making the draw
      * @return - Returns the draw made
      */
@@ -59,9 +67,7 @@ public class DrawAction {
         pbfCollection.updateById(pbf.getId(), pbf);
         log.debug("Drew civ " + civ + " and updated pbf");
 
-        //TODO call event for logging
-        //TODO call event for adding a undo
-        //For now we manually add undo. Its nicer to call event
+        createLog(draw);
         draw.setId(drawInsert.getSavedId());
         return draw;
     }
@@ -69,7 +75,7 @@ public class DrawAction {
     /**
      * Will make a draw of a Aircraft and store the draw in the collection
      *
-     * @param pbfId - The PBF
+     * @param pbfId    - The PBF
      * @param playerId - The player making the draw
      * @return - Returns the draw made
      */
@@ -86,9 +92,7 @@ public class DrawAction {
         pbfCollection.updateById(pbf.getId(), pbf);
         log.debug("Drew aircraft " + aircraft + " and updated pbf");
 
-        //TODO call event for logging
-        //TOOD call event for adding undo
-
+        createLog(draw);
         draw.setId(drawInsert.getSavedId());
         return draw;
     }
@@ -96,7 +100,7 @@ public class DrawAction {
     /**
      * Will make a draw of a Artillery and store the draw in the collection
      *
-     * @param pbfId - The PBF
+     * @param pbfId    - The PBF
      * @param playerId - The player making the draw
      * @return - Returns the draw made
      */
@@ -113,9 +117,7 @@ public class DrawAction {
         pbfCollection.updateById(pbf.getId(), pbf);
         log.debug("Drew artillery " + artillery + " and updated pbf");
 
-        //TODO call event for logging
-        //TOOD call event for adding undo
-
+        createLog(draw);
         draw.setId(drawInsert.getSavedId());
 
         return draw;
@@ -124,7 +126,7 @@ public class DrawAction {
     /**
      * Will make a draw of a Citystate and store the draw in the collection
      *
-     * @param pbfId - The PBF
+     * @param pbfId    - The PBF
      * @param playerId - The player making the draw
      * @return - Returns the draw made
      */
@@ -141,9 +143,7 @@ public class DrawAction {
         pbfCollection.updateById(pbf.getId(), pbf);
         log.debug("Drew Citystate " + citystate + " and updated pbf");
 
-        //TODO call event for logging
-        //TOOD call event for adding undo
-
+        createLog(draw);
         draw.setId(drawInsert.getSavedId());
 
         return draw;
@@ -152,7 +152,7 @@ public class DrawAction {
     /**
      * Will make a draw of a CultureI and store the draw in the collection
      *
-     * @param pbfId - The PBF
+     * @param pbfId    - The PBF
      * @param playerId - The player making the draw
      * @return - Returns the draw made
      */
@@ -169,9 +169,7 @@ public class DrawAction {
         pbfCollection.updateById(pbf.getId(), pbf);
         log.debug("Drew CultureI " + cultureI + " and updated pbf");
 
-        //TODO call event for logging
-        //TOOD call event for adding undo
-
+        createLog(draw);
         draw.setId(drawInsert.getSavedId());
 
         return draw;
@@ -180,7 +178,7 @@ public class DrawAction {
     /**
      * Will make a draw of a CultureII and store the draw in the collection
      *
-     * @param pbfId - The PBF
+     * @param pbfId    - The PBF
      * @param playerId - The player making the draw
      * @return - Returns the draw made
      */
@@ -197,9 +195,7 @@ public class DrawAction {
         pbfCollection.updateById(pbf.getId(), pbf);
         log.debug("Drew CultureII " + cultureII + " and updated pbf");
 
-        //TODO call event for logging
-        //TOOD call event for adding undo
-
+        createLog(draw);
         draw.setId(drawInsert.getSavedId());
 
         return draw;
@@ -208,7 +204,7 @@ public class DrawAction {
     /**
      * Will make a draw of a CultureIII and store the draw in the collection
      *
-     * @param pbfId - The PBF
+     * @param pbfId    - The PBF
      * @param playerId - The player making the draw
      * @return - Returns the draw made
      */
@@ -225,9 +221,7 @@ public class DrawAction {
         pbfCollection.updateById(pbf.getId(), pbf);
         log.debug("Drew CultureIII " + cultureIII + " and updated pbf");
 
-        //TODO call event for logging
-        //TOOD call event for adding undo
-
+        createLog(draw);
         draw.setId(drawInsert.getSavedId());
 
         return draw;
@@ -236,7 +230,7 @@ public class DrawAction {
     /**
      * Will make a draw of a GreatPerson and store the draw in the collection
      *
-     * @param pbfId - The PBF
+     * @param pbfId    - The PBF
      * @param playerId - The player making the draw
      * @return - Returns the draw made
      */
@@ -253,9 +247,7 @@ public class DrawAction {
         pbfCollection.updateById(pbf.getId(), pbf);
         log.debug("Drew GreatPerson " + greatPerson + " and updated pbf");
 
-        //TODO call event for logging
-        //TOOD call event for adding undo
-
+        createLog(draw);
         draw.setId(drawInsert.getSavedId());
 
         return draw;
@@ -264,7 +256,7 @@ public class DrawAction {
     /**
      * Will make a draw of a Hut and store the draw in the collection
      *
-     * @param pbfId - The PBF
+     * @param pbfId    - The PBF
      * @param playerId - The player making the draw
      * @return - Returns the draw made
      */
@@ -281,9 +273,7 @@ public class DrawAction {
         pbfCollection.updateById(pbf.getId(), pbf);
         log.debug("Drew Hut " + hut + " and updated pbf");
 
-        //TODO call event for logging
-        //TOOD call event for adding undo
-
+        createLog(draw);
         draw.setId(drawInsert.getSavedId());
 
         return draw;
@@ -292,7 +282,7 @@ public class DrawAction {
     /**
      * Will make a draw of a Infantry and store the draw in the collection
      *
-     * @param pbfId - The PBF
+     * @param pbfId    - The PBF
      * @param playerId - The player making the draw
      * @return - Returns the draw made
      */
@@ -309,9 +299,7 @@ public class DrawAction {
         pbfCollection.updateById(pbf.getId(), pbf);
         log.debug("Drew Infantry " + infantry + " and updated pbf");
 
-        //TODO call event for logging
-        //TOOD call event for adding undo
-
+        createLog(draw);
         draw.setId(drawInsert.getSavedId());
 
         return draw;
@@ -320,7 +308,7 @@ public class DrawAction {
     /**
      * Will make a draw of a Mounted and store the draw in the collection
      *
-     * @param pbfId - The PBF
+     * @param pbfId    - The PBF
      * @param playerId - The player making the draw
      * @return - Returns the draw made
      */
@@ -337,9 +325,7 @@ public class DrawAction {
         pbfCollection.updateById(pbf.getId(), pbf);
         log.debug("Drew Mounted " + mounted + " and updated pbf");
 
-        //TODO call event for logging
-        //TOOD call event for adding undo
-
+        createLog(draw);
         draw.setId(drawInsert.getSavedId());
 
         return draw;
@@ -348,7 +334,7 @@ public class DrawAction {
     /**
      * Will make a draw of a Tile and store the draw in the collection
      *
-     * @param pbfId - The PBF
+     * @param pbfId    - The PBF
      * @param playerId - The player making the draw
      * @return - Returns the draw made
      */
@@ -365,9 +351,7 @@ public class DrawAction {
         pbfCollection.updateById(pbf.getId(), pbf);
         log.debug("Drew Tile " + tile + " and updated pbf");
 
-        //TODO call event for logging
-        //TOOD call event for adding undo
-
+        createLog(draw);
         draw.setId(drawInsert.getSavedId());
 
         return draw;
@@ -376,7 +360,7 @@ public class DrawAction {
     /**
      * Will make a draw of a Village and store the draw in the collection
      *
-     * @param pbfId - The PBF
+     * @param pbfId    - The PBF
      * @param playerId - The player making the draw
      * @return - Returns the draw made
      */
@@ -393,9 +377,7 @@ public class DrawAction {
         pbfCollection.updateById(pbf.getId(), pbf);
         log.debug("Drew Village " + village + " and updated pbf");
 
-        //TODO call event for logging
-        //TOOD call event for adding undo
-
+        createLog(draw);
         draw.setId(drawInsert.getSavedId());
 
         return draw;
@@ -404,7 +386,7 @@ public class DrawAction {
     /**
      * Will make a draw of a Wonder and store the draw in the collection
      *
-     * @param pbfId - The PBF
+     * @param pbfId    - The PBF
      * @param playerId - The player making the draw
      * @return - Returns the draw made
      */
@@ -421,17 +403,50 @@ public class DrawAction {
         pbfCollection.updateById(pbf.getId(), pbf);
         log.debug("Drew Wonder " + wonder + " and updated pbf");
 
-        //TODO call event for logging
-        //TOOD call event for adding undo
-
+        createLog(draw);
         draw.setId(drawInsert.getSavedId());
 
         return draw;
     }
 
-    private Undo createUndo(int numOfPlayer) {
-        Undo undo = new Undo(numOfPlayer);
-        return undo;
+    private void createLog(Draw<? extends Type> draw) {
+        createPublicLog(draw);
+        createPrivateLog(draw);
+    }
+
+    private PublicLog createPublicLog(Draw draw) {
+        PublicLog pl = new PublicLog();
+        pl.setDraw(draw);
+        pl.setPbfId(draw.getPbfId());
+        try {
+            pl.setUsername(CivSingleton.getInstance().getUsernameCache().get(draw.getPlayerId()));
+        } catch (ExecutionException e) {
+            log.error("Couldn't retrieve username from cache");
+            pl.setUsername(getUsernameFromPlayerId(draw.getPlayerId()));
+        }
+        pl.createAndSetLog();
+        pl.setId(logAction.record(pl));
+        return pl;
+    }
+
+    private PrivateLog createPrivateLog(Draw draw) {
+        PrivateLog pl = new PrivateLog();
+        pl.setDraw(draw);
+        pl.setPbfId(draw.getPbfId());
+        try {
+            pl.setUsername(CivSingleton.getInstance().getUsernameCache().get(draw.getPlayerId()));
+        } catch (ExecutionException e) {
+            log.error("Couldn't retrieve username from cache");
+            pl.setUsername(getUsernameFromPlayerId(draw.getPlayerId()));
+        }
+        pl.setReveal(false);
+        pl.createAndSetLog();
+        pl.setId(logAction.record(pl));
+        return pl;
+    }
+
+    private String getUsernameFromPlayerId(String playerId) {
+        return playerCollection.findOneById(playerId).getUsername();
     }
 
 }
