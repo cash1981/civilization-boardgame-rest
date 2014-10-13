@@ -47,14 +47,24 @@ public class Tech implements Item, Level {
             case LEVEL_1:
                 return SheetName.LEVEL_1_TECH;
             case LEVEL_2:
-                return SheetName.LEVEL_1_TECH;
+                return SheetName.LEVEL_2_TECH;
             case LEVEL_3:
-                return SheetName.LEVEL_1_TECH;
+                return SheetName.LEVEL_3_TECH;
             case LEVEL_4:
-                return SheetName.LEVEL_1_TECH;
+                return SheetName.LEVEL_4_TECH;
         }
 
         return SheetName.LEVEL_1_TECH;
+    }
+
+    @Override
+    public String revealPublic() {
+        return getSheetName().toString();
+    }
+
+    @Override
+    public String revealAll() {
+        return name;
     }
 
 

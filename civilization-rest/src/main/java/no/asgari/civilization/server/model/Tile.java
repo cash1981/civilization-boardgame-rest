@@ -34,6 +34,16 @@ public class Tile implements Item {
     }
 
     @Override
+    public String revealPublic() {
+        return getClass().getSimpleName() + " " + name;
+    }
+
+    @Override
+    public String revealAll() {
+        return revealPublic();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

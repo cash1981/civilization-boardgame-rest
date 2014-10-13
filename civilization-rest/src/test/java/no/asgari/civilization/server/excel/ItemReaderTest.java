@@ -36,6 +36,6 @@ public class ItemReaderTest {
         assertThat(itemReader.shuffledCityStates).isNotEmpty();
         assertThat(itemReader.allTechs).isNotEmpty();
         assertThat(itemReader.allTechs).contains(Tech.SPACE_FLIGHT);
-        assertThat(itemReader.allTechs).isSorted();
+        assertThat(itemReader.allTechs).isSortedAccordingTo((o1, o2) -> Integer.valueOf(o1.getLevel()).compareTo(o2.getLevel()));
     }
 }

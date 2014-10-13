@@ -65,10 +65,7 @@ public class PublicLog {
         sb.append(created + SPACE );
         sb.append(username + SPACE);
         sb.append("drew " + SPACE);
-        sb.append(draw.getItem().getSheetName());
-        //TODO Need to implement better here. Citystate for instance we need to know name
-        //Great Person we need to know type, so there are some differences
-        //Unit we only want type
+        sb.append("drew " + SPACE + draw.getItem().revealPublic());
         log = sb.toString();
     }
 }

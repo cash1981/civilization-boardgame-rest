@@ -86,7 +86,7 @@ public class DrawAction {
             pl.setUsername(getUsernameFromPlayerId(draw.getPlayerId()));
         }
         pl.createAndSetLog();
-        pl.setId(logAction.record(pl));
+        pl.setId(logAction.save(pl));
         return pl;
     }
 
@@ -102,7 +102,7 @@ public class DrawAction {
         }
         pl.setReveal(false);
         pl.createAndSetLog();
-        pl.setId(logAction.record(pl));
+        pl.setId(logAction.save(pl));
         return pl;
     }
 

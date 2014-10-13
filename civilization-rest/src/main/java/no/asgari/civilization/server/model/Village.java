@@ -34,6 +34,16 @@ public class Village implements Item {
     }
 
     @Override
+    public String revealPublic() {
+        return getClass().getSimpleName();
+    }
+
+    @Override
+    public String revealAll() {
+        return getClass().getSimpleName() + ": " + name;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

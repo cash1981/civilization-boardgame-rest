@@ -46,6 +46,16 @@ public class Aircraft implements Unit {
     }
 
     @Override
+    public String revealPublic() {
+        return getType();
+    }
+
+    @Override
+    public String revealAll() {
+        return toString();
+    }
+
+    @Override
     public String toString() {
         return getType() + attack + "." + health;
     }

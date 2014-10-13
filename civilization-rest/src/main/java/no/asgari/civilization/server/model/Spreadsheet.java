@@ -22,9 +22,16 @@ import no.asgari.civilization.server.SheetName;
         @JsonSubTypes.Type(value=Artillery.class, name="artillery"),
         @JsonSubTypes.Type(value=Aircraft.class, name="aircraft")
 })
-@FunctionalInterface
 public interface Spreadsheet {
 
     @JsonIgnore
-    SheetName getSheetName();
+    public abstract SheetName getSheetName();
+
+    /** Is used to reveal public information about the item. **/
+    @JsonIgnore
+    public abstract String revealPublic();
+
+    @JsonIgnore
+    /** Is used to reveal all information about the item. **/
+    public abstract String revealAll();
 }

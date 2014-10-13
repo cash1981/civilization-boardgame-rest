@@ -65,7 +65,7 @@ public class PrivateLog {
         StringBuilder sb = new StringBuilder();
         sb.append(created + SPACE );
         sb.append(username + SPACE);
-        sb.append("drew " + SPACE + draw.getItem().toString());
+        sb.append("drew " + SPACE + draw.getItem().revealAll());
         log = sb.toString();
     }
 }

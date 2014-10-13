@@ -35,6 +35,16 @@ public class GreatPerson implements Item {
     }
 
     @Override
+    public String revealPublic() {
+        return type;
+    }
+
+    @Override
+    public String revealAll() {
+        return name + " " + type;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

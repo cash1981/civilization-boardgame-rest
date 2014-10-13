@@ -43,6 +43,16 @@ public class Wonder implements Item {
     }
 
     @Override
+    public String revealPublic() {
+        return name;
+    }
+
+    @Override
+    public String revealAll() {
+        return name;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

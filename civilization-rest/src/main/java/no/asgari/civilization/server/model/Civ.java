@@ -13,7 +13,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Getter
 @Setter
 @ToString(of="name")
-//TODO Consider adding typename to all models
 @JsonTypeName("civ")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "objectType")
 @NoArgsConstructor
@@ -36,6 +35,16 @@ public class Civ implements Item {
     @Override
     public SheetName getSheetName() {
         return SheetName.CIV;
+    }
+
+    @Override
+    public String revealPublic() {
+        return getClass().getSimpleName();
+    }
+
+    @Override
+    public String revealAll() {
+        return getClass().getSimpleName() + " " + name;
     }
 
     @Override

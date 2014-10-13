@@ -38,6 +38,27 @@ public class Infantry implements Unit {
     }
 
     @Override
+    public String revealPublic() {
+        switch (level) {
+            case LEVEL_1:
+                return "Spearmen";
+            case LEVEL_2:
+                return "Pikemen";
+            case LEVEL_3:
+                return "Riflemen";
+            case LEVEL_4:
+                return "Modern Infantry";
+            default:
+                return "Infantry";
+        }
+    }
+
+    @Override
+    public String revealAll() {
+        return toString();
+    }
+
+    @Override
     public String toString() {
         switch (level) {
             case LEVEL_1:

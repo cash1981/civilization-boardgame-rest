@@ -47,6 +47,27 @@ public class Mounted implements Unit {
     }
 
     @Override
+    public String revealPublic() {
+        switch (level) {
+            case LEVEL_1:
+                return "Horsemen";
+            case LEVEL_2:
+                return "Knight";
+            case LEVEL_3:
+                return "Cavalry";
+            case LEVEL_4:
+                return "Tank";
+            default:
+                return "Mounted";
+        }
+    }
+
+    @Override
+    public String revealAll() {
+        return toString();
+    }
+
+    @Override
     public String toString() {
         switch (level) {
             case LEVEL_1:

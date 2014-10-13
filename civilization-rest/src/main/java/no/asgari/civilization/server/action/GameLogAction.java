@@ -24,7 +24,7 @@ public class GameLogAction {
         this.publicLogCollection = JacksonDBCollection.wrap(db.getCollection(PublicLog.COL_NAME), PublicLog.class, String.class);
     }
 
-    public String record(@NotNull @Valid PrivateLog privateLog) {
+    public String save(@NotNull @Valid PrivateLog privateLog) {
         Preconditions.checkNotNull(privateLog);
 
         WriteResult<PrivateLog, String> insert = privateLogCollection.insert(privateLog);
@@ -32,7 +32,7 @@ public class GameLogAction {
         return insert.getSavedId();
     }
 
-    public String record(@NotNull @Valid PublicLog publicLog) {
+    public String save(@NotNull @Valid PublicLog publicLog) {
         Preconditions.checkNotNull(publicLog);
 
         WriteResult<PublicLog, String> insert = publicLogCollection.insert(publicLog);

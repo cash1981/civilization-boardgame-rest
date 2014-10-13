@@ -28,8 +28,22 @@ public class ItemDTO implements Item {
     /** ie Great Person */
     private SheetName sheetName;
 
+    private String revealPublic;
+
+    private String revealAll;
+
     @Override
     public int compareTo(Spreadsheet o) {
         return sheetName.compareTo(o.getSheetName());
+    }
+
+    @Override
+    public String revealPublic() {
+        return revealPublic;
+    }
+
+    @Override
+    public String revealAll() {
+        return revealAll;
     }
 }
