@@ -86,11 +86,15 @@ public class PlayerResource {
      */
     @GET
     @Path("{pbfId}/yourturn")
-    public Response isYourTurn(@Auth Player player, @PathParam("pbfId") String pbfId) {
-        boolean yourTurn = playerAction.isYourTurn(pbfId, player.getId());
-        if(yourTurn) return Response.ok().build();
+    public boolean isYourTurn(@Auth Player player, @PathParam("pbfId") String pbfId) {
+        return  playerAction.isYourTurn(pbfId, player.getId());
+    }
 
-        return Response.status(Response.Status.FORBIDDEN).build();
+    @PUT
+    @Path("{pbfId}/revealItem")
+    public Response revealItem(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
+        playerAction.revealItem(pbfId, player.getId(), item);
+        return  Response.ok().build();
     }
 
 }

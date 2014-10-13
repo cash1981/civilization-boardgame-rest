@@ -38,7 +38,11 @@ public interface Item extends Spreadsheet, Type, Comparable<Spreadsheet> {
 
     public String getOwner();
 
+    public void setOwner(String owner);
+
     public boolean isHidden();
+
+    public void setHidden(boolean hidden);
 
     public boolean isUsed();
 

@@ -7,6 +7,7 @@ import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.exception.PlayerExistException;
+import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
@@ -151,5 +152,26 @@ public class PlayerAction {
                 .stream().filter(p -> p.getPlayerId().equals(playerId))
                 .findFirst()
                 .orElseThrow(PlayerAction::cannotFindItem);
+    }
+
+    public void revealItem(String pbfId, String playerId, ItemDTO itemDTO) {
+        PBF pbf = pbfCollection.findOneById(pbfId);
+
+        Item itemToReveal = pbf.getPlayers().stream()
+                .filter(p -> p.getPlayerId().equals(playerId))
+                .findFirst()
+                .orElseThrow(PlayerAction::cannotFindItem)
+                .getItems().stream()
+                .filter(it -> it.getSheetName() == itemDTO.getSheetName())
+                .filter(it -> it.getName().equals(itemDTO.getName()))
+                .filter(it -> it.getType().equals(itemDTO.getType()))
+                .findFirst()
+                .orElseThrow(PlayerAction::cannotFindItem);
+
+
+        itemToReveal.setHidden(false);
+        log.debug("Setting item to reveal");
+        pbfCollection.updateById(pbfId, pbf);
+
     }
 }
