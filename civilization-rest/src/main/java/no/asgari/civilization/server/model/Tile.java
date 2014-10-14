@@ -20,7 +20,7 @@ public class Tile implements Item {
     private String description;
     private boolean used;
     private boolean hidden;
-    private String owner; // game_id or player_id (username)
+    private String ownerId; // game_id or player_id (username)
 
     public Tile(String name) {
         this.name = name;
@@ -54,7 +54,7 @@ public class Tile implements Item {
         if (used != tile.used) return false;
         if (description != null ? !description.equals(tile.description) : tile.description != null) return false;
         if (!name.equals(tile.name)) return false;
-        if (owner != null ? !owner.equals(tile.owner) : tile.owner != null) return false;
+        if (ownerId != null ? !ownerId.equals(tile.ownerId) : tile.ownerId != null) return false;
         if (type != null ? !type.equals(tile.type) : tile.type != null) return false;
 
         return true;
@@ -67,7 +67,7 @@ public class Tile implements Item {
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (used ? 1 : 0);
         result = 31 * result + (hidden ? 1 : 0);
-        result = 31 * result + (owner != null ? owner.hashCode() : 0);
+        result = 31 * result + (ownerId != null ? ownerId.hashCode() : 0);
         return result;
     }
 

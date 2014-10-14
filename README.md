@@ -13,7 +13,10 @@ The first version will be pretty basic, where you can only draw items.
 ##Coming soon
 Future version will be a fully playable web client with drag and drop play
 
-##REQUIRES
+##Requires
 * Java 8
 * MongoDB
 * Lombok (www.projectlombok.org)
+
+##Installation
+Install what is required, and then run mvn clean install

@@ -28,11 +28,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Log4j
-public class GameAction {
+public class GameAction extends BaseAction {
     private final JacksonDBCollection<PBF, String> pbfCollection;
     private final JacksonDBCollection<Player, String> playerCollection;
 
     public GameAction(DB db) {
+        super(db);
         this.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
         this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
     }

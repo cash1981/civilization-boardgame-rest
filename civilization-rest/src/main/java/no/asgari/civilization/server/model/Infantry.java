@@ -16,7 +16,7 @@ public class Infantry implements Unit {
     private int level = LEVEL_1;
     private int attack;
     private int health;
-    private String owner;
+    private String ownerId;
     private boolean hidden;
     private boolean used;
     private boolean killed;
@@ -86,7 +86,7 @@ public class Infantry implements Unit {
         if (health != infantry.health) return false;
         if (hidden != infantry.hidden) return false;
         if (used != infantry.used) return false;
-        if (owner != null ? !owner.equals(infantry.owner) : infantry.owner != null) return false;
+        if (ownerId != null ? !ownerId.equals(infantry.ownerId) : infantry.ownerId != null) return false;
 
         return true;
     }
@@ -94,7 +94,7 @@ public class Infantry implements Unit {
     @Override
     public int hashCode() {
         int result = health;
-        result = 31 * result + (owner != null ? owner.hashCode() : 0);
+        result = 31 * result + (ownerId != null ? ownerId.hashCode() : 0);
         result = 31 * result + (hidden ? 1 : 0);
         result = 31 * result + (used ? 1 : 0);
         result = 31 * result + (killed ? 1 : 0);

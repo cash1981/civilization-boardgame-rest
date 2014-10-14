@@ -12,7 +12,7 @@ import no.asgari.civilization.server.SheetName;
 @JsonTypeName("aircraft")
 @NoArgsConstructor
 public class Aircraft implements Unit {
-    private String owner;
+    private String ownerId; // id of the player which owns this item
     private boolean hidden;
     private boolean used;
     private boolean killed;
@@ -72,14 +72,14 @@ public class Aircraft implements Unit {
         if (health != aircraft.health) return false;
         if (hidden != aircraft.hidden) return false;
         if (used != aircraft.used) return false;
-        if (owner != null ? !owner.equals(aircraft.owner) : aircraft.owner != null) return false;
+        if (ownerId != null ? !ownerId.equals(aircraft.ownerId) : aircraft.ownerId != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = owner != null ? owner.hashCode() : 0;
+        int result = ownerId != null ? ownerId.hashCode() : 0;
         result = 31 * result + (hidden ? 1 : 0);
         result = 31 * result + (used ? 1 : 0);
         result = 31 * result + (killed ? 1 : 0);

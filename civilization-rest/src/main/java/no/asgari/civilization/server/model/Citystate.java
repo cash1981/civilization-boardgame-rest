@@ -28,7 +28,7 @@ public class Citystate implements Item {
     @JsonProperty
     private boolean hidden;
     @JsonProperty
-    private String owner; // (username)
+    private String ownerId; // (playerId)
 
     public Citystate(String name) {
         this.name = name;
@@ -63,7 +63,7 @@ public class Citystate implements Item {
         if (description != null ? !description.equals(citystate.description) : citystate.description != null)
             return false;
         if (!name.equals(citystate.name)) return false;
-        if (owner != null ? !owner.equals(citystate.owner) : citystate.owner != null) return false;
+        if (ownerId != null ? !ownerId.equals(citystate.ownerId) : citystate.ownerId != null) return false;
         if (type != null ? !type.equals(citystate.type) : citystate.type != null) return false;
 
         return true;
@@ -76,7 +76,7 @@ public class Citystate implements Item {
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (used ? 1 : 0);
         result = 31 * result + (hidden ? 1 : 0);
-        result = 31 * result + (owner != null ? owner.hashCode() : 0);
+        result = 31 * result + (ownerId != null ? ownerId.hashCode() : 0);
         return result;
     }
 

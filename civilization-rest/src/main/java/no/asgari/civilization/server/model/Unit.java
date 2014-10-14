@@ -43,7 +43,7 @@ public interface Unit extends Spreadsheet, Type, Level, Comparable<Spreadsheet> 
     /**
      * Either the username or pbf name, both of which must be unique *
      */
-    public String getOwner();
+    public String getOwnerId();
 
     public boolean isHidden();
 

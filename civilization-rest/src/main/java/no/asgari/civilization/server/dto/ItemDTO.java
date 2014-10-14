@@ -17,8 +17,8 @@ public class ItemDTO implements Item {
     /** ie: Leonidas **/
     @NotEmpty
     private String name;
-    /**if it is to be sent to a new owner */
-    private String owner;
+    /**if it is to be sent to a new playerId */
+    private String ownerId;
     /** If the item is to be revealed */
     private boolean hidden;
     private boolean used;

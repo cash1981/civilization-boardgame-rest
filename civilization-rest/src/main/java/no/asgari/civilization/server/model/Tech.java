@@ -32,7 +32,7 @@ public class Tech implements Item, Level {
     private String description;
     private boolean used;
     private boolean hidden = true;
-    private String owner; // player_id or (username)
+    private String ownerId; // player_id
     private int level;
 
     public Tech(String name, int level) {
@@ -66,7 +66,6 @@ public class Tech implements Item, Level {
     public String revealAll() {
         return name;
     }
-
 
     @Override
     public int compareTo(Spreadsheet o) {

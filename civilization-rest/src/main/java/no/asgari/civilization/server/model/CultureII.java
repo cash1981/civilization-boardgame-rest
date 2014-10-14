@@ -20,7 +20,7 @@ public class CultureII implements Item {
     private String type;
     private boolean used;
     private boolean hidden;
-    private String owner; // game_id or player_id (username)
+    private String ownerId; // player_id
 
     public CultureII(String name) {
         this.name = name;
@@ -55,7 +55,7 @@ public class CultureII implements Item {
         if (description != null ? !description.equals(cultureII.description) : cultureII.description != null)
             return false;
         if (!name.equals(cultureII.name)) return false;
-        if (owner != null ? !owner.equals(cultureII.owner) : cultureII.owner != null) return false;
+        if (ownerId != null ? !ownerId.equals(cultureII.ownerId) : cultureII.ownerId != null) return false;
         if (type != null ? !type.equals(cultureII.type) : cultureII.type != null) return false;
 
         return true;
@@ -68,7 +68,7 @@ public class CultureII implements Item {
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (used ? 1 : 0);
         result = 31 * result + (hidden ? 1 : 0);
-        result = 31 * result + (owner != null ? owner.hashCode() : 0);
+        result = 31 * result + (ownerId != null ? ownerId.hashCode() : 0);
         return result;
     }
 

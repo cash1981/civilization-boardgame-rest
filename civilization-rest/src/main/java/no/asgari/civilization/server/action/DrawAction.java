@@ -1,38 +1,34 @@
 package no.asgari.civilization.server.action;
 
+import java.util.Iterator;
+import java.util.Optional;
+
+import com.codahale.metrics.MetricRegistryListener;
 import com.google.common.base.Preconditions;
 import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.SheetName;
-import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
-import no.asgari.civilization.server.model.PrivateLog;
-import no.asgari.civilization.server.model.PublicLog;
 import no.asgari.civilization.server.model.Spreadsheet;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
-
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Class that will perform draws and log them
  */
 @Log4j
-public class DrawAction {
+public class DrawAction extends BaseAction {
     private final JacksonDBCollection<PBF, String> pbfCollection;
     private final JacksonDBCollection<Draw, String> drawCollection;
     private final JacksonDBCollection<Player, String> playerCollection;
-    private final GameLogAction logAction;
 
     public DrawAction(DB db) {
+        super(db);
         this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
         this.drawCollection = JacksonDBCollection.wrap(db.getCollection(Draw.COL_NAME), Draw.class, String.class);
         this.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
-        logAction = new GameLogAction(db);
     }
 
     /**
@@ -68,46 +64,6 @@ public class DrawAction {
         }
 
         return Optional.empty();
-    }
-
-    private void createLog(Draw<? extends Spreadsheet> draw) {
-        createPublicLog(draw);
-        createPrivateLog(draw);
-    }
-
-    private PublicLog createPublicLog(Draw draw) {
-        PublicLog pl = new PublicLog();
-        pl.setDraw(draw);
-        pl.setPbfId(draw.getPbfId());
-        try {
-            pl.setUsername(CivSingleton.instance().playerCache().get(draw.getPlayerId()));
-        } catch (ExecutionException e) {
-            log.error("Couldn't retrieve username from cache");
-            pl.setUsername(getUsernameFromPlayerId(draw.getPlayerId()));
-        }
-        pl.createAndSetLog();
-        pl.setId(logAction.save(pl));
-        return pl;
-    }
-
-    private PrivateLog createPrivateLog(Draw draw) {
-        PrivateLog pl = new PrivateLog();
-        pl.setDraw(draw);
-        pl.setPbfId(draw.getPbfId());
-        try {
-            pl.setUsername(CivSingleton.instance().playerCache().get(draw.getPlayerId()));
-        } catch (ExecutionException e) {
-            log.error("Couldn't retrieve username from cache");
-            pl.setUsername(getUsernameFromPlayerId(draw.getPlayerId()));
-        }
-        pl.setReveal(false);
-        pl.createAndSetLog();
-        pl.setId(logAction.save(pl));
-        return pl;
-    }
-
-    private String getUsernameFromPlayerId(String playerId) {
-        return playerCollection.findOneById(playerId).getUsername();
     }
 
 }

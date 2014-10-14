@@ -22,12 +22,13 @@ import java.util.Optional;
 import java.util.Set;
 
 @Log4j
-public class PlayerAction {
+public class PlayerAction extends BaseAction {
 
     private final JacksonDBCollection<Player, String> playerCollection;
     private final JacksonDBCollection<PBF, String> pbfCollection;
 
     public PlayerAction(DB db) {
+        super(db);
         this.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
         this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
     }
@@ -90,14 +91,14 @@ public class PlayerAction {
         Playerhand playerhand = getPlayerhandFromPlayerId(playerId, pbf);
 
         chosenTech.setHidden(true);
-        chosenTech.setOwner(playerId);
+        chosenTech.setOwnerId(playerId);
 
         playerhand.getTechsChosen().add(chosenTech);
 
         pbfCollection.updateById(pbf.getId(), pbf);
         log.debug("Player " + playerId + " chose tech " + chosenTech.getName());
 
-        //TODO private and public log
+        super.createLog(chosenTech, pbfId);
     }
 
     private static WebApplicationException cannotFindItem() {
@@ -154,6 +155,12 @@ public class PlayerAction {
                 .orElseThrow(PlayerAction::cannotFindItem);
     }
 
+    /**
+     * Revealing of items are really just saving a public log with the hidden content information
+     * @param pbfId
+     * @param playerId
+     * @param itemDTO
+     */
     public void revealItem(String pbfId, String playerId, ItemDTO itemDTO) {
         PBF pbf = pbfCollection.findOneById(pbfId);
 
@@ -161,12 +168,12 @@ public class PlayerAction {
                 .filter(p -> p.getPlayerId().equals(playerId))
                 .findFirst()
                 .orElseThrow(PlayerAction::cannotFindItem)
-                .getItems().stream()
-                .filter(it -> it.getSheetName() == itemDTO.getSheetName())
-                .filter(it -> it.getName().equals(itemDTO.getName()))
-                .filter(it -> it.getType().equals(itemDTO.getType()))
-                .findFirst()
-                .orElseThrow(PlayerAction::cannotFindItem);
+                    .getItems().stream()
+                    .filter(it -> it.getSheetName() == itemDTO.getSheetName())
+                    .filter(it -> it.getName().equals(itemDTO.getName()))
+                    .filter(it -> it.getType().equals(itemDTO.getType()))
+                    .findFirst()
+                    .orElseThrow(PlayerAction::cannotFindItem);
 
 
         itemToReveal.setHidden(false);

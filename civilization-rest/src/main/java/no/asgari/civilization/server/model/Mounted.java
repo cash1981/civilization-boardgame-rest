@@ -23,7 +23,7 @@ public class Mounted implements Unit {
     public static final int LEVEL_4 = 4;
 
     private int level = LEVEL_1;
-    private String owner;
+    private String ownerId;
     private boolean hidden;
     private boolean used;
     private boolean killed;
@@ -95,7 +95,7 @@ public class Mounted implements Unit {
         if (health != mounted.health) return false;
         if (hidden != mounted.hidden) return false;
         if (used != mounted.used) return false;
-        if (owner != null ? !owner.equals(mounted.owner) : mounted.owner != null) return false;
+        if (ownerId != null ? !ownerId.equals(mounted.ownerId) : mounted.ownerId != null) return false;
 
         return true;
     }
@@ -103,7 +103,7 @@ public class Mounted implements Unit {
     @Override
     public int hashCode() {
         int result = health;
-        result = 31 * result + (owner != null ? owner.hashCode() : 0);
+        result = 31 * result + (ownerId != null ? ownerId.hashCode() : 0);
         result = 31 * result + (hidden ? 1 : 0);
         result = 31 * result + (used ? 1 : 0);
         result = 31 * result + (killed ? 1 : 0);

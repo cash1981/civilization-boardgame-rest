@@ -14,7 +14,7 @@ import no.asgari.civilization.server.SheetName;
 @NoArgsConstructor
 public class Artillery implements Unit {
     private int level = LEVEL_1;
-    private String owner;
+    private String ownerId;
     private boolean hidden;
     private boolean used;
     private boolean killed;
@@ -76,7 +76,7 @@ public class Artillery implements Unit {
         if (health != artillery.health) return false;
         if (hidden != artillery.hidden) return false;
         if (used != artillery.used) return false;
-        if (owner != null ? !owner.equals(artillery.owner) : artillery.owner != null) return false;
+        if (ownerId != null ? !ownerId.equals(artillery.ownerId) : artillery.ownerId != null) return false;
 
         return true;
     }
@@ -84,7 +84,7 @@ public class Artillery implements Unit {
     @Override
     public int hashCode() {
         int result = attack;
-        result = 31 * result + (owner != null ? owner.hashCode() : 0);
+        result = 31 * result + (ownerId != null ? ownerId.hashCode() : 0);
         result = 31 * result + (hidden ? 1 : 0);
         result = 31 * result + (used ? 1 : 0);
         result = 31 * result + (killed ? 1 : 0);
