@@ -3,20 +3,16 @@ package no.asgari.civilization.server.resource;
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Preconditions;
 import com.mongodb.DB;
-import com.mongodb.MongoClient;
 import io.dropwizard.auth.Auth;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.GameAction;
 import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
-import no.asgari.civilization.server.model.Draw;
-import no.asgari.civilization.server.model.PBF;
+import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Tech;
-import no.asgari.civilization.server.model.Undo;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.mongojack.JacksonDBCollection;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -63,6 +59,22 @@ public class GameResource {
                 .build();
     }
 
+    /**
+     * Will return a list of all the players of this PBF.
+     * Handy for selecting players whom to trade with
+     */
+    @GET
+    @Path("{pbfId}/players")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllPlayersForPBF(@NotEmpty @PathParam("pbfId") String pbfId) {
+        GameAction gameAction = new GameAction(db);
+        List<PlayerDTO> players = gameAction.getAllPlayers(pbfId);
+
+        return Response.ok()
+                .entity(players)
+                .build();
+    }
+
     @POST
     @Timed
     public Response createGame(@Valid CreateNewGameDTO dto, @Auth Player player) {
@@ -102,6 +114,7 @@ public class GameResource {
     @Timed
     @Path("/{pbfId}/techs")
     public List<Tech> getAvailableTechs(@NotEmpty @PathParam("pbfId") String pbfId, @Auth Player player) {
+        //TODO Change return type to TechDTO or use ItemDTO
         return new PlayerAction(db).getRemaingTechsForPlayer(player.getId(), pbfId);
     }
 

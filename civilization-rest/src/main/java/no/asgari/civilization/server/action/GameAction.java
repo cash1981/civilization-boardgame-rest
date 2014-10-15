@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+import com.google.common.base.Preconditions;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import lombok.Cleanup;
@@ -152,13 +153,6 @@ public class GameAction extends BaseAction {
 
     }
 
-    /*
-    public List<Tech> getAllTechs(String pbfId) {
-        Preconditions.checkNotNull(pbfId);
-        return findPBFById(pbfId).getTechs();
-    }
-    */
-
     private void startIfAllPlayers(PBF pbf) {
         final int numOfPlayersNeeded = pbf.getNumOfPlayers();
         if(numOfPlayersNeeded == pbf.getPlayers().size()) {
@@ -171,5 +165,13 @@ public class GameAction extends BaseAction {
     private Playerhand getRandomPlayer(List<Playerhand> players) {
         Collections.shuffle(players);
         return players.get(0);
+    }
+
+    public List<PlayerDTO> getAllPlayers(String pbfId) {
+        Preconditions.checkNotNull(pbfId);
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        return pbf.getPlayers().stream()
+                .map(p -> createPlayerDTO(p))
+                .collect(Collectors.toList());
     }
 }
