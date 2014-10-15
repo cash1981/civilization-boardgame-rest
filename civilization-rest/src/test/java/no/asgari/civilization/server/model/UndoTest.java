@@ -1,5 +1,13 @@
 package no.asgari.civilization.server.model;
 
+import static org.fest.assertions.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.action.DrawAction;
 import no.asgari.civilization.server.action.UndoAction;
@@ -8,20 +16,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mongojack.DBQuery;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 @SuppressWarnings("unchecked")
 public class UndoTest extends AbstractMongoDBTest {
 
     @Before
     public void before() throws Exception {
-        if(drawCollection.findOne() == null) {
+        if (gameLogCollection.findOne() == null) {
             createADrawAndPerformVoteForUndo();
         }
     }
@@ -35,18 +35,18 @@ public class UndoTest extends AbstractMongoDBTest {
         assertThat(pbf.getItems()).isNotEmpty();
 
         DrawAction drawAction = new DrawAction(db);
-        Optional<Draw<? extends Spreadsheet>> drawOptional = drawAction.draw(pbfId, playerId, SheetName.CIV);
-        assertTrue(drawOptional.isPresent());
-        Draw drawCiv = drawOptional.get();
+        Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.CIV);
+        assertTrue(gameLogOptional.isPresent());
         UndoAction undoAction = new UndoAction(db);
-        drawCiv = undoAction.vote(drawCiv, playerId, true);
+        GameLog gameLog = undoAction.vote(gameLogOptional.get(), playerId, true);
 
-        assertThat(drawCiv.getUndo().getVotes().size()).isEqualTo(1);
+        assertThat(gameLog.getDraw().getUndo().getVotes().size()).isEqualTo(1);
     }
 
     @Test
     public void performAVoteAndCheckIt() throws Exception {
-        Draw draw = drawCollection.findOne();
+        GameLog gameLog = gameLogCollection.findOne();
+        Draw draw = gameLog.getDraw();
         int votes = draw.getUndo().getVotes().size();
         assertThat(draw.getUndo()).isNotNull();
         UndoAction undoAction = new UndoAction(db);
@@ -61,49 +61,49 @@ public class UndoTest extends AbstractMongoDBTest {
 
         votes = votes + 1;
         assertThat(playerId.isPresent()).isTrue();
-        Draw vote = undoAction.vote(draw, playerId.get(), Boolean.TRUE);
-        assertThat(vote.getUndo().getVotes().size()).isEqualTo(votes);
-        assertThat(drawCollection.findOneById(draw.getId()).getUndo().getVotes().size()).isEqualTo(votes);
+        GameLog vote = undoAction.vote(gameLog, playerId.get(), Boolean.TRUE);
+        assertThat(vote.getDraw().getUndo().getVotes().size()).isEqualTo(votes);
+        assertThat(gameLogCollection.findOneById(gameLog.getId()).getDraw().getUndo().getVotes().size()).isEqualTo(votes);
     }
 
     @Test
     public void allPlayersVoteYesThenPerformUndo() throws Exception {
-        Draw draw = drawCollection.findOne();
-        PBF pbf = pbfCollection.findOneById(draw.getPbfId());
+        GameLog gameLog = gameLogCollection.findOne();
+        PBF pbf = pbfCollection.findOneById(gameLog.getPbfId());
         //Get the same undo, since I need it to be final
         UndoAction undoAction = new UndoAction(db);
 
         pbf.getPlayers().stream()
-                .filter(p -> !draw.getUndo().getVotes().keySet().contains(p.getUsername()))
-                .forEach(p -> undoAction.vote(draw, p.getPlayerId(), Boolean.TRUE));
+                .filter(p -> !gameLog.getDraw().getUndo().getVotes().keySet().contains(p.getUsername()))
+                .forEach(p -> undoAction.vote(gameLog, p.getPlayerId(), Boolean.TRUE));
 
-        assertThat(drawCollection.findOneById(draw.getId()).getUndo().getVotes()).doesNotContainValue(Boolean.FALSE);
-        Optional<Boolean> resultOfVotes = undoAction.getResultOfVotes(draw);
+        assertThat(gameLogCollection.findOneById(gameLog.getId()).getDraw().getUndo().getVotes()).doesNotContainValue(Boolean.FALSE);
+        Optional<Boolean> resultOfVotes = undoAction.getResultOfVotes(gameLog.getDraw());
         assertTrue(resultOfVotes.isPresent());
         assertThat(resultOfVotes.get()).isTrue();
 
         //Put item back
-        final Spreadsheet item = draw.getItem();
+        final Spreadsheet item = gameLog.getDraw().getItem();
         System.out.println("Item to put back is type: " + item.getSheetName());
         assertThat(item).isInstanceOf(Civ.class);
 
         //First check that its not in the pbf
         assertFalse(pbf.getItems().contains(item));
 
-        undoAction.putDrawnItemBackInPBF(draw);
+        undoAction.putDrawnItemBackInPBF(gameLog.getDraw());
 
-        assertTrue(pbfCollection.findOneById(draw.getPbfId()).getItems().contains(item));
+        assertTrue(pbfCollection.findOneById(gameLog.getPbfId()).getItems().contains(item));
     }
 
     @Test
     public void voteAndCountRemaingVotes() throws Exception{
-        Draw draw = drawCollection.findOne();
+        GameLog gameLog = gameLogCollection.findOne();
         //make another vote
 
         UndoAction undoAction = new UndoAction(db);
-        assertThat(draw.getUndo()).isNotNull();
-        draw = undoAction.vote(draw, getAnotherPlayerId(), Boolean.TRUE);
-        assertThat(draw.getUndo().votesRemaining()).isEqualTo(2);
+        assertThat(gameLog.getDraw().getUndo()).isNotNull();
+        gameLog = undoAction.vote(gameLog, getAnotherPlayerId(), Boolean.TRUE);
+        assertThat(gameLog.getDraw().getUndo().votesRemaining()).isEqualTo(2);
     }
 
     private String getAnotherPlayerId() {

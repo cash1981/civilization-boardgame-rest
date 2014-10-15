@@ -1,20 +1,17 @@
 package no.asgari.civilization.server.eventbus;
 
-import no.asgari.civilization.server.SheetName;
-import no.asgari.civilization.server.action.DrawAction;
-import no.asgari.civilization.server.action.GameLogAction;
-import no.asgari.civilization.server.model.Artillery;
-import no.asgari.civilization.server.model.Draw;
-import no.asgari.civilization.server.model.GreatPerson;
-import no.asgari.civilization.server.model.PrivateLog;
-import no.asgari.civilization.server.model.PublicLog;
-import no.asgari.civilization.server.model.Spreadsheet;
-import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
-import org.junit.Test;
+import static org.fest.assertions.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import no.asgari.civilization.server.SheetName;
+import no.asgari.civilization.server.action.DrawAction;
+import no.asgari.civilization.server.model.Artillery;
+import no.asgari.civilization.server.model.GameLog;
+import no.asgari.civilization.server.model.GreatPerson;
+import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
+import org.junit.Test;
 
 public class GameLogActionTest extends AbstractMongoDBTest {
 
@@ -22,16 +19,15 @@ public class GameLogActionTest extends AbstractMongoDBTest {
     public void checkThatPublicLogIsSaved() {
         DrawAction drawAction = new DrawAction(db);
 
-        long beforeInsert = publicLogCollection.count();
+        long beforeInsert = gameLogCollection.count();
         //Make a draw
-        Optional<Draw<? extends Spreadsheet>> drawOptional = drawAction.draw(pbfId, playerId, SheetName.ARTILLERY);
-        PublicLog pl = new PublicLog();
-        pl.setDraw(drawOptional.get());
-        pl.setPbfId(pbfId);
-        pl.setUsername("cash1981");
-        pl.createAndSetLog();
+        Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.ARTILLERY);
+        assertTrue(gameLogOptional.isPresent());
 
-        long afterInsert = publicLogCollection.count();
+        assertThat(gameLogOptional.get().getDraw()).isNotNull();
+        assertThat(gameLogOptional.get().getDraw().getPlayerId()).isEqualToIgnoringCase(playerId);
+        assertThat(gameLogOptional.get().getDraw().getItem()).isInstanceOf(Artillery.class);
+        long afterInsert = gameLogCollection.count();
         assertThat(beforeInsert).isLessThan(afterInsert);
     }
 
@@ -39,16 +35,13 @@ public class GameLogActionTest extends AbstractMongoDBTest {
     public void checkThatPrivateLogIsSaved() {
         DrawAction drawAction = new DrawAction(db);
 
-        long beforeInsert = privateLogCollection.count();
+        long beforeInsert = gameLogCollection.count();
         //Make a draw
-        Optional<Draw<? extends Spreadsheet>> drawOptional = drawAction.draw(pbfId, playerId, SheetName.GREAT_PERSON);
-        PrivateLog pl = new PrivateLog();
-        pl.setDraw(drawOptional.get());
-        pl.setPbfId(pbfId);
-        pl.setUsername("cash1981");
-        pl.createAndSetLog();
-
-        long afterInsert = privateLogCollection.count();
+        Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.GREAT_PERSON);
+        assertThat(gameLogOptional.get().getDraw()).isNotNull();
+        assertThat(gameLogOptional.get().getDraw().getPlayerId()).isEqualToIgnoringCase(playerId);
+        assertThat(gameLogOptional.get().getDraw().getItem()).isInstanceOf(GreatPerson.class);
+        long afterInsert = gameLogCollection.count();
         assertThat(beforeInsert).isLessThan(afterInsert);
     }
 }

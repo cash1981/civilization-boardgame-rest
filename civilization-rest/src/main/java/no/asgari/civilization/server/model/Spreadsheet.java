@@ -27,11 +27,11 @@ public interface Spreadsheet {
     @JsonIgnore
     public abstract SheetName getSheetName();
 
-    /** Is used to reveal public information about the item. **/
+    /** Is used to hidden public information about the item. **/
     @JsonIgnore
     public abstract String revealPublic();
 
     @JsonIgnore
-    /** Is used to reveal all information about the item. **/
+    /** Is used to hidden all information about the item. **/
     public abstract String revealAll();
 }

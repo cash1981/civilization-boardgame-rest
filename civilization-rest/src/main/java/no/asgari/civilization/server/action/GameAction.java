@@ -120,7 +120,6 @@ public class GameAction extends BaseAction {
         return dto;
     }
 
-
     public void joinGame(String pbfId, String username) {
         PBF pbf = pbfCollection.findOneById(pbfId);
         if(pbf.getNumOfPlayers() == pbf.getPlayers().size()) {
@@ -157,18 +156,6 @@ public class GameAction extends BaseAction {
     public List<Tech> getAllTechs(String pbfId) {
         Preconditions.checkNotNull(pbfId);
         return findPBFById(pbfId).getTechs();
-    }
-
-    private PBF findPBFById(String pbfId) {
-        try {
-            return pbfCollection.findOneById(pbfId);
-        } catch(Exception ex) {
-            log.error("Couldn't find pbf");
-            Response badReq = Response.status(Response.Status.BAD_REQUEST)
-                    .entity("Cannot find pbf")
-                    .build();
-            throw new WebApplicationException(badReq);
-        }
     }
 
     private void startIfAllPlayers(PBF pbf) {

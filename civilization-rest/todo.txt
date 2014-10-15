@@ -1,13 +1,13 @@
-- Create revealing; possibility to reveal items/units/techs
-    -- Either let players when fighting do it as now, and then after battle reveal all units
+- Create revealing; possibility to hidden items/units/techs
+    -- Either let players when fighting do it as now, and then after battle hidden all units
 - Battle
     -- A dropdown with number of units to draw
     -- Must support undo in-case wrong number of units is drawn
     -- After battle, perhaps have a end battle button, it will show all the draws that where made
         -- For now a battle is just revealing units that where drawn by the system
-        -- Perhaps a end battle button both players will need to push, which will reveal all units that where drawn
+        -- Perhaps a end battle button both players will need to push, which will hidden all units that where drawn
 - Choose Techs
-	-- Techs will not be revealed until all players have pushed submit/reveal button (Same functionality as voting)
+	-- Techs will not be revealed until all players have pushed submit/hidden button (Same functionality as voting)
 	-- Option to alter a specific chosen tech which has not been revealed
 #DONE - Choose starting player
 	#DONE -- Should be randomly chosen, only when all players have joined
@@ -27,7 +27,7 @@ Nice to have
 - Chat with scrolling capabilites.
 	-- Websocket?
 - Each item can have path to a picture so that client can show it
-- Create a battlefield, for now only use the reveal option
+- Create a battlefield, for now only use the hidden option
 - Option to leave a game
 	-- Haven't thought of all the details about this
 - Possibility to request undo of end of turn?

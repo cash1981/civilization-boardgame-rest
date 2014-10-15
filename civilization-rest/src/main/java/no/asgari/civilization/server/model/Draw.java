@@ -25,30 +25,26 @@ import java.time.LocalDateTime;
  * <T> - Typically implementation of Unit or Item
  *
  */
+//TODO There might be many duplicate draws in gamelog. I probably need to fix this at some point, or just distinct them
 @NoArgsConstructor
 @JsonRootName(value = "draw")
 @Data
 public class Draw<T extends Spreadsheet> {
     public static final String COL_NAME = "draw";
 
-    /** Will be used to identify a draw so that voting of undo can be performed */
-    @ObjectId
-    @Id
-    private String id;
-
     /** Typically implementation of Unit or Item. Should have #getSheetName() to determine the type */
     @NotNull
     private T item;
 
-    /** Used to reveal draw, which will make it public */
-    private boolean reveal = false;
+    /** Used to hidden draw, which will make it public if set to false*/
+    private boolean hidden = true;
 
     public Draw(String pbfId, String playerId) {
         this.pbfId = pbfId;
         this.playerId = playerId;
 
         created = LocalDateTime.now();
-        reveal = false;
+        hidden = false;
     }
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)

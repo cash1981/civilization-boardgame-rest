@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.mongojack.Id;
 import org.mongojack.ObjectId;
@@ -22,15 +23,21 @@ import java.time.LocalDateTime;
  * All private logs/draws can be requested undo
  *
  * Private view:
- * 14.04.2014 - 14:24 - cash1981 drew Civ Japan - <reveal button> - <undo button>
- * 14.04.2014 - 14:25 - cash1981 drew Civ Greece - <reveal button> - <undo button>
+ * 14.04.2014 - 14:24 - cash1981 drew Civ Japan - <hidden button> - <undo button>
+ * 14.04.2014 - 14:25 - cash1981 drew Civ Greece - <hidden button> - <undo button>
+ *
+ * Public view:
+ * <14.04.2014 - 14:25 - cash1981 drew Infantry
+ * <14.04.2014 - 14:25 - cash1981 drew Mounted
+ * <14.04.2014 - 14:25 - cash1981 drew Artillery
  *
  */
-@Data
-@JsonRootName("privateLog")
+@JsonRootName("gameLog")
 @NoArgsConstructor
-public class PrivateLog {
-    public static final String COL_NAME = "privateLog";
+@ToString(of="log")
+@Data
+public class GameLog {
+    public static final String COL_NAME = "gameLog";
 
     @Id
     @ObjectId
@@ -55,9 +62,9 @@ public class PrivateLog {
     private Draw draw;
 
     /**
-     * All logs which are revealed, will be put in the public log
+     * All logs which are not hidden, will be displayed as public information
      */
-    private boolean reveal = false;
+    private boolean hidden = true;
 
     @JsonIgnore
     public void createAndSetLog() {
@@ -65,7 +72,10 @@ public class PrivateLog {
         StringBuilder sb = new StringBuilder();
         sb.append(created + SPACE );
         sb.append(username + SPACE);
-        sb.append("drew " + SPACE + draw.getItem().revealAll());
+        if(!hidden)
+            sb.append("drew " + SPACE + draw.getItem().revealAll());
+        else
+            sb.append("drew " + SPACE + draw.getItem().revealPublic());
         log = sb.toString();
     }
 }

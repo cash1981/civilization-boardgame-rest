@@ -24,7 +24,7 @@ Alle actions/metoder logger til et visst sted. Denne loggen blir alltid displaye
 2.3 Read the techs and store them in PBF
 
 #DONE 3.0 Create User
-3.1 Reveal playing field. <-- Each PBF should have a place where players can reveal items, units and tech
+3.1 Reveal playing field. <-- Each PBF should have a place where players can hidden items, units and tech
 Logging and Draws
 4.0 Every action user takes must be logged
 4.1 Logging is both private and public. The private should include the item name

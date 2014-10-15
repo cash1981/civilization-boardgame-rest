@@ -1,5 +1,10 @@
 package no.asgari.civilization.server.mongodb;
 
+import static org.junit.Assert.assertNotNull;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.cache.CacheBuilder;
@@ -21,11 +26,10 @@ import no.asgari.civilization.server.application.CivAuthenticator;
 import no.asgari.civilization.server.application.CivBoardGameRandomizerConfiguration;
 import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.model.Draw;
+import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
-import no.asgari.civilization.server.model.PrivateLog;
-import no.asgari.civilization.server.model.PublicLog;
 import no.asgari.civilization.server.resource.GameResource;
 import no.asgari.civilization.server.resource.LoginResource;
 import no.asgari.civilization.server.resource.PlayerResource;
@@ -37,17 +41,10 @@ import org.junit.BeforeClass;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
 
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.assertNotNull;
-
 public abstract class AbstractMongoDBTest extends JerseyTest {
     protected static JacksonDBCollection<PBF, String> pbfCollection;
     protected static JacksonDBCollection<Player, String> playerCollection;
-    protected static JacksonDBCollection<Draw, String> drawCollection;
-    protected static JacksonDBCollection<PrivateLog, String> privateLogCollection;
-    protected static JacksonDBCollection<PublicLog, String> publicLogCollection;
+    protected static JacksonDBCollection<GameLog, String> gameLogCollection;
 
     protected static String pbfId;
     protected static String playerId;
@@ -66,15 +63,11 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
 
         AbstractMongoDBTest.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
         AbstractMongoDBTest.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
-        AbstractMongoDBTest.drawCollection = JacksonDBCollection.wrap(db.getCollection(Draw.COL_NAME), Draw.class, String.class);
-        AbstractMongoDBTest.privateLogCollection = JacksonDBCollection.wrap(db.getCollection(PrivateLog.COL_NAME), PrivateLog.class, String.class);
-        AbstractMongoDBTest.publicLogCollection = JacksonDBCollection.wrap(db.getCollection(PublicLog.COL_NAME), PublicLog.class, String.class);
+        AbstractMongoDBTest.gameLogCollection = JacksonDBCollection.wrap(db.getCollection(GameLog.COL_NAME), GameLog.class, String.class);
 
         playerCollection.drop();
         pbfCollection.drop();
-        drawCollection.drop();
-        privateLogCollection.drop();
-        publicLogCollection.drop();
+        gameLogCollection.drop();
 
         playerCollection.createIndex(new BasicDBObject("username", 1), new BasicDBObject("unique", true));
 
@@ -106,7 +99,7 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
             mongo.close();
         }
 
-        //CivCache.instance().getEventBus().unregister(new LogListener(privateLogCollection, publicLogCollection));
+        //CivCache.instance().getEventBus().unregister(new LogListener(gameLogCollection, publicLogCollection));
     }
 
     protected static String getUsernameAndPassEncoded() {

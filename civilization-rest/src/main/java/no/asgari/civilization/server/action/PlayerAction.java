@@ -1,5 +1,12 @@
 package no.asgari.civilization.server.action;
 
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Stream;
+
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
 import com.google.common.base.Preconditions;
 import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
@@ -15,11 +22,6 @@ import no.asgari.civilization.server.model.Tech;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-import java.util.Optional;
-import java.util.Set;
 
 @Log4j
 public class PlayerAction extends BaseAction {
@@ -161,23 +163,23 @@ public class PlayerAction extends BaseAction {
      * @param playerId
      * @param itemDTO
      */
+    @SuppressWarnings("unchecked")
     public void revealItem(String pbfId, String playerId, ItemDTO itemDTO) {
         PBF pbf = pbfCollection.findOneById(pbfId);
+        Playerhand playerhand = getPlayerhandFromPlayerId(playerId, pbf);
 
-        Item itemToReveal = pbf.getPlayers().stream()
-                .filter(p -> p.getPlayerId().equals(playerId))
-                .findFirst()
-                .orElseThrow(PlayerAction::cannotFindItem)
-                    .getItems().stream()
-                    .filter(it -> it.getSheetName() == itemDTO.getSheetName())
+        Stream<Item> combinedItemStream = Stream.concat(playerhand.getItems().stream(), (Stream<Item>) playerhand.getTechsChosen());
+
+        Item itemToReveal = combinedItemStream
+                .filter(it -> it.getSheetName() == itemDTO.getSheetName())
                     .filter(it -> it.getName().equals(itemDTO.getName()))
-                    .filter(it -> it.getType().equals(itemDTO.getType()))
                     .findFirst()
                     .orElseThrow(PlayerAction::cannotFindItem);
 
 
         itemToReveal.setHidden(false);
-        log.debug("Setting item to reveal");
+        logAction.createGameLog(itemToReveal, pbfId);
+        log.debug("tem to be reveal " + itemToReveal);
         pbfCollection.updateById(pbfId, pbf);
 
     }

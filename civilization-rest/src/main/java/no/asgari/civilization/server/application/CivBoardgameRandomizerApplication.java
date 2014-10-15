@@ -61,7 +61,6 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
         environment.jersey().register(new BasicAuthProvider<>(new CachingAuthenticator<>(new MetricRegistry(), new CivAuthenticator(db),
                 CacheBuilderSpec.parse("expireAfterWrite=120m")), "civilization"));
 
-
         createUsernameCache(playerCollection);
     }
 
@@ -72,8 +71,7 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
                 .build(new CacheLoader<String, String>() {
                             public String load(String playerId) {
                                 return playerCollection.findOneById(playerId).getUsername();
-                            }
-                       });
+                            }});
 
         CivSingleton.instance().setPlayerCache(usernameCache);
     }

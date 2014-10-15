@@ -1,5 +1,7 @@
 package no.asgari.civilization.server.dto;
 
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +15,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Setter
 @Getter
 @ToString(of="name")
-public class ItemDTO implements Item {
+public class ItemDTO {
     /** ie: Leonidas **/
     @NotEmpty
     private String name;
@@ -26,24 +28,7 @@ public class ItemDTO implements Item {
     /** Type of item, ie Scientist */
     private String type;
     /** ie Great Person */
+    @NotNull
     private SheetName sheetName;
 
-    private String revealPublic;
-
-    private String revealAll;
-
-    @Override
-    public int compareTo(Spreadsheet o) {
-        return sheetName.compareTo(o.getSheetName());
-    }
-
-    @Override
-    public String revealPublic() {
-        return revealPublic;
-    }
-
-    @Override
-    public String revealAll() {
-        return revealAll;
-    }
 }

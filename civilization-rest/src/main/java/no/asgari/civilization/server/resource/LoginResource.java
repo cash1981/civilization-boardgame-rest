@@ -1,18 +1,7 @@
 package no.asgari.civilization.server.resource;
 
-import com.google.common.base.Preconditions;
-import com.mongodb.DB;
-import com.mongodb.MongoClient;
-import io.dropwizard.auth.basic.BasicCredentials;
-import lombok.extern.log4j.Log4j;
-import no.asgari.civilization.server.action.PlayerAction;
-import no.asgari.civilization.server.application.CivAuthenticator;
-import no.asgari.civilization.server.dto.PlayerDTO;
-import no.asgari.civilization.server.model.PBF;
-import no.asgari.civilization.server.model.Player;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.mongojack.JacksonDBCollection;
-import org.mongojack.WriteResult;
+import java.net.URI;
+import java.util.Optional;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -27,8 +16,18 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.net.URI;
-import java.util.Optional;
+
+import com.google.common.base.Preconditions;
+import com.mongodb.DB;
+import io.dropwizard.auth.basic.BasicCredentials;
+import lombok.extern.log4j.Log4j;
+import no.asgari.civilization.server.action.PlayerAction;
+import no.asgari.civilization.server.application.CivAuthenticator;
+import no.asgari.civilization.server.dto.PlayerDTO;
+import no.asgari.civilization.server.model.Player;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.mongojack.JacksonDBCollection;
+import org.mongojack.WriteResult;
 
 @Path("login")
 @Log4j
@@ -87,7 +86,7 @@ public class LoginResource {
                     .build();
         } catch (WebApplicationException ex) {
             return ex.getResponse();
-        }  catch (Exception ex) {
+        } catch (Exception ex) {
             log.error("Unknown error when registering user: " + ex.getMessage(), ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
@@ -102,7 +101,7 @@ public class LoginResource {
             WriteResult<Player, String> result = playerCollection.removeById(playerId);
             if (result.getError() == null)
                 return Response.status(Response.Status.NO_CONTENT).build();
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             log.error("Unknown error when deleting user: " + ex.getMessage(), ex);
         }
         return Response.status(Response.Status.FORBIDDEN).build();
