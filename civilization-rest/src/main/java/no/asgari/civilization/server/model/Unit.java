@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * used = true
  * hidden = true;
  */
-public interface Unit extends Spreadsheet, Type, Level, Comparable<Spreadsheet> {
+public abstract class Unit implements Item, Level {
     @JsonIgnore
     static final int LEVEL_1 = 1;
     @JsonIgnore
@@ -40,19 +40,22 @@ public interface Unit extends Spreadsheet, Type, Level, Comparable<Spreadsheet> 
     @JsonIgnore
     static final int LEVEL_4 = 4;
 
-    /**
-     * Either the username or pbf name, both of which must be unique *
-     */
-    public String getOwnerId();
+    public abstract boolean isKilled();
 
-    public boolean isHidden();
+    public abstract int getAttack();
 
-    public boolean isUsed();
+    public abstract int getHealth();
 
-    public boolean isKilled();
+    @JsonIgnore
+    @Override
+    public String getName() {
+        return getType();
+    }
 
-    public int getAttack();
-
-    public int getHealth();
+    @JsonIgnore
+    @Override
+    public String getDescription() {
+        return getType();
+    }
 
 }

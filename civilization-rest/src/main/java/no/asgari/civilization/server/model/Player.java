@@ -20,6 +20,7 @@ import java.util.Set;
 public class Player {
     @JsonIgnore public static final String COL_NAME = "player";
     @JsonIgnore public static final String USERNAME = "username";
+    @JsonIgnore public static final String EMAIL = "email";
 
     @ObjectId
     @Id

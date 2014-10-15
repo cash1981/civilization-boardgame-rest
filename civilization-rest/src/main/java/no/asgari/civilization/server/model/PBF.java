@@ -45,7 +45,7 @@ public class PBF {
     private int numOfPlayers;
     private boolean active = true;
 
-    private List<Spreadsheet> items = Lists.newArrayList();
+    private List<Item> items = Lists.newArrayList();
     private List<Playerhand> players = Lists.newArrayList();
     private List<Tech> techs = Lists.newArrayList();
 

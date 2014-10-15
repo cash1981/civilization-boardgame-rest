@@ -2,6 +2,7 @@ package no.asgari.civilization.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.asgari.civilization.server.SheetName;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -11,6 +12,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(of={"name", "level"})
 public class Tech implements Item, Level {
     @JsonIgnore
     public static final int LEVEL_1 = 1;

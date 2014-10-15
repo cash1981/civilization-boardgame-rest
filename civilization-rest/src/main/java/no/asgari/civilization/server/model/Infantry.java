@@ -12,7 +12,7 @@ import no.asgari.civilization.server.SheetName;
 @Setter
 @JsonTypeName("infantry")
 @NoArgsConstructor
-public class Infantry implements Unit {
+public class Infantry extends Unit {
     private int level = LEVEL_1;
     private int attack;
     private int health;

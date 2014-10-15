@@ -1,25 +1,29 @@
-- Create revealing; possibility to hidden items/units/techs
-    -- Either let players when fighting do it as now, and then after battle hidden all units
+#DONE - Create revealing; possibility to hidden items/units/techs
+    #DONE -- Either let players when fighting do it as now, and then after battle hidden all units
 - Battle
     -- A dropdown with number of units to draw
     -- Must support undo in-case wrong number of units is drawn
     -- After battle, perhaps have a end battle button, it will show all the draws that where made
         -- For now a battle is just revealing units that where drawn by the system
         -- Perhaps a end battle button both players will need to push, which will hidden all units that where drawn
-- Choose Techs
-	-- Techs will not be revealed until all players have pushed submit/hidden button (Same functionality as voting)
-	-- Option to alter a specific chosen tech which has not been revealed
+#DONE - Choose Techs
+	*MAYBE* -- Techs will not be revealed until all players have pushed submit/hidden button (Same functionality as voting)
+	*MAYBE* for now they must undo -- Option to alter a specific chosen tech which has not been revealed
+	#DONE -- If undo's his chosen tech, it must be removed from playerhand.tech()
 #DONE - Choose starting player
 	#DONE -- Should be randomly chosen, only when all players have joined
 	#DONE -- All drawing is disabled until all players have joined. (If only the starting player can draw, then in theory this should be redundant)
 	#DONE -- Should be triggered when a player joins a game
-- End of turn button which will disable drawing for players
-	-- Each this happens, system will enable for next player in line
+- Undo
+    -- Consider if undo should reveal all info or just public
+#DONE - End of turn
+    #DONE -- will disable drawing of items for players
+	#DONE -- Each this happens, system will enable for next player in line
 - Send player items
 	-- Allowing players to send Huts, Villages, Culture cards privately to other players
 	-- That player should get the item sent, plus logged both publicly that trading has taken place, plus privately
-- No players should be able to draw items when it is not their turn
-	-- Except, they should be able to send stuff to other players, and choosing techs, because these are done simultanously, or if it is too difficult, then everything is turn based
+#DONE - No players should be able to draw items when it is not their turn
+	#DONE -- Except, they should be able to send stuff to other players, and choosing techs, because these are done simultanously, or if it is too difficult, then everything is turn based
 #DONE - Logging
 #DONE - CachingAuthentication
 	
@@ -27,6 +31,7 @@ Nice to have
 - Chat with scrolling capabilites.
 	-- Websocket?
 - Each item can have path to a picture so that client can show it
+- Create a filter that is for /civilization/pbf/{pbfId}* which takes the pbfId and the logged in player, and check if that player has access to the game, and proceeds if they do
 - Create a battlefield, for now only use the hidden option
 - Option to leave a game
 	-- Haven't thought of all the details about this

@@ -1,7 +1,9 @@
 package no.asgari.civilization.server.action;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.ws.rs.WebApplicationException;
@@ -84,7 +86,11 @@ public class PlayerAction extends BaseAction {
         Preconditions.checkNotNull(pbfId);
         Preconditions.checkNotNull(item);
         Preconditions.checkNotNull(item.getName());
-        PBF pbf = getPBF(pbfId);
+
+        //This can be done out of turn, because of EOI played in SOT
+        //checkYourTurn(pbfId, playerId);
+
+        PBF pbf = pbfCollection.findOneById(pbfId);
         Optional<Tech> tech = pbf.getTechs().stream()
                 .filter(techToFind -> techToFind.getName().equals(item.getName()))
                 .findFirst();
@@ -103,21 +109,11 @@ public class PlayerAction extends BaseAction {
         super.createLog(chosenTech, pbfId);
     }
 
-    private static WebApplicationException cannotFindItem() {
-        return new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-                .entity("Could not find item")
-                .build());
-    }
-
-    private PBF getPBF(String pbfId) {
-        return pbfCollection.findOneById(pbfId);
-    }
-
     public boolean endTurn(String pbfId, String username) {
         Preconditions.checkNotNull(pbfId);
         Preconditions.checkNotNull(username);
 
-        PBF pbf = getPBF(pbfId);
+        PBF pbf = pbfCollection.findOneById(pbfId);
 
         //Loop through the list and find next starting player
         for(int i = 0; i < pbf.getPlayers().size(); i++) {
@@ -144,19 +140,6 @@ public class PlayerAction extends BaseAction {
         return false;
     }
 
-    public boolean isYourTurn(String pbfId, String playerId) {
-        PBF pbf = pbfCollection.findOneById(pbfId);
-        Playerhand playerhand = getPlayerhandFromPlayerId(playerId, pbf);
-        return playerhand.isYourTurn();
-    }
-
-    private static Playerhand getPlayerhandFromPlayerId(String playerId, PBF pbf) {
-        return pbf.getPlayers()
-                .stream().filter(p -> p.getPlayerId().equals(playerId))
-                .findFirst()
-                .orElseThrow(PlayerAction::cannotFindItem);
-    }
-
     /**
      * Revealing of items are really just saving a public log with the hidden content information
      * @param pbfId
@@ -181,6 +164,31 @@ public class PlayerAction extends BaseAction {
         logAction.createGameLog(itemToReveal, pbfId);
         log.debug("tem to be reveal " + itemToReveal);
         pbfCollection.updateById(pbfId, pbf);
+    }
 
+    /**
+     * Returns the remaining techs the player can choose from
+     * @param playerId - The player
+     * @param pbfId - The PBF
+     * @return
+     */
+    public List<Tech> getRemaingTechsForPlayer(String playerId, String pbfId) {
+        PBF pbf = pbfCollection.findOneById(pbfId);
+
+        Set<Tech> techsChosen = pbf.getPlayers().stream()
+                .filter(p -> p.getPlayerId().equals(playerId))
+                .findFirst()
+                .orElseThrow(PlayerAction::cannotFindPlayer)
+                .getTechsChosen();
+
+
+        pbf.getTechs().removeAll(techsChosen);
+        return pbf.getTechs();
+    }
+
+    public boolean isYourTurn(String pbfId, String playerId) {
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        Playerhand playerhand = getPlayerhandFromPlayerId(playerId, pbf);
+        return playerhand.isYourTurn();
     }
 }

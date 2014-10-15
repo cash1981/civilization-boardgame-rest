@@ -47,7 +47,9 @@ public class PlayerResource {
     }
 
     /**
-     * Will choose a tech and update the player collection
+     * Will choose a tech and update the player collection.
+     *
+     * This method will also check if other players have chosen
      * @param player
      * @param pbfId
      * @param item

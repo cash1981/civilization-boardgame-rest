@@ -22,14 +22,15 @@ import java.time.LocalDateTime;
  * It will support undo of draws, which will put the item back in the deck and shuffle
  * Each draw will have a collection of Undo, which contains information about a possible undo with votes and outcome
  *
- * <T> - Typically implementation of Unit or Item
+ * <T> - Typically implementation of Unit, Item, or Tech
  *
  */
 //TODO There might be many duplicate draws in gamelog. I probably need to fix this at some point, or just distinct them
 @NoArgsConstructor
 @JsonRootName(value = "draw")
 @Data
-public class Draw<T extends Spreadsheet> {
+//TODO Draw is not a good name really. Its really more a UndoableItem
+public class Draw<T extends Item> {
     public static final String COL_NAME = "draw";
 
     /** Typically implementation of Unit or Item. Should have #getSheetName() to determine the type */

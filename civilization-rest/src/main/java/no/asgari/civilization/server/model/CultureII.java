@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @ToString(of="name")
 @JsonTypeName("cultureII")
 @NoArgsConstructor
-public class CultureII implements Item {
+public class CultureII implements Item, Tradable {
     @NotEmpty
     private String name;
     private String description;

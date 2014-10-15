@@ -12,7 +12,7 @@ import no.asgari.civilization.server.SheetName;
 @Setter
 @JsonTypeName("artillery")
 @NoArgsConstructor
-public class Artillery implements Unit {
+public class Artillery extends Unit {
     private int level = LEVEL_1;
     private String ownerId;
     private boolean hidden;

@@ -29,6 +29,8 @@ public enum SheetName {
                     SheetName.VILLAGES, SheetName.HUTS, SheetName.WONDERS, SheetName.TILES, SheetName.CITY_STATES,
                     SheetName.LEVEL_1_TECH, SheetName.LEVEL_2_TECH, SheetName.LEVEL_3_TECH, SheetName.LEVEL_4_TECH);
 
+    public static final EnumSet<SheetName> TECHS = EnumSet.of(SheetName.LEVEL_1_TECH, SheetName.LEVEL_2_TECH, SheetName.LEVEL_3_TECH, SheetName.LEVEL_4_TECH);
+
     public static Optional<SheetName> find(String name) {
         return SHEETS.stream()
                 .filter(sheet -> sheet.label.equalsIgnoreCase(name))

@@ -12,16 +12,7 @@ import no.asgari.civilization.server.SheetName;
 @Setter
 @JsonTypeName("mounted")
 @NoArgsConstructor
-public class Mounted implements Unit {
-    @JsonIgnore
-    public static final int LEVEL_1 = 1;
-    @JsonIgnore
-    public static final int LEVEL_2 = 2;
-    @JsonIgnore
-    public static final int LEVEL_3 = 3;
-    @JsonIgnore
-    public static final int LEVEL_4 = 4;
-
+public class Mounted extends Unit {
     private int level = LEVEL_1;
     private String ownerId;
     private boolean hidden;

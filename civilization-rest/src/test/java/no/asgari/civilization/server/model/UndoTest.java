@@ -72,27 +72,32 @@ public class UndoTest extends AbstractMongoDBTest {
         PBF pbf = pbfCollection.findOneById(gameLog.getPbfId());
         //Get the same undo, since I need it to be final
         UndoAction undoAction = new UndoAction(db);
+        assertFalse(pbf.getItems().contains(gameLog.getDraw().getItem()));
+        pbf = pbfCollection.findOneById(gameLog.getPbfId());
+
+        List<Item> items = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(playerId)).findFirst().get().getItems();
+        assertTrue(items.contains(gameLog.getDraw().getItem()));
 
         pbf.getPlayers().stream()
                 .filter(p -> !gameLog.getDraw().getUndo().getVotes().keySet().contains(p.getUsername()))
                 .forEach(p -> undoAction.vote(gameLog, p.getPlayerId(), Boolean.TRUE));
 
-        assertThat(gameLogCollection.findOneById(gameLog.getId()).getDraw().getUndo().getVotes()).doesNotContainValue(Boolean.FALSE);
-        Optional<Boolean> resultOfVotes = undoAction.getResultOfVotes(gameLog.getDraw());
-        assertTrue(resultOfVotes.isPresent());
-        assertThat(resultOfVotes.get()).isTrue();
+        Undo undo = gameLogCollection.findOneById(gameLog.getId()).getDraw().getUndo();
+        assertThat(undo.getVotes()).doesNotContainValue(Boolean.FALSE);
+        assertThat(undo.getResultOfVotes().get()).isTrue();
 
-        //Put item back
+        //Check that item is back
         final Spreadsheet item = gameLog.getDraw().getItem();
-        System.out.println("Item to put back is type: " + item.getSheetName());
+        System.out.println("Item that is put back type: " + item.getSheetName());
         assertThat(item).isInstanceOf(Civ.class);
 
-        //First check that its not in the pbf
-        assertFalse(pbf.getItems().contains(item));
-
-        undoAction.putDrawnItemBackInPBF(gameLog.getDraw());
-
+        //check that its in the pbf
         assertTrue(pbfCollection.findOneById(gameLog.getPbfId()).getItems().contains(item));
+    }
+
+    @Test
+    public void checkThatYouCanUndoTech() throws Exception {
+        //TODO implement
     }
 
     @Test

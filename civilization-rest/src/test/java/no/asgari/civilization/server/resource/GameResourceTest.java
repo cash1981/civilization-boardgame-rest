@@ -1,13 +1,17 @@
 package no.asgari.civilization.server.resource;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import no.asgari.civilization.server.application.CivBoardGameRandomizerConfiguration;
 import no.asgari.civilization.server.application.CivBoardgameRandomizerApplication;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
+import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
 import no.asgari.civilization.server.model.GameType;
+import no.asgari.civilization.server.model.PBF;
+import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.mongodb.MongoDBBaseTest;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.ClassRule;
@@ -19,8 +23,10 @@ import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class GameResourceTest extends MongoDBBaseTest {
 
@@ -88,7 +94,9 @@ public class GameResourceTest extends MongoDBBaseTest {
     }
 
     @Test
-    public void shouldGetAllTechs() throws Exception {
+    public void shouldGetAllAvailableTechs() throws Exception {
+        chooseTechForPlayer();
+
         final ArrayList list = client().resource(
                 UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/techs", RULE.getLocalPort(), pbfId))
                         .build())
@@ -97,6 +105,32 @@ public class GameResourceTest extends MongoDBBaseTest {
                 .get(ArrayList.class);
 
         assertThat(list).isNotEmpty();
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        assertThat(list.size()).isEqualTo(pbf.getTechs().size()-1);
+    }
+
+    private void chooseTechForPlayer() throws JsonProcessingException {
+        ItemDTO dto = new ItemDTO();
+        dto.setName("Agriculture");
+
+        ObjectMapper mapper = new ObjectMapper();
+        String dtoAsJSon = mapper.writeValueAsString(dto);
+
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/tech/choose", RULE.getLocalPort(), pbfId)).build();
+        ClientResponse response = client().resource(uri)
+                .type(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .entity(dtoAsJSon)
+                .put(ClientResponse.class);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT_204);
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        Optional<Playerhand> cash1981 = pbf.getPlayers().stream()
+                .filter(p -> p.getUsername().equals("cash1981"))
+                .findFirst();
+        assertTrue(cash1981.isPresent());
+        assertThat(cash1981.get().getTechsChosen()).isNotEmpty();
+        assertThat(cash1981.get().getTechsChosen().iterator().next().getName()).isEqualTo("Agriculture");
     }
 
 }

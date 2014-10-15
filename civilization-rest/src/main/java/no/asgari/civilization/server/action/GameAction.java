@@ -1,6 +1,14 @@
 package no.asgari.civilization.server.action;
 
-import com.google.common.base.Preconditions;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import lombok.Cleanup;
@@ -13,19 +21,10 @@ import no.asgari.civilization.server.excel.UnitReader;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
-import no.asgari.civilization.server.model.Tech;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Log4j
 public class GameAction extends BaseAction {
@@ -153,10 +152,12 @@ public class GameAction extends BaseAction {
 
     }
 
+    /*
     public List<Tech> getAllTechs(String pbfId) {
         Preconditions.checkNotNull(pbfId);
         return findPBFById(pbfId).getTechs();
     }
+    */
 
     private void startIfAllPlayers(PBF pbf) {
         final int numOfPlayersNeeded = pbf.getNumOfPlayers();

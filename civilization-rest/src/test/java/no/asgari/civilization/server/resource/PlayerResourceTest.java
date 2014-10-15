@@ -45,7 +45,9 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
     @Test
     public void chooseSpecificTechForLoggedInPlayer() throws Exception {
         PBF pbf = pbfCollection.findOneById(pbfId);
-        pbf.getPlayers().forEach(p -> assertThat(p.getTechsChosen()).isEmpty());
+        pbf.getPlayers().stream()
+                .filter(p -> p.getUsername().equals("cash1981"))
+                .forEach(p -> assertThat(p.getTechsChosen()).isEmpty());
 
         ItemDTO dto = new ItemDTO();
         dto.setName("Agriculture");

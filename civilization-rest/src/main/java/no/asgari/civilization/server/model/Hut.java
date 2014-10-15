@@ -14,7 +14,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @ToString(of="name")
 @JsonTypeName("hut")
 @NoArgsConstructor
-public class Hut implements Item {
+public class Hut implements Item, Tradable {
     @NotEmpty
     private String name;
     private String type;

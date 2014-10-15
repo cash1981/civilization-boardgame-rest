@@ -20,7 +20,8 @@ import no.asgari.civilization.server.SheetName;
         @JsonSubTypes.Type(value=Infantry.class, name="infantry"),
         @JsonSubTypes.Type(value=Mounted.class, name="mounted"),
         @JsonSubTypes.Type(value=Artillery.class, name="artillery"),
-        @JsonSubTypes.Type(value=Aircraft.class, name="aircraft")
+        @JsonSubTypes.Type(value=Aircraft.class, name="aircraft"),
+        @JsonSubTypes.Type(value=Tech.class, name="tech")
 })
 public interface Spreadsheet {
 

@@ -7,6 +7,7 @@ import com.mongodb.MongoClient;
 import io.dropwizard.auth.Auth;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.GameAction;
+import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
 import no.asgari.civilization.server.model.Draw;
@@ -92,7 +93,7 @@ public class GameResource {
     }
 
     /**
-     * Gets all the available techs
+     * Gets all the available techs. Will remove the techs that player already have chosen
      * @param pbfId - The PBF
      * @param player - The Authenticated player
      * @return - Response ok with a list of techs
@@ -100,11 +101,8 @@ public class GameResource {
     @GET
     @Timed
     @Path("/{pbfId}/techs")
-    public List<Tech> getAllTechs(@NotEmpty @PathParam("pbfId") String pbfId, @Auth Player player) {
-        GameAction gameAction = new GameAction(db);
-        //TODO This will never change, so really it should be cached
-        List<Tech> techs = gameAction.getAllTechs(pbfId);
-        return techs;
+    public List<Tech> getAvailableTechs(@NotEmpty @PathParam("pbfId") String pbfId, @Auth Player player) {
+        return new PlayerAction(db).getRemaingTechsForPlayer(player.getId(), pbfId);
     }
 
 }

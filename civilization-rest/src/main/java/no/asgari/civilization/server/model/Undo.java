@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * When player pushes revert or cancel a specific draw,
@@ -53,4 +54,20 @@ public class Undo {
     public int votesRemaining() {
         return Math.abs(votes.size() - numberOfVotesRequired);
     }
+
+    /**
+     * All must agree for draw to be performed.
+     * If absent/empty, then all players have not voted
+     */
+    @JsonIgnore
+    public Optional<Boolean> getResultOfVotes() {
+        if(votesRemaining() != 0) return Optional.empty();
+
+        if(getVotes().containsValue(Boolean.FALSE)) return Optional.of(Boolean.FALSE);
+
+
+        return Optional.of(Boolean.TRUE);
+    }
+
+
 }

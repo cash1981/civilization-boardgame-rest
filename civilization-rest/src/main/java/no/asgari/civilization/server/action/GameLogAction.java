@@ -57,7 +57,7 @@ public class GameLogAction {
 
     public GameLog createGameLog(Tech tech, String pdfId) {
         GameLog pl = new GameLog();
-        Draw<Spreadsheet> draw = new Draw<>(pdfId, tech.getOwnerId());
+        Draw<Item> draw = new Draw<>(pdfId, tech.getOwnerId());
         draw.setItem(tech);
         pl.setDraw(draw);
         pl.setPbfId(pdfId);

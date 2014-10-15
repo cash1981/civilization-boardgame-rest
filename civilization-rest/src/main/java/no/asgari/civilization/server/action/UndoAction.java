@@ -5,60 +5,57 @@ import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
+import no.asgari.civilization.server.model.Infantry;
+import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
+import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.model.Spreadsheet;
+import no.asgari.civilization.server.model.Tech;
 import no.asgari.civilization.server.model.Undo;
 import org.mongojack.JacksonDBCollection;
 
 import java.util.Optional;
 
 @Log4j
-public class UndoAction {
+public class UndoAction extends BaseAction {
     private final JacksonDBCollection<PBF, String> pbfCollection;
     private final JacksonDBCollection<GameLog, String> gameLogCollection;
 
     public UndoAction(DB db) {
+        super(db);
         this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
         this.gameLogCollection = JacksonDBCollection.wrap(db.getCollection(GameLog.COL_NAME), GameLog.class, String.class);
     }
 
-    public Optional<Boolean> getResultOfVotes(GameLog gameLog) {
-        return getResultOfVotes(gameLog.getDraw());
-    }
-    /**
-     * All must agree for draw to be performed.
-     * If absent/empty, then all players have not voted
-     * @param draw
-     */
-    public Optional<Boolean> getResultOfVotes(Draw draw) {
-        PBF pbf = pbfCollection.findOneById(draw.getPbfId());
-
-        if(draw.getUndo() == null || draw.getUndo().getVotes().size() < pbf.getNumOfPlayers()) {
-            //No draw initiated or not enough votes
-            return Optional.empty();
-        }
-
-        if(draw.getUndo().getVotes().containsValue(Boolean.FALSE)) {
-            return Optional.of(Boolean.FALSE);
-        }
-
-        return Optional.of(Boolean.TRUE);
-    }
-
-    private PBF findPBF(Draw draw) {
-        return pbfCollection.findOneById(draw.getPbfId());
-    }
-
-    public void putDrawnItemBackInPBF(Draw draw) {
+    public void putDrawnItemBackInPBF(PBF pbf, Draw draw) {
+        Preconditions.checkNotNull(pbf);
         Preconditions.checkNotNull(draw);
         Preconditions.checkNotNull(draw.getItem());
 
-        final Spreadsheet item = draw.getItem();
-        final PBF pbf = pbfCollection.findOneById(draw.getPbfId());
-        pbf.getItems().add(item);
+        Item item = draw.getItem();
+
+        Playerhand playerhand = getPlayerhandFromPlayerId(draw.getPlayerId(), pbf);
+        if(item instanceof Tech) {
+            //Remove from tech
+            boolean remove = playerhand.getTechsChosen().remove(item);
+            if(remove) log.debug("Successfully undoed tech");
+            else log.error("Didn't find tech to remove from playerhand: " + item);
+        } else {
+            pbf.getItems().add(item);
+            boolean remove = playerhand.getItems().remove(item);
+            if(remove) log.debug("Successfully undoed item");
+            else log.error("Didn't find item to remove from playerhand: " + item);
+        }
         pbfCollection.updateById(pbf.getId(), pbf);
     }
 
+    /**
+     * Will perform vote, and if all votes are successfull, item is put back in the deck
+     * @param gameLog
+     * @param playerId
+     * @param vote
+     * @return
+     */
     public GameLog vote(GameLog gameLog, String playerId, boolean vote) {
         Preconditions.checkNotNull(gameLog);
         Preconditions.checkNotNull(gameLog.getDraw());
@@ -74,6 +71,12 @@ public class UndoAction {
         gameLog.getDraw().getUndo().vote(playerId,vote);
 
         gameLogCollection.updateById(gameLog.getId(), gameLog);
+
+        Optional<Boolean> resultOfVotes = gameLog.getDraw().getUndo().getResultOfVotes();
+        if(resultOfVotes.isPresent() && resultOfVotes.get()) {
+            log.info("Everyone has performed a vote, so we put item back in the deck");
+            putDrawnItemBackInPBF(pbf, gameLog.getDraw());
+        }
         return gameLog;
     }
 }

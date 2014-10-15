@@ -2,16 +2,17 @@ package no.asgari.civilization.server.action;
 
 import java.util.Iterator;
 import java.util.Optional;
+
 import com.google.common.base.Preconditions;
 import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
+import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
-import no.asgari.civilization.server.model.Spreadsheet;
+import no.asgari.civilization.server.model.Playerhand;
 import org.mongojack.JacksonDBCollection;
-import org.mongojack.WriteResult;
 
 /**
  * Class that will perform draws and log them.
@@ -41,25 +42,46 @@ public class DrawAction extends BaseAction {
         Preconditions.checkNotNull(pbfId);
         Preconditions.checkNotNull(playerId);
         Preconditions.checkNotNull(sheetName);
+
+        checkYourTurn(pbfId, playerId);
+
         PBF pbf = pbfCollection.findOneById(pbfId);
 
-        //Java 8 stream doesn't support remove very well
-        Iterator<Spreadsheet> iterator = pbf.getItems().iterator();
-        while(iterator.hasNext()) {
-            Spreadsheet spreadsheet = iterator.next();
-            if(spreadsheet.getSheetName() == sheetName) {
-                Draw<Spreadsheet> draw = new Draw<>(pbfId, playerId);
-                draw.setHidden(true);
-                draw.setItem(spreadsheet);
-                iterator.remove();
-                pbfCollection.updateById(pbf.getId(), pbf);
-                log.debug("Drew item " + spreadsheet + " and updated pbf");
-                GameLog gamelog = createLog(draw);
-                return Optional.of(gamelog);
+
+        if (SheetName.TECHS.contains(sheetName)) {
+            log.warn("Drawing of techs is not possible. You are supposed to choose a tech, not draw one");
+            return Optional.empty();
+        } else {
+            //Java 8 stream doesn't support remove very well
+            Iterator<Item> iterator = pbf.getItems().iterator();
+            while (iterator.hasNext()) {
+                Item item = iterator.next();
+                if (item.getSheetName() == sheetName) {
+                    putItemToPlayer(item, pbf, playerId);
+
+                    iterator.remove();
+                    pbfCollection.updateById(pbf.getId(), pbf);
+                    log.debug("Drew item " + item + " and updated pbf");
+                    Draw<Item> draw = createDraw(pbfId, playerId, item);
+                    GameLog gamelog = createLog(draw);
+                    return Optional.of(gamelog);
+                }
             }
         }
 
         return Optional.empty();
+    }
+
+    private void putItemToPlayer(Item item, PBF pbf, String playerId) {
+        Playerhand playerhand = getPlayerhandFromPlayerId(playerId, pbf);
+        playerhand.getItems().add(item);
+    }
+
+    private static Draw<Item> createDraw(String pbfId, String playerId, Item item) {
+        Draw<Item> draw = new Draw<>(pbfId, playerId);
+        draw.setHidden(true);
+        draw.setItem(item);
+        return draw;
     }
 
 }

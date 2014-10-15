@@ -13,14 +13,14 @@ import org.hibernate.validator.constraints.NotEmpty;
 @JsonTypeName("cultureI")
 @ToString(of="name")
 @NoArgsConstructor
-public class CultureI implements Item {
+public class CultureI implements Item, Tradable {
     @NotEmpty
     private String name;
     private String description;
     private String type;
     private boolean used;
     private boolean hidden;
-    private String ownerId; // game_id or player_id (username)
+    private String ownerId; // player_id
 
     public CultureI(String name) {
         this.name = name;

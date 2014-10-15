@@ -8,6 +8,7 @@ import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
+import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.model.Spreadsheet;
 import no.asgari.civilization.server.model.Tech;
 import org.mongojack.JacksonDBCollection;
@@ -43,5 +44,46 @@ public abstract class BaseAction {
         }
     }
 
+    /**
+     * Checks wheter is the players turn. If not UNAUTHORIZED exception is thrown
+     * @param pbfId
+     * @param playerId
+     *
+     * @throws WebApplicationException(Response) - Throws Response.UNAUTHORIZED if not your turn
+     */
+    //TODO Perhaps its best to have this in a filter, but its not always intended to be run
+    void checkYourTurn(String pbfId, String playerId) {
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        Playerhand playerhand = getPlayerhandFromPlayerId(playerId, pbf);
+        if (playerhand.isYourTurn()) {
+            throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("Its not your turn")
+                    .build());
+        }
+    }
+
+    Playerhand getPlayerhandFromPlayerId(String playerId, PBF pbf) {
+        return pbf.getPlayers()
+                .stream().filter(p -> p.getPlayerId().equals(playerId))
+                .findFirst()
+                .orElseThrow(PlayerAction::cannotFindItem);
+    }
+
+    Playerhand getPlayerhandFromPlayerId(String playerId, String pbfId) {
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        return getPlayerhandFromPlayerId(playerId, pbf);
+    }
+
+    static WebApplicationException cannotFindItem() {
+        return new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+                .entity("Could not find item")
+                .build());
+    }
+
+    static WebApplicationException cannotFindPlayer() {
+        return new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+                .entity("Could not find player")
+                .build());
+    }
 
 }

@@ -40,13 +40,13 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
     public void run(CivBoardGameRandomizerConfiguration configuration, Environment environment) throws Exception {
         MongoClient mongo = new MongoClient(configuration.mongohost, configuration.mongoport);
         DB db = mongo.getDB(configuration.mongodb);
-
-        JacksonDBCollection<Player, String> playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
-
-        createIndexForPlayer(playerCollection);
         MongoManaged mongoManaged = new MongoManaged(mongo);
         //Database
         environment.lifecycle().manage(mongoManaged);
+
+        JacksonDBCollection<Player, String> playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
+        createIndexForPlayer(playerCollection);
+        createUsernameCache(playerCollection);
 
         //healtcheck
         environment.healthChecks().register("MongoHealthCheck", new MongoHealthCheck(mongo));
@@ -61,13 +61,13 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
         environment.jersey().register(new BasicAuthProvider<>(new CachingAuthenticator<>(new MetricRegistry(), new CivAuthenticator(db),
                 CacheBuilderSpec.parse("expireAfterWrite=120m")), "civilization"));
 
-        createUsernameCache(playerCollection);
     }
 
-    private void createUsernameCache(final JacksonDBCollection<Player, String> playerCollection) {
+    private void createUsernameCache(JacksonDBCollection<Player, String> playerCollection) {
         LoadingCache<String, String> usernameCache = CacheBuilder.newBuilder()
                 .expireAfterWrite(2, TimeUnit.HOURS)
                 .maximumSize(100)
+                .removalListener(lis ->  log.debug("Removing " + lis.toString() + " from the usernameCache"))
                 .build(new CacheLoader<String, String>() {
                             public String load(String playerId) {
                                 return playerCollection.findOneById(playerId).getUsername();
@@ -78,6 +78,7 @@ public class CivBoardgameRandomizerApplication extends Application<CivBoardGameR
 
     private void createIndexForPlayer(JacksonDBCollection<Player, String> playerCollection) {
         playerCollection.createIndex(new BasicDBObject(Player.USERNAME, 1), new BasicDBObject("unique", true));
+        playerCollection.createIndex(new BasicDBObject(Player.EMAIL, 1), new BasicDBObject("unique", true));
     }
 
 }

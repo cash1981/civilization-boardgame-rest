@@ -31,7 +31,6 @@ public class Playerhand {
     private boolean yourTurn = false;
 
     private List<Item> items = Lists.newArrayList();
-    private List<Unit> units = Lists.newArrayList();
     private Set<Tech> techsChosen = Sets.newTreeSet();
 
 

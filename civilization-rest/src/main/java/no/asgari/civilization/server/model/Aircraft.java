@@ -11,7 +11,7 @@ import no.asgari.civilization.server.SheetName;
 @Setter
 @JsonTypeName("aircraft")
 @NoArgsConstructor
-public class Aircraft implements Unit {
+public class Aircraft extends Unit {
     private String ownerId; // id of the player which owns this item
     private boolean hidden;
     private boolean used;
