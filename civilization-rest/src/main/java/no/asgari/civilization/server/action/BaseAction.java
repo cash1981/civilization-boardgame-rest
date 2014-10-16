@@ -5,6 +5,7 @@ import javax.ws.rs.core.Response;
 
 import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
+import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
@@ -66,7 +67,7 @@ public abstract class BaseAction {
         return pbf.getPlayers()
                 .stream().filter(p -> p.getPlayerId().equals(playerId))
                 .findFirst()
-                .orElseThrow(PlayerAction::cannotFindItem);
+                .orElseThrow(PlayerAction::cannotFindPlayer);
     }
 
     Playerhand getPlayerhandFromPlayerId(String playerId, String pbfId) {

@@ -8,7 +8,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 //TODO: Fiks openshift env name when deploying to cloud
-public class CivBoardGameRandomizerConfiguration extends Configuration {
+public class CivilizationConfiguration extends Configuration {
 
     //FIXME, during testing, we use another db so to not clutter prod database
     public String CIVILIZATION = "civ-test";

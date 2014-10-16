@@ -62,6 +62,8 @@ public class ItemReader {
                 throw new IOException("FAF not supported yet");
             case BASE:
                 throw new IOException("Base is not supported yet");
+            case DOC:
+                throw new IOException("DoC is not supported yet");
             default:
                 throw new IOException("For now we only support WAW");
         }
@@ -82,7 +84,7 @@ public class ItemReader {
     }
 
     private LinkedList<? extends Item> getShuffledCityStates(Workbook wb) {
-        Sheet civSheet = wb.getSheet(SheetName.CITY_STATES.toString());
+        Sheet civSheet = wb.getSheet(SheetName.CITY_STATES.getName());
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
         civSheet.forEach(row -> row.forEach(unfilteredCivCells::add));
@@ -118,7 +120,7 @@ public class ItemReader {
     }
 
     private LinkedList<? extends Item> getShuffledCultureIFromExcel(Workbook wb) {
-        Sheet culture1Sheet = wb.getSheet(SheetName.CULTURE_1.toString());
+        Sheet culture1Sheet = wb.getSheet(SheetName.CULTURE_1.getName());
 
         List<Cell> unfilteredCells = new ArrayList<>();
         culture1Sheet.forEach(row -> row.forEach(unfilteredCells::add));
@@ -151,7 +153,7 @@ public class ItemReader {
     }
 
     private LinkedList<? extends Item> getShuffledCultureIIFromExcel(Workbook wb) {
-        Sheet culture2Sheet = wb.getSheet(SheetName.CULTURE_2.toString());
+        Sheet culture2Sheet = wb.getSheet(SheetName.CULTURE_2.getName());
 
         List<Cell> unfilteredCells = new ArrayList<>();
         culture2Sheet.forEach(row -> row.forEach(unfilteredCells::add));
@@ -183,7 +185,7 @@ public class ItemReader {
     }
 
     private LinkedList<? extends Item> getShuffledCultureIIIFromExcel(Workbook wb) {
-        Sheet culture3Sheet = wb.getSheet(SheetName.CULTURE_3.toString());
+        Sheet culture3Sheet = wb.getSheet(SheetName.CULTURE_3.getName());
 
         List<Cell> unfilteredCells = new ArrayList<>();
         culture3Sheet.forEach(row -> row.forEach(unfilteredCells::add));
@@ -215,7 +217,7 @@ public class ItemReader {
     }
 
     private LinkedList<? extends Item> getShuffledGreatPersonFromExcel(Workbook wb) {
-        Sheet gpSheet = wb.getSheet(SheetName.GREAT_PERSON.toString());
+        Sheet gpSheet = wb.getSheet(SheetName.GREAT_PERSON.getName());
 
         List<Cell> unfilteredCells = new ArrayList<>();
         gpSheet.forEach(row -> row.forEach(unfilteredCells::add));
@@ -259,7 +261,7 @@ public class ItemReader {
     }
 
     private void extractShuffledWondersFromExcel(Workbook wb) {
-        Sheet wonderSheet = wb.getSheet(SheetName.WONDERS.toString());
+        Sheet wonderSheet = wb.getSheet(SheetName.WONDERS.getName());
 
         List<Cell> unfilteredCells = new ArrayList<>();
         wonderSheet.forEach(row -> row.forEach(unfilteredCells::add));
@@ -324,7 +326,7 @@ public class ItemReader {
     }
 
     private LinkedList<? extends Item> getShuffledTilesFromExcel(Workbook wb) {
-        Sheet tileSheet = wb.getSheet(SheetName.TILES.toString());
+        Sheet tileSheet = wb.getSheet(SheetName.TILES.getName());
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
         tileSheet.forEach(row -> row.forEach(unfilteredCivCells::add));
@@ -342,7 +344,7 @@ public class ItemReader {
     }
 
     private LinkedList<? extends Item> getShuffledHutsFromExcel(Workbook wb) {
-        Sheet hutSheet = wb.getSheet(SheetName.HUTS.toString());
+        Sheet hutSheet = wb.getSheet(SheetName.HUTS.getName());
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
         hutSheet.forEach(row -> row.forEach(unfilteredCivCells::add));
@@ -360,7 +362,7 @@ public class ItemReader {
     }
 
     private LinkedList<? extends Item> getShuffledVillages(Workbook wb) {
-        Sheet sheet = wb.getSheet(SheetName.VILLAGES.toString());
+        Sheet sheet = wb.getSheet(SheetName.VILLAGES.getName());
 
         List<Cell> unfilteredCivCells = new ArrayList<>();
         sheet.forEach(row -> row.forEach(unfilteredCivCells::add));
@@ -384,7 +386,7 @@ public class ItemReader {
      */
     private List<Tech> getTechsFromExcel(Workbook wb) {
         //Start with level 1 techs
-        Sheet sheet = wb.getSheet(SheetName.LEVEL_1_TECH.toString());
+        Sheet sheet = wb.getSheet(SheetName.LEVEL_1_TECH.getName());
         List<Cell> level1Cells = new ArrayList<>();
         sheet.forEach(row -> row.forEach(level1Cells::add));
 
@@ -396,7 +398,7 @@ public class ItemReader {
                 .map(tech -> new Tech(tech.toString(), Tech.LEVEL_1))
                 .collect(Collectors.toList());
 
-        sheet = wb.getSheet(SheetName.LEVEL_2_TECH.toString());
+        sheet = wb.getSheet(SheetName.LEVEL_2_TECH.getName());
         List<Cell> level2Cells = new ArrayList<>();
         sheet.forEach(row -> row.forEach(level2Cells::add));
 
@@ -408,7 +410,7 @@ public class ItemReader {
                 .map(tech -> new Tech(tech.toString(), Tech.LEVEL_2))
                 .collect(Collectors.toList());
 
-        sheet = wb.getSheet(SheetName.LEVEL_3_TECH.toString());
+        sheet = wb.getSheet(SheetName.LEVEL_3_TECH.getName());
         List<Cell> level3Cells = new ArrayList<>();
         sheet.forEach(row -> row.forEach(level3Cells::add));
 
@@ -420,7 +422,7 @@ public class ItemReader {
                 .map(tech -> new Tech(tech.toString(), Tech.LEVEL_3))
                 .collect(Collectors.toList());
 
-        sheet = wb.getSheet(SheetName.LEVEL_4_TECH.toString());
+        sheet = wb.getSheet(SheetName.LEVEL_4_TECH.getName());
         List<Cell> level4Cells = new ArrayList<>();
         sheet.forEach(row -> row.forEach(level4Cells::add));
 

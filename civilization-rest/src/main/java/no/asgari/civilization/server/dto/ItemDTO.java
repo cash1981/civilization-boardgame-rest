@@ -31,4 +31,5 @@ public class ItemDTO {
     @NotNull
     private SheetName sheetName;
 
+    private String pbfId;
 }

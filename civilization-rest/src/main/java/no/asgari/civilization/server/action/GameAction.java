@@ -115,8 +115,8 @@ public class GameAction extends BaseAction {
 
     private PlayerDTO createPlayerDTO(Playerhand player) {
         PlayerDTO dto = new PlayerDTO();
-        player.setUsername(player.getUsername());
-        player.setPlayerId(player.getPlayerId());
+        dto.setUsername(player.getUsername());
+        dto.setPlayerId(player.getPlayerId());
         return dto;
     }
 

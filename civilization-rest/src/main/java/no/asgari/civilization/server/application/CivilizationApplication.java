@@ -25,19 +25,19 @@ import java.util.concurrent.TimeUnit;
 
 @Log4j
 @SuppressWarnings("unchecked")
-public class CivBoardgameRandomizerApplication extends Application<CivBoardGameRandomizerConfiguration> {
+public class CivilizationApplication extends Application<CivilizationConfiguration> {
 
     public static void main(String[] args) throws Exception {
-        new CivBoardgameRandomizerApplication().run(new String[]{"server", "src/main/resources/config.yml"});
+        new CivilizationApplication().run(new String[] { "server", "src/main/resources/config.yml" });
     }
 
     @Override
-    public void initialize(Bootstrap<CivBoardGameRandomizerConfiguration> bootstrap) {
+    public void initialize(Bootstrap<CivilizationConfiguration> bootstrap) {
         bootstrap.addBundle(new AssetsBundle());
     }
 
     @Override
-    public void run(CivBoardGameRandomizerConfiguration configuration, Environment environment) throws Exception {
+    public void run(CivilizationConfiguration configuration, Environment environment) throws Exception {
         MongoClient mongo = new MongoClient(configuration.mongohost, configuration.mongoport);
         DB db = mongo.getDB(configuration.mongodb);
         MongoManaged mongoManaged = new MongoManaged(mongo);

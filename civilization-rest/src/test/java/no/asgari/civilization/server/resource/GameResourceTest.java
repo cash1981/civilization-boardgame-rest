@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.testing.junit.DropwizardAppRule;
-import no.asgari.civilization.server.application.CivBoardGameRandomizerConfiguration;
-import no.asgari.civilization.server.application.CivBoardgameRandomizerApplication;
+import no.asgari.civilization.server.application.CivilizationConfiguration;
+import no.asgari.civilization.server.application.CivilizationApplication;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
@@ -31,8 +31,8 @@ import static org.junit.Assert.assertTrue;
 public class GameResourceTest extends MongoDBBaseTest {
 
     @ClassRule
-    public static final DropwizardAppRule<CivBoardGameRandomizerConfiguration> RULE =
-            new DropwizardAppRule<CivBoardGameRandomizerConfiguration>(CivBoardgameRandomizerApplication.class, "src/main/resources/config.yml");
+    public static final DropwizardAppRule<CivilizationConfiguration> RULE =
+            new DropwizardAppRule<CivilizationConfiguration>(CivilizationApplication.class, "src/main/resources/config.yml");
     private static final String BASE_URL = "http://localhost:%d";
 
     @Test

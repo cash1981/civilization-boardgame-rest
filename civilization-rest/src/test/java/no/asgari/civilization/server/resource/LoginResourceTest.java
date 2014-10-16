@@ -16,8 +16,8 @@ import io.dropwizard.jersey.DropwizardResourceConfig;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import lombok.Cleanup;
 import no.asgari.civilization.server.application.CivAuthenticator;
-import no.asgari.civilization.server.application.CivBoardGameRandomizerConfiguration;
-import no.asgari.civilization.server.application.CivBoardgameRandomizerApplication;
+import no.asgari.civilization.server.application.CivilizationConfiguration;
+import no.asgari.civilization.server.application.CivilizationApplication;
 import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
@@ -43,8 +43,8 @@ import static org.fest.assertions.api.Assertions.assertThat;
 public class LoginResourceTest extends AbstractMongoDBTest {
 
     @ClassRule
-    public static final DropwizardAppRule<CivBoardGameRandomizerConfiguration> RULE =
-            new DropwizardAppRule<>(CivBoardgameRandomizerApplication.class, "src/main/resources/config.yml");
+    public static final DropwizardAppRule<CivilizationConfiguration> RULE =
+            new DropwizardAppRule<>(CivilizationApplication.class, "src/main/resources/config.yml");
     private static final String BASE_URL = "http://localhost:%d";
 
     @Path("/test/")

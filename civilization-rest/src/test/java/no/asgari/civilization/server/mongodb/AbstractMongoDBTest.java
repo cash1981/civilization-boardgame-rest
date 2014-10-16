@@ -23,9 +23,8 @@ import io.dropwizard.java8.auth.basic.BasicAuthProvider;
 import io.dropwizard.jersey.DropwizardResourceConfig;
 import no.asgari.civilization.server.action.PBFAction;
 import no.asgari.civilization.server.application.CivAuthenticator;
-import no.asgari.civilization.server.application.CivBoardGameRandomizerConfiguration;
+import no.asgari.civilization.server.application.CivilizationConfiguration;
 import no.asgari.civilization.server.application.CivSingleton;
-import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
@@ -56,7 +55,7 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
 
     @BeforeClass
     public static void setup() throws Exception {
-        CivBoardGameRandomizerConfiguration configuration = new CivBoardGameRandomizerConfiguration();
+        CivilizationConfiguration configuration = new CivilizationConfiguration();
 
         mongo = new MongoClient(configuration.mongohost, configuration.mongoport);
         db = mongo.getDB(configuration.mongodb);
@@ -118,7 +117,6 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         oneById.getPlayers().add(createPlayerhand(createPlayer("Itchi", pbfId)));
         oneById.getPlayers().add(createPlayerhand(createPlayer("Chul", pbfId)));
         pbfCollection.updateById(pbfId, oneById);
-
     }
 
     private static void createAnotherPBF() throws IOException {

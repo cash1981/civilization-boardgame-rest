@@ -43,15 +43,14 @@ public class DrawAction extends BaseAction {
         Preconditions.checkNotNull(playerId);
         Preconditions.checkNotNull(sheetName);
 
-        checkYourTurn(pbfId, playerId);
-
-        PBF pbf = pbfCollection.findOneById(pbfId);
-
-
         if (SheetName.TECHS.contains(sheetName)) {
             log.warn("Drawing of techs is not possible. You are supposed to choose a tech, not draw one");
             return Optional.empty();
         } else {
+            checkYourTurn(pbfId, playerId);
+
+            PBF pbf = pbfCollection.findOneById(pbfId);
+
             //Java 8 stream doesn't support remove very well
             Iterator<Item> iterator = pbf.getItems().iterator();
             while (iterator.hasNext()) {

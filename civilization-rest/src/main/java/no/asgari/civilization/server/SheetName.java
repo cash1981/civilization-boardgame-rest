@@ -18,10 +18,7 @@ public enum SheetName {
         this.label = name;
     }
 
-    @Override
-    public String toString() {
-        return label;
-    }
+    public String getName() {return label;}
 
     public static final EnumSet<SheetName> SHEETS =
             EnumSet.of(SheetName.CIV, SheetName.CULTURE_1, SheetName.CULTURE_2, SheetName.CULTURE_3,

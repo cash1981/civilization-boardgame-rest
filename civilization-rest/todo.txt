@@ -40,5 +40,5 @@ Nice to have
 - Perhaps when players choose tech it should be intersection between pbf.getTech() and player.getTech() so that only distinct techs shows
 - Instead of Basic authentication, it would be nice to support OAUTH
 - Would be nice to get eventbus for private and public logging so that their will be loose coupling
-
+- For now sending public items (resources) doesnt need sending in the system, but for fully playable version we need support for it
 

@@ -21,6 +21,7 @@ import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.model.Tech;
+import no.asgari.civilization.server.model.Tradable;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
@@ -190,5 +191,38 @@ public class PlayerAction extends BaseAction {
         PBF pbf = pbfCollection.findOneById(pbfId);
         Playerhand playerhand = getPlayerhandFromPlayerId(playerId, pbf);
         return playerhand.isYourTurn();
+    }
+
+    /**
+     * Will send the item to the new owner
+     * @param item
+     * @param playerId
+     * @return
+     */
+    public boolean tradeToPlayer(ItemDTO item, String playerId) {
+        Preconditions.checkNotNull(item);
+        Preconditions.checkNotNull(item.getPbfId());
+        Preconditions.checkNotNull(item.getOwnerId());
+
+        PBF pbf = pbfCollection.findOneById(item.getPbfId());
+        Playerhand fromPlayer = getPlayerhandFromPlayerId(playerId, pbf);
+        Playerhand toPlayer = getPlayerhandFromPlayerId(item.getOwnerId(), pbf);
+
+        Item itemToTrade = fromPlayer.getItems().stream()
+                .filter(it -> it instanceof Tradable)
+                .filter(it -> it.getSheetName() == item.getSheetName())
+                .filter(it -> it.getName().equals(item.getName()))
+                .findFirst()
+                .orElseThrow(PlayerAction::cannotFindItem);
+
+        boolean remove = fromPlayer.getItems().remove(itemToTrade);
+        if(!remove) {
+            log.error("Didn't find item from playerhand: " + item);
+            return false;
+        }
+        toPlayer.getItems().add(itemToTrade);
+
+        pbfCollection.updateById(pbf.getId(), pbf);
+        return true;
     }
 }
