@@ -14,6 +14,7 @@ The first version will be pretty basic, where you can only draw items.
 Future version will be a fully playable web client with drag and drop play
 
 ##Requires
+* Maven
 * Java 8
 * MongoDB
 * Lombok (www.projectlombok.org)

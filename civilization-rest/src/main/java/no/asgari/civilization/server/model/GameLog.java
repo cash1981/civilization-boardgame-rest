@@ -39,12 +39,19 @@ import java.time.LocalDateTime;
 public class GameLog {
     public static final String COL_NAME = "gameLog";
 
+    public enum LogType {
+        TRADE, BATTLE, ITEM, TECH;
+    }
+
     @Id
     @ObjectId
     private String id;
 
     @NotEmpty
-    private String log;
+    private String privateLog;
+
+    @NotEmpty
+    private String publicLog;
 
     /** Each log belongs to a pbf **/
     @NotEmpty
@@ -61,21 +68,29 @@ public class GameLog {
     @NotNull
     private Draw draw;
 
-    /**
-     * All logs which are not hidden, will be displayed as public information
-     */
-    private boolean hidden = true;
-
     @JsonIgnore
-    public void createAndSetLog() {
-        final String SPACE = " - ";
+    public void createAndSetLog(LogType logType) {
+        final String DELIM = " - ";
         StringBuilder sb = new StringBuilder();
-        sb.append(created + SPACE );
-        sb.append(username + SPACE);
-        if(!hidden)
-            sb.append("drew " + SPACE + draw.getItem().revealAll());
-        else
-            sb.append("drew " + SPACE + draw.getItem().revealPublic());
-        log = sb.toString();
+        sb.append(created + DELIM);
+        sb.append(username + DELIM);
+        switch (logType) {
+            case ITEM:
+                privateLog = sb.toString() + "drew " + DELIM + draw.getItem().revealAll();
+                publicLog = sb.toString() + "reveals " + DELIM + draw.getItem().revealPublic();
+                break;
+            case BATTLE:
+                privateLog = sb.toString() + "plays " + DELIM + draw.getItem().revealAll();
+                publicLog = sb.toString() + "reveals " + DELIM + draw.getItem().revealPublic();
+                break;
+            case TRADE:
+                privateLog = sb.toString() + "has received from trade " + DELIM + draw.getItem().revealAll();
+                publicLog = sb.toString() + "has received from trade " + DELIM + draw.getItem().revealPublic();
+                break;
+            case TECH:
+                privateLog = sb.toString() + "has teched  " + DELIM + draw.getItem().revealAll();
+                publicLog = sb.toString() + "has teched " + DELIM + draw.getItem().revealPublic();
+                break;
+        }
     }
 }

@@ -22,11 +22,11 @@ public class UndoTest extends AbstractMongoDBTest {
     @Before
     public void before() throws Exception {
         if (gameLogCollection.findOne() == null) {
-            createADrawAndPerformVoteForUndo();
+            createADrawAndInitiateAVoteForUndo();
         }
     }
 
-    private void createADrawAndPerformVoteForUndo() throws Exception {
+    private void createADrawAndInitiateAVoteForUndo() throws Exception {
         //First create one UndoAction
 
         //Pick one item
@@ -38,9 +38,9 @@ public class UndoTest extends AbstractMongoDBTest {
         Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.CIV);
         assertTrue(gameLogOptional.isPresent());
         UndoAction undoAction = new UndoAction(db);
-        GameLog gameLog = undoAction.vote(gameLogOptional.get(), playerId, true);
+        undoAction.initiateUndo(gameLogOptional.get(), playerId);
 
-        assertThat(gameLog.getDraw().getUndo().getVotes().size()).isEqualTo(1);
+        assertThat(gameLogCollection.findOneById(gameLogOptional.get().getId()).getDraw().getUndo().getVotes().size()).isEqualTo(1);
     }
 
     @Test
@@ -88,7 +88,6 @@ public class UndoTest extends AbstractMongoDBTest {
 
         //Check that item is back
         final Spreadsheet item = gameLog.getDraw().getItem();
-        System.out.println("Item that is put back type: " + item.getSheetName());
         assertThat(item).isInstanceOf(Civ.class);
 
         //check that its in the pbf
@@ -97,6 +96,7 @@ public class UndoTest extends AbstractMongoDBTest {
 
     @Test
     public void checkThatYouCanUndoTech() throws Exception {
+
         //TODO implement
     }
 

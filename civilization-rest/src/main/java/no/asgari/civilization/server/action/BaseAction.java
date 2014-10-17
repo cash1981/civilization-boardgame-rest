@@ -25,12 +25,12 @@ public abstract class BaseAction {
     }
 
     /** Creates public and private logs of draws **/
-    protected GameLog createLog(Draw<? extends Spreadsheet> draw) {
-        return logAction.createGameLog(draw);
+    protected GameLog createLog(Draw<? extends Spreadsheet> draw, GameLog.LogType logType) {
+        return logAction.createGameLog(draw,logType);
     }
 
-    protected GameLog createLog(Tech chosenTech, String pbfId) {
-        return logAction.createGameLog(chosenTech, pbfId);
+    protected GameLog createLog(Tech chosenTech, String pbfId, GameLog.LogType logType) {
+        return logAction.createGameLog(chosenTech, pbfId,logType);
     }
 
     protected PBF findPBFById(String pbfId) {
@@ -57,7 +57,7 @@ public abstract class BaseAction {
         PBF pbf = pbfCollection.findOneById(pbfId);
         Playerhand playerhand = getPlayerhandFromPlayerId(playerId, pbf);
         if (playerhand.isYourTurn()) {
-            throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
+            throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN)
                     .entity("Its not your turn")
                     .build());
         }

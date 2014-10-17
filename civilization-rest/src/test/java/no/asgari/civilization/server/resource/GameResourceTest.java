@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class GameResourceTest extends MongoDBBaseTest {
@@ -46,6 +47,16 @@ public class GameResourceTest extends MongoDBBaseTest {
         List<PbfDTO> pbf = response.getEntity(ArrayList.class);
         //By default Jackson creates List<LinkedHashMap<String,String>> with the values
         assertThat(pbf).isNotEmpty();
+    }
+
+    @Test
+    public void getAllActiveGamesForPlayer() throws Exception {
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/game/player", RULE.getLocalPort())).build();
+        ClientResponse response = client().resource(uri)
+                .type(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .get(ClientResponse.class);
+        assertEquals(response.getStatus(), HttpStatus.OK_200);
     }
 
     @Test

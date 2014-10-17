@@ -3,7 +3,6 @@ package no.asgari.civilization.server.action;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.ws.rs.WebApplicationException;
@@ -16,6 +15,7 @@ import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.exception.PlayerExistException;
+import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
@@ -86,7 +86,7 @@ public class PlayerAction extends BaseAction {
     public void chooseTech(String pbfId, ItemDTO item, String playerId) {
         Preconditions.checkNotNull(pbfId);
         Preconditions.checkNotNull(item);
-        Preconditions.checkNotNull(item.getName());
+        Preconditions.checkNotNull(item.getName()); 
 
         //This can be done out of turn, because of EOI played in SOT
         //checkYourTurn(pbfId, playerId);
@@ -97,17 +97,16 @@ public class PlayerAction extends BaseAction {
                 .findFirst();
                                            //if not static then this::cannotFindItem
         Tech chosenTech = tech.orElseThrow(PlayerAction::cannotFindItem);
-        Playerhand playerhand = getPlayerhandFromPlayerId(playerId, pbf);
-
         chosenTech.setHidden(true);
         chosenTech.setOwnerId(playerId);
 
+        Playerhand playerhand = getPlayerhandFromPlayerId(playerId, pbf);
         playerhand.getTechsChosen().add(chosenTech);
 
         pbfCollection.updateById(pbf.getId(), pbf);
         log.debug("Player " + playerId + " chose tech " + chosenTech.getName());
 
-        super.createLog(chosenTech, pbfId);
+        super.createLog(chosenTech, pbfId, GameLog.LogType.TECH);
     }
 
     public boolean endTurn(String pbfId, String username) {
@@ -162,8 +161,8 @@ public class PlayerAction extends BaseAction {
 
 
         itemToReveal.setHidden(false);
-        logAction.createGameLog(itemToReveal, pbfId);
-        log.debug("tem to be reveal " + itemToReveal);
+        logAction.createGameLog(itemToReveal, pbfId, GameLog.LogType.ITEM);
+        log.debug("item to be reveal " + itemToReveal);
         pbfCollection.updateById(pbfId, pbf);
     }
 
@@ -221,8 +220,10 @@ public class PlayerAction extends BaseAction {
             return false;
         }
         toPlayer.getItems().add(itemToTrade);
-
+        itemToTrade.setOwnerId(toPlayer.getPlayerId());
         pbfCollection.updateById(pbf.getId(), pbf);
+
+        logAction.createGameLog(itemToTrade, pbf.getId(), GameLog.LogType.TRADE);
         return true;
     }
 }

@@ -20,11 +20,13 @@
     #DONE -- will disable drawing of items for players
 	#DONE -- Each this happens, system will enable for next player in line
 - Send player items
-	-- Allowing players to send Huts, Villages, Culture cards privately to other players
+	#DONE -- Allowing players to send Huts, Villages, Culture cards privately to other players
 	-- That player should get the item sent, plus logged both publicly that trading has taken place, plus privately
 #DONE - No players should be able to draw items when it is not their turn
 	#DONE -- Except, they should be able to send stuff to other players, and choosing techs, because these are done simultanously, or if it is too difficult, then everything is turn based
-#DONE - Logging
+- Logging
+    -- Public logs are just for info. Need to differentiate Gamelog
+    -- Trading for instance should have a different log, now its says "X drew hut"
 #DONE - CachingAuthentication
 	
 Nice to have
@@ -33,12 +35,18 @@ Nice to have
 - Each item can have path to a picture so that client can show it
 - Create a filter that is for /civilization/pbf/{pbfId}* which takes the pbfId and the logged in player, and check if that player has access to the game, and proceeds if they do
 - Create a battlefield, for now only use the hidden option
+- Change to social authentication
 - Option to leave a game
 	-- Haven't thought of all the details about this
+	-- This is probably not that difficult. Just put all playerhand info in another playerhand
 - Possibility to request undo of end of turn?
     -- For now, this can only be done if all players just push end of turn until it goes back to the correct player
 - Perhaps when players choose tech it should be intersection between pbf.getTech() and player.getTech() so that only distinct techs shows
 - Instead of Basic authentication, it would be nice to support OAUTH
 - Would be nice to get eventbus for private and public logging so that their will be loose coupling
 - For now sending public items (resources) doesnt need sending in the system, but for fully playable version we need support for it
+- Change basic authentication to OAUTH
 
+
+Future
+- Replace MongoJack with Morphia as MongoJack is no longer maintained it seems

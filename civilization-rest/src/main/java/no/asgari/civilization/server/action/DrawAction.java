@@ -59,10 +59,11 @@ public class DrawAction extends BaseAction {
                     putItemToPlayer(item, pbf, playerId);
 
                     iterator.remove();
+                    item.setOwnerId(playerId);
                     pbfCollection.updateById(pbf.getId(), pbf);
                     log.debug("Drew item " + item + " and updated pbf");
                     Draw<Item> draw = createDraw(pbfId, playerId, item);
-                    GameLog gamelog = createLog(draw);
+                    GameLog gamelog = createLog(draw, GameLog.LogType.ITEM);
                     return Optional.of(gamelog);
                 }
             }

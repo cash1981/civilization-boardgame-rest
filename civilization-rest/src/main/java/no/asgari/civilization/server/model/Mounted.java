@@ -86,19 +86,17 @@ public class Mounted extends Unit {
         if (health != mounted.health) return false;
         if (hidden != mounted.hidden) return false;
         if (used != mounted.used) return false;
-        if (ownerId != null ? !ownerId.equals(mounted.ownerId) : mounted.ownerId != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = health;
-        result = 31 * result + (ownerId != null ? ownerId.hashCode() : 0);
-        result = 31 * result + (hidden ? 1 : 0);
+        int result = (hidden ? 1 : 0);
         result = 31 * result + (used ? 1 : 0);
         result = 31 * result + (killed ? 1 : 0);
         result = 31 * result + attack;
+        result = 31 * result + health;
         return result;
     }
 

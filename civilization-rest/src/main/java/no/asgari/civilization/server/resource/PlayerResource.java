@@ -6,7 +6,9 @@ import io.dropwizard.auth.Auth;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.action.DrawAction;
+import no.asgari.civilization.server.action.GameLogAction;
 import no.asgari.civilization.server.action.PlayerAction;
+import no.asgari.civilization.server.action.UndoAction;
 import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Player;
@@ -32,7 +34,7 @@ import java.util.Set;
 /**
  * Contains player specific resources
  */
-@Path("player")
+@Path("player/{pbfId}")
 @Produces(value = MediaType.APPLICATION_JSON)
 @Consumes(value = MediaType.APPLICATION_JSON)
 @Log4j
@@ -49,16 +51,6 @@ public class PlayerResource {
     }
 
     /**
-     * Will return a colletion of all pbf ids
-     */
-    @GET @Timed
-    public Response getGamesForPlayer(@Auth Player player) {
-        Set<String> games = playerAction.getGames(player);
-        //TODO Perhaps nice to create location for all the games
-        return Response.ok().entity(games).build();
-    }
-
-    /**
      * Will choose a tech and update the player collection.
      *
      * This method will also check if other players have chosen
@@ -68,7 +60,7 @@ public class PlayerResource {
      * @return
      */
     @PUT
-    @Path("{pbfId}/tech/choose")
+    @Path("/tech/choose")
     @Timed
     public Response chooseTech(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
         playerAction.chooseTech(pbfId, item, player.getId());
@@ -83,7 +75,7 @@ public class PlayerResource {
      * @return
      */
     @PUT
-    @Path("{pbfId}/endturn")
+    @Path("/endturn")
     @Timed
     //TODO test
     public Response endTurn(@Auth Player player, @PathParam("pbfId") String pbfId) {
@@ -101,14 +93,14 @@ public class PlayerResource {
      * @return
      */
     @GET
-    @Path("{pbfId}/yourturn")
+    @Path("/yourturn")
     @Timed
     public boolean isYourTurn(@Auth Player player, @PathParam("pbfId") String pbfId) {
         return  playerAction.isYourTurn(pbfId, player.getId());
     }
 
     @PUT
-    @Path("{pbfId}/revealItem")
+    @Path("/{pbfId}/revealItem")
     @Timed
     public Response revealItem(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
         playerAction.revealItem(pbfId, player.getId(), item);
@@ -116,7 +108,7 @@ public class PlayerResource {
     }
 
     @PUT
-    @Path("{pbfId}/trade")
+    @Path("/trade")
     @Timed
     public Response giveItemToPlayer(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
         if(player.getId().equals(item.getOwnerId())) {
@@ -131,14 +123,26 @@ public class PlayerResource {
     }
 
     @PUT
-    @Path("{pbfId}/draw/{sheetName}")
+    @Path("/draw/{sheetName}")
     @Timed
     public Response drawItem(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @PathParam("sheetName") SheetName sheetName) {
         DrawAction drawAction = new DrawAction(db);
         Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, player.getId(), sheetName);
         if(gameLogOptional.isPresent())
             return Response.ok().build();
-        else return Response.status(Response.Status.NOT_MODIFIED).build();
+
+        return Response.status(Response.Status.NOT_MODIFIED).build();
+    }
+
+    @PUT
+    @Path("/undo")
+    @Timed
+    public Response undoItem(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @QueryParam("gameLogId") String gameLogId) {
+        GameLogAction gameLogAction = new GameLogAction(db);
+        GameLog gameLog = gameLogAction.findGameLogById(gameLogId);
+        UndoAction undoAction = new UndoAction(db);
+        undoAction.initiateUndo(gameLog, player.getId());
+        return Response.ok().build();
     }
 
 }

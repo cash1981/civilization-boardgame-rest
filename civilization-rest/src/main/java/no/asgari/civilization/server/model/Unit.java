@@ -58,4 +58,16 @@ public abstract class Unit implements Item, Level {
         return getType();
     }
 
+    @Override
+    public String revealPublic() {
+        return getType();
+    }
+
+    @Override
+    public String revealAll() {
+        return toString();
+    }
+
+
+
 }

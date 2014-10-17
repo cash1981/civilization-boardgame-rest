@@ -6,10 +6,13 @@ import com.mongodb.DB;
 import io.dropwizard.auth.Auth;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.GameAction;
+import no.asgari.civilization.server.action.GameLogAction;
 import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
+import no.asgari.civilization.server.dto.GameLogDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
 import no.asgari.civilization.server.dto.PlayerDTO;
+import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Tech;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -26,7 +29,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Path("game")
 @Produces(MediaType.APPLICATION_JSON)
@@ -57,6 +64,19 @@ public class GameResource {
         return Response.ok()
                 .entity(games)
                 .build();
+    }
+
+    /**
+     * Will return a colletion of all pbf ids
+     */
+    @Path("/player")
+    @GET
+    @Timed
+    public Response getGamesByPlayer(@Auth Player player) {
+        PlayerAction playerAction = new PlayerAction(db);
+        Set<String> games = playerAction.getGames(player);
+        //TODO Perhaps nice to create location for all the games
+        return Response.ok().entity(games).build();
     }
 
     /**
@@ -116,6 +136,44 @@ public class GameResource {
     public List<Tech> getAvailableTechs(@NotEmpty @PathParam("pbfId") String pbfId, @Auth Player player) {
         //TODO Change return type to TechDTO or use ItemDTO
         return new PlayerAction(db).getRemaingTechsForPlayer(player.getId(), pbfId);
+    }
+
+    @GET
+    @Timed
+    @Path("/{pbfId}/publiclog")
+    public List<GameLogDTO> getPublicLog(@NotEmpty @PathParam("pbfId") String pbfId) {
+        GameLogAction gameLogAction = new GameLogAction(db);
+        List<GameLog> allPublicLogs = gameLogAction.getAllPublicLogs(pbfId);
+        List<GameLogDTO> gameLogDTOs = new ArrayList<>();
+        if(!allPublicLogs.isEmpty()) {
+            gameLogDTOs = allPublicLogs.stream()
+                    .map(gl -> createDTO(gl.getId(), gl.getPublicLog()))
+                    .collect(Collectors.toList());
+        }
+        return gameLogDTOs;
+    }
+
+    @GET
+    @Timed
+    @Path("/{pbfId}/privatelog")
+    public List<GameLogDTO> getPrivateLog(@NotEmpty @PathParam("pbfId") String pbfId, @Auth Player player) {
+        GameLogAction gameLogAction = new GameLogAction(db);
+
+        List<GameLog> allPrivateLogs = gameLogAction.getAllPrivateLogs(pbfId, player.getUsername());
+        List<GameLogDTO> gameLogDTOs = new ArrayList<>();
+        if(!allPrivateLogs.isEmpty()) {
+            gameLogDTOs = allPrivateLogs.stream()
+                    .map(gl -> createDTO(gl.getId(), gl.getPublicLog()))
+                    .collect(Collectors.toList());
+        }
+        return gameLogDTOs;
+    }
+
+    private static GameLogDTO createDTO(String id, String log) {
+        GameLogDTO dto = new GameLogDTO();
+        dto.setId(id);
+        dto.setLog(log);
+        return dto;
     }
 
 }

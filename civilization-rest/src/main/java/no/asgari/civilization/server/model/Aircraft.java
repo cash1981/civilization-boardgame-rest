@@ -2,6 +2,7 @@ package no.asgari.civilization.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import no.asgari.civilization.server.SheetName;
 @Setter
 @JsonTypeName("aircraft")
 @NoArgsConstructor
+//@EqualsAndHashCode(of = {"used", "attack", "health", "type"}, callSuper = true)
 public class Aircraft extends Unit {
     private String ownerId; // id of the player which owns this item
     private boolean hidden;
@@ -72,15 +74,13 @@ public class Aircraft extends Unit {
         if (health != aircraft.health) return false;
         if (hidden != aircraft.hidden) return false;
         if (used != aircraft.used) return false;
-        if (ownerId != null ? !ownerId.equals(aircraft.ownerId) : aircraft.ownerId != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = ownerId != null ? ownerId.hashCode() : 0;
-        result = 31 * result + (hidden ? 1 : 0);
+        int result = (hidden ? 1 : 0);
         result = 31 * result + (used ? 1 : 0);
         result = 31 * result + (killed ? 1 : 0);
         result = 31 * result + attack;

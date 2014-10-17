@@ -1,6 +1,7 @@
 package no.asgari.civilization.server.model;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @ToString(of="name")
 @JsonTypeName("cultureII")
 @NoArgsConstructor
+@EqualsAndHashCode(exclude={"ownerId", "hidden", "used"})
 public class CultureII implements Item, Tradable {
     @NotEmpty
     private String name;
@@ -41,35 +43,6 @@ public class CultureII implements Item, Tradable {
     @Override
     public String revealAll() {
         return name;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        CultureII cultureII = (CultureII) o;
-
-        if (hidden != cultureII.hidden) return false;
-        if (used != cultureII.used) return false;
-        if (description != null ? !description.equals(cultureII.description) : cultureII.description != null)
-            return false;
-        if (!name.equals(cultureII.name)) return false;
-        if (ownerId != null ? !ownerId.equals(cultureII.ownerId) : cultureII.ownerId != null) return false;
-        if (type != null ? !type.equals(cultureII.type) : cultureII.type != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (used ? 1 : 0);
-        result = 31 * result + (hidden ? 1 : 0);
-        result = 31 * result + (ownerId != null ? ownerId.hashCode() : 0);
-        return result;
     }
 
     @Override

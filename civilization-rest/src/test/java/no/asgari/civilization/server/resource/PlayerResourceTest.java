@@ -37,16 +37,6 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
 
 
     @Test
-    public void getAllActiveGamesForPlayer() throws Exception {
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player", RULE.getLocalPort())).build();
-        ClientResponse response = client().resource(uri)
-                .type(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .get(ClientResponse.class);
-        assertEquals(response.getStatus(), HttpStatus.OK_200);
-    }
-
-    @Test
     public void chooseSpecificTechForLoggedInPlayer() throws Exception {
         PBF pbf = pbfCollection.findOneById(pbfId);
         pbf.getPlayers().stream()

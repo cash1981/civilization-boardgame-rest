@@ -16,6 +16,9 @@ import org.mongojack.JacksonDBCollection;
 
 import java.util.Optional;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
 @Log4j
 public class UndoAction extends BaseAction {
     private final JacksonDBCollection<PBF, String> pbfCollection;
@@ -51,6 +54,8 @@ public class UndoAction extends BaseAction {
 
     /**
      * Will perform vote, and if all votes are successfull, item is put back in the deck
+     *
+     * A vote must have already been initiated
      * @param gameLog
      * @param playerId
      * @param vote
@@ -59,17 +64,14 @@ public class UndoAction extends BaseAction {
     public GameLog vote(GameLog gameLog, String playerId, boolean vote) {
         Preconditions.checkNotNull(gameLog);
         Preconditions.checkNotNull(gameLog.getDraw());
+        Preconditions.checkNotNull(gameLog.getDraw().getUndo());
 
         PBF pbf = pbfCollection.findOneById(gameLog.getPbfId());
         if(!pbf.getPlayers().stream().anyMatch(p -> p.getPlayerId().equals(playerId))) {
             log.error("Couldn't find playerId " + playerId + " in PBF's players");
             throw new IllegalArgumentException("Wrong playerId");
         }
-        if(gameLog.getDraw().getUndo() == null) {
-            gameLog.getDraw().setUndo(new Undo(pbf.getNumOfPlayers()));
-        }
         gameLog.getDraw().getUndo().vote(playerId,vote);
-
         gameLogCollection.updateById(gameLog.getId(), gameLog);
 
         Optional<Boolean> resultOfVotes = gameLog.getDraw().getUndo().getResultOfVotes();
@@ -78,5 +80,34 @@ public class UndoAction extends BaseAction {
             putDrawnItemBackInPBF(pbf, gameLog.getDraw());
         }
         return gameLog;
+    }
+
+    /**
+     * Will request for undo and initiate a vote
+     * @param gameLog
+     * @param playerId
+     * @return
+     */
+    //TODO Will need to find out how to initate the vote (Perhaps search for all game logs which have unfinished undo
+    public void initiateUndo(GameLog gameLog, String playerId) {
+        Preconditions.checkNotNull(gameLog);
+        Preconditions.checkNotNull(gameLog.getDraw());
+
+        Draw<?> draw = gameLog.getDraw();
+        if(draw.getUndo() != null) {
+            log.error("Cannot initiate a undo. Its already been initiated");
+            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Undo already initiated")
+                    .build());
+        }
+        PBF pbf = pbfCollection.findOneById(gameLog.getPbfId());
+        if(!pbf.getPlayers().stream().anyMatch(p -> p.getPlayerId().equals(playerId))) {
+            log.error("Couldn't find playerId " + playerId + " in PBF's players");
+            throw new IllegalArgumentException("Wrong playerId");
+        }
+
+        draw.setUndo(new Undo(pbf.getNumOfPlayers()));
+        draw.getUndo().vote(playerId, true);
+        gameLogCollection.updateById(gameLog.getId(), gameLog);
     }
 }
