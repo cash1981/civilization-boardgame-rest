@@ -120,6 +120,31 @@ public class GameResourceTest extends MongoDBBaseTest {
         assertThat(list.size()).isEqualTo(pbf.getTechs().size()-1);
     }
 
+    @Test
+    public void getAllPublicGameLogs() throws Exception {
+        chooseTechForPlayer();
+
+        final ArrayList list = client().resource(
+                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/publiclog", RULE.getLocalPort(), pbfId))
+                        .build())
+                .type(MediaType.APPLICATION_JSON)
+                .get(ArrayList.class);
+        assertThat(list).isNotEmpty();
+    }
+
+    @Test
+    public void getAllPrivateGameLogs() throws Exception {
+        chooseTechForPlayer();
+
+        final ArrayList list = client().resource(
+                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/privatelog", RULE.getLocalPort(), pbfId))
+                        .build())
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .type(MediaType.APPLICATION_JSON)
+                .get(ArrayList.class);
+        assertThat(list).isNotEmpty();
+    }
+
     private void chooseTechForPlayer() throws JsonProcessingException {
         ItemDTO dto = new ItemDTO();
         dto.setName("Agriculture");
