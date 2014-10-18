@@ -16,12 +16,16 @@
 	#DONE -- Should be triggered when a player joins a game
 - Undo
     -- Consider if undo should reveal all info or just public
+    -- Create a method that lists all undoes a player has to vote for
+    -- Vote for undo
+    -- List all successfull votes
+    -- List all finished unsuccesful votes
 #DONE - End of turn
     #DONE -- will disable drawing of items for players
 	#DONE -- Each this happens, system will enable for next player in line
-- Send player items
+#DONE - Send player items
 	#DONE -- Allowing players to send Huts, Villages, Culture cards privately to other players
-	-- That player should get the item sent, plus logged both publicly that trading has taken place, plus privately
+	#DONE -- That player should get the item sent, plus logged both publicly that trading has taken place, plus privately
 #DONE - No players should be able to draw items when it is not their turn
 	#DONE -- Except, they should be able to send stuff to other players, and choosing techs, because these are done simultanously, or if it is too difficult, then everything is turn based
 - Logging

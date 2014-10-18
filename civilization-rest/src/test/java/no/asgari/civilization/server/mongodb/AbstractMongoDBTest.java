@@ -68,13 +68,18 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         pbfCollection.drop();
         gameLogCollection.drop();
 
-        playerCollection.createIndex(new BasicDBObject("username", 1), new BasicDBObject("unique", true));
+        createIndexForPlayer(playerCollection);
 
         createNewPBFGame();
         createAnotherPBF();
         playerId = playerCollection.findOne().getId();
 
         createUsernameCache(playerCollection);
+    }
+
+    private static void createIndexForPlayer(JacksonDBCollection<Player, String> playerCollection) {
+        playerCollection.createIndex(new BasicDBObject(Player.USERNAME, 1), new BasicDBObject("unique", true));
+        playerCollection.createIndex(new BasicDBObject(Player.EMAIL, 1), new BasicDBObject("unique", true));
     }
 
     @Override

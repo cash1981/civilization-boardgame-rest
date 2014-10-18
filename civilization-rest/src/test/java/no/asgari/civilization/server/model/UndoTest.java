@@ -19,6 +19,8 @@ import org.mongojack.DBQuery;
 @SuppressWarnings("unchecked")
 public class UndoTest extends AbstractMongoDBTest {
 
+    private UndoAction undoAction = new UndoAction(db);
+
     @Before
     public void before() throws Exception {
         if (gameLogCollection.findOne() == null) {
@@ -37,7 +39,6 @@ public class UndoTest extends AbstractMongoDBTest {
         DrawAction drawAction = new DrawAction(db);
         Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.CIV);
         assertTrue(gameLogOptional.isPresent());
-        UndoAction undoAction = new UndoAction(db);
         undoAction.initiateUndo(gameLogOptional.get(), playerId);
 
         assertThat(gameLogCollection.findOneById(gameLogOptional.get().getId()).getDraw().getUndo().getVotes().size()).isEqualTo(1);
@@ -49,7 +50,6 @@ public class UndoTest extends AbstractMongoDBTest {
         Draw draw = gameLog.getDraw();
         int votes = draw.getUndo().getVotes().size();
         assertThat(draw.getUndo()).isNotNull();
-        UndoAction undoAction = new UndoAction(db);
 
         List<Playerhand> players = pbfCollection.findOneById(draw.getPbfId()).getPlayers();
         Set<String> playerIds = draw.getUndo().getVotes().keySet();
@@ -71,7 +71,6 @@ public class UndoTest extends AbstractMongoDBTest {
         GameLog gameLog = gameLogCollection.findOne();
         PBF pbf = pbfCollection.findOneById(gameLog.getPbfId());
         //Get the same undo, since I need it to be final
-        UndoAction undoAction = new UndoAction(db);
         assertFalse(pbf.getItems().contains(gameLog.getDraw().getItem()));
         pbf = pbfCollection.findOneById(gameLog.getPbfId());
 
@@ -105,10 +104,16 @@ public class UndoTest extends AbstractMongoDBTest {
         GameLog gameLog = gameLogCollection.findOne();
         //make another vote
 
-        UndoAction undoAction = new UndoAction(db);
         assertThat(gameLog.getDraw().getUndo()).isNotNull();
         gameLog = undoAction.vote(gameLog, getAnotherPlayerId(), Boolean.TRUE);
         assertThat(gameLog.getDraw().getUndo().votesRemaining()).isEqualTo(2);
+    }
+
+    @Test
+    public void getAllActiveUndos() throws Exception {
+        createADrawAndInitiateAVoteForUndo();
+        List<GameLog> allActiveUndos = undoAction.getAllActiveUndos(pbfId);
+        assertThat(allActiveUndos).isNotEmpty();
     }
 
     private String getAnotherPlayerId() {

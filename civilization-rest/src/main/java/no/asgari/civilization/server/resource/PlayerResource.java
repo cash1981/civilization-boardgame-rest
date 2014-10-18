@@ -134,6 +134,15 @@ public class PlayerResource {
         return Response.status(Response.Status.NOT_MODIFIED).build();
     }
 
+    /**
+     * Initiates undo for an item.
+     *
+     * Will throw BAD_REQUEST if undo has already been performed
+     * @param player
+     * @param pbfId
+     * @param gameLogId
+     * @return
+     */
     @PUT
     @Path("/undo")
     @Timed
@@ -144,5 +153,21 @@ public class PlayerResource {
         undoAction.initiateUndo(gameLog, player.getId());
         return Response.ok().build();
     }
+
+    /**
+     * Returns a list of all undoes that a player needs to vote for
+     * @param player
+     * @param pbfId
+     * @return
+     */
+    @GET
+    @Path("/undo")
+    @Timed
+    public Response getAllUndoThatNeedsVoteFromPlayer(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId) {
+        UndoAction undoAction = new UndoAction(db);
+        undoAction.getPlayersActiveUndoes(pbfId, player.getUsername());
+        return Response.ok().build();
+    }
+
 
 }

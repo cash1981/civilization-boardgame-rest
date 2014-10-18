@@ -93,4 +93,14 @@ public class GameLog {
                 break;
         }
     }
+
+    @JsonIgnore
+    public boolean hasUndo() {
+        return draw != null && draw.getUndo() != null;
+    }
+
+    @JsonIgnore
+    public boolean hasActiveUndo() {
+        return draw != null && draw.getUndo() != null && !draw.getUndo().isDone();
+    }
 }

@@ -8,6 +8,7 @@ import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.GameAction;
 import no.asgari.civilization.server.action.GameLogAction;
 import no.asgari.civilization.server.action.PlayerAction;
+import no.asgari.civilization.server.action.UndoAction;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.GameLogDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
@@ -29,7 +30,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -167,6 +167,20 @@ public class GameResource {
                     .collect(Collectors.toList());
         }
         return gameLogDTOs;
+    }
+
+    /**
+     * Returns a list of all undoes that are currently initiated and still not finished
+     * @param pbfId
+     * @return
+     */
+    @GET
+    @Path("/{pbfId}/undo")
+    @Timed
+    public Response getAllActiveUndosCurrentlyInProgress(@NotEmpty @PathParam("pbfId") String pbfId) {
+        UndoAction undoAction = new UndoAction(db);
+        List<GameLog> gamelogs = undoAction.getAllActiveUndos(pbfId);
+        return Response.ok().entity(gamelogs).build();
     }
 
     private static GameLogDTO createDTO(String id, String log) {

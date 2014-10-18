@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.google.common.base.Preconditions;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
@@ -87,7 +88,7 @@ public class GameLogAction {
     }
 
     public List<GameLog> getAllPublicLogs(String pbfId) {
-        @Cleanup DBCursor<GameLog> gameLogsCursor = gameLogCollection.find(DBQuery.is("pbfId", pbfId));
+        @Cleanup DBCursor<GameLog> gameLogsCursor = gameLogCollection.find(DBQuery.is("pbfId", pbfId), new BasicDBObject());
         List<GameLog> gamelogs = new ArrayList<>(gameLogsCursor.size());
         while(gameLogsCursor.hasNext()) {
             gamelogs.add(gameLogsCursor.next());
@@ -96,7 +97,7 @@ public class GameLogAction {
     }
 
     public List<GameLog> getAllPrivateLogs(String pbfId, String username) {
-        @Cleanup DBCursor<GameLog> gameLogsCursor = gameLogCollection.find(DBQuery.is("pbfId", pbfId).is("username", username));
+        @Cleanup DBCursor<GameLog> gameLogsCursor = gameLogCollection.find(DBQuery.is("pbfId", pbfId).is("username", username), new BasicDBObject());
         List<GameLog> gamelogs = new ArrayList<>(gameLogsCursor.size());
         while(gameLogsCursor.hasNext()) {
             gamelogs.add(gameLogsCursor.next());

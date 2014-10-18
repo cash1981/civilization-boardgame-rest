@@ -51,7 +51,7 @@ public class DrawAction extends BaseAction {
 
             PBF pbf = pbfCollection.findOneById(pbfId);
 
-            //Java 8 stream doesn't support remove very well
+            //Java 8 streamFromIterable doesn't support remove very well
             Iterator<Item> iterator = pbf.getItems().iterator();
             while (iterator.hasNext()) {
                 Item item = iterator.next();

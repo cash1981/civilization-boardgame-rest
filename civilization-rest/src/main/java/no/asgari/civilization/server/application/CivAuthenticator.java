@@ -23,8 +23,7 @@ public class CivAuthenticator implements Authenticator<BasicCredentials, Player>
     @Override
     public Optional<Player> authenticate(BasicCredentials credentials) {
         @Cleanup DBCursor<Player> dbPlayer = playerCollection.find(
-                DBQuery.is("username", credentials.getUsername()),
-                new BasicDBObject());
+                DBQuery.is("username", credentials.getUsername()), new BasicDBObject());
 
         if(dbPlayer == null || !dbPlayer.hasNext()) {
             return Optional.empty();

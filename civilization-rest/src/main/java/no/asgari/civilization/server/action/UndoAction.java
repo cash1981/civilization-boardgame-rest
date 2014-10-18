@@ -1,23 +1,27 @@
 package no.asgari.civilization.server.action;
 
 import com.google.common.base.Preconditions;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
+import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
-import no.asgari.civilization.server.model.Infantry;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
-import no.asgari.civilization.server.model.Spreadsheet;
 import no.asgari.civilization.server.model.Tech;
 import no.asgari.civilization.server.model.Undo;
+import no.asgari.civilization.server.util.Java8Util;
+import org.mongojack.DBCursor;
+import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
-
-import java.util.Optional;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Log4j
 public class UndoAction extends BaseAction {
@@ -109,5 +113,22 @@ public class UndoAction extends BaseAction {
         draw.setUndo(new Undo(pbf.getNumOfPlayers()));
         draw.getUndo().vote(playerId, true);
         gameLogCollection.updateById(gameLog.getId(), gameLog);
+    }
+
+    //TODO test
+    public List<GameLog> getAllActiveUndos(String pbfId) {
+        @Cleanup DBCursor<GameLog> gameLogDBCursor = gameLogCollection.find(DBQuery.is("pbfId", pbfId), new BasicDBObject());
+
+        return Java8Util.streamFromIterable(gameLogDBCursor)
+                .filter(GameLog::hasActiveUndo)
+                .collect(Collectors.toList());
+    }
+
+    //TODO test
+    public List<GameLog> getPlayersActiveUndoes(String pbfId, String username) {
+        @Cleanup DBCursor<GameLog> gameLogDBCursor = gameLogCollection.find(DBQuery.is("pbfId", pbfId).is("username", username), new BasicDBObject());
+        return Java8Util.streamFromIterable(gameLogDBCursor)
+                .filter(GameLog::hasActiveUndo)
+                .collect(Collectors.toList());
     }
 }
