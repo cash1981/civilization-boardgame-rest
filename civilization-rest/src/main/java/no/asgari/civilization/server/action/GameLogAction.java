@@ -32,7 +32,6 @@ import org.mongojack.WriteResult;
 public class GameLogAction {
     private final JacksonDBCollection<GameLog, String> gameLogCollection;
     private final JacksonDBCollection<Player, String> playerCollection;
-    private List<String> allPublicLogs;
 
     public GameLogAction(DB db) {
         this.gameLogCollection = JacksonDBCollection.wrap(db.getCollection(GameLog.COL_NAME), GameLog.class, String.class);

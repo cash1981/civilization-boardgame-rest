@@ -34,15 +34,16 @@
     #DONE-- Trading for instance should have a different log, now its says "X drew hut"
 #DONE - CachingAuthentication
 - Draws
-    -- When there is no more elements to draw, system must get the items from excel sheet and put back in the pbf
+    #DONE -- When there is no more elements to draw, system must get the items from excel sheet and put back in the pbf
        #DONE -- Should cache itemReader and put content in cache loader with sheetname as key <-- This is helpful for creating new games fast
 
-    -- When drawing certain types (Culture cards and Units, GP, Villages, Huts, although these last three are highly unlikely ) and it is empty, then system
+    #DONE -- When drawing certain types (Culture cards and Units, GP, Villages, Huts, although these last three are highly unlikely ) and it is empty, then system
         needs to find out which ones is inside the playershands.
         Collect all playerhand filter by sheetname, and itemReader.getFoo().removeAll(playerhands.stuff)
 
 - Discard/Delete from playerhand
-	-- When deleting it should log it. All deleted items will be put back in the deck/pbf
+	-- When deleting it should log it.
+	-- Consider putting items back in the deck, although this is already taken care of by reshuffling when draw is made
 - A player can reveal all items
 
 Nice to have

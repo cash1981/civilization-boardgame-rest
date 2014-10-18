@@ -100,7 +100,7 @@ public class PlayerAction extends BaseAction {
         chosenTech.setHidden(true);
         chosenTech.setOwnerId(playerId);
 
-        Playerhand playerhand = getPlayerhandFromPlayerId(playerId, pbf);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         playerhand.getTechsChosen().add(chosenTech);
 
         pbfCollection.updateById(pbf.getId(), pbf);
@@ -149,7 +149,7 @@ public class PlayerAction extends BaseAction {
     @SuppressWarnings("unchecked")
     public void revealItem(String pbfId, String playerId, ItemDTO itemDTO) {
         PBF pbf = pbfCollection.findOneById(pbfId);
-        Playerhand playerhand = getPlayerhandFromPlayerId(playerId, pbf);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
 
         Stream<Item> combinedItemStream = Stream.concat(playerhand.getItems().stream(), (Stream<Item>) playerhand.getTechsChosen());
 
@@ -188,7 +188,7 @@ public class PlayerAction extends BaseAction {
 
     public boolean isYourTurn(String pbfId, String playerId) {
         PBF pbf = pbfCollection.findOneById(pbfId);
-        Playerhand playerhand = getPlayerhandFromPlayerId(playerId, pbf);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         return playerhand.isYourTurn();
     }
 
@@ -204,8 +204,8 @@ public class PlayerAction extends BaseAction {
         Preconditions.checkNotNull(item.getOwnerId());
 
         PBF pbf = pbfCollection.findOneById(item.getPbfId());
-        Playerhand fromPlayer = getPlayerhandFromPlayerId(playerId, pbf);
-        Playerhand toPlayer = getPlayerhandFromPlayerId(item.getOwnerId(), pbf);
+        Playerhand fromPlayer = getPlayerhandByPlayerId(playerId, pbf);
+        Playerhand toPlayer = getPlayerhandByPlayerId(item.getOwnerId(), pbf);
 
         Item itemToTrade = fromPlayer.getItems().stream()
                 .filter(it -> it instanceof Tradable)

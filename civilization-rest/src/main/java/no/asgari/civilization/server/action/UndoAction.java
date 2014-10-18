@@ -41,7 +41,7 @@ public class UndoAction extends BaseAction {
 
         Item item = draw.getItem();
 
-        Playerhand playerhand = getPlayerhandFromPlayerId(draw.getPlayerId(), pbf);
+        Playerhand playerhand = getPlayerhandByPlayerId(draw.getPlayerId(), pbf);
         if(item instanceof Tech) {
             //Remove from tech
             boolean remove = playerhand.getTechsChosen().remove(item);
@@ -75,7 +75,7 @@ public class UndoAction extends BaseAction {
             log.error("Couldn't find playerId " + playerId + " in PBF's players");
             throw new IllegalArgumentException("Wrong playerId");
         }
-        gameLog.getDraw().getUndo().vote(playerId,vote);
+        gameLog.getDraw().getUndo().vote(playerId, vote);
 
         Optional<Boolean> resultOfVotes = gameLog.getDraw().getUndo().getResultOfVotes();
         if(resultOfVotes.isPresent() && resultOfVotes.get()) {
@@ -93,7 +93,6 @@ public class UndoAction extends BaseAction {
      * @param playerId
      * @return
      */
-    //TODO Will need to find out how to initate the vote (Perhaps search for all game logs which have unfinished undo
     public void initiateUndo(GameLog gameLog, String playerId) {
         Preconditions.checkNotNull(gameLog);
         Preconditions.checkNotNull(gameLog.getDraw());

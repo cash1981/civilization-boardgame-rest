@@ -30,6 +30,9 @@ public enum SheetName {
 
     public static final EnumSet<SheetName> UNITS = EnumSet.of(SheetName.AIRCRAFT, SheetName.ARTILLERY, SheetName.INFANTRY, SheetName.MOUNTED);
 
+    public static final EnumSet<SheetName> SHUFFLABLE_ITEMS = EnumSet.of(SheetName.AIRCRAFT, SheetName.ARTILLERY, SheetName.INFANTRY, SheetName.MOUNTED,
+                SheetName.GREAT_PERSON, SheetName.CULTURE_1, SheetName.CULTURE_2, SheetName.CULTURE_3);
+
     public static Optional<SheetName> find(String name) {
         return SHEETS.stream()
                 .filter(sheet -> sheet.label.equalsIgnoreCase(name))

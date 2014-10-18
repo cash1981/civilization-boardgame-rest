@@ -5,7 +5,6 @@ import javax.ws.rs.core.Response;
 
 import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
-import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Item;
@@ -13,7 +12,6 @@ import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.model.Spreadsheet;
 import no.asgari.civilization.server.model.Tech;
-import no.asgari.civilization.server.model.Unit;
 import org.mongojack.JacksonDBCollection;
 
 import java.util.List;
@@ -67,7 +65,7 @@ public abstract class BaseAction {
     //TODO Perhaps its best to have this in a filter, but its not always intended to be run
     void checkYourTurn(String pbfId, String playerId) {
         PBF pbf = pbfCollection.findOneById(pbfId);
-        Playerhand playerhand = getPlayerhandFromPlayerId(playerId, pbf);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         if (playerhand.isYourTurn()) {
             throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN)
                     .entity("Its not your turn")
@@ -75,16 +73,16 @@ public abstract class BaseAction {
         }
     }
 
-    Playerhand getPlayerhandFromPlayerId(String playerId, PBF pbf) {
+    Playerhand getPlayerhandByPlayerId(String playerId, PBF pbf) {
         return pbf.getPlayers()
                 .stream().filter(p -> p.getPlayerId().equals(playerId))
                 .findFirst()
                 .orElseThrow(PlayerAction::cannotFindPlayer);
     }
 
-    Playerhand getPlayerhandFromPlayerId(String playerId, String pbfId) {
+    Playerhand getPlayerhandByPlayerId(String playerId, String pbfId) {
         PBF pbf = pbfCollection.findOneById(pbfId);
-        return getPlayerhandFromPlayerId(playerId, pbf);
+        return getPlayerhandByPlayerId(playerId, pbf);
     }
 
     static WebApplicationException cannotFindItem() {

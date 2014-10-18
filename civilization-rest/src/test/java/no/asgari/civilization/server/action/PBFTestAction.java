@@ -1,10 +1,16 @@
 package no.asgari.civilization.server.action;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.PBF;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 public class PBFTestAction {
 
@@ -20,8 +26,29 @@ public class PBFTestAction {
         pbf.setName("First civ game");
         pbf.setType(GameType.WAW);
 
-        ItemReader items = new ItemReader();
-        items.readItemsFromExcel(pbf.getType());
+        if (CivSingleton.instance().itemsCache() == null) {
+            CivSingleton.instance().setItemsCache(
+                    CacheBuilder.newBuilder()
+                            .maximumSize(4) //1 for each game type
+                            .build(new CacheLoader<GameType, ItemReader>() {
+                                public ItemReader load(GameType type) {
+                                    ItemReader itemReader = new ItemReader();
+                                    try {
+                                        itemReader.readItemsFromExcel(GameType.WAW);
+                                    } catch (IOException e) {
+                                    }
+                                    return itemReader;
+                                }
+                            })
+            );
+        }
+
+        ItemReader items;
+        try {
+            items = CivSingleton.instance().itemsCache().get(GameType.WAW);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
 
         pbf.getItems().addAll(items.mountedList);
         pbf.getItems().addAll(items.aircraftList);

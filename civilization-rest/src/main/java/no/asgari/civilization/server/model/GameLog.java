@@ -40,7 +40,7 @@ public class GameLog {
     public static final String COL_NAME = "gamelog";
 
     public enum LogType {
-        TRADE, BATTLE, ITEM, TECH;
+        TRADE, BATTLE, ITEM, TECH, SHUFFLE;
     }
 
     @Id
@@ -53,7 +53,7 @@ public class GameLog {
     @NotEmpty
     private String publicLog;
 
-    /** Each log belongs to a pbf **/
+    /** Each log belongs to a pbf */
     @NotEmpty
     private String pbfId;
 
@@ -64,8 +64,7 @@ public class GameLog {
     @NotEmpty
     private String username;
 
-    /** Each log is from a corresponding draw **/
-    @NotNull
+    /** If log is from a draw */
     private Draw draw;
 
     @JsonIgnore

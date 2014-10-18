@@ -16,8 +16,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 /**
- * Class that handles drawing of things.
- * This class will log all the draws and output them publicly and privately
+ * This class is used in GameLog to show what item have been drawn
  *
  * It will support undo of draws, which will put the item back in the deck and shuffle
  * Each draw will have a collection of Undo, which contains information about a possible undo with votes and outcome

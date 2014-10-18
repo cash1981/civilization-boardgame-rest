@@ -1,6 +1,7 @@
 package no.asgari.civilization.server.excel;
 
 import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.SheetName;
@@ -56,6 +57,8 @@ public class ItemReader {
     public LinkedList<Mounted> mountedList;
     public LinkedList<Infantry> infantryList;
 
+    public ImmutableList<Item> redrawableItems;
+
     private static final Predicate<Cell> notEmptyPredicate = cell -> !cell.toString().isEmpty();
     private static final Predicate<Cell> notRandomPredicate = cell -> !cell.toString().equals("RAND()");
     private static final Predicate<Cell> rowNotZeroPredicate = cell -> cell.getRow().getRowNum() != 0;
@@ -95,6 +98,17 @@ public class ItemReader {
             createMountedTest(wb);
             createArtilleryTest(wb);
             createAircraftTest(wb);
+
+            redrawableItems = ImmutableList.<Item>builder()
+                    .addAll(shuffledCultureI)
+                    .addAll(shuffledCultureII)
+                    .addAll(shuffledCultureIII)
+                    .addAll(infantryList)
+                    .addAll(mountedList)
+                    .addAll(artilleryList)
+                    .addAll(aircraftList)
+                    .addAll(shuffledGPs)
+                    .build();
         }
     }
 

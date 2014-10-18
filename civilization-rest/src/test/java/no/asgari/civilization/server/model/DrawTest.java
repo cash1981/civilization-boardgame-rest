@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.action.DrawAction;
+import no.asgari.civilization.server.exception.NoMoreItemsException;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
 import org.junit.Test;
 
@@ -243,5 +244,63 @@ public class DrawTest extends AbstractMongoDBTest {
         DrawAction drawAction = new DrawAction(db);
         drawAction.draw(pbfId, playerId, SheetName.GREAT_PERSON);
         assertThat(gameLogCollection.count()).isEqualTo(++privateLog);
+    }
+
+    @Test(expected = NoMoreItemsException.class)
+    public void makeSureSystemCorrectlyThrowsExceptionWhenNothingToShuffle() throws Exception {
+        DrawAction drawAction = new DrawAction(db);
+        //Before draw
+        long aircrafts = pbfCollection.findOneById(pbfId).getItems().stream()
+                .filter(p -> p.getSheetName() == SheetName.AIRCRAFT)
+                .count();
+
+        for(int i = 0; i < aircrafts; i++) {
+            Optional<GameLog> draw = drawAction.draw(pbfId, playerId, SheetName.AIRCRAFT, GameType.WAW);
+            assertThat(draw.isPresent());
+        }
+
+        long newCount = pbfCollection.findOneById(pbfId).getItems().stream()
+                .filter(p -> p.getSheetName() == SheetName.AIRCRAFT)
+                .count();
+
+        assertThat(newCount).isEqualTo(0L);
+
+        //Now if draw again, then it should throw exception since all units are in play
+        drawAction.draw(pbfId, playerId, SheetName.AIRCRAFT, GameType.WAW);
+    }
+
+    @Test
+    public void makeSureSystemCorrectlyShuffles() throws Exception {
+        DrawAction drawAction = new DrawAction(db);
+        //Before draw
+        long aircrafts = pbfCollection.findOneById(pbfId).getItems().stream()
+                .filter(p -> p.getSheetName() == SheetName.AIRCRAFT)
+                .count();
+
+        for(int i = 0; i < aircrafts; i++) {
+            Optional<GameLog> draw = drawAction.draw(pbfId, playerId, SheetName.AIRCRAFT, GameType.WAW);
+            assertThat(draw.isPresent());
+        }
+
+        long newCount = pbfCollection.findOneById(pbfId).getItems().stream()
+                .filter(p -> p.getSheetName() == SheetName.AIRCRAFT)
+                .count();
+
+        assertThat(newCount).isEqualTo(0L);
+
+        //Simulate battle where all units are killed
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        Playerhand playerhand = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(playerId)).findFirst().get();
+        playerhand.getItems().clear();
+        pbfCollection.updateById(pbf.getId(), pbf);
+
+        //Now if draw again, then it should throw exception since all units are in play
+        drawAction.draw(pbfId, playerId, SheetName.AIRCRAFT, GameType.WAW);
+
+        newCount = pbfCollection.findOneById(pbfId).getItems().stream()
+                .filter(p -> p.getSheetName() == SheetName.AIRCRAFT)
+                .count();
+
+        assertThat(newCount).isGreaterThan(1);
     }
 }
