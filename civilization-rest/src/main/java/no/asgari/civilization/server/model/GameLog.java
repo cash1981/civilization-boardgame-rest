@@ -34,7 +34,7 @@ import java.time.LocalDateTime;
  */
 @JsonRootName("gameLog")
 @NoArgsConstructor
-@ToString(of="log")
+@ToString(of={"privateLog", "publicLog"})
 @Data
 public class GameLog {
     public static final String COL_NAME = "gameLog";
