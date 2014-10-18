@@ -1,7 +1,7 @@
 #DONE - Create revealing; possibility to hidden items/units/techs
     #DONE -- Either let players when fighting do it as now, and then after battle hidden all units
 - Battle
-    -- A dropdown with number of units to draw
+    #DONE -- A dropdown with number of units to draw
     -- Must support undo in-case wrong number of units is drawn
     -- After battle, perhaps have a end battle button, it will show all the draws that where made
         -- For now a battle is just revealing units that where drawn by the system
@@ -35,10 +35,16 @@
 #DONE - CachingAuthentication
 - Draws
     -- When there is no more elements to draw, system must get the items from excel sheet and put back in the pbf
-        -- Should cache itemReader and put content in cache loader with sheetname as key <-- This is helpful for creating new games fast
-            -- The we can have weak values/keys
-            -- At one point we must create a key with GameType + SheetName
-	
+       #DONE -- Should cache itemReader and put content in cache loader with sheetname as key <-- This is helpful for creating new games fast
+
+    -- When drawing certain types (Culture cards and Units, GP, Villages, Huts, although these last three are highly unlikely ) and it is empty, then system
+        needs to find out which ones is inside the playershands.
+        Collect all playerhand filter by sheetname, and itemReader.getFoo().removeAll(playerhands.stuff)
+
+- Discard/Delete from playerhand
+	-- When deleting it should log it. All deleted items will be put back in the deck/pbf
+- A player can reveal all items
+
 Nice to have
 - Chat with scrolling capabilites.
 	-- Websocket?
@@ -56,6 +62,9 @@ Nice to have
 - Would be nice to get eventbus for private and public logging so that their will be loose coupling
 - For now sending public items (resources) doesnt need sending in the system, but for fully playable version we need support for it
 - Change basic authentication to OAUTH
+- Support for more game types
+	-- Change all sheetnames in parameters to combination of GameType and Sheetname
+
 
 
 Future

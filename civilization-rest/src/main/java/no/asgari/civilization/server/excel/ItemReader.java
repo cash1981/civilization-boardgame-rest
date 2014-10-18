@@ -1,6 +1,11 @@
 package no.asgari.civilization.server.excel;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
+import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.SheetName;
+import no.asgari.civilization.server.model.Aircraft;
+import no.asgari.civilization.server.model.Artillery;
 import no.asgari.civilization.server.model.Citystate;
 import no.asgari.civilization.server.model.Civ;
 import no.asgari.civilization.server.model.CultureI;
@@ -9,7 +14,9 @@ import no.asgari.civilization.server.model.CultureIII;
 import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.GreatPerson;
 import no.asgari.civilization.server.model.Hut;
+import no.asgari.civilization.server.model.Infantry;
 import no.asgari.civilization.server.model.Item;
+import no.asgari.civilization.server.model.Mounted;
 import no.asgari.civilization.server.model.Tech;
 import no.asgari.civilization.server.model.Tile;
 import no.asgari.civilization.server.model.Village;
@@ -23,13 +30,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-//TODO Nice to have: Make this reader more generic by looping through all the sheets dynamically
+@Log4j
 public class ItemReader {
     public LinkedList<Civ> shuffledCivs;
     public LinkedList<CultureI> shuffledCultureI;
@@ -45,10 +51,15 @@ public class ItemReader {
     public LinkedList<Citystate> shuffledCityStates;
     public List<Tech> allTechs; //Not linked list because all players can choose the same tech
 
-    static final Predicate<Cell> notEmptyPredicate = cell -> !cell.toString().isEmpty();
-    static final Predicate<Cell> notRandomPredicate = cell -> !cell.toString().equals("RAND()");
-    static final Predicate<Cell> rowNotZeroPredicate = cell -> cell.getRow().getRowNum() != 0;
-    static final Predicate<Cell> columnIndexZeroPredicate = cell -> cell.getColumnIndex() == 0;
+    public LinkedList<Aircraft> aircraftList;
+    public LinkedList<Artillery> artilleryList;
+    public LinkedList<Mounted> mountedList;
+    public LinkedList<Infantry> infantryList;
+
+    private static final Predicate<Cell> notEmptyPredicate = cell -> !cell.toString().isEmpty();
+    private static final Predicate<Cell> notRandomPredicate = cell -> !cell.toString().equals("RAND()");
+    private static final Predicate<Cell> rowNotZeroPredicate = cell -> cell.getRow().getRowNum() != 0;
+    private static final Predicate<Cell> columnIndexZeroPredicate = cell -> cell.getColumnIndex() == 0;
     private static final String WONDERS = "wonders";
 
     @SuppressWarnings("unchecked")
@@ -80,6 +91,10 @@ public class ItemReader {
             shuffledTiles = (LinkedList<Tile>) getShuffledTilesFromExcel(wb);
             extractShuffledWondersFromExcel(wb);
             allTechs = getTechsFromExcel(wb);
+            createInfantryTest(wb);
+            createMountedTest(wb);
+            createArtilleryTest(wb);
+            createAircraftTest(wb);
         }
     }
 
@@ -442,5 +457,119 @@ public class ItemReader {
         Collections.sort(allTechs, (o1, o2) -> Integer.valueOf(o1.getLevel()).compareTo(o2.getLevel()));
 
         return allTechs;
+    }
+
+    private void createInfantryTest(Workbook wb) throws IOException {
+        Sheet infantrySheet = wb.getSheet(SheetName.INFANTRY.toString());
+
+
+        List<Cell> unfilteredCells = new ArrayList<>();
+        infantrySheet.forEach(row -> row.forEach(unfilteredCells::add));
+
+        List<Infantry> infantryUnits = unfilteredCells.stream()
+                .filter(ItemReader.notEmptyPredicate)
+                .filter(ItemReader.notRandomPredicate)
+                .filter(ItemReader.rowNotZeroPredicate)
+                .filter(ItemReader.columnIndexZeroPredicate)
+                .map(cell -> createInfantry(cell.toString()))
+                .collect(Collectors.toList());
+
+        Collections.shuffle(infantryUnits);
+        infantryList = new LinkedList<>(infantryUnits);
+        log.debug(infantryList);
+    }
+
+    private void createMountedTest(Workbook wb) throws IOException {
+        Sheet mountedsheet = wb.getSheet(SheetName.MOUNTED.toString());
+
+        List<Cell> unfilteredCells = new ArrayList<>();
+        mountedsheet.forEach(row -> row.forEach(unfilteredCells::add));
+
+        List<Mounted> mountedUnits = unfilteredCells.stream()
+                .filter(ItemReader.notEmptyPredicate)
+                .filter(ItemReader.notRandomPredicate)
+                .filter(ItemReader.rowNotZeroPredicate)
+                .filter(ItemReader.columnIndexZeroPredicate)
+                .map(cell -> createMounted(cell.toString()))
+                .collect(Collectors.toList());
+
+        Collections.shuffle(mountedUnits);
+        mountedList = new LinkedList<>(mountedUnits);
+        log.debug("Mounted units from excel are " + mountedList);
+    }
+
+    private void createArtilleryTest(Workbook wb) throws IOException {
+        Sheet artillerySheet = wb.getSheet(SheetName.ARTILLERY.toString());
+
+        List<Cell> unfilteredCells = new ArrayList<>();
+        artillerySheet.forEach(row -> row.forEach(unfilteredCells::add));
+
+        List<Artillery> artilleryUnits = unfilteredCells.stream()
+                .filter(ItemReader.notEmptyPredicate)
+                .filter(ItemReader.notRandomPredicate)
+                .filter(ItemReader.rowNotZeroPredicate)
+                .filter(ItemReader.columnIndexZeroPredicate)
+                .map(cell -> createArtillery(cell.toString()))
+                .collect(Collectors.toList());
+
+        Collections.shuffle(artilleryUnits);
+        artilleryList = new LinkedList<>(artilleryUnits);
+        log.debug("Artillery units from excel are " + artilleryList);
+    }
+
+    private void createAircraftTest(Workbook wb) throws IOException {
+        Sheet aircraftSheet = wb.getSheet(SheetName.AIRCRAFT.toString());
+
+        List<Cell> unfilteredCells = new ArrayList<>();
+        aircraftSheet.forEach(row -> row.forEach(unfilteredCells::add));
+
+        List<Aircraft> aircraftUnits = unfilteredCells.stream()
+                .filter(ItemReader.notEmptyPredicate)
+                .filter(ItemReader.notRandomPredicate)
+                .filter(ItemReader.rowNotZeroPredicate)
+                .filter(ItemReader.columnIndexZeroPredicate)
+                .map(cell -> createAircraft(cell.toString()))
+                .collect(Collectors.toList());
+
+        Collections.shuffle(aircraftUnits);
+        aircraftList = new LinkedList<>(aircraftUnits);
+        log.debug("Aircraft units from excel are " + aircraftList);
+    }
+
+    private static Infantry createInfantry(String string) {
+        Iterable<String> split = split(string);
+
+        int attack = Integer.parseInt(Iterables.get(split, 0));
+        int health = Integer.parseInt(Iterables.get(split, 1));
+
+        return new Infantry(attack, health);
+    }
+
+    private static Artillery createArtillery(String string) {
+        Iterable<String> split = split(string);
+        int attack = Integer.parseInt(Iterables.get(split, 0));
+        int health = Integer.parseInt(Iterables.get(split, 1));
+
+        return new Artillery(attack, health);
+    }
+
+    private static Mounted createMounted(String string) {
+        Iterable<String> split = split(string);
+        int attack = Integer.parseInt(Iterables.get(split, 0));
+        int health = Integer.parseInt(Iterables.get(split, 1));
+
+        return new Mounted(attack, health);
+    }
+
+    private static Aircraft createAircraft(String string) {
+        Iterable<String> split = split(string);
+        int attack = Integer.parseInt(Iterables.get(split, 0));
+        int health = Integer.parseInt(Iterables.get(split, 1));
+
+        return new Aircraft(attack, health);
+    }
+
+    private static Iterable<String> split(String string) {
+        return Splitter.onPattern(",|\\.").omitEmptyStrings().trimResults().split(string);
     }
 }

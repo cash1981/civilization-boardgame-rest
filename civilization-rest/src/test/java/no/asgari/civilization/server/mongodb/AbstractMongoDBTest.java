@@ -21,7 +21,7 @@ import io.dropwizard.auth.basic.BasicCredentials;
 import io.dropwizard.java8.auth.CachingAuthenticator;
 import io.dropwizard.java8.auth.basic.BasicAuthProvider;
 import io.dropwizard.jersey.DropwizardResourceConfig;
-import no.asgari.civilization.server.action.PBFAction;
+import no.asgari.civilization.server.action.PBFTestAction;
 import no.asgari.civilization.server.application.CivAuthenticator;
 import no.asgari.civilization.server.application.CivilizationConfiguration;
 import no.asgari.civilization.server.application.CivSingleton;
@@ -111,8 +111,8 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
     }
 
     private static void createNewPBFGame() throws IOException {
-        PBFAction pbfAction = new PBFAction();
-        PBF pbf = pbfAction.createNewGame();
+        PBFTestAction pbfTestAction = new PBFTestAction();
+        PBF pbf = pbfTestAction.createNewGame();
         WriteResult<PBF, String> writeResult = pbfCollection.insert(pbf);
         pbfId = writeResult.getSavedId();
 
@@ -125,8 +125,8 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
     }
 
     private static void createAnotherPBF() throws IOException {
-        PBFAction pbfAction = new PBFAction();
-        PBF pbf = pbfAction.createNewGame();
+        PBFTestAction pbfTestAction = new PBFTestAction();
+        PBF pbf = pbfTestAction.createNewGame();
         WriteResult<PBF, String> writeResult = pbfCollection.insert(pbf);
         pbfId_2 = writeResult.getSavedId();
 

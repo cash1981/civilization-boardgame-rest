@@ -4,8 +4,11 @@ import com.google.common.base.Preconditions;
 import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.SheetName;
+import no.asgari.civilization.server.application.CivSingleton;
+import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
+import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
@@ -17,6 +20,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 /**
@@ -32,28 +36,19 @@ public class DrawAction extends BaseAction {
         this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
     }
 
-    /**
-     * Finds the item or unit from the PBF matching the SheetName.
-     * Then it removes the first item it finds
-     * Draws item and units and puts the draw in the gamelog
-     * @param pbfId - PBF id
-     * @param playerId - Player id
-     * @param sheetName - SheetName
-     * @return
-     */
-    //TODO no need for optional really
-    public Optional<GameLog> draw(String pbfId, String playerId, SheetName sheetName) {
+    public Optional<GameLog> draw(String pbfId, String playerId, SheetName sheetName, GameType gameType) {
         Preconditions.checkNotNull(pbfId);
         Preconditions.checkNotNull(playerId);
         Preconditions.checkNotNull(sheetName);
+        Preconditions.checkNotNull(gameType);
 
         checkYourTurn(pbfId, playerId);
+        PBF pbf = pbfCollection.findOneById(pbfId);
 
         if (SheetName.TECHS.contains(sheetName)) {
             log.warn("Drawing of techs is not possible. You are supposed to choose a tech, not draw one");
             return Optional.empty();
-        } else{
-            PBF pbf = pbfCollection.findOneById(pbfId);
+        } else {
 
             //Java 8 streamFromIterable doesn't support remove very well
             Iterator<Item> iterator = pbf.getItems().iterator();
@@ -72,11 +67,24 @@ public class DrawAction extends BaseAction {
             }
         }
 
-        //Items where empty, thus we need to populate more
-        //TODO pbf.getItems().addAll(itemReader.readFromSheet(sheetName))
+        //Items where empty, this happens if all units are drawn, but not yet killed
+        log.warn("No more " + sheetName + " to draw. Possibly no more items left to draw in the deck");
+
 
 
         return Optional.empty();
+    }
+    /**
+     * Finds the item or unit from the PBF matching the SheetName.
+     * Then it removes the first item it finds
+     * Draws item and units and puts the draw in the gamelog
+     * @param pbfId - PBF id
+     * @param playerId - Player id
+     * @param sheetName - SheetName
+     * @return
+     */
+    public Optional<GameLog> draw(String pbfId, String playerId, SheetName sheetName) {
+        return draw(pbfId,playerId,sheetName, GameType.WAW);
     }
 
     public List<Item> drawUnitsFromHand(String pbfId, String playerId, int numberOfDraws) {
@@ -87,8 +95,7 @@ public class DrawAction extends BaseAction {
                 .collect(Collectors.toList());
 
         if(unitsInHand.isEmpty()) {
-            log.debug("Units to draw are empty");
-            throw new WebApplicationException(Response.Status.NO_CONTENT);
+            return unitsInHand;
         }
 
         if(unitsInHand.size() <= numberOfDraws) {

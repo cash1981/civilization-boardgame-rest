@@ -1,24 +1,18 @@
 package no.asgari.civilization.server.action;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-
 import com.google.common.base.Preconditions;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
+import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
 import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.excel.ItemReader;
-import no.asgari.civilization.server.excel.UnitReader;
+import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
@@ -26,6 +20,15 @@ import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
+
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Log4j
 public class GameAction extends BaseAction {
@@ -43,20 +46,33 @@ public class GameAction extends BaseAction {
         pbf.setName(dto.getName());
         pbf.setType(dto.getType());
         pbf.setNumOfPlayers(dto.getNumOfPlayers());
-        ItemReader itemReader = new ItemReader();
-        UnitReader unit = new UnitReader();
-        try {
-            itemReader.readItemsFromExcel(dto.getType());
-            unit.readAllUnitsFromExcel();
-        } catch (IOException e) {
-            log.error("Couldn't read from Excel file", e);
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        if (CivSingleton.instance().itemsCache() == null) {
+            CivSingleton.instance().setItemsCache(
+                    CacheBuilder.newBuilder()
+                            .maximumSize(4) //1 for each game type
+                            .removalListener(lis -> log.debug("Removing " + lis.getKey() + " from the gameCache"))
+                            .build(new CacheLoader<GameType, ItemReader>() {
+                                public ItemReader load(GameType type) {
+                                    ItemReader itemReader = new ItemReader();
+                                    try {
+                                        itemReader.readItemsFromExcel(dto.getType());
+                                    } catch (IOException e) {
+                                        log.error("Couldn't read from Excel file " + e.getMessage() , e);
+                                        throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+                                    }
+                                    return itemReader;
+                                }
+                            })
+            );
         }
 
-        pbf.getItems().addAll(unit.mountedList);
-        pbf.getItems().addAll(unit.aircraftList);
-        pbf.getItems().addAll(unit.artilleryList);
-        pbf.getItems().addAll(unit.infantryList);
+        ItemReader itemReader;
+        try {
+            itemReader = CivSingleton.instance().itemsCache().get(dto.getType());
+        } catch (ExecutionException e) {
+            log.error("Couldnt get itemReader from cache " + e.getMessage(), e);
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
 
         pbf.getItems().addAll(itemReader.shuffledCivs);
         pbf.getItems().addAll(itemReader.shuffledCultureI);
@@ -70,11 +86,15 @@ public class GameAction extends BaseAction {
         pbf.getItems().addAll(itemReader.ancientWonders);
         pbf.getItems().addAll(itemReader.medievalWonders);
         pbf.getItems().addAll(itemReader.modernWonders);
+        pbf.getItems().addAll(itemReader.mountedList);
+        pbf.getItems().addAll(itemReader.aircraftList);
+        pbf.getItems().addAll(itemReader.artilleryList);
+        pbf.getItems().addAll(itemReader.infantryList);
         pbf.getTechs().addAll(itemReader.allTechs);
 
         WriteResult<PBF, String> pbfInsert = pbfCollection.insert(pbf);
         pbf.setId(pbfInsert.getSavedId());
-        log.info("PBF game craeted with id " + pbfInsert.getSavedId());
+        log.info("PBF game created with id " + pbfInsert.getSavedId());
 
         DBCursor<Player> dBCursorPlayer = playerCollection.find(DBQuery.is("username", dto.getUsername()), new BasicDBObject());
         if(!dBCursorPlayer.hasNext()) {

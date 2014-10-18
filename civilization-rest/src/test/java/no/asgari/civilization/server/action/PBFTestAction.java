@@ -1,13 +1,12 @@
 package no.asgari.civilization.server.action;
 
 import no.asgari.civilization.server.excel.ItemReader;
-import no.asgari.civilization.server.excel.UnitReader;
 import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.PBF;
 
 import java.io.IOException;
 
-public class PBFAction {
+public class PBFTestAction {
 
     /**
      * Will create a new game and read the content from the Excel sheet, and shuffle the content
@@ -24,13 +23,10 @@ public class PBFAction {
         ItemReader items = new ItemReader();
         items.readItemsFromExcel(pbf.getType());
 
-        UnitReader unit = new UnitReader();
-        unit.readAllUnitsFromExcel();
-
-        pbf.getItems().addAll(unit.mountedList);
-        pbf.getItems().addAll(unit.aircraftList);
-        pbf.getItems().addAll(unit.artilleryList);
-        pbf.getItems().addAll(unit.infantryList);
+        pbf.getItems().addAll(items.mountedList);
+        pbf.getItems().addAll(items.aircraftList);
+        pbf.getItems().addAll(items.artilleryList);
+        pbf.getItems().addAll(items.infantryList);
 
         pbf.getItems().addAll(items.shuffledCivs);
         pbf.getItems().addAll(items.shuffledCultureI);

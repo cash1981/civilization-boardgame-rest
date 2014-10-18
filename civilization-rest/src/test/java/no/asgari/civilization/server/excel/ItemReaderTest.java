@@ -20,6 +20,11 @@ public class ItemReaderTest {
         assertNull(itemReader.shuffledCultureII);
         assertNull(itemReader.shuffledCultureIII);
 
+        assertNull(itemReader.mountedList);
+        assertNull(itemReader.artilleryList);
+        assertNull(itemReader.infantryList);
+        assertNull(itemReader.aircraftList);
+
         itemReader.readItemsFromExcel(GameType.WAW);
 
         assertThat(itemReader.shuffledCivs).isNotEmpty();
@@ -37,5 +42,10 @@ public class ItemReaderTest {
         assertThat(itemReader.allTechs).isNotEmpty();
         assertThat(itemReader.allTechs).contains(Tech.SPACE_FLIGHT);
         assertThat(itemReader.allTechs).isSortedAccordingTo((o1, o2) -> Integer.valueOf(o1.getLevel()).compareTo(o2.getLevel()));
+        assertThat(itemReader.mountedList).isNotEmpty();
+        assertThat(itemReader.artilleryList).isNotEmpty();
+        assertThat(itemReader.infantryList).isNotEmpty();
+        assertThat(itemReader.aircraftList).isNotEmpty();
     }
+
 }
