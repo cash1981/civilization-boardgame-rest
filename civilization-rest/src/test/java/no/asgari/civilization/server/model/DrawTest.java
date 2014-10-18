@@ -244,6 +244,4 @@ public class DrawTest extends AbstractMongoDBTest {
         drawAction.draw(pbfId, playerId, SheetName.GREAT_PERSON);
         assertThat(gameLogCollection.count()).isEqualTo(++privateLog);
     }
-
-
 }

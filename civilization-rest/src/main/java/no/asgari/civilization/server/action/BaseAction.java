@@ -8,11 +8,15 @@ import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
+import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.model.Spreadsheet;
 import no.asgari.civilization.server.model.Tech;
+import no.asgari.civilization.server.model.Unit;
 import org.mongojack.JacksonDBCollection;
+
+import java.util.List;
 
 @Log4j
 public abstract class BaseAction {
@@ -31,6 +35,14 @@ public abstract class BaseAction {
 
     protected GameLog createLog(Tech chosenTech, String pbfId, GameLog.LogType logType) {
         return logAction.createGameLog(chosenTech, pbfId,logType);
+    }
+
+    protected void createLog(List<? extends Item> items, String pbfId) {
+        items.forEach(item -> logAction.createGameLog(item, pbfId, GameLog.LogType.ITEM));
+    }
+
+    protected void createLog(Item item, String pbfId,GameLog.LogType logType) {
+        logAction.createGameLog(item, pbfId, logType);
     }
 
     protected PBF findPBFById(String pbfId) {

@@ -11,6 +11,7 @@ import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.action.UndoAction;
 import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.model.GameLog;
+import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.Player;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -28,6 +29,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -132,6 +134,16 @@ public class PlayerResource {
             return Response.ok().build();
 
         return Response.status(Response.Status.NOT_MODIFIED).build();
+    }
+
+    @PUT
+    @Path("/draw/units")
+    @Timed
+    public Response drawUnits(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @QueryParam("numOfUnits") int numberOfunits) {
+        DrawAction drawAction = new DrawAction(db);
+
+        List<Item> units = drawAction.drawUnitsFromHand(pbfId, player.getId(), numberOfunits);
+        return Response.ok().entity(units).build();
     }
 
     /**

@@ -6,6 +6,7 @@
     -- After battle, perhaps have a end battle button, it will show all the draws that where made
         -- For now a battle is just revealing units that where drawn by the system
         -- Perhaps a end battle button both players will need to push, which will hidden all units that where drawn
+    -- Must be able to kill/delete units/item, they will be put back in pbf
 #DONE - Choose Techs
 	*MAYBE* -- Techs will not be revealed until all players have pushed submit/hidden button (Same functionality as voting)
 	*MAYBE* for now they must undo -- Option to alter a specific chosen tech which has not been revealed
@@ -16,10 +17,10 @@
 	#DONE -- Should be triggered when a player joins a game
 - Undo
     -- Consider if undo should reveal all info or just public
-    -- Create a method that lists all undoes a player has to vote for
-    -- Vote for undo
-    -- List all successfull votes
-    -- List all finished unsuccesful votes
+    #DONE -- Create a method that lists all undoes a player has to vote for
+    #DONE -- Vote for undo
+    #DONE -- List all successful votes
+    #DONE -- List all finished unsuccessful votes
 #DONE - End of turn
     #DONE -- will disable drawing of items for players
 	#DONE -- Each this happens, system will enable for next player in line
@@ -29,9 +30,14 @@
 #DONE - No players should be able to draw items when it is not their turn
 	#DONE -- Except, they should be able to send stuff to other players, and choosing techs, because these are done simultanously, or if it is too difficult, then everything is turn based
 - Logging
-    -- Public logs are just for info. Need to differentiate Gamelog
-    -- Trading for instance should have a different log, now its says "X drew hut"
+    #DONE -- Public logs are just for info. Need to differentiate Gamelog
+    #DONE-- Trading for instance should have a different log, now its says "X drew hut"
 #DONE - CachingAuthentication
+- Draws
+    -- When there is no more elements to draw, system must get the items from excel sheet and put back in the pbf
+        -- Should cache itemReader and put content in cache loader with sheetname as key <-- This is helpful for creating new games fast
+            -- The we can have weak values/keys
+            -- At one point we must create a key with GameType + SheetName
 	
 Nice to have
 - Chat with scrolling capabilites.

@@ -146,8 +146,9 @@ public class GameAction extends BaseAction {
         playerhand.setPlayerId(player.getId());
         playerhand.setUsername(player.getUsername());
 
-        if(!pbf.getPlayers().contains(playerhand))
+        if(!pbf.getPlayers().contains(playerhand)) {
             pbf.getPlayers().add(playerhand);
+        }
         startIfAllPlayers(pbf);
         pbfCollection.updateById(pbf.getId(), pbf);
 

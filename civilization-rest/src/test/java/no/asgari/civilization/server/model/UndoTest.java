@@ -95,7 +95,6 @@ public class UndoTest extends AbstractMongoDBTest {
 
     @Test
     public void checkThatYouCanUndoTech() throws Exception {
-
         //TODO implement
     }
 
@@ -114,6 +113,13 @@ public class UndoTest extends AbstractMongoDBTest {
         createADrawAndInitiateAVoteForUndo();
         List<GameLog> allActiveUndos = undoAction.getAllActiveUndos(pbfId);
         assertThat(allActiveUndos).isNotEmpty();
+    }
+
+    @Test
+    public void getAllFinishedUndos() throws Exception {
+        allPlayersVoteYesThenPerformUndo();
+        List<GameLog> allFinishedUndos = undoAction.getAllFinishedUndos(pbfId);
+        assertThat(allFinishedUndos).isNotEmpty();
     }
 
     private String getAnotherPlayerId() {

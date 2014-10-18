@@ -85,7 +85,7 @@ public class Mounted extends Unit {
         if (killed != mounted.killed) return false;
         if (health != mounted.health) return false;
         if (hidden != mounted.hidden) return false;
-        if (used != mounted.used) return false;
+        if (used != mounted.used) return false;//NOPMD
 
         return true;
     }

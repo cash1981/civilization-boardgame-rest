@@ -175,11 +175,25 @@ public class GameResource {
      * @return
      */
     @GET
-    @Path("/{pbfId}/undo")
+    @Path("/{pbfId}/undo/active")
     @Timed
     public Response getAllActiveUndosCurrentlyInProgress(@NotEmpty @PathParam("pbfId") String pbfId) {
         UndoAction undoAction = new UndoAction(db);
         List<GameLog> gamelogs = undoAction.getAllActiveUndos(pbfId);
+        return Response.ok().entity(gamelogs).build();
+    }
+
+    /**
+     * Returns a list of all undoes that are finished voted
+     * @param pbfId
+     * @return
+     */
+    @GET
+    @Path("/{pbfId}/undo/finished")
+    @Timed
+    public Response getAllFinishedUndos(@NotEmpty @PathParam("pbfId") String pbfId) {
+        UndoAction undoAction = new UndoAction(db);
+        List<GameLog> gamelogs = undoAction.getAllFinishedUndos(pbfId);
         return Response.ok().entity(gamelogs).build();
     }
 

@@ -76,13 +76,14 @@ public class UndoAction extends BaseAction {
             throw new IllegalArgumentException("Wrong playerId");
         }
         gameLog.getDraw().getUndo().vote(playerId,vote);
-        gameLogCollection.updateById(gameLog.getId(), gameLog);
 
         Optional<Boolean> resultOfVotes = gameLog.getDraw().getUndo().getResultOfVotes();
         if(resultOfVotes.isPresent() && resultOfVotes.get()) {
             log.info("Everyone has performed a vote, so we put item back in the deck");
+            gameLog.getDraw().getUndo().setDone(true);
             putDrawnItemBackInPBF(pbf, gameLog.getDraw());
         }
+        gameLogCollection.updateById(gameLog.getId(), gameLog);
         return gameLog;
     }
 
@@ -124,11 +125,18 @@ public class UndoAction extends BaseAction {
                 .collect(Collectors.toList());
     }
 
-    //TODO test
     public List<GameLog> getPlayersActiveUndoes(String pbfId, String username) {
         @Cleanup DBCursor<GameLog> gameLogDBCursor = gameLogCollection.find(DBQuery.is("pbfId", pbfId).is("username", username), new BasicDBObject());
         return Java8Util.streamFromIterable(gameLogDBCursor)
                 .filter(GameLog::hasActiveUndo)
+                .collect(Collectors.toList());
+    }
+
+    public List<GameLog> getAllFinishedUndos(String pbfId) {
+        @Cleanup DBCursor<GameLog> gameLogDBCursor = gameLogCollection.find(DBQuery.is("pbfId", pbfId), new BasicDBObject());
+
+        return Java8Util.streamFromIterable(gameLogDBCursor)
+                .filter(log -> log.getDraw() != null && log.getDraw().getUndo() != null && log.getDraw().getUndo().isDone())
                 .collect(Collectors.toList());
     }
 }

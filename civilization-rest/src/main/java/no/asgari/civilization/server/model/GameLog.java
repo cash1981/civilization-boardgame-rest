@@ -37,7 +37,7 @@ import java.time.LocalDateTime;
 @ToString(of={"privateLog", "publicLog"})
 @Data
 public class GameLog {
-    public static final String COL_NAME = "gameLog";
+    public static final String COL_NAME = "gamelog";
 
     public enum LogType {
         TRADE, BATTLE, ITEM, TECH;
@@ -72,12 +72,11 @@ public class GameLog {
     public void createAndSetLog(LogType logType) {
         final String DELIM = " - ";
         StringBuilder sb = new StringBuilder();
-        sb.append(created + DELIM);
-        sb.append(username + DELIM);
+        sb.append(created + DELIM).append(username + DELIM);
         switch (logType) {
             case ITEM:
                 privateLog = sb.toString() + "drew " + DELIM + draw.getItem().revealAll();
-                publicLog = sb.toString() + "reveals " + DELIM + draw.getItem().revealPublic();
+                publicLog = sb.toString() + "drew " + DELIM + draw.getItem().revealPublic();
                 break;
             case BATTLE:
                 privateLog = sb.toString() + "plays " + DELIM + draw.getItem().revealAll();

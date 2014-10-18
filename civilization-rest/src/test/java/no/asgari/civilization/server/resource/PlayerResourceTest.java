@@ -20,6 +20,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import static junit.framework.TestCase.assertNotNull;
@@ -256,5 +257,57 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
                 .put(ClientResponse.class);
         assertEquals(response.getStatus(), HttpStatus.NOT_FOUND_404);
     }
+
+    @Test
+    public void drawUnits() throws Exception {
+        testDrawArtilleryCard();
+        testDrawInfantryCard();
+        testDrawArtilleryCard();
+
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/draw/units", RULE.getLocalPort(), pbfId)).build();
+        ClientResponse response = client()
+                .resource(uri)
+                .queryParam("numOfUnits", "3")
+                .type(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .put(ClientResponse.class);
+        assertEquals(response.getStatus(), HttpStatus.OK_200);
+        List list = response.getEntity(List.class);
+        assertThat(list).hasSize(3);
+    }
+
+    @Test
+    public void drawUnitsWithNoParam() throws Exception {
+        testDrawArtilleryCard();
+        testDrawInfantryCard();
+        testDrawArtilleryCard();
+
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/draw/units", RULE.getLocalPort(), pbfId)).build();
+        ClientResponse response = client()
+                .resource(uri)
+                .type(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .put(ClientResponse.class);
+        assertEquals(response.getStatus(), HttpStatus.OK_200);
+        List list = response.getEntity(List.class);
+        assertThat(list).hasSize(0);
+    }
+
+    @Test
+    public void drawUnitsWithInvalidParamShouldResult404() throws Exception {
+        testDrawArtilleryCard();
+        testDrawInfantryCard();
+        testDrawArtilleryCard();
+
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/draw/units", RULE.getLocalPort(), pbfId)).build();
+        ClientResponse response = client()
+                .resource(uri)
+                .queryParam("numOfUnits", "foobar")
+                .type(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .put(ClientResponse.class);
+        assertEquals(response.getStatus(), HttpStatus.NOT_FOUND_404);
+    }
+
 
 }
