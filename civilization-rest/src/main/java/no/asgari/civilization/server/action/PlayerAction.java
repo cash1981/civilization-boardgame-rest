@@ -1,5 +1,6 @@
 package no.asgari.civilization.server.action;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -225,5 +226,22 @@ public class PlayerAction extends BaseAction {
 
         logAction.createGameLog(itemToTrade, pbf.getId(), GameLog.LogType.TRADE);
         return true;
+    }
+
+    public void discardItem(String pbfId, String playerId, ItemDTO itemdto) {
+        PBF pbf = pbfCollection.findOneById(pbfId);
+
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+
+        Iterator<Item> iterator = playerhand.getItems().iterator();
+        while(iterator.hasNext()) {
+            Item item = iterator.next();
+            if(item.getSheetName() == itemdto.getSheetName() && item.getName().equals(itemdto.getName())) {
+                iterator.remove();
+                return;
+            }
+        }
+
+        throw cannotFindItem();
     }
 }

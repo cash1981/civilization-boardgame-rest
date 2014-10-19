@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import no.asgari.civilization.server.SheetName;
-import no.asgari.civilization.server.application.CivilizationConfiguration;
 import no.asgari.civilization.server.application.CivilizationApplication;
+import no.asgari.civilization.server.application.CivilizationConfiguration;
 import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
@@ -15,7 +15,6 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
@@ -111,25 +110,13 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
 
         //Find another player
         PBF pbf = pbfCollection.findOneById(pbfId);
-        String anotherPlayerId = pbf.getPlayers().stream()
-                .filter(p -> !p.getUsername().equals("cash1981"))
-                .findFirst().get().getPlayerId();
+        String anotherPlayerId = getAnotherplayerId(pbf);
         assertNotNull(anotherPlayerId);
 
-        Item village = pbf.getPlayers().stream()
-                .filter(p -> p.getUsername().equals("cash1981"))
-                .findFirst().get()
-                .getItems().stream()
-                .filter(fil -> fil.getSheetName() == SheetName.VILLAGES)
-                .findFirst().get();
-
+        Item village = getVillageFromPlayerhand(pbf);
         assertNotNull(village);
 
-        ItemDTO itemDTO = new ItemDTO();
-        itemDTO.setSheetName(SheetName.VILLAGES);
-        itemDTO.setName(village.getName());
-        itemDTO.setOwnerId(anotherPlayerId);
-        itemDTO.setPbfId(pbfId);
+        ItemDTO itemDTO = createItemDTOVillage(village.getName());
 
         URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/trade", RULE.getLocalPort(), pbfId)).build();
         ClientResponse response = client().resource(uri)
@@ -152,15 +139,19 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         assertThat(anotherPlayer.getItems()).contains(village);
     }
 
+    private String getAnotherplayerId(PBF pbf) {
+        return pbf.getPlayers().stream()
+                .filter(p -> !p.getUsername().equals("cash1981"))
+                .findFirst().get().getPlayerId();
+    }
+
     @Test
     public void checkThatYouGetExceptionWhenTradingStuffWhichIsNotAllowed() throws Exception {
         testDrawArtilleryCard();
 
         //Find another player
         PBF pbf = pbfCollection.findOneById(pbfId);
-        String anotherPlayerId = pbf.getPlayers().stream()
-                .filter(p -> !p.getUsername().equals("cash1981"))
-                .findFirst().get().getPlayerId();
+        String anotherPlayerId = getAnotherplayerId(pbf);
         assertNotNull(anotherPlayerId);
 
         Item artillery = pbf.getPlayers().stream()
@@ -307,6 +298,43 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .put(ClientResponse.class);
         assertEquals(response.getStatus(), HttpStatus.NOT_FOUND_404);
+    }
+
+    @Test
+    public void discardItem() throws Exception {
+        testDrawVillage();
+
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        Item village = getVillageFromPlayerhand(pbf);
+        assertNotNull(village);
+
+        ItemDTO itemDTO = createItemDTOVillage(village.getName());
+
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/item", RULE.getLocalPort(), pbfId)).build();
+        ClientResponse response = client().resource(uri)
+                .type(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .entity(itemDTO)
+                .delete(ClientResponse.class);
+        assertEquals(response.getStatus(), HttpStatus.OK_200);
+    }
+
+    private ItemDTO createItemDTOVillage(String name) {
+        ItemDTO itemDTO = new ItemDTO();
+        itemDTO.setSheetName(SheetName.VILLAGES);
+        itemDTO.setName(name);
+        itemDTO.setOwnerId(playerId);
+        itemDTO.setPbfId(pbfId);
+        return itemDTO;
+    }
+
+    private Item getVillageFromPlayerhand(PBF pbf) {
+        return pbf.getPlayers().stream()
+                .filter(p -> p.getUsername().equals("cash1981"))
+                .findFirst().get()
+                .getItems().stream()
+                .filter(fil -> fil.getSheetName() == SheetName.VILLAGES)
+                .findFirst().get();
     }
 
 

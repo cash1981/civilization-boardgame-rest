@@ -43,7 +43,7 @@
 
 - Discard/Delete from playerhand
 	-- When deleting it should log it.
-	-- Consider putting items back in the deck, although this is already taken care of by reshuffling when draw is made
+	#DONE -- Consider putting items back in the deck, although this is already taken care of by reshuffling when draw is made
 - A player can reveal all items
 
 Nice to have

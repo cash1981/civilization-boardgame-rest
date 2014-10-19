@@ -18,6 +18,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -102,10 +103,19 @@ public class PlayerResource {
     }
 
     @PUT
-    @Path("/{pbfId}/revealItem")
+    @Path("/revealItem")
     @Timed
     public Response revealItem(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
         playerAction.revealItem(pbfId, player.getId(), item);
+        return  Response.ok().build();
+    }
+
+    @DELETE
+    @Path("/item")
+    @Timed
+    //TODO test
+    public Response discardItem(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
+        playerAction.discardItem(pbfId, player.getId(), item);
         return  Response.ok().build();
     }
 
