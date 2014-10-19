@@ -16,7 +16,6 @@ import no.asgari.civilization.server.model.Player;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -29,10 +28,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * Contains player specific resources
@@ -113,7 +110,6 @@ public class PlayerResource {
     @DELETE
     @Path("/item")
     @Timed
-    //TODO test
     public Response discardItem(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
         playerAction.discardItem(pbfId, player.getId(), item);
         return  Response.ok().build();

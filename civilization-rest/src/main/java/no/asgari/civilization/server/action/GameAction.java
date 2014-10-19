@@ -41,7 +41,7 @@ public class GameAction extends BaseAction {
         this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
     }
 
-    public String createNewGame(CreateNewGameDTO dto) {
+    public String createNewGame(CreateNewGameDTO dto, String playerId) {
         PBF pbf = new PBF();
         pbf.setName(dto.getName());
         pbf.setType(dto.getType());
@@ -92,17 +92,13 @@ public class GameAction extends BaseAction {
         pbf.getItems().addAll(itemReader.infantryList);
         pbf.getTechs().addAll(itemReader.allTechs);
 
+        Player player = playerCollection.findOneById(playerId);
+        pbf.getPlayers().add(createPlayerHand(player));
+
         WriteResult<PBF, String> pbfInsert = pbfCollection.insert(pbf);
         pbf.setId(pbfInsert.getSavedId());
         log.info("PBF game created with id " + pbfInsert.getSavedId());
 
-        DBCursor<Player> dBCursorPlayer = playerCollection.find(DBQuery.is("username", dto.getUsername()), new BasicDBObject());
-        if(!dBCursorPlayer.hasNext()) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
-        }
-
-        //TODO rewrite with update gameid statement. Then no need to find and update
-        Player player = dBCursorPlayer.next();
         player.getGameIds().add(pbfInsert.getSavedId());
         playerCollection.updateById(player.getId(), player);
         log.debug("Added pbf to player");
@@ -124,7 +120,7 @@ public class GameAction extends BaseAction {
             dto.setCreated(pbf.getCreated());
             dto.setNumOfPlayers(pbf.getNumOfPlayers());
             dto.setPlayers(pbf.getPlayers().stream()
-                    .map(this::createPlayerDTO)
+                    .map(GameAction::createPlayerDTO)
                             //.map(p -> createPlayerDTO(p))
                     .collect(Collectors.toList()));
             pbfs.add(dto);
@@ -133,14 +129,22 @@ public class GameAction extends BaseAction {
         return pbfs;
     }
 
-    private PlayerDTO createPlayerDTO(Playerhand player) {
+    private static PlayerDTO createPlayerDTO(Playerhand player) {
         PlayerDTO dto = new PlayerDTO();
         dto.setUsername(player.getUsername());
         dto.setPlayerId(player.getPlayerId());
         return dto;
     }
 
-    public void joinGame(String pbfId, String username) {
+    private static Playerhand createPlayerHand(Player player) {
+        Playerhand playerhand = new Playerhand();
+        playerhand.setUsername(player.getUsername());
+        playerhand.setPlayerId(player.getId());
+        playerhand.setYourTurn(false);
+        return playerhand;
+    }
+
+    public void joinGame(String pbfId, String playerId) {
         PBF pbf = pbfCollection.findOneById(pbfId);
         if(pbf.getNumOfPlayers() == pbf.getPlayers().size()) {
             log.warn("Cannot join the game. Its full");
@@ -150,42 +154,31 @@ public class GameAction extends BaseAction {
             throw new WebApplicationException(badReq);
         }
 
-        DBCursor<Player> dbCursor = playerCollection.find(DBQuery.is("username", username), new BasicDBObject());
-        if(!dbCursor.hasNext()) {
-            log.error("Couldn't find dbCursor by username " + username);
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
-        }
-
-        //TODO Better to use update instead of find & update
-        Player player = dbCursor.next();
+        Player player = playerCollection.findOneById(playerId);
         player.getGameIds().add(pbfId);
-
         playerCollection.updateById(player.getId(), player);
 
-        Playerhand playerhand = new Playerhand();
-        playerhand.setPlayerId(player.getId());
-        playerhand.setUsername(player.getUsername());
-
+        Playerhand playerhand = createPlayerHand(player);
         if(!pbf.getPlayers().contains(playerhand)) {
             pbf.getPlayers().add(playerhand);
         }
         startIfAllPlayers(pbf);
         pbfCollection.updateById(pbf.getId(), pbf);
-
     }
 
-    private void startIfAllPlayers(PBF pbf) {
-        final int numOfPlayersNeeded = pbf.getNumOfPlayers();
-        if(numOfPlayersNeeded == pbf.getPlayers().size()) {
-            Playerhand randomPlayer = getRandomPlayer(pbf.getPlayers());
-            log.debug("Setting starting player");
-            randomPlayer.setYourTurn(true);
-        }
-    }
+    /**
+     * Returns the username of the starting player
+     * @param pbfId
+     * @return
+     */
+    public String getStartingPlayer(String pbfId) {
+        PBF pbf = findPBFById(pbfId);
+        return pbf.getPlayers().stream()
+                .filter(Playerhand::isYourTurn)
+                .findFirst()
+                .orElseThrow(PlayerAction::cannotFindPlayer)
+                .getUsername();
 
-    private Playerhand getRandomPlayer(List<Playerhand> players) {
-        Collections.shuffle(players);
-        return players.get(0);
     }
 
     public List<PlayerDTO> getAllPlayers(String pbfId) {
@@ -195,4 +188,21 @@ public class GameAction extends BaseAction {
                 .map(p -> createPlayerDTO(p))
                 .collect(Collectors.toList());
     }
+
+    private void startIfAllPlayers(PBF pbf) {
+        final int numOfPlayersNeeded = pbf.getNumOfPlayers();
+        if(numOfPlayersNeeded == pbf.getPlayers().size()) {
+            Playerhand randomPlayer = getRandomPlayer(pbf.getPlayers());
+            log.debug("Setting starting player " + randomPlayer);
+            randomPlayer.setYourTurn(true);
+            createInfoLog(pbf.getId(), "Starting player is " + randomPlayer.getUsername());
+            pbfCollection.updateById(pbf.getId(), pbf);
+        }
+    }
+
+    private Playerhand getRandomPlayer(List<Playerhand> players) {
+        Collections.shuffle(players);
+        return players.get(0);
+    }
+
 }

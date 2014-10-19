@@ -156,9 +156,9 @@ public class PlayerAction extends BaseAction {
 
         Item itemToReveal = combinedItemStream
                 .filter(it -> it.getSheetName() == itemDTO.getSheetName())
-                    .filter(it -> it.getName().equals(itemDTO.getName()))
-                    .findFirst()
-                    .orElseThrow(PlayerAction::cannotFindItem);
+                .filter(it -> it.getName().equals(itemDTO.getName()))
+                .findFirst()
+                .orElseThrow(PlayerAction::cannotFindItem);
 
 
         itemToReveal.setHidden(false);
@@ -187,6 +187,15 @@ public class PlayerAction extends BaseAction {
         return pbf.getTechs();
     }
 
+    /**
+     * Method that's checks whether it is players turn.
+     * Not the same as #checkYourTurn()
+     *
+     * @see #checkYourTurn(String, String)
+     * @param pbfId - PBF id
+     * @param playerId - Player id
+     * @return - true if it is players turn
+     */
     public boolean isYourTurn(String pbfId, String playerId) {
         PBF pbf = pbfCollection.findOneById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
@@ -238,6 +247,7 @@ public class PlayerAction extends BaseAction {
             Item item = iterator.next();
             if(item.getSheetName() == itemdto.getSheetName() && item.getName().equals(itemdto.getName())) {
                 iterator.remove();
+                createLog(item, pbf.getId(), GameLog.LogType.DISCARD);
                 return;
             }
         }

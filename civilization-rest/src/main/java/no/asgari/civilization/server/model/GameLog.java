@@ -40,7 +40,7 @@ public class GameLog {
     public static final String COL_NAME = "gamelog";
 
     public enum LogType {
-        TRADE, BATTLE, ITEM, TECH, SHUFFLE;
+        TRADE, BATTLE, ITEM, TECH, SHUFFLE, DISCARD;
     }
 
     @Id
@@ -86,8 +86,12 @@ public class GameLog {
                 publicLog = sb.toString() + "has received from trade " + DELIM + draw.getItem().revealPublic();
                 break;
             case TECH:
-                privateLog = sb.toString() + "has teched  " + DELIM + draw.getItem().revealAll();
-                publicLog = sb.toString() + "has teched " + DELIM + draw.getItem().revealPublic();
+                privateLog = sb.toString() + "has researched  " + DELIM + draw.getItem().revealAll();
+                publicLog = sb.toString() + "has researched " + DELIM + draw.getItem().revealPublic();
+                break;
+            case DISCARD:
+                privateLog = sb.toString() + "has discarded  " + DELIM + draw.getItem().revealAll();
+                publicLog = sb.toString() + "has discarded " + DELIM + draw.getItem().revealPublic();
                 break;
         }
     }

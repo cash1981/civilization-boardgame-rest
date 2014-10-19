@@ -18,9 +18,6 @@ public class CreateNewGameDTO {
     @NotNull
     private GameType type;
 
-    @NotBlank
-    private String username;
-
     @NotNull
     @Min(1)
     private Integer numOfPlayers;

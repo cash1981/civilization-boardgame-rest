@@ -63,7 +63,6 @@ public class GameResourceTest extends MongoDBBaseTest {
     public void createGame() throws Exception {
         CreateNewGameDTO dto = new CreateNewGameDTO();
         dto.setNumOfPlayers(4);
-        dto.setUsername("cash1981");
         dto.setName("PBF WaW");
         dto.setType(GameType.WAW);
 
@@ -81,27 +80,6 @@ public class GameResourceTest extends MongoDBBaseTest {
         URI location = response.getLocation();
         final String id = response.getEntity(String.class);
         assertThat(location.getPath()).isEqualTo("/game/" + id);
-    }
-
-    @Test
-    public void createGameShouldFailBecauseUsernameIsMissing() throws Exception {
-        CreateNewGameDTO dto = new CreateNewGameDTO();
-        dto.setNumOfPlayers(4);
-        dto.setUsername(null);
-        dto.setName("First waw game");
-        dto.setType(GameType.WAW);
-
-        ObjectMapper mapper = new ObjectMapper();
-        String dtoAsJSon = mapper.writeValueAsString(dto);
-
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/game", RULE.getLocalPort())).build();
-        ClientResponse response = client().resource(uri)
-                .type(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .entity(dtoAsJSon)
-                .post(ClientResponse.class);
-
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST_400);
     }
 
     @Test

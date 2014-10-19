@@ -142,6 +142,9 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         Playerhand playerhand = new Playerhand();
         playerhand.setUsername(player.getUsername());
         playerhand.setPlayerId(player.getId());
+        if(player.getUsername().equals("cash1981")) {
+            playerhand.setYourTurn(true);
+        }
         return playerhand;
     }
 

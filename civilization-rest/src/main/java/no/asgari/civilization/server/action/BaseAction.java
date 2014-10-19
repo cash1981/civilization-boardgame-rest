@@ -3,6 +3,7 @@ package no.asgari.civilization.server.action;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+import com.google.common.base.Preconditions;
 import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.model.Draw;
@@ -39,8 +40,17 @@ public abstract class BaseAction {
         items.forEach(item -> logAction.createGameLog(item, pbfId, GameLog.LogType.ITEM));
     }
 
-    protected void createLog(Item item, String pbfId,GameLog.LogType logType) {
+    protected void createLog(Item item, String pbfId, GameLog.LogType logType) {
         logAction.createGameLog(item, pbfId, logType);
+    }
+
+    protected void createInfoLog(String pbfId, String message) {
+        Preconditions.checkNotNull(message);
+        GameLog log = new GameLog();
+        log.setPublicLog(log.getCreated() + " - System - " + message);
+        log.setUsername("System");
+        log.setPbfId(pbfId);
+        logAction.save(log);
     }
 
     protected PBF findPBFById(String pbfId) {
@@ -56,17 +66,21 @@ public abstract class BaseAction {
     }
 
     /**
-     * Checks wheter is the players turn. If not UNAUTHORIZED exception is thrown
+     * Checks whether is the players turn. If not FORBIDDEN exception is thrown
      * @param pbfId
      * @param playerId
      *
-     * @throws WebApplicationException(Response) - Throws Response.UNAUTHORIZED if not your turn
+     * @throws WebApplicationException(Response) - Throws Response.FORBIDDEN if not your turn
      */
     //TODO Perhaps its best to have this in a filter, but its not always intended to be run
     void checkYourTurn(String pbfId, String playerId) {
         PBF pbf = pbfCollection.findOneById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        if (playerhand.isYourTurn()) {
+        checkYourTurn(playerhand);
+    }
+
+    void checkYourTurn(Playerhand playerhand) {
+        if (!playerhand.isYourTurn()) {
             throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN)
                     .entity("Its not your turn")
                     .build());

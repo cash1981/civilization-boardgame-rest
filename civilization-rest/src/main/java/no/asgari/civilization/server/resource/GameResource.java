@@ -103,7 +103,7 @@ public class GameResource {
 
         log.info("Creating game " + dto);
         GameAction gameAction = new GameAction(db);
-        String id = gameAction.createNewGame(dto);
+        String id = gameAction.createNewGame(dto, player.getId());
         return Response.status(Response.Status.CREATED)
                 .location(uriInfo.getAbsolutePathBuilder().path(id).build())
                 .entity(id)
@@ -118,7 +118,7 @@ public class GameResource {
         Preconditions.checkNotNull(player);
 
         GameAction gameAction = new GameAction(db);
-        gameAction.joinGame(pbfId, player.getUsername());
+        gameAction.joinGame(pbfId, player.getId());
         return Response.ok()
                 .location(uriInfo.getAbsolutePathBuilder().path(pbfId).build())
                 .build();
