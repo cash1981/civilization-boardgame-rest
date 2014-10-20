@@ -33,6 +33,8 @@ public class Player {
     @Email
     private String email;
 
+    private boolean disableEmail = false;
+
     @NotBlank
     private String password;
 
