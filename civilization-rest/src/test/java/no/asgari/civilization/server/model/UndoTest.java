@@ -65,7 +65,7 @@ public class UndoTest extends AbstractMongoDBTest {
         List<Playerhand> players = pbfCollection.findOneById(gameLog.getDraw().getPbfId()).getPlayers();
 
         Optional<Playerhand> anotherPlayer = players.stream()
-                .filter(p -> !p.getPlayerId().equals(playerId))
+                .filter(p -> !gameLog.getDraw().getUndo().getVotes().keySet().contains(p.getPlayerId()))
                 .limit(1)
                 .findFirst();
 
