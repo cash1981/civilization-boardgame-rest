@@ -6,7 +6,7 @@
     -- After battle, perhaps have a end battle button, it will show all the draws that where made
         -- For now a battle is just revealing units that where drawn by the system
         -- Perhaps a end battle button both players will need to push, which will hidden all units that where drawn
-    -- Must be able to kill/delete units/item, they will be put back in pbf
+    #DONE -- Must be able to kill/delete units/item, they will be put back in pbf
 #DONE - Choose Techs
 	*MAYBE* -- Techs will not be revealed until all players have pushed submit/hidden button (Same functionality as voting)
 	*MAYBE* for now they must undo -- Option to alter a specific chosen tech which has not been revealed
@@ -24,6 +24,9 @@
 #DONE - End of turn
     #DONE -- will disable drawing of items for players
 	#DONE -- Each this happens, system will enable for next player in line
+	- Send email to the next player
+	    -- Player should be able to choose not to get emails
+	        -- Per game specific? Or overall?
 #DONE - Send player items
 	#DONE -- Allowing players to send Huts, Villages, Culture cards privately to other players
 	#DONE -- That player should get the item sent, plus logged both publicly that trading has taken place, plus privately
@@ -65,7 +68,5 @@ Nice to have
 - Support for more game types
 	-- Change all sheetnames in parameters to combination of GameType and Sheetname
 
-
-
-Future
+Future roadmap
 - Replace MongoJack with Morphia as MongoJack is no longer maintained it seems

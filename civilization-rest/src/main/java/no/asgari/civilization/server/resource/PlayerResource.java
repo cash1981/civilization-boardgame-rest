@@ -142,6 +142,14 @@ public class PlayerResource {
         return Response.status(Response.Status.NOT_MODIFIED).build();
     }
 
+    /**
+     * Draws units from playerhand for battle purposes
+     *
+     * @param player
+     * @param pbfId
+     * @param numberOfunits
+     * @return
+     */
     @PUT
     @Path("/draw/units")
     @Timed
