@@ -42,9 +42,8 @@
         Collect all playerhand filter by sheetname, and itemReader.getFoo().removeAll(playerhands.stuff)
 
 - Discard/Delete from playerhand
-	-- When deleting it should log it.
+	#DONE -- When deleting it should log it.
 	#DONE -- Consider putting items back in the deck, although this is already taken care of by reshuffling when draw is made
-- A player can reveal all items
 
 Nice to have
 - Chat with scrolling capabilites.

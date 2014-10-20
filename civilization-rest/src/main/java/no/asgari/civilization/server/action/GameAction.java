@@ -16,6 +16,7 @@ import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
+import no.asgari.civilization.server.util.Java8Util;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
@@ -24,7 +25,6 @@ import org.mongojack.WriteResult;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -92,47 +92,46 @@ public class GameAction extends BaseAction {
         pbf.getItems().addAll(itemReader.infantryList);
         pbf.getTechs().addAll(itemReader.allTechs);
 
-        Player player = playerCollection.findOneById(playerId);
-        pbf.getPlayers().add(createPlayerHand(player));
-
         WriteResult<PBF, String> pbfInsert = pbfCollection.insert(pbf);
         pbf.setId(pbfInsert.getSavedId());
         log.info("PBF game created with id " + pbfInsert.getSavedId());
 
-        player.getGameIds().add(pbfInsert.getSavedId());
-        playerCollection.updateById(player.getId(), player);
-        log.debug("Added pbf to player");
+        log.info("Join the game created");
+        joinGame(pbf.getId(), playerId);
         return pbf.getId();
     }
 
     public List<PbfDTO> getAllActiveGames() {
         @Cleanup DBCursor<PBF> dbCursor = pbfCollection.find(DBQuery.is("active", true), new BasicDBObject());
-
-        List<PbfDTO> pbfs = new ArrayList<>();
-        while (dbCursor.hasNext()) {
-            PBF pbf = dbCursor.next();
-
-            PbfDTO dto = new PbfDTO();
-            dto.setType(pbf.getType());
-            dto.setId(pbf.getId());
-            dto.setName(pbf.getName());
-            dto.setActive(pbf.isActive());
-            dto.setCreated(pbf.getCreated());
-            dto.setNumOfPlayers(pbf.getNumOfPlayers());
-            dto.setPlayers(pbf.getPlayers().stream()
-                    .map(GameAction::createPlayerDTO)
-                            //.map(p -> createPlayerDTO(p))
-                    .collect(Collectors.toList()));
-            pbfs.add(dto);
-        }
-
-        return pbfs;
+        return Java8Util.streamFromIterable(dbCursor)
+            .map(GameAction::createPbfDTO).collect(Collectors.toList());
     }
 
-    private static PlayerDTO createPlayerDTO(Playerhand player) {
+    /**
+     * Creating PbfDTO so to not include every players Ghand and information
+     *
+     * @param pbf - the PBF
+     * @return PbfDto
+     */
+    private static PbfDTO createPbfDTO(PBF pbf) {
+        PbfDTO dto = new PbfDTO();
+        dto.setType(pbf.getType());
+        dto.setId(pbf.getId());
+        dto.setName(pbf.getName());
+        dto.setActive(pbf.isActive());
+        dto.setCreated(pbf.getCreated());
+        dto.setNumOfPlayers(pbf.getNumOfPlayers());
+        dto.setPlayers(pbf.getPlayers().stream()
+                .map(p -> createPlayerDTO(p, pbf.getId()))
+                .collect(Collectors.toList()));
+        return dto;
+    }
+
+    private static PlayerDTO createPlayerDTO(Playerhand player, String pbfId) {
         PlayerDTO dto = new PlayerDTO();
         dto.setUsername(player.getUsername());
         dto.setPlayerId(player.getPlayerId());
+        dto.setPbfId(pbfId);
         return dto;
     }
 
@@ -144,6 +143,9 @@ public class GameAction extends BaseAction {
         return playerhand;
     }
 
+    /**
+     * Joins a game. If it is full it will throw exception
+     */
     public void joinGame(String pbfId, String playerId) {
         PBF pbf = pbfCollection.findOneById(pbfId);
         if(pbf.getNumOfPlayers() == pbf.getPlayers().size()) {
@@ -167,11 +169,11 @@ public class GameAction extends BaseAction {
     }
 
     /**
-     * Returns the username of the starting player
+     * Returns the username of the starting turn player
      * @param pbfId
      * @return
      */
-    public String getStartingPlayer(String pbfId) {
+    public String getTurnPlayer(String pbfId) {
         PBF pbf = findPBFById(pbfId);
         return pbf.getPlayers().stream()
                 .filter(Playerhand::isYourTurn)
@@ -185,7 +187,7 @@ public class GameAction extends BaseAction {
         Preconditions.checkNotNull(pbfId);
         PBF pbf = pbfCollection.findOneById(pbfId);
         return pbf.getPlayers().stream()
-                .map(p -> createPlayerDTO(p))
+                .map(p -> createPlayerDTO(p, pbf.getId()))
                 .collect(Collectors.toList());
     }
 

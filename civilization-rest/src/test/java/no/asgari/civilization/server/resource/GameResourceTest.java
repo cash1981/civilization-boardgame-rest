@@ -80,6 +80,8 @@ public class GameResourceTest extends MongoDBBaseTest {
         URI location = response.getLocation();
         final String id = response.getEntity(String.class);
         assertThat(location.getPath()).isEqualTo("/game/" + id);
+
+        assertThat(pbfCollection.findOneById(id).getPlayers().size()).isEqualTo(1);
     }
 
     @Test

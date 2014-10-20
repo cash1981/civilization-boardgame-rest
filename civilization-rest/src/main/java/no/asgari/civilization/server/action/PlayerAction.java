@@ -72,6 +72,9 @@ public class PlayerAction extends BaseAction {
         return insert.getSavedId();
     }
 
+    /**
+     * Returns a set of all the game ids of player
+     */
     public Set<String> getGames(Player player) {
         Preconditions.checkNotNull(player);
         log.debug("Getting all games for player " + player.getUsername());

@@ -28,7 +28,7 @@ public class UndoTest extends AbstractMongoDBTest {
         }
     }
 
-    private void createADrawAndInitiateAVoteForUndo() throws Exception {
+    private String createADrawAndInitiateAVoteForUndo() throws Exception {
         //First create one UndoAction
 
         //Pick one item
@@ -42,26 +42,33 @@ public class UndoTest extends AbstractMongoDBTest {
         undoAction.initiateUndo(gameLogOptional.get(), playerId);
 
         assertThat(gameLogCollection.findOneById(gameLogOptional.get().getId()).getDraw().getUndo().getVotes().size()).isEqualTo(1);
+        return gameLogOptional.get().getId();
     }
 
     @Test
     public void performAVoteAndCheckIt() throws Exception {
-        GameLog gameLog = gameLogCollection.findOne();
-        Draw draw = gameLog.getDraw();
-        int votes = draw.getUndo().getVotes().size();
-        assertThat(draw.getUndo()).isNotNull();
+        String gamelogId = gameLogCollection.findOne().getId();
+        if(gameLogCollection.findOne().getDraw().getUndo().isDone()) {
+            gamelogId = createADrawAndInitiateAVoteForUndo();
+        }
 
-        List<Playerhand> players = pbfCollection.findOneById(draw.getPbfId()).getPlayers();
-        Set<String> playerIds = draw.getUndo().getVotes().keySet();
-        Optional<String> playerId = players.stream()
-                .map(p -> p.getPlayerId())
-                .filter(p -> !playerIds.contains(p))
+        final GameLog gameLog = gameLogCollection.findOneById(gamelogId);
+        assertThat(gameLog.getDraw().getUndo()).isNotNull();
+
+        int votes = gameLog.getDraw().getUndo().getVotes().size();
+        assertThat(gameLog.getDraw().getUndo().isDone()).isFalse();
+
+        List<Playerhand> players = pbfCollection.findOneById(gameLog.getDraw().getPbfId()).getPlayers();
+
+        Optional<Playerhand> anotherPlayer = players.stream()
+                .filter(p -> !p.getPlayerId().equals(playerId))
                 .limit(1)
                 .findFirst();
 
+        assertThat(gameLog.getDraw().getUndo().getVotes().size()).isEqualTo(votes);
         votes = votes + 1;
-        assertThat(playerId.isPresent()).isTrue();
-        GameLog vote = undoAction.vote(gameLog, playerId.get(), Boolean.TRUE);
+        assertThat(anotherPlayer.isPresent()).isTrue();
+        GameLog vote = undoAction.vote(gameLog, anotherPlayer.get().getPlayerId(), Boolean.TRUE);
         assertThat(vote.getDraw().getUndo().getVotes().size()).isEqualTo(votes);
         assertThat(gameLogCollection.findOneById(gameLog.getId()).getDraw().getUndo().getVotes().size()).isEqualTo(votes);
     }
@@ -69,17 +76,22 @@ public class UndoTest extends AbstractMongoDBTest {
     @Test
     public void allPlayersVoteYesThenPerformUndo() throws Exception {
         GameLog gameLog = gameLogCollection.findOne();
+        if(gameLog.getDraw().getUndo().isDone()) {
+            String gamelogId = createADrawAndInitiateAVoteForUndo();
+            gameLog = gameLogCollection.findOneById(gamelogId);
+        }
+
         PBF pbf = pbfCollection.findOneById(gameLog.getPbfId());
-        //Get the same undo, since I need it to be final
         assertFalse(pbf.getItems().contains(gameLog.getDraw().getItem()));
         pbf = pbfCollection.findOneById(gameLog.getPbfId());
 
         List<Item> items = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(playerId)).findFirst().get().getItems();
         assertTrue(items.contains(gameLog.getDraw().getItem()));
 
+        final GameLog finalGameLog = gameLog;
         pbf.getPlayers().stream()
-                .filter(p -> !gameLog.getDraw().getUndo().getVotes().keySet().contains(p.getUsername()))
-                .forEach(p -> undoAction.vote(gameLog, p.getPlayerId(), Boolean.TRUE));
+                .filter(p -> !finalGameLog.getDraw().getUndo().getVotes().keySet().contains(p.getUsername()))
+                .forEach(p -> undoAction.vote(finalGameLog, p.getPlayerId(), Boolean.TRUE));
 
         Undo undo = gameLogCollection.findOneById(gameLog.getId()).getDraw().getUndo();
         assertThat(undo.getVotes()).doesNotContainValue(Boolean.FALSE);
