@@ -10,7 +10,11 @@ import java.util.Set;
 
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.action.DrawAction;
+import no.asgari.civilization.server.action.GameAction;
+import no.asgari.civilization.server.action.GameLogAction;
+import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.action.UndoAction;
+import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
 import org.junit.Before;
 import org.junit.Test;
@@ -107,7 +111,24 @@ public class UndoTest extends AbstractMongoDBTest {
 
     @Test
     public void checkThatYouCanUndoTech() throws Exception {
-        //TODO implement
+        //Pick one item
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        assertThat(pbf).isNotNull();
+        assertThat(pbf.getItems()).isNotEmpty();
+
+        PlayerAction playerAction = new PlayerAction(db);
+        ItemDTO dto = new ItemDTO();
+        dto.setName("Navy");
+        dto.setPbfId(pbfId);
+        dto.setOwnerId(playerId);
+        dto.setSheetName(SheetName.LEVEL_1_TECH);
+
+        GameLog gameLog = playerAction.chooseTech(pbfId, dto, playerId);
+
+        assertThat(gameLog.getDraw().getUndo()).isNull();
+        undoAction.initiateUndo(gameLog, playerId);
+        gameLog = gameLogCollection.findOneById(gameLog.getId());
+        assertThat(gameLog.getDraw().getUndo()).isNotNull();
     }
 
     @Test

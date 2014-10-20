@@ -87,7 +87,7 @@ public class PlayerAction extends BaseAction {
      * @param item - The tech
      * @param playerId - The id of player
      */
-    public void chooseTech(String pbfId, ItemDTO item, String playerId) {
+    public GameLog chooseTech(String pbfId, ItemDTO item, String playerId) {
         Preconditions.checkNotNull(pbfId);
         Preconditions.checkNotNull(item);
         Preconditions.checkNotNull(item.getName()); 
@@ -110,7 +110,7 @@ public class PlayerAction extends BaseAction {
         pbfCollection.updateById(pbf.getId(), pbf);
         log.debug("Player " + playerId + " chose tech " + chosenTech.getName());
 
-        super.createLog(chosenTech, pbfId, GameLog.LogType.TECH);
+        return super.createLog(chosenTech, pbfId, GameLog.LogType.TECH);
     }
 
     public boolean endTurn(String pbfId, String username) {
