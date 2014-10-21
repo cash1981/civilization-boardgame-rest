@@ -1,0 +1,26 @@
+Front page
+
+- Title and welcome info
+- Active games
+    -- List of active games
+    -- Link goes to read only
+        -- join button (if logged in && isnt started yet)
+
+Inside a game
+
+Footer on all pages
+    - Copyright
+    - Donate button
+
+Navbar on all pages
+    - Login (if not logged in)
+        -- Opens popup with login form
+           --- Save button
+           --- Register
+            -- Link to the register page
+
+
+Nice to have: 
+- Implement email verification on register?
+
+
