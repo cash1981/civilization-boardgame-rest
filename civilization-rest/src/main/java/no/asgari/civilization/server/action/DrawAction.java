@@ -13,6 +13,7 @@ import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
+import no.asgari.civilization.server.model.Unit;
 import org.mongojack.JacksonDBCollection;
 
 import javax.ws.rs.WebApplicationException;
@@ -125,28 +126,6 @@ public class DrawAction extends BaseAction {
      */
     public Optional<GameLog> draw(String pbfId, String playerId, SheetName sheetName) {
         return draw(pbfId,playerId,sheetName, GameType.WAW);
-    }
-
-    public List<Item> drawUnitsFromHand(String pbfId, String playerId, int numberOfDraws) {
-        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbfId);
-
-        List<Item> unitsInHand = playerhand.getItems().stream()
-                .filter(p -> SheetName.UNITS.contains(p.getSheetName()))
-                .collect(Collectors.toList());
-
-        if(unitsInHand.isEmpty()) {
-            return unitsInHand;
-        }
-
-        if(unitsInHand.size() <= numberOfDraws) {
-            createLog(unitsInHand, pbfId);
-            return unitsInHand;
-        }
-
-        Collections.shuffle(unitsInHand);
-        return unitsInHand.stream().limit(numberOfDraws)
-                .peek(item -> createLog(item, pbfId, GameLog.LogType.ITEM))
-                .collect(Collectors.toList());
     }
 
     private void logShuffle(SheetName sheetName, PBF pbf) {

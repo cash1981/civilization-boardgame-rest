@@ -3,6 +3,7 @@ package no.asgari.civilization.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import no.asgari.civilization.server.SheetName;
 @Setter
 @JsonTypeName("mounted")
 @NoArgsConstructor
+@EqualsAndHashCode(exclude={"ownerId", "hidden", "used"}, callSuper = false)
 public class Mounted extends Unit {
     private int level = LEVEL_1;
     private String ownerId;
@@ -20,6 +22,7 @@ public class Mounted extends Unit {
     private boolean killed;
     private int attack;
     private int health;
+    private boolean isInBattle;
 
     public Mounted(int attack, int health) {
         this.attack = attack;
@@ -72,32 +75,6 @@ public class Mounted extends Unit {
             default:
                 return "Unknown level" + attack + "." + health;
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Mounted mounted = (Mounted) o;
-
-        if (attack != mounted.attack) return false;
-        if (killed != mounted.killed) return false;
-        if (health != mounted.health) return false;
-        if (hidden != mounted.hidden) return false;
-        if (used != mounted.used) return false;//NOPMD
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (hidden ? 1 : 0);
-        result = 31 * result + (used ? 1 : 0);
-        result = 31 * result + (killed ? 1 : 0);
-        result = 31 * result + attack;
-        result = 31 * result + health;
-        return result;
     }
 
     @Override

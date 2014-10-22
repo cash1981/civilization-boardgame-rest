@@ -20,7 +20,7 @@ Navbar on all pages
             -- Link to the register page
 
 
-Nice to have: 
+Nice to have:
 - Implement email verification on register?
 
 

@@ -20,6 +20,7 @@ public class Aircraft extends Unit {
     private boolean killed;
     private int attack;
     private int health;
+    private boolean isInBattle;
 
     public Aircraft(int attack, int health) {
         this.attack = attack;
@@ -74,6 +75,7 @@ public class Aircraft extends Unit {
         if (health != aircraft.health) return false;
         if (hidden != aircraft.hidden) return false;
         if (used != aircraft.used) return false;
+        if (isInBattle != aircraft.isInBattle) return false;
 
         return true;
     }
@@ -85,6 +87,7 @@ public class Aircraft extends Unit {
         result = 31 * result + (killed ? 1 : 0);
         result = 31 * result + attack;
         result = 31 * result + health;
+        result = 31 * result + (isInBattle ? 1 : 0);
         return result;
     }
 
