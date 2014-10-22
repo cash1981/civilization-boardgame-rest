@@ -5,6 +5,7 @@ import com.mongodb.DB;
 import io.dropwizard.auth.Auth;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.SheetName;
+import no.asgari.civilization.server.action.BattleAction;
 import no.asgari.civilization.server.action.DrawAction;
 import no.asgari.civilization.server.action.GameLogAction;
 import no.asgari.civilization.server.action.PlayerAction;
@@ -13,6 +14,8 @@ import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.Player;
+import no.asgari.civilization.server.model.Undo;
+import no.asgari.civilization.server.model.Unit;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
@@ -151,13 +154,34 @@ public class PlayerResource {
      * @return
      */
     @PUT
-    @Path("/draw/units")
+    @Path("/battle/draw")
     @Timed
     public Response drawUnits(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @QueryParam("numOfUnits") int numberOfunits) {
-        DrawAction drawAction = new DrawAction(db);
+        BattleAction battleAction = new BattleAction(db);
 
-        List<Item> units = drawAction.drawUnitsFromHand(pbfId, player.getId(), numberOfunits);
+        List<Unit> units = battleAction.drawUnitsFromHand(pbfId, player.getId(), numberOfunits);
         return Response.ok().entity(units).build();
+    }
+
+    /**
+     * Will end a battle for one player
+     * Will set the isBattle = false
+     *
+     * Both players need to call this method
+     *
+     * @param player
+     * @param pbfId
+     * @param numberOfunits
+     * @return
+     */
+    @PUT
+    @Path("/battle/end")
+    @Timed
+    public Response endBattle(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @QueryParam("numOfUnits") int numberOfunits) {
+        BattleAction battleAction = new BattleAction(db);
+
+        battleAction.endBattle(pbfId, player.getId());
+        return Response.ok().build();
     }
 
     /**

@@ -68,6 +68,7 @@ public abstract class Unit implements Item, Level {
         return toString();
     }
 
+    public abstract boolean isInBattle();
 
-
+    public abstract void setInBattle(boolean inBattle);
 }

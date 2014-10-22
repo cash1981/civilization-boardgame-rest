@@ -15,11 +15,11 @@ import javax.mail.internet.MimeMultipart;
 import java.util.Date;
 import java.util.Properties;
 
-public class MailTest {
+public class EmailTest {
 
-    @Test
-    @Ignore
-    public void testSendingMail() throws Exception {
+    //@Test
+    //@Ignore
+    public void sendingEmail() throws Exception {
         Properties props = new Properties();
         props.put("mail.smtp.host", "127.0.0.1"); //Assumes you have an stmp server running locally
         props.put("mail.smtp.port", Integer.toString(25));

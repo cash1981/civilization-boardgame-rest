@@ -3,6 +3,7 @@ package no.asgari.civilization.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import no.asgari.civilization.server.SheetName;
 @Setter
 @JsonTypeName("infantry")
 @NoArgsConstructor
+@EqualsAndHashCode(exclude={"ownerId", "hidden", "used"}, callSuper = false)
 public class Infantry extends Unit {
     private int level = LEVEL_1;
     private int attack;
@@ -20,6 +22,7 @@ public class Infantry extends Unit {
     private boolean hidden;
     private boolean used;
     private boolean killed;
+    private boolean isInBattle;
 
     public Infantry(int attack, int health) {
         this.attack = attack;
@@ -72,32 +75,6 @@ public class Infantry extends Unit {
             default:
                 return "Unknown level" + attack + "." + health;
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Infantry infantry = (Infantry) o;
-
-        if (attack != infantry.attack) return false;
-        if (killed != infantry.killed) return false;
-        if (health != infantry.health) return false;
-        if (hidden != infantry.hidden) return false;
-        if (used != infantry.used) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (hidden ? 1 : 0);
-        result = 31 * result + (used ? 1 : 0);
-        result = 31 * result + (killed ? 1 : 0);
-        result = 31 * result + attack;
-        result = 31 * result + health;
-        return result;
     }
 
     @Override

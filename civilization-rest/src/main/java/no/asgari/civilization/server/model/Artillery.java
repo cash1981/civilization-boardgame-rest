@@ -22,6 +22,7 @@ public class Artillery extends Unit {
     private boolean killed;
     private int attack;
     private int health;
+    private boolean isInBattle;
 
     public Artillery(int attack, int health) {
         this.attack = attack;

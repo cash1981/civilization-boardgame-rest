@@ -1,5 +1,19 @@
 package no.asgari.civilization.server.resource;
 
+import static junit.framework.TestCase.assertNotNull;
+import static org.fest.assertions.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.net.URI;
+import java.util.List;
+import java.util.Optional;
+
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriBuilder;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.testing.junit.DropwizardAppRule;
@@ -7,6 +21,7 @@ import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.application.CivilizationApplication;
 import no.asgari.civilization.server.application.CivilizationConfiguration;
 import no.asgari.civilization.server.dto.ItemDTO;
+import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
@@ -15,19 +30,8 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
-
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
-import java.net.URI;
-import java.util.List;
-import java.util.Optional;
-
-import static junit.framework.TestCase.assertNotNull;
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.mongojack.DBCursor;
+import org.mongojack.DBQuery;
 
 public class PlayerResourceTest extends AbstractMongoDBTest {
 
@@ -261,12 +265,15 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
     }
 
     @Test
-    public void drawUnits() throws Exception {
+    public void drawUnitsForBattle() throws Exception {
         testDrawArtilleryCard();
         testDrawInfantryCard();
         testDrawArtilleryCard();
 
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/draw/units", RULE.getLocalPort(), pbfId)).build();
+        DBCursor<GameLog> gameLogs = gameLogCollection.find(DBQuery.is("pbfId", pbfId));
+        int count = gameLogs.count();
+
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/battle/draw", RULE.getLocalPort(), pbfId)).build();
         ClientResponse response = client()
                 .resource(uri)
                 .queryParam("numOfUnits", "3")
@@ -276,6 +283,22 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         assertEquals(response.getStatus(), HttpStatus.OK_200);
         List list = response.getEntity(List.class);
         assertThat(list).hasSize(3);
+
+        gameLogs = gameLogCollection.find(DBQuery.is("pbfId", pbfId));
+        assertThat(gameLogs.count()).isEqualTo(count+3);
+
+        //finally end battle
+        endBattle();
+    }
+
+    private void endBattle() throws Exception {
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/battle/end", RULE.getLocalPort(), pbfId)).build();
+        ClientResponse response = client()
+                .resource(uri)
+                .type(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .put(ClientResponse.class);
+        assertEquals(response.getStatus(), HttpStatus.OK_200);
     }
 
     @Test
@@ -284,7 +307,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         testDrawInfantryCard();
         testDrawArtilleryCard();
 
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/draw/units", RULE.getLocalPort(), pbfId)).build();
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/battle/draw", RULE.getLocalPort(), pbfId)).build();
         ClientResponse response = client()
                 .resource(uri)
                 .type(MediaType.APPLICATION_JSON)
@@ -301,7 +324,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         testDrawInfantryCard();
         testDrawArtilleryCard();
 
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/draw/units", RULE.getLocalPort(), pbfId)).build();
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/battle/draw", RULE.getLocalPort(), pbfId)).build();
         ClientResponse response = client()
                 .resource(uri)
                 .queryParam("numOfUnits", "foobar")
