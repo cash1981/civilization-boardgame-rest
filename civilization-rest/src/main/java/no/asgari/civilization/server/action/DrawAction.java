@@ -84,7 +84,7 @@ public class DrawAction extends BaseAction {
         try {
             ItemReader itemReader = CivSingleton.instance().itemsCache().get(gameType);
 
-            List<Item> itemsFromExcel = itemReader.redrawableItems.stream()
+            List<Item> itemsFromExcel = itemReader.redrawableItems.parallelStream()
                     .filter(s -> s.getSheetName() == sheetName)
                     .collect(Collectors.toList());
 

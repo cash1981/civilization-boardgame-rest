@@ -1,4 +1,4 @@
-package no.asgari.civilization.server.eventbus;
+package no.asgari.civilization.server.action;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
