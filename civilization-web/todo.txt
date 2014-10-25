@@ -7,6 +7,8 @@ Front page
         -- join button (if logged in && isnt started yet)
 
 Inside a game
+	-- Display public log
+		https://docs.angularjs.org/guide/services <-- Something like this 'batchLog'?
 
 Footer on all pages
     - Copyright
