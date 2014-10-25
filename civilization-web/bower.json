@@ -1,15 +1,21 @@
 {
-  "name": "angular-seed",
-  "description": "A starter project for AngularJS",
+  "name": "civilization-web",
   "version": "0.0.0",
-  "homepage": "https://github.com/angular/angular-seed",
-  "license": "MIT",
-  "private": true,
   "dependencies": {
-    "angular": "1.2.x",
-    "angular-route": "1.2.x",
-    "angular-loader": "1.2.x",
-    "angular-mocks": "~1.2.x",
-    "html5-boilerplate": "~4.3.0"
-  }
+    "angular": "~1.2.0",
+    "json3": "~3.3.1",
+    "es5-shim": "~3.1.0",
+    "bootstrap": "~3.2.0",
+    "angular-resource": "~1.2.0",
+    "angular-cookies": "~1.2.0",
+    "angular-sanitize": "~1.2.0",
+    "angular-animate": "~1.2.0",
+    "angular-touch": "~1.2.0",
+    "angular-route": "~1.2.0"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.2.0",
+    "angular-scenario": "~1.2.0"
+  },
+  "appPath": "app"
 }

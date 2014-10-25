@@ -1,8 +1,5 @@
-logs/*
-!.gitkeep
-node_modules/
-bower_components/
-tmp
-.DS_Store
-.idea
-npm-debug.log
+node_modules
+dist
+.tmp
+.sass-cache
+bower_components
