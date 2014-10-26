@@ -2,14 +2,14 @@
 
 /**
  * @ngdoc overview
- * @name civilizationWebApp
+ * @name civApp
  * @description
- * # civilizationWebApp
+ * # civApp
  *
  * Main module of the application.
  */
 angular
-  .module('civilizationWebApp', [
+  .module('civApp', [
     'ngAnimate',
     'ngCookies',
     'ngResource',

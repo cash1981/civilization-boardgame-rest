@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name civilizationWebApp.controller:MainCtrl
+ * @name civApp.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of the civilizationWebApp
+ * Controller of the civApp
  */
-angular.module('civilizationWebApp')
+angular.module('civApp')
   .controller('MainCtrl', function ($scope) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',
