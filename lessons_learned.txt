@@ -1,0 +1,7 @@
+I had lots of problems with nodejs and bower to correctly work in Ubuntu. This resultet in not getting yeoman or cleverstack to work.
+Cleverstack looked pretty promising.
+
+I tried installing nodejs from apt-get, and updating to the latest nodejs and bower versions, but still I got some issues.
+Finally I installed nodejs from source and used $HOME/local for all the global files to avoid permission issues.
+
+Now I could finally get yeoman to generate a angular app for me. However cleverstack still complained.
