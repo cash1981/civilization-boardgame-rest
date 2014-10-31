@@ -1,0 +1,27 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'start' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.32
+4 verbose run-script [ 'prestart', 'start', 'poststart' ]
+5 info prestart angular-seed@0.0.0
+6 verbose unsafe-perm in lifecycle true
+7 info angular-seed@0.0.0 Failed to exec prestart script
+8 error angular-seed@0.0.0 prestart: `npm install`
+8 error Exit status 1
+9 error Failed at the angular-seed@0.0.0 prestart script.
+9 error This is most likely a problem with the angular-seed package,
+9 error not with npm itself.
+9 error Tell the author that this fails on your system:
+9 error     npm install
+9 error You can get their info via:
+9 error     npm owner ls angular-seed
+9 error There is likely additional logging output above.
+10 error System Windows_NT 6.1.7601
+11 error command "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "start"
+12 error cwd C:\wses\civilization-boardgame-randomizer\civilization-web
+13 error node -v v0.10.32
+14 error npm -v 1.4.28
+15 error code ELIFECYCLE
+16 verbose exit [ 1, true ]
