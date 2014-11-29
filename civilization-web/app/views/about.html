@@ -1,1 +1,11 @@
-<p>This is the about view.</p>
+<div ng-controller="GameController">
+
+    <ul ng-repeat="game in games">
+        <li>{{game.name}}</li>
+
+    </ul>
+
+    <p>Spillets navn {{games}}!</p>
+
+
+</div>
