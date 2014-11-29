@@ -1,11 +1,28 @@
-<div ng-controller="GameController">
+<div class="table-responsive" ng-controller="GameController as gameCtrl">
+    <table class="table table-striped">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Number of players</th>
+        <th>Players</th>
+        <th>Active</th>
+    </tr>
+    </thead>
 
-    <ul ng-repeat="game in games">
-        <li>{{game.name}}</li>
+    <tbody><tr ng-repeat="game in games">
+        <td></td>
+        <td>{{game.name}}</td>
+        <td>{{ game.type }}</td>
+        <td>{{ game.numOfPlayers}}</td>
+        <td ng-repeat="player in game.players">
+            {{ player.username<td>
+        <td>{{game.active ? 'Active' : 'Finished'}}</td>
+    </tr></tbody>
 
-    </ul>
-
-    <p>Spillets navn {{games}}!</p>
+    <p>json {{games}}!</p>
+    </table>
 
 
 </div>
