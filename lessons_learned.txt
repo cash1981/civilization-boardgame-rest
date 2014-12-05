@@ -1,7 +1,13 @@
+I wanted a clean setup to work with. I found three promising options. The angular seed project which is located on the angularjs site. Cleverstack and Yeoman.
+
+The reason I didn't continue with the seed project is that I couldn't get bower and nodejs to correctly work.
+
 I had lots of problems with nodejs and bower to correctly work in Ubuntu. This resultet in not getting yeoman or cleverstack to work.
 Cleverstack looked pretty promising.
 
 I tried installing nodejs from apt-get, and updating to the latest nodejs and bower versions, but still I got some issues.
 Finally I installed nodejs from source and used $HOME/local for all the global files to avoid permission issues.
 
-Now I could finally get yeoman to generate a angular app for me. However cleverstack still complained.
+Now I could finally get yeoman to generate a angular app for me. However cleverstack still complained about some issues.
+
+

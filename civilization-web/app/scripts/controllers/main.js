@@ -11,9 +11,9 @@ angular.module('civApp')
         .controller('GameController', function($scope, $log, $http) {
             $http.get('http://localhost:8080/civilization/game')
                 .success(function (result) {
-                $log.info("Henter ut spill");
-                $scope.games = result;
-            });
+                    $log.info("Henter ut spill");
+                    $scope.games = result;
+                });
 
 //            $http({
 //                method: 'GET',
