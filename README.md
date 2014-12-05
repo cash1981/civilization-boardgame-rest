@@ -14,10 +14,17 @@ The first version will be pretty basic, where you can only draw items.
 Future version will be a fully playable web client with drag and drop play
 
 ##Requires
+
+###civilizaton-rest	
 * Maven
 * Java 8
 * MongoDB
 * Lombok (www.projectlombok.org)
 
+###civilization-web
+* NodeJS (https://www.npmjs.org/)
+* bower (http://bower.io/
+* Grunt (http://gruntjs.com/)
+
 ##Installation
-Install what is required, and then run mvn clean install
+Install what is required, and then run mvn clean install or mvn exec:java on civilization-rest and grunt serve on civilization-web
