@@ -21,6 +21,8 @@ Navbar on all pages
            --- Register
             -- Link to the register page
 
+Proper login/authentication, restrict pages
+
 
 Nice to have:
 - Implement email verification on register?
