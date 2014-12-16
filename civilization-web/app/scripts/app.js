@@ -8,8 +8,7 @@
  *
  * Main module of the application.
  */
-angular
-  .module('civApp', [
+angular.module('civApp', [
     'ngAnimate',
     'ngCookies',
     'ngResource',
@@ -20,12 +19,10 @@ angular
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
+        templateUrl: 'views/main.html'
       })
-      .when('/about', {
-        templateUrl: 'views/about.html',
-        controller: 'GameController'
+      .when('/game/:id', {
+        templateUrl: 'views/main.html'
       })
       .otherwise({
         redirectTo: '/'

@@ -1,9 +1,16 @@
-civApp.controller('GameController', function($scope, $log) {
-    $http({
-        method: 'GET',
-        url: 'http://localhost:8080/civilization/game'
-    }).success(function (result) {
-        $log.info("Henter ut spill");
-        $scope.games = result;
-    });
-});
+//"use strict";
+(function (module) {
+  var GameListController = function ($log, $routeParams, GameService) {
+    var model = this;
+
+    GameService.getGameById($routeParams.id)
+      .then(function(game) {
+        model.game = game;
+      });
+
+  };
+
+  module.controller("GameListController",
+    ["$log", "$routeParams", "GameService", GameListController]);
+
+}(angular.module("civApp")));

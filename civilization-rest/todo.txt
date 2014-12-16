@@ -49,8 +49,6 @@
 	#DONE -- When deleting it should log it.
 	#DONE -- Consider putting items back in the deck, although this is already taken care of by reshuffling when draw is made
 
-- Refactor list of PBF, to only include data which is safe, and not the entire pbf collection which contains every data from the db
-
 Nice to have
 - Chat with scrolling capabilites.
 	-- Websocket?
