@@ -39,7 +39,7 @@
     };
 
     var getGameById = function(id) {
-      return $http.get("http://localhost:8080/civilization/game/" + id);
+      return $http.get("http://localhost:8080/civilization/game/" + id)
         .then(function(response) {
           $log.info("Getting all games");
           return response.data;
