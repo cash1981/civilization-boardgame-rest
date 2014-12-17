@@ -22,7 +22,7 @@ angular.module('civApp', [
         templateUrl: 'views/main.html'
       })
       .when('/game/:id', {
-        templateUrl: 'views/main.html'
+        templateUrl: 'views/game.html'
       })
       .otherwise({
         redirectTo: '/'

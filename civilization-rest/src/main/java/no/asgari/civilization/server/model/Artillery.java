@@ -61,9 +61,9 @@ public class Artillery extends Unit {
             case LEVEL_3:
                 return "Catapult " + (attack + LEVEL_2) + "." + (health + LEVEL_2);
             case LEVEL_4:
-                return "Mobile Artillery" + (attack + LEVEL_3) + "." + (health + LEVEL_3);
+                return "Mobile Artillery " + (attack + LEVEL_3) + "." + (health + LEVEL_3);
             default:
-                return "Unknown level" + attack + "." + health;
+                return "Artillery unknown level " + attack + "." + health;
         }
     }
 

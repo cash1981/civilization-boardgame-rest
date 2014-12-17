@@ -1,6 +1,7 @@
 package no.asgari.civilization.server.action;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.mongodb.BasicDBObject;
@@ -8,14 +9,9 @@ import com.mongodb.DB;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.application.CivSingleton;
-import no.asgari.civilization.server.dto.CreateNewGameDTO;
-import no.asgari.civilization.server.dto.PbfDTO;
-import no.asgari.civilization.server.dto.PlayerDTO;
+import no.asgari.civilization.server.dto.*;
 import no.asgari.civilization.server.excel.ItemReader;
-import no.asgari.civilization.server.model.GameType;
-import no.asgari.civilization.server.model.PBF;
-import no.asgari.civilization.server.model.Player;
-import no.asgari.civilization.server.model.Playerhand;
+import no.asgari.civilization.server.model.*;
 import no.asgari.civilization.server.util.Java8Util;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
@@ -25,8 +21,10 @@ import org.mongojack.WriteResult;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
@@ -34,11 +32,13 @@ import java.util.stream.Collectors;
 public class GameAction extends BaseAction {
     private final JacksonDBCollection<PBF, String> pbfCollection;
     private final JacksonDBCollection<Player, String> playerCollection;
+    private final GameLogAction gameLogAction;
 
     public GameAction(DB db) {
         super(db);
         this.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
         this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
+        this.gameLogAction = new GameLogAction(db);
     }
 
     public String createNewGame(CreateNewGameDTO dto, String playerId) {
@@ -119,7 +119,8 @@ public class GameAction extends BaseAction {
         dto.setId(pbf.getId());
         dto.setName(pbf.getName());
         dto.setActive(pbf.isActive());
-        dto.setCreated(pbf.getCreated());
+        long created = pbf.getCreated().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        dto.setCreated(created);
         dto.setNumOfPlayers(pbf.getNumOfPlayers());
         dto.setPlayers(pbf.getPlayers().stream()
                 .map(p -> createPlayerDTO(p, pbf.getId()))
@@ -205,6 +206,44 @@ public class GameAction extends BaseAction {
     private Playerhand getRandomPlayer(List<Playerhand> players) {
         Collections.shuffle(players);
         return players.get(0);
+    }
+
+    //TODO test it
+    public GameDTO getGame(PBF pbf, Player player) {
+        //Set common stuff
+        GameDTO dto = new GameDTO();
+        long created = pbf.getCreated().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        dto.setCreated(created);
+        dto.setId(pbf.getId());
+        dto.setType(pbf.getType());
+        dto.setName(pbf.getName());
+
+        //Set logs
+        List<GameLog> allPublicLogs = gameLogAction.getAllPublicLogs(pbf.getId());
+        List<GameLogDTO> publicGamelogDTOs = allPublicLogs.stream()
+                .map(log -> new GameLogDTO(log.getId(), log.getPublicLog()))
+                .collect(Collectors.toList());
+        dto.setPublicLogs(publicGamelogDTOs);
+
+        //Set private player info if correct player is loggedIn.
+        if(player != null && Strings.isNullOrEmpty(player.getUsername()) && Strings.isNullOrEmpty(player.getId())) {
+            //Get all the private player stuff
+            Optional<Playerhand> playerhand = pbf.getPlayers()
+                    .stream()
+                    .filter(p -> p.getPlayerId().equals(player.getId()))
+                    .findFirst();
+
+            if(playerhand.isPresent()) {
+                List<GameLog> allPrivateLogs = gameLogAction.getAllPrivateLogs(pbf.getId(), playerhand.get().getUsername());
+                List<GameLogDTO> privateGamelogDTOs = allPrivateLogs.stream()
+                        .map(log -> new GameLogDTO(log.getId(), log.getPublicLog()))
+                        .collect(Collectors.toList());
+
+                dto.setPlayer(playerhand.get());
+                dto.setPrivateLogs(privateGamelogDTOs);
+            }
+        }
+        return dto;
     }
 
 }

@@ -25,9 +25,7 @@ public class PbfDTO {
     private String name;
     private GameType type;
 
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime created = LocalDateTime.now();
+    private long created = System.currentTimeMillis();
 
     private int numOfPlayers;
     private boolean active = true;

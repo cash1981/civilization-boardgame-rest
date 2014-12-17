@@ -15,6 +15,7 @@ import org.mongojack.ObjectId;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * This class will be used to store all the actions performed in the game.
@@ -38,6 +39,7 @@ import java.time.LocalDateTime;
 @Data
 public class GameLog {
     public static final String COL_NAME = "gamelog";
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     public enum LogType {
         TRADE, BATTLE, ITEM, TECH, SHUFFLE, DISCARD;
@@ -71,7 +73,7 @@ public class GameLog {
     public void createAndSetLog(LogType logType) {
         final String DELIM = " - ";
         StringBuilder sb = new StringBuilder();
-        sb.append(created + DELIM).append(username + DELIM);
+        sb.append(formatter.format(created) + DELIM).append(username + DELIM);
         switch (logType) {
             case ITEM:
                 privateLog = sb.toString() + "drew " + DELIM + draw.getItem().revealAll();

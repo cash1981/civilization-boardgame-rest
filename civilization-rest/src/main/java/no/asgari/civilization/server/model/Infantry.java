@@ -71,9 +71,9 @@ public class Infantry extends Unit {
             case LEVEL_3:
                 return "Riflemen " + (attack + LEVEL_2) + "." + (health + LEVEL_2);
             case LEVEL_4:
-                return "Modern Infantry" + (attack + LEVEL_3) + "." + (health + LEVEL_3);
+                return "Modern Infantry " + (attack + LEVEL_3) + "." + (health + LEVEL_3);
             default:
-                return "Unknown level" + attack + "." + health;
+                return "Infantry Unknown level " + attack + "." + health;
         }
     }
 

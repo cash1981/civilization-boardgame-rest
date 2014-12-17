@@ -7,6 +7,7 @@ import io.dropwizard.testing.junit.DropwizardAppRule;
 import no.asgari.civilization.server.application.CivilizationConfiguration;
 import no.asgari.civilization.server.application.CivilizationApplication;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
+import no.asgari.civilization.server.dto.GameDTO;
 import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
 import no.asgari.civilization.server.model.GameType;
@@ -147,6 +148,20 @@ public class GameResourceTest extends MongoDBBaseTest {
         assertTrue(cash1981.isPresent());
         assertThat(cash1981.get().getTechsChosen()).isNotEmpty();
         assertThat(cash1981.get().getTechsChosen().iterator().next().getName()).isEqualTo("Agriculture");
+    }
+
+    @Test
+    public void getGameAsPublicUser() throws Exception {
+        PBF pbf = pbfCollection.findOne();
+
+        ClientResponse response = client().resource(
+                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s", RULE.getLocalPort(), pbf.getId()))
+                        .build())
+                .type(MediaType.APPLICATION_JSON)
+                .get(ClientResponse.class);
+
+        GameDTO game = response.getEntity(GameDTO.class);
+        assertThat(game).isNotNull();
     }
 
 }

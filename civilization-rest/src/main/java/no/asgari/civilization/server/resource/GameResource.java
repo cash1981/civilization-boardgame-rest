@@ -2,6 +2,7 @@ package no.asgari.civilization.server.resource;
 
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 import com.mongodb.DB;
 import io.dropwizard.auth.Auth;
 import lombok.extern.log4j.Log4j;
@@ -9,23 +10,15 @@ import no.asgari.civilization.server.action.GameAction;
 import no.asgari.civilization.server.action.GameLogAction;
 import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.action.UndoAction;
-import no.asgari.civilization.server.dto.CreateNewGameDTO;
-import no.asgari.civilization.server.dto.GameLogDTO;
-import no.asgari.civilization.server.dto.PbfDTO;
-import no.asgari.civilization.server.dto.PlayerDTO;
+import no.asgari.civilization.server.dto.*;
 import no.asgari.civilization.server.model.GameLog;
+import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Tech;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -63,6 +56,29 @@ public class GameResource {
 
         return Response.ok()
                 .entity(games)
+                .build();
+    }
+
+    /**
+     * Returns a specific game
+     *
+     * @return
+     */
+    @Path("/{gameId}")
+    @GET
+    @Timed
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getGame(@Auth(required = false) Player player, @PathParam("gameId") String pbfId) {
+        if (Strings.isNullOrEmpty(pbfId)) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("GameId is missing").build();
+        }
+        GameAction gameAction = new GameAction(db);
+        PBF pbf = gameAction.findPBFById(pbfId);
+        GameDTO gameDTO = gameAction.getGame(pbf, player);
+
+        return Response.ok()
+                .entity(gameDTO)
                 .build();
     }
 
@@ -126,7 +142,8 @@ public class GameResource {
 
     /**
      * Gets all the available techs. Will remove the techs that player already have chosen
-     * @param pbfId - The PBF
+     *
+     * @param pbfId  - The PBF
      * @param player - The Authenticated player
      * @return - Response ok with a list of techs
      */
@@ -145,9 +162,9 @@ public class GameResource {
         GameLogAction gameLogAction = new GameLogAction(db);
         List<GameLog> allPublicLogs = gameLogAction.getAllPublicLogs(pbfId);
         List<GameLogDTO> gameLogDTOs = new ArrayList<>();
-        if(!allPublicLogs.isEmpty()) {
+        if (!allPublicLogs.isEmpty()) {
             gameLogDTOs = allPublicLogs.stream()
-                    .map(gl -> createDTO(gl.getId(), gl.getPublicLog()))
+                    .map(gl -> new GameLogDTO(gl.getId(), gl.getPublicLog()))
                     .collect(Collectors.toList());
         }
         return gameLogDTOs;
@@ -161,9 +178,9 @@ public class GameResource {
 
         List<GameLog> allPrivateLogs = gameLogAction.getAllPrivateLogs(pbfId, player.getUsername());
         List<GameLogDTO> gameLogDTOs = new ArrayList<>();
-        if(!allPrivateLogs.isEmpty()) {
+        if (!allPrivateLogs.isEmpty()) {
             gameLogDTOs = allPrivateLogs.stream()
-                    .map(gl -> createDTO(gl.getId(), gl.getPublicLog()))
+                    .map(gl -> new GameLogDTO(gl.getId(), gl.getPublicLog()))
                     .collect(Collectors.toList());
         }
         return gameLogDTOs;
@@ -171,6 +188,7 @@ public class GameResource {
 
     /**
      * Returns a list of all undoes that are currently initiated and still not finished
+     *
      * @param pbfId
      * @return
      */
@@ -185,6 +203,7 @@ public class GameResource {
 
     /**
      * Returns a list of all undoes that are finished voted
+     *
      * @param pbfId
      * @return
      */
@@ -195,13 +214,6 @@ public class GameResource {
         UndoAction undoAction = new UndoAction(db);
         List<GameLog> gamelogs = undoAction.getAllFinishedUndos(pbfId);
         return Response.ok().entity(gamelogs).build();
-    }
-
-    private static GameLogDTO createDTO(String id, String log) {
-        GameLogDTO dto = new GameLogDTO();
-        dto.setId(id);
-        dto.setLog(log);
-        return dto;
     }
 
 }

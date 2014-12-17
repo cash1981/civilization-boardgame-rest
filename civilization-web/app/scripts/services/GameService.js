@@ -1,3 +1,4 @@
+'use strict';
 (function(module) {
 
   var GameService = function($http, $log) {
@@ -48,7 +49,7 @@
     return {
       getAllGames: getAllGames,
       getGameById: getGameById
-    }
+    };
   };
 
   module.factory("GameService", ["$http", "$log", GameService]);

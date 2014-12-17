@@ -1,7 +1,13 @@
-<div ng-controller="GameController as gameCtrl">
+<div class="container-fluid">
+  <div ng-controller="GameController as gameCtrl">
 
-<h3>{{gameCtrl.game.name}}</h3>
+    <h3>{{gameCtrl.game.name}}</h3>
 
+    <div>{{gameCtrl.game.type}}</div>
+    <div>{{gameCtrl.game.created | date:'dd-MM-yyyy'}}</div>
 
+    <div>json '{{gameCtrl.game | json}}'</div>
+
+  </div>
 
 </div>

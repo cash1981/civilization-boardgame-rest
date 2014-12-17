@@ -71,9 +71,9 @@ public class Mounted extends Unit {
             case LEVEL_3:
                 return "Cavalry " + (attack + LEVEL_2) + "." + (health + LEVEL_2);
             case LEVEL_4:
-                return "Tank" + (attack + LEVEL_3) + "." + (health + LEVEL_3);
+                return "Tank " + (attack + LEVEL_3) + "." + (health + LEVEL_3);
             default:
-                return "Unknown level" + attack + "." + health;
+                return "Mounted unknown level " + attack + "." + health;
         }
     }
 

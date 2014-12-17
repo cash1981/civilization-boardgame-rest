@@ -60,7 +60,7 @@ public class Aircraft extends Unit {
 
     @Override
     public String toString() {
-        return getType() + attack + "." + health;
+        return getType() + " " + attack + "." + health;
     }
 
     @Override

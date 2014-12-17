@@ -53,7 +53,7 @@ public abstract class BaseAction {
         logAction.save(log);
     }
 
-    protected PBF findPBFById(String pbfId) {
+    public PBF findPBFById(String pbfId) {
         try {
             return pbfCollection.findOneById(pbfId);
         } catch(Exception ex) {
