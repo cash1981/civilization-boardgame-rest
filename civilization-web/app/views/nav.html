@@ -1,0 +1,39 @@
+﻿<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#/">Civilization Play By Forum</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="#/">Foobar</a></li>
+            <li><a href="#/">Foobar</a></li>
+            <li><a href="#/">Foobar</a></li>
+            <li class="dropdown">
+              <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Action <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Create new game</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Separated link</a></li>
+              </ul>
+            </li>
+        </ul>
+        <div ng-controller="LoginController as login">
+            <div ng-show="login.user.loggedIn" class="navbar-text navbar-right">
+                Hello {{ login.user.username }}!
+                <button class="btn btn-default btn-sm" ng-click="login.signOut()">Sign Out</button>
+            </div>
+            <form ng-if="!login.user.loggedIn" name="loginForm" class="navbar-form navbar-right"
+                  ng-submit="login.login(loginForm)" novalidate>
+                <div class="form-group">
+                    <input name="username" type="text" placeholder="Username" ng-model="login.username" required />
+                </div>
+                <div class="form-group">
+                    <input name="password" type="password" placeholder="Password" ng-model="login.password" required />
+                </div>
+                <input class="btn btn-default btn-sm" type="submit" value="Login" />
+            </form>
+        </div>
+      <!-- TODO implement register -->
+    </div>
+</nav>

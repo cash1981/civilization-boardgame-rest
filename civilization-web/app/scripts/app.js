@@ -14,6 +14,7 @@ angular.module('civApp', [
     'ngResource',
     'ngRoute',
     'ngSanitize',
+    'ngMessages',
     'ngTouch'
   ])
   .config(function ($routeProvider) {

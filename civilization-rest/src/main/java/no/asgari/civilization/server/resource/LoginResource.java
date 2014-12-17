@@ -4,14 +4,7 @@ import java.net.URI;
 import java.util.Optional;
 
 import javax.validation.Valid;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -47,9 +40,9 @@ public class LoginResource {
     }
 
     @POST
-    @Consumes(value = MediaType.TEXT_PLAIN)
+    @Consumes(value = MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(value = MediaType.TEXT_PLAIN)
-    public Response login(@QueryParam("username") @NotEmpty String username, @QueryParam("password") @NotEmpty String password) {
+    public Response login(@FormParam("username") @NotEmpty String username, @FormParam("password") @NotEmpty String password) {
         Preconditions.checkNotNull(username);
         Preconditions.checkNotNull(password);
 

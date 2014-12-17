@@ -8,10 +8,11 @@ import lombok.Data;
 public class GameLogDTO {
     private String id;
     private String log;
+    private long created;
 
-    public GameLogDTO(String id, String log) {
+    public GameLogDTO(String id, String log, long created) {
         this.id = id;
         this.log = log;
-
+        this.created = created;
     }
 }

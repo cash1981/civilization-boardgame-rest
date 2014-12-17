@@ -221,7 +221,7 @@ public class GameAction extends BaseAction {
         //Set logs
         List<GameLog> allPublicLogs = gameLogAction.getAllPublicLogs(pbf.getId());
         List<GameLogDTO> publicGamelogDTOs = allPublicLogs.stream()
-                .map(log -> new GameLogDTO(log.getId(), log.getPublicLog()))
+                .map(log -> new GameLogDTO(log.getId(), log.getPublicLog(), log.getCreatedInMillis()))
                 .collect(Collectors.toList());
         dto.setPublicLogs(publicGamelogDTOs);
 
@@ -236,7 +236,7 @@ public class GameAction extends BaseAction {
             if(playerhand.isPresent()) {
                 List<GameLog> allPrivateLogs = gameLogAction.getAllPrivateLogs(pbf.getId(), playerhand.get().getUsername());
                 List<GameLogDTO> privateGamelogDTOs = allPrivateLogs.stream()
-                        .map(log -> new GameLogDTO(log.getId(), log.getPublicLog()))
+                        .map(log -> new GameLogDTO(log.getId(), log.getPublicLog(),log.getCreatedInMillis() ))
                         .collect(Collectors.toList());
 
                 dto.setPlayer(playerhand.get());

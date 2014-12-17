@@ -164,7 +164,7 @@ public class GameResource {
         List<GameLogDTO> gameLogDTOs = new ArrayList<>();
         if (!allPublicLogs.isEmpty()) {
             gameLogDTOs = allPublicLogs.stream()
-                    .map(gl -> new GameLogDTO(gl.getId(), gl.getPublicLog()))
+                    .map(gl -> new GameLogDTO(gl.getId(), gl.getPublicLog(), gl.getCreatedInMillis()))
                     .collect(Collectors.toList());
         }
         return gameLogDTOs;
@@ -180,7 +180,7 @@ public class GameResource {
         List<GameLogDTO> gameLogDTOs = new ArrayList<>();
         if (!allPrivateLogs.isEmpty()) {
             gameLogDTOs = allPrivateLogs.stream()
-                    .map(gl -> new GameLogDTO(gl.getId(), gl.getPublicLog()))
+                    .map(gl -> new GameLogDTO(gl.getId(), gl.getPrivateLog(), gl.getCreatedInMillis() ))
                     .collect(Collectors.toList());
         }
         return gameLogDTOs;

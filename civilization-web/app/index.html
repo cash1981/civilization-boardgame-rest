@@ -16,15 +16,21 @@
   your browser</a> to improve your experience.</p>
 <![endif]-->
 
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">Home</a>
+<nav ng-include="'views/nav.html'"></nav>
+
+<div class="container-fluid">
+  <div class="work-spinner ">
+    <img src="images/ajax-loader.gif" class="center-block"/>
+  </div>
+  <div class="row">
+    <div class="col-md-8">
+      <div ng-view></div>
+    </div>
+    <div class="col-md-4">
+      <alerts></alerts>
     </div>
   </div>
-</nav>
-
-<div ng-view></div>
+</div>
 
 <footer class="footer">
   Copyright &copy; 2014 by Shervin Asgari. All rights reserved
@@ -61,10 +67,7 @@
 <script src="bower_components/es5-shim/es5-shim.js"></script>
 <script src="bower_components/json3/lib/json3.js"></script>
 <![endif]-->
-<!-- endbuild -->
 
-<!-- build:js(.) scripts/vendor.js -->
-<!-- bower:js -->
 <script src="bower_components/jquery/dist/jquery.js"></script>
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
@@ -74,14 +77,25 @@
 <script src="bower_components/angular-animate/angular-animate.js"></script>
 <script src="bower_components/angular-touch/angular-touch.js"></script>
 <script src="bower_components/angular-route/angular-route.js"></script>
-<!-- endbower -->
-<!-- endbuild -->
+<script src="bower_components/angular-messages/angular-messages.js"></script>
 
-<!-- build:js({.tmp,app}) scripts/scripts.js -->
+
 <script src="scripts/app.js"></script>
 <script src="scripts/controllers/GameListController.js"></script>
 <script src="scripts/controllers/GameController.js"></script>
+<script src="scripts/controllers/LoginController.js"></script>
 <script src="scripts/services/GameService.js"></script>
-<!-- endbuild -->
+<script src="scripts/services/requestCounter.js"></script>
+<script src="scripts/services/localStorage.js"></script>
+<script src="scripts/services/loginRedirect.js"></script>
+<script src="scripts/services/alerting.js"></script>
+<script src="scripts/services/addToken.js"></script>
+<script src="scripts/services/currentUser.js"></script>
+<script src="scripts/services/formEncode.js"></script>
+
+<script src="scripts/services/oauth.js"></script>
+<script src="scripts/directives/alerts.js"></script>
+<script src="scripts/directives/workSpinner.js"></script>
+
 </body>
 </html>

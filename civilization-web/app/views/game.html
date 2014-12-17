@@ -1,13 +1,31 @@
-<div class="container-fluid">
-  <div ng-controller="GameController as gameCtrl">
+<div class="container-fluid" ng-controller="GameController as gameCtrl">
 
-    <h3>{{gameCtrl.game.name}}</h3>
-
-    <div>{{gameCtrl.game.type}}</div>
-    <div>{{gameCtrl.game.created | date:'dd-MM-yyyy'}}</div>
-
-    <div>json '{{gameCtrl.game | json}}'</div>
-
+  <div class="jumbotron">
+    <h1>{{gameCtrl.game.name}}</h1>
+    <p class="lead">{{gameCtrl.game.type}}</p>
+    <p class="lead">Created: {{gameCtrl.game.created | date:'dd-MM-yyyy'}}</p>
   </div>
+
+  <div class="table-responsive">
+    <caption>Gamelog</caption>
+    <table class="table table-bordered table-hover table-condensed text-center">
+      <thead>
+      <tr>
+        <th>Date</th>
+        <th>Log</th>
+      </tr>
+      </thead>
+
+      <tbody>
+        <tr ng-repeat="log in gameCtrl.game.publicLogs" class="active">
+          <td>{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+          <td>{{log.log}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div>json '{{gameCtrl.game | json}}'</div>
+
 
 </div>

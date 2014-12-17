@@ -49,6 +49,8 @@
 	#DONE -- When deleting it should log it.
 	#DONE -- Consider putting items back in the deck, although this is already taken care of by reshuffling when draw is made
 
+- Change basic authentication to OAUTH
+
 Nice to have
 - Chat with scrolling capabilites.
 	-- Websocket?
@@ -65,7 +67,6 @@ Nice to have
 - Instead of Basic authentication, it would be nice to support OAUTH
 - Would be nice to get eventbus for private and public logging so that their will be loose coupling
 - For now sending public items (resources) doesnt need sending in the system, but for fully playable version we need support for it
-- Change basic authentication to OAUTH
 - Support for more game types
 	-- Change all sheetnames in parameters to combination of GameType and Sheetname
 
