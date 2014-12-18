@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
   <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="styles/animate.css">
+  <link rel="stylesheet" href="bower_components/ng-table/ng-table.css"/>
+
 </head>
 <body ng-app="civApp" ng-cloak>
 <!--[if lt IE 7]>
@@ -19,8 +21,8 @@
 <nav ng-include="'views/nav.html'"></nav>
 
 <div class="container-fluid">
-  <div class="work-spinner ">
-    <img src="images/ajax-loader.gif" class="center-block"/>
+  <div class="work-spinner">
+    <img src="images/ajax-loader.gif" class="center-block" />
   </div>
   <div class="row">
     <div class="col-md-8">
@@ -33,7 +35,7 @@
 </div>
 
 <footer class="footer">
-  Copyright &copy; 2014 by Shervin Asgari. All rights reserved
+  Copyright &copy; 2014-2015 by Shervin Asgari. All rights reserved
   <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" class="pull-right">
     <input type="hidden" name="cmd" value="_s-xclick">
     <input type="hidden" name="encrypted"
@@ -70,7 +72,9 @@
 
 <script src="bower_components/jquery/dist/jquery.js"></script>
 <script src="bower_components/angular/angular.js"></script>
-<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<!--<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>-->
+<script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 <script src="bower_components/angular-resource/angular-resource.js"></script>
 <script src="bower_components/angular-cookies/angular-cookies.js"></script>
 <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
@@ -78,6 +82,8 @@
 <script src="bower_components/angular-touch/angular-touch.js"></script>
 <script src="bower_components/angular-route/angular-route.js"></script>
 <script src="bower_components/angular-messages/angular-messages.js"></script>
+<script src="bower_components/ng-table/ng-table.js"></script>
+
 
 
 <script src="scripts/app.js"></script>
@@ -92,10 +98,8 @@
 <script src="scripts/services/addToken.js"></script>
 <script src="scripts/services/currentUser.js"></script>
 <script src="scripts/services/formEncode.js"></script>
-
 <script src="scripts/services/oauth.js"></script>
 <script src="scripts/directives/alerts.js"></script>
 <script src="scripts/directives/workSpinner.js"></script>
-
 </body>
 </html>

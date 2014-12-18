@@ -1,7 +1,13 @@
 'use strict';
 (function (module) {
-  var GameListController = function ($log, GameService) {
+  var GameListController = function ($log, GameService, currentUser) {
     var model = this;
+    model.user = currentUser.profile;
+
+    model.joinGame = function(game) {
+      $log.info("User wants to join game with nr " + game.id);
+      //TODO call PUT on /game/{pbfId}
+    };
 
     var loadGames = function(game) {
       model.games = game;
@@ -23,6 +29,6 @@
   };
 
   module.controller("GameListController",
-    ["$log", "GameService", GameListController]);
+    ["$log", "GameService", "currentUser", GameListController]);
 
 }(angular.module("civApp")));

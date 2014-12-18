@@ -80,28 +80,26 @@ public class GameLog {
     @JsonIgnore
     public void createAndSetLog(LogType logType) {
         final String DELIM = " - ";
-        StringBuilder sb = new StringBuilder();
-        sb.append(formatter.format(created) + DELIM).append(username + DELIM);
         switch (logType) {
             case ITEM:
-                privateLog = sb.toString() + "drew " + DELIM + draw.getItem().revealAll();
-                publicLog = sb.toString() + "drew " + DELIM + draw.getItem().revealPublic();
+                privateLog = username + "drew " + DELIM + draw.getItem().revealAll();
+                publicLog = username + "drew " + DELIM + draw.getItem().revealPublic();
                 break;
             case BATTLE:
-                privateLog = sb.toString() + "plays " + DELIM + draw.getItem().revealAll();
-                publicLog = sb.toString() + "reveals " + DELIM + draw.getItem().revealPublic();
+                privateLog = username + "plays " + DELIM + draw.getItem().revealAll();
+                publicLog = username + "reveals " + DELIM + draw.getItem().revealPublic();
                 break;
             case TRADE:
-                privateLog = sb.toString() + "has received from trade " + DELIM + draw.getItem().revealAll();
-                publicLog = sb.toString() + "has received from trade " + DELIM + draw.getItem().revealPublic();
+                privateLog = username + "has received from trade " + DELIM + draw.getItem().revealAll();
+                publicLog = username + "has received from trade " + DELIM + draw.getItem().revealPublic();
                 break;
             case TECH:
-                privateLog = sb.toString() + "has researched  " + DELIM + draw.getItem().revealAll();
-                publicLog = sb.toString() + "has researched " + DELIM + draw.getItem().revealPublic();
+                privateLog = username + "has researched  " + DELIM + draw.getItem().revealAll();
+                publicLog = username + "has researched " + DELIM + draw.getItem().revealPublic();
                 break;
             case DISCARD:
-                privateLog = sb.toString() + "has discarded  " + DELIM + draw.getItem().revealAll();
-                publicLog = sb.toString() + "has discarded " + DELIM + draw.getItem().revealPublic();
+                privateLog = username + "has discarded  " + DELIM + draw.getItem().revealAll();
+                publicLog = username + "has discarded " + DELIM + draw.getItem().revealPublic();
                 break;
         }
     }

@@ -27,7 +27,7 @@
                 user.token = localUser.token;
             }
             return user;
-        }
+        };
 
         var profile = initialize();
 

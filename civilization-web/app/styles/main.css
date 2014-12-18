@@ -71,3 +71,19 @@
     border-bottom: 0;
   }
 }
+
+/* Kan legge denne effekten på forskjellige ting ved å kombinere class */
+/* view.ng-enter f.eks */
+
+/* TODO må legge på vendor specific for alle samme (IE, mozilla, safari)
+
+.ng-enter {
+  -webkit-animation: fadeInRight 1s;
+  animation: fadeInRight 1s;
+  /*animation-delay: 0.5s;
+  -webkit-delay: 0.5s;
+
+}
+*/
+
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }

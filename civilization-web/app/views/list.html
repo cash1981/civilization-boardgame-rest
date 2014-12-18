@@ -1,6 +1,13 @@
 <div class="container-fluid">
-  <div class="table-responsive" ng-controller="GameListController as gameListCtrl">
+  <div class="jumbotron">
+    <h1>Welcome to Civilization Play By Forum Randomizer</h1>
+    <p class="lead">
+      This site is useful for Play By Forum games, where you need a moderator to play a game.
+      It cuts out the "middleman", and lets you play without the need of a moderator.
+    </p>
+  </div>
 
+  <div class="table-responsive" ng-controller="GameListController as gameListCtrl">
     <input type="text" ng-model="filterContent" alt="Filter the table" placeholder="Search games"/>
     <table class="table table-striped table-hover table-condensed text-center">
       <thead>
@@ -19,7 +26,7 @@
       <tbody>
       <!-- Games that are not active anymore should have a light grey background -->
       <tr ng-repeat="game in gameListCtrl.games | filter: filterContent" class="{{game.active ? 'active' : ''}}"
-          ng-class-even="row-even" ng-class-odd="row-odd">
+          ng-class-even="'row-even'" ng-class-odd="'row-odd'">
         <td>{{$index+1}}</td>
         <td>{{game.created | date}}</td>
         <td><a ng-href="#/game/{{game.id}}">{{game.name}}</a></td>
@@ -33,14 +40,18 @@
         <td>{{game.active ? 'Active' : 'Finished'}}</td>
         <td>
           <!-- TODO Also add the logged in check -->
-          <button id="btnJoinGame" ng-if="game.numOfPlayers < game.players.length" type="button"
-                  class="btn btn-success">
+          <button id="btnJoinGame" ng-if="(game.numOfPlayers < game.players.length) && gameListCtrl.user.loggedIn" type="button"
+                  class="btn btn-success" ng-click="gameListCtrl.joinGame(game)">
             Join
           </button>
+          <button type="button" class="btn btn-success" ng-click="gameListCtrl.joinGame(game)">Join</button>
         </td>
       </tr>
       </tbody>
     </table>
+    {{gameListCtrl.games}}
+
   </div>
+
 
 </div>

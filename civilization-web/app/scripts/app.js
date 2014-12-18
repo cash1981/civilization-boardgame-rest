@@ -15,15 +15,24 @@ angular.module('civApp', [
     'ngRoute',
     'ngSanitize',
     'ngMessages',
-    'ngTouch'
+    'ui.bootstrap',
+    'ngTouch',
+    'ngTable'
   ])
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'views/main.html'
+        templateUrl: 'views/list.html'
       })
       .when('/game/:id', {
         templateUrl: 'views/game.html'
+        //Use resolve when you want the data to appear before going to the page
+        /*
+        ,resolve: {
+             game = function(GameService) { GameService.getGame(gameId) }
+             Then put this game in the controller, but you need to define controller here also
+        }
+         */
       })
       .otherwise({
         redirectTo: '/'

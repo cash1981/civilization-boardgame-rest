@@ -8,20 +8,20 @@
 
   <div class="table-responsive">
     <caption>Gamelog</caption>
-    <table class="table table-bordered table-hover table-condensed text-center">
-      <thead>
+    <table ng-table="gameCtrl.tableParams" class="table table-bordered table-hover table-condensed text-center">
+      <!--<thead>
       <tr>
         <th>Date</th>
         <th>Log</th>
       </tr>
       </thead>
-
-      <tbody>
-        <tr ng-repeat="log in gameCtrl.game.publicLogs" class="active">
-          <td>{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
-          <td>{{log.log}}</td>
+-->
+      <!--<tbody>-->
+        <tr ng-repeat="log in $data" class="active" ng-class-even="'row-even'" ng-class-odd="'row-odd'">
+          <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+          <td data-title="'Log'" sortable="'log'">{{log.log}}</td>
         </tr>
-      </tbody>
+      <!--</tbody>-->
     </table>
   </div>
 
