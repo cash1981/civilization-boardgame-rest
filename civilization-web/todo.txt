@@ -1,27 +1,30 @@
 Front page
 
-- Title and welcome info
-- Active games
-    -- List of active games
-    -- Link goes to read only
-        -- join button (if logged in && isnt started yet)
+#DONE - Title and welcome info
+#DONE - Active games
+#DONE    -- List of active games
+#DONE    -- Link goes to read only
+#DONE        -- join button (if logged in && isnt started yet)
+
 
 Inside a game
-	-- Display public log
+#DONE	-- Display public log
 		https://docs.angularjs.org/guide/services <-- Something like this 'batchLog'?
 
 #DONE Footer on all pages
 #DONE     - Copyright
 #DONE - Donate button
 
-Navbar on all pages
-    - Login (if not logged in)
+#DONE Navbar on all pages
+#DONE    - Login (if not logged in)
         -- Opens popup with login form
            --- Save button
            --- Register
             -- Link to the register page
 
 Proper login/authentication, restrict pages
+
+- Ikke vise 
 
 - Lage en appConfig service som constant så kan jeg injecte den overalt å få tilgang til alle mine url
 f.eks appConfig.getGame = "http://localhost:8080/civilization
