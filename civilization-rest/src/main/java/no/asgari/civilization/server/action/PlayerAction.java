@@ -251,10 +251,10 @@ public class PlayerAction extends BaseAction {
             if(item.getSheetName() == itemdto.getSheetName() && item.getName().equals(itemdto.getName())) {
                 iterator.remove();
                 createLog(item, pbf.getId(), GameLog.LogType.DISCARD);
+                pbfCollection.updateById(pbf.getId(), pbf);
                 return;
             }
         }
-
         throw cannotFindItem();
     }
 }

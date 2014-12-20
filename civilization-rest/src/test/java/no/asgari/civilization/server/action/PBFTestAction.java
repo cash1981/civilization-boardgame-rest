@@ -20,10 +20,10 @@ public class PBFTestAction {
      * @return - A newly created PBF
      * @throws IOException
      */
-    public PBF createNewGame() throws IOException {
+    public PBF createNewGame(String name) throws IOException {
         PBF pbf = new PBF();
         pbf.setNumOfPlayers(4);
-        pbf.setName("First civ game");
+        pbf.setName(name);
         pbf.setType(GameType.WAW);
 
         if (CivSingleton.instance().itemsCache() == null) {

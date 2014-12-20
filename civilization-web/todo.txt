@@ -24,7 +24,11 @@ Inside a game
 
 Proper login/authentication, restrict pages
 
-- Ikke vise 
+- My Items
+    -- List of your current items
+    -- Selection with what you want to draw
+        -- confirmation
+- Option to withdraw from a game after they have joined, before it is started
 
 - Lage en appConfig service som constant så kan jeg injecte den overalt å få tilgang til alle mine url
 f.eks appConfig.getGame = "http://localhost:8080/civilization

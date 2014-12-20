@@ -50,6 +50,7 @@
 	#DONE -- Consider putting items back in the deck, although this is already taken care of by reshuffling when draw is made
 
 - Change basic authentication to OAUTH
+- Created filter/interceptor for userHasAccess
 
 Nice to have
 - Chat with scrolling capabilites.

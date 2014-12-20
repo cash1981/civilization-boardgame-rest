@@ -37,6 +37,8 @@ import org.eclipse.jetty.util.B64Code;
 import org.eclipse.jetty.util.StringUtil;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.mongojack.DBCursor;
+import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
 
@@ -48,6 +50,7 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
     protected static String pbfId;
     protected static String playerId;
     protected static String pbfId_2;
+    protected static String pbfId_3;
 
     protected static DB db;
 
@@ -72,6 +75,7 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
 
         createNewPBFGame();
         createAnotherPBF();
+        createEmptyPBF();
         playerId = playerCollection.findOne().getId();
 
         createUsernameCache(playerCollection);
@@ -112,7 +116,7 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
 
     private static void createNewPBFGame() throws IOException {
         PBFTestAction pbfTestAction = new PBFTestAction();
-        PBF pbf = pbfTestAction.createNewGame();
+        PBF pbf = pbfTestAction.createNewGame("First civ game");
         WriteResult<PBF, String> writeResult = pbfCollection.insert(pbf);
         pbfId = writeResult.getSavedId();
 
@@ -126,7 +130,7 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
 
     private static void createAnotherPBF() throws IOException {
         PBFTestAction pbfTestAction = new PBFTestAction();
-        PBF pbf = pbfTestAction.createNewGame();
+        PBF pbf = pbfTestAction.createNewGame("Second civ game");
         WriteResult<PBF, String> writeResult = pbfCollection.insert(pbf);
         pbfId_2 = writeResult.getSavedId();
 
@@ -136,6 +140,13 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         oneById.getPlayers().add(createPlayerhand(createPlayer("DaveLuca", pbfId_2)));
         oneById.getPlayers().add(createPlayerhand(createPlayer("Foobar", pbfId_2)));
         pbfCollection.updateById(pbfId_2, oneById);
+    }
+
+    private static void createEmptyPBF() throws IOException {
+        PBFTestAction pbfTestAction = new PBFTestAction();
+        PBF pbf = pbfTestAction.createNewGame("Third civ game");
+        WriteResult<PBF, String> writeResult = pbfCollection.insert(pbf);
+        pbfId_3 = writeResult.getSavedId();
     }
 
     private static Playerhand createPlayerhand(Player player) {

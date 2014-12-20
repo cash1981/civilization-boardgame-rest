@@ -164,4 +164,25 @@ public class GameResourceTest extends MongoDBBaseTest {
         assertThat(game).isNotNull();
     }
 
+    @Test
+    public void joinGameAndThenWithdraw() throws Exception {
+        ClientResponse response = client().resource(
+                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/join", RULE.getLocalPort(), pbfId_3))
+                        .build())
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .type(MediaType.APPLICATION_JSON)
+                .put(ClientResponse.class);
+
+        assertThat(response.getStatus()).isEqualTo(200);
+
+        ClientResponse secondResponse = client().resource(
+                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/withdraw", RULE.getLocalPort(), pbfId_3))
+                        .build())
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .type(MediaType.APPLICATION_JSON)
+                .put(ClientResponse.class);
+
+        assertThat(secondResponse.getStatus()).isEqualTo(200);
+    }
+
 }

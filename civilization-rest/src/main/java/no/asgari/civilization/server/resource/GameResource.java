@@ -100,7 +100,7 @@ public class GameResource {
      * Handy for selecting players whom to trade with
      */
     @GET
-    @Path("{pbfId}/players")
+    @Path("/{pbfId}/players")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllPlayersForPBF(@NotEmpty @PathParam("pbfId") String pbfId) {
         GameAction gameAction = new GameAction(db);
@@ -128,14 +128,35 @@ public class GameResource {
 
     @PUT
     @Timed
-    @Path("/{pbfId}")
+    @Path("/{pbfId}/join")
     public Response joinGame(@NotEmpty @PathParam("pbfId") String pbfId, @Auth Player player) {
         Preconditions.checkNotNull(pbfId);
         Preconditions.checkNotNull(player);
 
         GameAction gameAction = new GameAction(db);
         gameAction.joinGame(pbfId, player.getId());
-        return Response.ok()
+        return Response.ok().build();
+    }
+
+    /**
+     * With draw from exisiting game.
+     * Game must not have started
+     */
+    @PUT
+    @Timed
+    @Path("/{pbfId}/withdraw")
+    public Response withdrawFromGame(@NotEmpty @PathParam("pbfId") String pbfId, @Auth Player player) {
+        Preconditions.checkNotNull(pbfId);
+        Preconditions.checkNotNull(player);
+
+        GameAction gameAction = new GameAction(db);
+        boolean ok = gameAction.withdrawFromGame(pbfId, player.getId());
+        if(ok) {
+            return Response.ok().build();
+        }
+
+        return Response.notModified()
+                .entity("Cannot withdraw from game. It is already started")
                 .location(uriInfo.getAbsolutePathBuilder().path(pbfId).build())
                 .build();
     }

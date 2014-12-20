@@ -11,8 +11,10 @@ import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.dto.*;
 import no.asgari.civilization.server.excel.ItemReader;
+import no.asgari.civilization.server.exception.PlayerExistException;
 import no.asgari.civilization.server.model.*;
 import no.asgari.civilization.server.util.Java8Util;
+import no.asgari.civilization.server.util.SecurityCheck;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
@@ -23,6 +25,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.time.ZoneId;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -57,7 +60,7 @@ public class GameAction extends BaseAction {
                                     try {
                                         itemReader.readItemsFromExcel(dto.getType());
                                     } catch (IOException e) {
-                                        log.error("Couldn't read from Excel file " + e.getMessage() , e);
+                                        log.error("Couldn't read from Excel file " + e.getMessage(), e);
                                         throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
                                     }
                                     return itemReader;
@@ -104,7 +107,7 @@ public class GameAction extends BaseAction {
     public List<PbfDTO> getAllActiveGames() {
         @Cleanup DBCursor<PBF> dbCursor = pbfCollection.find(DBQuery.is("active", true), new BasicDBObject());
         return Java8Util.streamFromIterable(dbCursor)
-            .map(GameAction::createPbfDTO).collect(Collectors.toList());
+                .map(GameAction::createPbfDTO).collect(Collectors.toList());
     }
 
     /**
@@ -149,7 +152,7 @@ public class GameAction extends BaseAction {
      */
     public void joinGame(String pbfId, String playerId) {
         PBF pbf = pbfCollection.findOneById(pbfId);
-        if(pbf.getNumOfPlayers() == pbf.getPlayers().size()) {
+        if (pbf.getNumOfPlayers() == pbf.getPlayers().size()) {
             log.warn("Cannot join the game. Its full");
             Response badReq = Response.status(Response.Status.BAD_REQUEST)
                     .entity("Cannot join the game. Its full.")
@@ -162,7 +165,7 @@ public class GameAction extends BaseAction {
         playerCollection.updateById(player.getId(), player);
 
         Playerhand playerhand = createPlayerHand(player);
-        if(!pbf.getPlayers().contains(playerhand)) {
+        if (!pbf.getPlayers().contains(playerhand)) {
             pbf.getPlayers().add(playerhand);
         }
         startIfAllPlayers(pbf);
@@ -171,6 +174,7 @@ public class GameAction extends BaseAction {
 
     /**
      * Returns the username of the starting turn player
+     *
      * @param pbfId
      * @return
      */
@@ -194,7 +198,7 @@ public class GameAction extends BaseAction {
 
     private void startIfAllPlayers(PBF pbf) {
         final int numOfPlayersNeeded = pbf.getNumOfPlayers();
-        if(numOfPlayersNeeded == pbf.getPlayers().size()) {
+        if (numOfPlayersNeeded == pbf.getPlayers().size()) {
             Playerhand randomPlayer = getRandomPlayer(pbf.getPlayers());
             log.debug("Setting starting player " + randomPlayer);
             randomPlayer.setYourTurn(true);
@@ -226,17 +230,17 @@ public class GameAction extends BaseAction {
         dto.setPublicLogs(publicGamelogDTOs);
 
         //Set private player info if correct player is loggedIn.
-        if(player != null && Strings.isNullOrEmpty(player.getUsername()) && Strings.isNullOrEmpty(player.getId())) {
+        if (player != null && Strings.isNullOrEmpty(player.getUsername()) && Strings.isNullOrEmpty(player.getId())) {
             //Get all the private player stuff
             Optional<Playerhand> playerhand = pbf.getPlayers()
                     .stream()
                     .filter(p -> p.getPlayerId().equals(player.getId()))
                     .findFirst();
 
-            if(playerhand.isPresent()) {
+            if (playerhand.isPresent()) {
                 List<GameLog> allPrivateLogs = gameLogAction.getAllPrivateLogs(pbf.getId(), playerhand.get().getUsername());
                 List<GameLogDTO> privateGamelogDTOs = allPrivateLogs.stream()
-                        .map(log -> new GameLogDTO(log.getId(), log.getPublicLog(),log.getCreatedInMillis() ))
+                        .map(log -> new GameLogDTO(log.getId(), log.getPublicLog(), log.getCreatedInMillis()))
                         .collect(Collectors.toList());
 
                 dto.setPlayer(playerhand.get());
@@ -246,4 +250,33 @@ public class GameAction extends BaseAction {
         return dto;
     }
 
+    public boolean withdrawFromGame(String pbfId, String playerId) {
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        if (pbf.getNumOfPlayers() == pbf.getPlayers().size()) {
+            return false;
+        }
+
+        if (!SecurityCheck.hasUserAcces(pbf, playerId)) {
+            log.warn("User with id " + playerId + " is not player this game, and cannot withdraw");
+            Response badReq = Response.status(Response.Status.FORBIDDEN)
+                    .entity("No access")
+                    .build();
+            throw new WebApplicationException(badReq);
+        }
+
+        Iterator<Playerhand> iterator = pbf.getPlayers().iterator();
+        while(iterator.hasNext()) {
+            Playerhand playerhand = iterator.next();
+            if(playerhand.getPlayerId().equals(playerId)) {
+                iterator.remove();
+                //TOOD Create log player withdrew from game
+                gameLogAction.createCommonPublicLog("Withdrew from join", pbfId, playerId);
+                pbfCollection.updateById(pbf.getId(), pbf);
+                return true;
+            }
+        }
+
+
+        return false;
+    }
 }

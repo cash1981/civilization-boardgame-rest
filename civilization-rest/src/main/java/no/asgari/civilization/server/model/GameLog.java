@@ -41,14 +41,13 @@ public class GameLog {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     public enum LogType {
-        TRADE, BATTLE, ITEM, TECH, SHUFFLE, DISCARD;
+        TRADE, BATTLE, ITEM, TECH, SHUFFLE, DISCARD, WITHDRAW, JOIN;
     }
 
     @Id
     @ObjectId
     private String id;
 
-    @NotEmpty
     private String privateLog;
 
     @NotEmpty

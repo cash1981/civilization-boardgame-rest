@@ -78,6 +78,23 @@ public class GameLogAction {
         return pl;
     }
 
+    /**
+     * Common messages like, user joined game, user withdrew game etc
+     */
+    public GameLog createCommonPublicLog(String publicMessage, String pbfId, String playerId) {
+        GameLog pl = new GameLog();
+        pl.setPbfId(pbfId);
+        pl.setPublicLog(publicMessage);
+        try {
+            pl.setUsername(CivSingleton.instance().playerCache().get(playerId));
+        } catch (ExecutionException e) {
+            log.error("Couldn't retrieve username from cache");
+            pl.setUsername(getUsernameFromPlayerId(playerId));
+        }
+        pl.setId(save(pl));
+        return pl;
+    }
+
     public GameLog findGameLogById(String id) {
         return gameLogCollection.findOneById(id);
     }
