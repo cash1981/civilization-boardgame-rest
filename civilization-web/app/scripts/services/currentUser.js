@@ -1,6 +1,6 @@
 ﻿(function(module) {
 
-    var USERKEY = "utoken";
+    var USERKEY = "authorization_encoded";
 
     var currentUser = function (localStorage) {
 
@@ -15,16 +15,18 @@
         var initialize = function() {
             var user = {
                 username: "",
-                token: "",
+                password: "",
+                authorization_encoded: "",
                 get loggedIn() {
-                    return this.token ? true : false;
+                    return this.authorization_encoded ? true : false;
                 }
             };
 
             var localUser = localStorage.get(USERKEY);
             if (localUser) {
                 user.username = localUser.username;
-                user.token = localUser.token;
+                user.password = localUser.password;
+                user.authorization_encoded = localUser.authorization_encoded;
             }
             return user;
         };

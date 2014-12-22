@@ -20,7 +20,7 @@ angular.module('civApp', [
     'ab-base64',
     'ngTable'
   ])
-  .config(function ($routeProvider) {
+  .config(function ($routeProvider, $httpProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/list.html'
@@ -40,12 +40,12 @@ angular.module('civApp', [
       });
 
     // Some config for IE stuff and just in case
-    $httpProvider.defaults.useXDomain = true;
+    /*$httpProvider.defaults.useXDomain = true;
     $httpProvider.defaults.withCredentials = true;
     var contentTypeHeader = "Content-Type";
     var jsonMediaType = "application/json";
     $httpProvider.defaults.headers.post[contentTypeHeader] = jsonMediaType;
     $httpProvider.defaults.headers.put[contentTypeHeader] = jsonMediaType;
-
+*/
     //TODO Also added interceptor in RequestInterceptor.js, move it here
   });
