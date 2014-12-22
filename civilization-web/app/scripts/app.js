@@ -17,6 +17,7 @@ angular.module('civApp', [
     'ngMessages',
     'ui.bootstrap',
     'ngTouch',
+    'ab-base64',
     'ngTable'
   ])
   .config(function ($routeProvider) {
@@ -37,4 +38,14 @@ angular.module('civApp', [
       .otherwise({
         redirectTo: '/'
       });
+
+    // Some config for IE stuff and just in case
+    $httpProvider.defaults.useXDomain = true;
+    $httpProvider.defaults.withCredentials = true;
+    var contentTypeHeader = "Content-Type";
+    var jsonMediaType = "application/json";
+    $httpProvider.defaults.headers.post[contentTypeHeader] = jsonMediaType;
+    $httpProvider.defaults.headers.put[contentTypeHeader] = jsonMediaType;
+
+    //TODO Also added interceptor in RequestInterceptor.js, move it here
   });
