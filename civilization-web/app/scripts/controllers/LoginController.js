@@ -1,6 +1,6 @@
 ﻿(function (module) {
 
-  var LoginController = function (oauth, currentUser, alerting, loginRedirect) {
+  var LoginController = function (basicauth, currentUser, alerting, loginRedirect) {
     var model = this;
     model.user = currentUser.profile;
 
@@ -10,7 +10,7 @@
 
     model.login = function (form) {
       if (form.$valid) {
-        oauth.login(model.username, model.password)
+        basicauth.login(model.username, model.password)
           .then(loginRedirect.redirectPreLogin)
           .catch(alerting.errorHandler("Could not login"));
         model.password = "";
@@ -18,10 +18,10 @@
     };
 
     model.signOut = function () {
-      oauth.logout();
+      basicauth.logout();
     };
   };
 
-  module.controller("LoginController", LoginController);
+  module.controller("LoginController", ['basicauth', 'currentUser', 'alerting', 'loginRedirect', LoginController]);
 
 }(angular.module("civApp")));

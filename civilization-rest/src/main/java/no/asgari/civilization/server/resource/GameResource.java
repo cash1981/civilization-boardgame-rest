@@ -83,7 +83,7 @@ public class GameResource {
     }
 
     /**
-     * Will return a colletion of all pbf ids
+     * Will return a collection of all pbf ids
      */
     @Path("/player")
     @GET

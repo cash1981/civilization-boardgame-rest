@@ -1,47 +1,47 @@
-﻿(function(module) {
+﻿(function (module) {
 
-    var requestCounter = function($q) {
+  var requestCounter = function ($q) {
 
-        var requests = 0;
+    var requests = 0;
 
-        var request = function(config) {
-            requests += 1;
-            return $q.when(config);
-        };
-
-        var requestError = function(error) {
-            requests -= 1;
-            return $q.reject(error);
-        };
-
-        var response = function(response) {
-            requests -= 1;
-            return $q.when(response);
-        };
-
-        var responseError = function(error) {
-            requests -= 1;
-            return $q.reject(error);
-        };
-
-        var getRequestCount = function() {
-            return requests;
-        };
-
-        return {
-            request: request,
-            response: response,
-            requestError: requestError,
-            responseError: responseError,
-            getRequestCount: getRequestCount
-        };
-
+    var request = function (config) {
+      requests += 1;
+      return $q.when(config);
     };
 
-    module.factory("requestCounter", requestCounter);
+    var requestError = function (error) {
+      requests -= 1;
+      return $q.reject(error);
+    };
 
-    module.config(function($httpProvider) {
-        $httpProvider.interceptors.push("requestCounter");
-    });
+    var response = function (response) {
+      requests -= 1;
+      return $q.when(response);
+    };
+
+    var responseError = function (error) {
+      requests -= 1;
+      return $q.reject(error);
+    };
+
+    var getRequestCount = function () {
+      return requests;
+    };
+
+    return {
+      request: request,
+      response: response,
+      requestError: requestError,
+      responseError: responseError,
+      getRequestCount: getRequestCount
+    };
+
+  };
+
+  module.factory("requestCounter", requestCounter);
+
+  module.config(function ($httpProvider) {
+    $httpProvider.interceptors.push("requestCounter");
+  });
 
 }(angular.module("civApp")));

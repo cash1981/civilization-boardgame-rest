@@ -151,6 +151,12 @@ public class GameResourceTest extends MongoDBBaseTest {
     }
 
     @Test
+    public void checkThatEncodingInFrontendGivesSameAsBackend() {
+        String encodingFrontend = "Basic Y2FzaDE5ODE6Zm9v";
+        assertEquals(encodingFrontend, getUsernameAndPassEncoded());
+    }
+
+    @Test
     public void getGameAsPublicUser() throws Exception {
         PBF pbf = pbfCollection.findOne();
 

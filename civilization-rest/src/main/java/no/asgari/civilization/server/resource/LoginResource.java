@@ -41,7 +41,7 @@ public class LoginResource {
 
     @POST
     @Consumes(value = MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces(value = MediaType.TEXT_PLAIN)
+    @Produces(value = MediaType.APPLICATION_JSON)
     public Response login(@FormParam("username") @NotEmpty String username, @FormParam("password") @NotEmpty String password) {
         Preconditions.checkNotNull(username);
         Preconditions.checkNotNull(password);
@@ -56,7 +56,9 @@ public class LoginResource {
                     .path("/games")
                     .build();
 
+            player.setPassword("");
             return Response.ok()
+                    .entity(player)
                     .location(games)
                     .build();
         }

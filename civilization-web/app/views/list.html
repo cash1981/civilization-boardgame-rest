@@ -39,19 +39,13 @@
         </td>
         <td>{{game.active ? 'Active' : 'Finished'}}</td>
         <td>
-          <!-- TODO Also add the logged in check -->
-          <button id="btnJoinGame" ng-if="(game.numOfPlayers < game.players.length) && gameListCtrl.user.loggedIn" type="button"
+          <button id="btnJoinGame" ng-if="(game.numOfPlayers > game.players.length) && gameListCtrl.user.loggedIn" type="button"
                   class="btn btn-success" ng-click="gameListCtrl.joinGame(game)">
             Join
           </button>
-          <button type="button" class="btn btn-success" ng-click="gameListCtrl.joinGame(game)">Join</button>
         </td>
       </tr>
       </tbody>
     </table>
-    {{gameListCtrl.games}}
-
   </div>
-
-
 </div>

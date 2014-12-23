@@ -230,7 +230,7 @@ public class GameAction extends BaseAction {
         dto.setPublicLogs(publicGamelogDTOs);
 
         //Set private player info if correct player is loggedIn.
-        if (player != null && Strings.isNullOrEmpty(player.getUsername()) && Strings.isNullOrEmpty(player.getId())) {
+        if (player != null && !Strings.isNullOrEmpty(player.getUsername()) && !Strings.isNullOrEmpty(player.getId())) {
             //Get all the private player stuff
             Optional<Playerhand> playerhand = pbf.getPlayers()
                     .stream()

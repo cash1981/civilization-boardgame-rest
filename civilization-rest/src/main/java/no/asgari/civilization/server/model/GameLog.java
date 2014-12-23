@@ -81,24 +81,24 @@ public class GameLog {
         final String DELIM = " - ";
         switch (logType) {
             case ITEM:
-                privateLog = username + "drew " + DELIM + draw.getItem().revealAll();
-                publicLog = username + "drew " + DELIM + draw.getItem().revealPublic();
+                privateLog = username + " drew " + DELIM + draw.getItem().revealAll();
+                publicLog = username + " drew " + DELIM + draw.getItem().revealPublic();
                 break;
             case BATTLE:
-                privateLog = username + "plays " + DELIM + draw.getItem().revealAll();
-                publicLog = username + "reveals " + DELIM + draw.getItem().revealPublic();
+                privateLog = username + " plays " + DELIM + draw.getItem().revealAll();
+                publicLog = username + " reveals " + DELIM + draw.getItem().revealPublic();
                 break;
             case TRADE:
-                privateLog = username + "has received from trade " + DELIM + draw.getItem().revealAll();
-                publicLog = username + "has received from trade " + DELIM + draw.getItem().revealPublic();
+                privateLog = username + " has received from trade " + DELIM + draw.getItem().revealAll();
+                publicLog = username + " has received from trade " + DELIM + draw.getItem().revealPublic();
                 break;
             case TECH:
-                privateLog = username + "has researched  " + DELIM + draw.getItem().revealAll();
-                publicLog = username + "has researched " + DELIM + draw.getItem().revealPublic();
+                privateLog = username + " has researched  " + DELIM + draw.getItem().revealAll();
+                publicLog = username + " has researched " + DELIM + draw.getItem().revealPublic();
                 break;
             case DISCARD:
-                privateLog = username + "has discarded  " + DELIM + draw.getItem().revealAll();
-                publicLog = username + "has discarded " + DELIM + draw.getItem().revealPublic();
+                privateLog = username + " has discarded  " + DELIM + draw.getItem().revealAll();
+                publicLog = username + " has discarded " + DELIM + draw.getItem().revealPublic();
                 break;
         }
     }

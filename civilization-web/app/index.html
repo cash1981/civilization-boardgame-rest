@@ -24,14 +24,11 @@
   <div class="work-spinner">
     <img src="images/ajax-loader.gif" class="center-block" />
   </div>
+  <!--TODO fikse bra sted å vise alert -->
   <div class="row">
-    <div class="col-md-8">
-      <div ng-view></div>
-    </div>
-    <div class="col-md-4">
-      <alerts></alerts>
-    </div>
+    <alerts></alerts>
   </div>
+  <div ng-view class="row"></div>
 </div>
 
 <footer class="footer">
