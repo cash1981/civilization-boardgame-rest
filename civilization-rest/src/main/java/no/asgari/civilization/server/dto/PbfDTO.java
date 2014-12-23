@@ -31,4 +31,6 @@ public class PbfDTO {
     private boolean active = true;
 
     private List<PlayerDTO> players = new ArrayList<>();
+    private String nameOfUsersTurn;
+
 }

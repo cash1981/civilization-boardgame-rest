@@ -1,6 +1,7 @@
 <div class="container-fluid">
   <div class="jumbotron">
     <h1>Welcome to Civilization Play By Forum Randomizer</h1>
+
     <p class="lead">
       This site is useful for Play By Forum games, where you need a moderator to play a game.
       It cuts out the "middleman", and lets you play without the need of a moderator.
@@ -39,7 +40,8 @@
         </td>
         <td>{{game.active ? 'Active' : 'Finished'}}</td>
         <td>
-          <button id="btnJoinGame" ng-if="(game.numOfPlayers > game.players.length) && gameListCtrl.user.loggedIn" type="button"
+          <button id="btnJoinGame" ng-if="(game.numOfPlayers > game.players.length) && gameListCtrl.user.loggedIn"
+                  type="button"
                   class="btn btn-success" ng-click="gameListCtrl.joinGame(game)">
             Join
           </button>
@@ -48,4 +50,5 @@
       </tbody>
     </table>
   </div>
+
 </div>

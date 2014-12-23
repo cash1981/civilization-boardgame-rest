@@ -1,30 +1,30 @@
 ﻿<nav class="navbar navbar-inverse" role="navigation">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#/">Civilization Play By Forum</a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><a href="#/">Foobar</a></li>
-            <li><a href="#/">Foobar</a></li>
-            <li><a href="#/">Foobar</a></li>
-        </ul>
-        <div ng-controller="LoginController as login" class="padd-right-5">
-            <div ng-show="login.user.loggedIn" class="navbar-text navbar-right" >
-                <span class="padd-right-5">Hello {{ login.user.username }}!</span>
-                <button class="btn btn-default btn-sm" ng-click="login.signOut()">Sign Out</button>
-            </div>
-            <form ng-if="!login.user.loggedIn" name="loginForm" class="navbar-form navbar-right"
-                  ng-submit="login.login(loginForm)" novalidate>
-                <div class="form-group">
-                    <input name="username" type="text" placeholder="Username" ng-model="login.username" required />
-                </div>
-                <div class="form-group">
-                    <input name="password" type="password" placeholder="Password" ng-model="login.password" required />
-                </div>
-                <input class="btn btn-default btn-sm" type="submit" value="Login" />
-            </form>
-        </div>
-      <!-- TODO implement register -->
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#/">Civilization Play By Forum</a>
     </div>
+    <ul class="nav navbar-nav">
+      <li><a href="#/">Foobar</a></li>
+      <li><a href="#/">Foobar</a></li>
+      <li><a href="#/">Foobar</a></li>
+    </ul>
+    <div ng-controller="LoginController as login" class="padd-right-5">
+      <div ng-show="login.user.loggedIn" class="navbar-text navbar-right">
+        <span class="padd-right-5">Hello {{ login.user.username }}!</span>
+        <button class="btn btn-default btn-sm" ng-click="login.signOut()">Sign Out</button>
+      </div>
+      <form ng-if="!login.user.loggedIn" name="loginForm" class="navbar-form navbar-right"
+            ng-submit="login.login(loginForm)" novalidate>
+        <div class="form-group">
+          <input name="username" type="text" placeholder="Username" ng-model="login.username" required/>
+        </div>
+        <div class="form-group">
+          <input name="password" type="password" placeholder="Password" ng-model="login.password" required/>
+        </div>
+        <input class="btn btn-default btn-sm" type="submit" value="Login"/>
+      </form>
+    </div>
+    <!-- TODO implement register -->
+  </div>
 
 </nav>

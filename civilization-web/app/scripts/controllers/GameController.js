@@ -1,32 +1,24 @@
 'use strict';
 (function (module) {
-  var GameController = function ($log, $routeParams, GameService, currentUser, $filter, ngTableParams) {
+  var GameController = function ($log, $routeParams, GameService, currentUser, $filter, ngTableParams, $scope) {
     var model = this;
     model.user = currentUser.profile;
+    $scope.userHasAccess = false;
+    model.yourTurn = false;
 
-    $log.info("Inside Game");
     var gamePromise = GameService.getGameById($routeParams.id)
       .then(function (game) {
         model.game = game;
+        $scope.userHasAccess = game.player && game.player.username === model.user.username;
+        model.yourTurn = game.player && game.player.yourTurn;
         return game;
       });
-
-    model.getPublicLogs = function () {
-      return model.game.publicLogs;
-    };
-
-    model.userHasAccess = function() {
-      return gamePromise.then(function (game) {
-        $log.info("Checking if user has access");
-        return game.player.username == model.user.username;
-      });
-    };
 
     model.tableParams = new ngTableParams({
       page: 1,            // show first page
       count: 10,          // count per page
       sorting: {
-        name: 'asc'     // initial sorting
+        created: 'desc'     // initial sorting
       }
     }, {
       total: 0, // length of data
@@ -45,6 +37,6 @@
   };
 
   module.controller("GameController",
-    ["$log", "$routeParams", "GameService", "currentUser", "$filter", "ngTableParams", GameController]);
+    ["$log", "$routeParams", "GameService", "currentUser", "$filter", "ngTableParams", "$scope", GameController]);
 
 }(angular.module("civApp")));

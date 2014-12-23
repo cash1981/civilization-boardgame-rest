@@ -128,6 +128,7 @@ public class GameAction extends BaseAction {
         dto.setPlayers(pbf.getPlayers().stream()
                 .map(p -> createPlayerDTO(p, pbf.getId()))
                 .collect(Collectors.toList()));
+        dto.setNameOfUsersTurn(pbf.getNameOfUsersTurn());
         return dto;
     }
 
@@ -221,6 +222,7 @@ public class GameAction extends BaseAction {
         dto.setId(pbf.getId());
         dto.setType(pbf.getType());
         dto.setName(pbf.getName());
+        dto.setWhosTurnIsIt(pbf.getNameOfUsersTurn());
 
         //Set logs
         List<GameLog> allPublicLogs = gameLogAction.getAllPublicLogs(pbf.getId());

@@ -17,6 +17,7 @@ import org.mongojack.ObjectId;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * PBF stands for Play By Forum
@@ -48,5 +49,21 @@ public class PBF {
     private List<Item> items = Lists.newArrayList();
     private List<Playerhand> players = Lists.newArrayList();
     private List<Tech> techs = Lists.newArrayList();
+
+    /**
+     * Returns the username of the player who is start of turn
+     */
+    @JsonIgnore
+    public String getNameOfUsersTurn() {
+        Optional<Playerhand> optional = players.stream()
+                .filter(Playerhand::isYourTurn)
+                .findFirst();
+
+        if(optional.isPresent()) {
+            return optional.get().getUsername();
+        }
+
+        return "";
+    }
 
 }
