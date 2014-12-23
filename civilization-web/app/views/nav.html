@@ -8,9 +8,9 @@
             <li><a href="#/">Foobar</a></li>
             <li><a href="#/">Foobar</a></li>
         </ul>
-        <div ng-controller="LoginController as login">
-            <div ng-show="login.user.loggedIn" class="navbar-text navbar-right">
-                Hello {{ login.user.username }}!
+        <div ng-controller="LoginController as login" class="padd-right-5">
+            <div ng-show="login.user.loggedIn" class="navbar-text navbar-right" >
+                <span class="padd-right-5">Hello {{ login.user.username }}!</span>
                 <button class="btn btn-default btn-sm" ng-click="login.signOut()">Sign Out</button>
             </div>
             <form ng-if="!login.user.loggedIn" name="loginForm" class="navbar-form navbar-right"

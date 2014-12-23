@@ -1,13 +1,22 @@
 <div class="row" ng-controller="GameController as gameCtrl">
-  <div class="col-md-8">
+  <div ng-class="gameCtrl.userHasAccess ? 'col-md-6' : 'col-md-12'">
     <div class="jumbotron">
       <h1>{{gameCtrl.game.name}}</h1>
-      <p class="lead">{{gameCtrl.game.type}}</p>
-      <p class="lead">Created: {{gameCtrl.game.created | date:'dd-MM-yyyy'}}</p>
+      <p class="lead">{{gameCtrl.game.type}} - Created: {{gameCtrl.game.created | date:'dd-MM-yyyy'}}</p>
     </div>
+  </div>
+  <div class="col-md-6" ng-if="gameCtrl.userHasAccess">
+    <div class="jumbotron">
+      <h1>Your items</h1>
+      <p class="lead" ng-show="gameCtrl.game.player.yourTurn">Its your turn</p>
+    </div>
+  </div>
+</div>
 
-    <!-- TODO different font for the table -->
-    <div class="panel panel-default col-md-5">
+<!-- TODO different font for the table -->
+<div class="row">
+  <div class="col-md-3">
+    <div class="panel panel-default">
       <div class="panel-heading">Gamelog</div>
       <table ng-table="gameCtrl.tableParams" class="table table-bordered table-hover table-condensed text-center table-responsive">
           <tr ng-repeat="log in $data" class="active" ng-class-even="'row-even'" ng-class-odd="'row-odd'">
@@ -16,11 +25,17 @@
           </tr>
       </table>
     </div>
-    <div class="col-md-3">
-      <h1>Map image uploadsssssssssssssssssssssssssssssssssssssssssss</h1>
-    </div>
   </div>
-  <div>json '{{gameCtrl.game | json}}'</div>
-
+  <div class="col-md-3">
+    Image of map
+  </div>
+  <div class="col-md-6">
+    User stuff
+  </div>
 
 </div>
+
+
+<div class="row">json '{{gameCtrl.game | json}}'</div>
+
+

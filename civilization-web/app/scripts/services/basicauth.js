@@ -15,8 +15,9 @@
       var processToken = function (username, password) {
         return function (response) {
           $log.info("Is player info here " + response)
-          $log.info("Is player info here response.data" + response.data)
+          $log.info("Is player info here response.data" + response.data);
           currentUser.profile.username = username;
+          currentUser.profile.id = response.data.id;
           var encoded = base64.encode(username + ":" + password);
           $log.info("Encoded string from username:password= " + username + ":" + password + " is encoded= " + encoded);
           currentUser.profile.authorizationEncoded = encoded;
@@ -44,7 +45,9 @@
 
       var logout = function () {
         currentUser.profile.username = "";
+        currentUser.profile.password = "";
         currentUser.profile.authorizationEncoded = "";
+        currentUser.profile.id = "";
         currentUser.remove();
       };
 

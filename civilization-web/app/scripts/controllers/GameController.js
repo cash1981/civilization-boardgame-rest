@@ -15,6 +15,13 @@
       return model.game.publicLogs;
     };
 
+    model.userHasAccess = function() {
+      return gamePromise.then(function (game) {
+        $log.info("Checking if user has access");
+        return game.player.username == model.user.username;
+      });
+    };
+
     model.tableParams = new ngTableParams({
       page: 1,            // show first page
       count: 10,          // count per page
@@ -32,7 +39,6 @@
           params.total(game.publicLogs.length);
           $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
         });
-
       }
     });
 

@@ -5,7 +5,7 @@
     model.user = currentUser.profile;
 
     model.joinGame = function (game) {
-      $log.info("User wants to join game with nr " + game.id);
+      $log.debug("User wants to join game with nr " + game.id);
       //TODO call PUT on /game/{pbfId}
     };
 

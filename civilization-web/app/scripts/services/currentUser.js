@@ -16,6 +16,7 @@
       var user = {
         username: "",
         password: "",
+        id: "",
         authorizationEncoded: "",
         get loggedIn() {
           $log.info("Checking if user is logged in " + this.authorizationEncoded);
@@ -27,6 +28,7 @@
       if (localUser) {
         user.username = localUser.username;
         user.password = localUser.password;
+        user.id = localUser.id;
         user.authorizationEncoded = localUser.authorizationEncoded;
       }
       return user;
