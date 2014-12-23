@@ -1,4 +1,5 @@
-﻿(function (module) {
+﻿'use strict';
+(function (module) {
 
   var formEncode = function () {
     return function (data) {

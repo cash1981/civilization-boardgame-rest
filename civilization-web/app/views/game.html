@@ -1,41 +1,39 @@
-<div class="row" ng-controller="GameController as gameCtrl">
-  <div ng-class="gameCtrl.userHasAccess ? 'col-md-6' : 'col-md-12'">
-    <div class="jumbotron">
-      <h1>{{gameCtrl.game.name}}</h1>
-      <p class="lead">{{gameCtrl.game.type}} - Created: {{gameCtrl.game.created | date:'dd-MM-yyyy'}}</p>
-    </div>
-  </div>
-  <div class="col-md-6" ng-if="gameCtrl.userHasAccess">
-    <div class="jumbotron">
-      <h1>Your items</h1>
-      <p class="lead" ng-show="gameCtrl.game.player.yourTurn">Its your turn</p>
-    </div>
-  </div>
-</div>
+<div ng-controller="GameController as gameCtrl">
+  <div class="row">
+    <div ng-class="userHasAccess ? 'col-md-6' : 'col-md-12'">
+      <div class="jumbotron">
+        <h1>{{gameCtrl.game.name}}</h1>
 
-<!-- TODO different font for the table -->
-<div class="row">
-  <div class="col-md-3">
-    <div class="panel panel-default">
-      <div class="panel-heading">Gamelog</div>
-      <table ng-table="gameCtrl.tableParams" class="table table-bordered table-hover table-condensed text-center table-responsive">
-          <tr ng-repeat="log in $data" class="active" ng-class-even="'row-even'" ng-class-odd="'row-odd'">
-            <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
-            <td data-title="'Log'" sortable="'log'">{{log.log}}</td>
-          </tr>
+        <p class="lead">{{gameCtrl.game.type}} - Created: {{gameCtrl.game.created | date:'dd-MM-yyyy'}}</p>
+        <p><a ng-href class="btn btn-primary btn-lg" role="button">{{gameCtrl.game.whosTurnIsIt}}</a> to play</p>
+      </div>
+    </div>
+    <div class="col-md-6" ng-if="userHasAccess">
+      <div class="jumbotron">
+        <h1>Kanskje diverse info her</h1>
+        <h2>End of turn button</h2>
+        <h3>Write message/chat</h3>
+        <p class="lead" ng-show="gameCtrl.yourTurn">Its your turn</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+  <tabset justified="false">
+    <tab heading="Gamelog" class="col-md-3">
+      <table ng-table="gameCtrl.tableParams" ng-show="$data.length > 0"
+             class="table table-bordered table-hover table-condensed text-center table-responsive">
+        <tr ng-repeat="log in $data" class="active" ng-class-even="'row-even'" ng-class-odd="'row-odd'">
+          <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+          <td data-title="'Log'" sortable="'log'">{{log.log}}</td>
+        </tr>
       </table>
-    </div>
+    </tab>
+    <tab heading="The current map" class="col-md-3">Here should be uploaded image of map</tab>
+    <tab ng-if="userHasAccess" heading="User stuff" class="col-md-6">User stuff here</tab>
+  </tabset>
   </div>
-  <div class="col-md-3">
-    Image of map
-  </div>
-  <div class="col-md-6">
-    User stuff
-  </div>
+
+  <div class="row">json '{{gameCtrl.game | json}}'</div>
 
 </div>
-
-
-<div class="row">json '{{gameCtrl.game | json}}'</div>
-
-

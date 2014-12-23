@@ -1,4 +1,5 @@
-﻿(function (common) {
+﻿'use strict';
+(function (common) {
 
   var alerting = function ($timeout) {
 

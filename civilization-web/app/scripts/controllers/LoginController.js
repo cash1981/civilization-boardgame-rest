@@ -1,4 +1,5 @@
-﻿(function (module) {
+﻿'use strict';
+(function (module) {
 
   var LoginController = function (basicauth, currentUser, alerting, loginRedirect) {
     var model = this;
