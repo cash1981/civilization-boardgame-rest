@@ -51,6 +51,7 @@
 
 - Change basic authentication to OAUTH
 - Created filter/interceptor for userHasAccess
+- Choose color
 
 Nice to have
 - Chat with scrolling capabilites.

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.cache.CacheBuilderSpec;
 import com.mongodb.BasicDBObject;
 import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.representation.Form;
 import com.sun.jersey.test.framework.AppDescriptor;
 import com.sun.jersey.test.framework.LowLevelAppDescriptor;
 import io.dropwizard.auth.Auth;
@@ -88,28 +89,32 @@ public class LoginResourceTest extends AbstractMongoDBTest {
 
     @Test
     public void shouldGet403WithWrongUsernamePass() {
+        Form form = new Form();
+        form.add("username", "cash1981");
+        form.add("password", "fifafoo");
+
         ClientResponse response = client().resource(
                 UriBuilder.fromPath(String.format(BASE_URL + "/login", RULE.getLocalPort()))
-                        .queryParam("username", "cash1981")
-                        .queryParam("password", "fifafoo")
                         .build()
         )
-                .type(MediaType.TEXT_PLAIN)
-                .post(ClientResponse.class);
+                .type(MediaType.APPLICATION_FORM_URLENCODED)
+                .post(ClientResponse.class, form);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FORBIDDEN_403);
     }
 
     @Test
     public void shouldLoginCorrectly() {
+        Form form = new Form();
+        form.add("username", "cash1981");
+        form.add("password", "foo");
+
         ClientResponse response = client().resource(
                 UriBuilder.fromPath(String.format(BASE_URL + "/login", RULE.getLocalPort()))
-                        .queryParam("username", "cash1981")
-                        .queryParam("password", "foo")
                         .build()
         )
-                .type(MediaType.TEXT_PLAIN)
-                .post(ClientResponse.class);
+                .type(MediaType.APPLICATION_FORM_URLENCODED)
+                .post(ClientResponse.class, form);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
         assertThat(response.getLocation().toASCIIString().matches(".*/player/.*/game.*"));

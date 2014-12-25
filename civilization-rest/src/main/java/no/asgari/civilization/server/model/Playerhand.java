@@ -36,21 +36,23 @@ public class Playerhand {
     private List<Item> items = Lists.newArrayList();
     private Set<Tech> techsChosen = Sets.newTreeSet();
 
+    @JsonIgnore
     public String green() {
         return "Green";
     }
 
+    @JsonIgnore
     public String yellow() {
-        return "yellow";
+        return "Yellow";
     }
 
+    @JsonIgnore
     public String purple() {
-        return "purple";
+        return "Purple";
     }
 
+    @JsonIgnore
     public String red() {
-        return "red";
+        return "Red";
     }
-
-
 }

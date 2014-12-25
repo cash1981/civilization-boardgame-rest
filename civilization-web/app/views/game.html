@@ -18,7 +18,8 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="row"></div>
+
   <tabset justified="false">
     <tab heading="Gamelog" class="col-md-3">
       <table ng-table="gameCtrl.tableParams" ng-show="$data.length > 0"
@@ -30,10 +31,11 @@
       </table>
     </tab>
     <tab heading="The current map" class="col-md-3">Here should be uploaded image of map</tab>
-    <tab ng-if="userHasAccess" heading="User stuff" class="col-md-6">User stuff here</tab>
+    <tab ng-if="userHasAccess" heading="User stuff" class="col-md-6">
+      <ng-include src="'views/useritems.html'"></ng-include>
+    </tab>
   </tabset>
-  </div>
 
-  <div class="row">json '{{gameCtrl.game | json}}'</div>
+  <!--<div class="row">json '{{gameCtrl.game | json}}'</div>-->
 
 </div>

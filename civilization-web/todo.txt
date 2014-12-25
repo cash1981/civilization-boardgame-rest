@@ -33,6 +33,8 @@ Proper login/authentication, restrict pages
 - Lage en appConfig service som constant så kan jeg injecte den overalt å få tilgang til alle mine url
 f.eks appConfig.getGame = "http://localhost:8080/civilization
 
+- Upload map feature
+  -- Will send the jpg/png to the server, and install it on the file system, or in mongodb
 
 Nice to have:
 - Implement email verification on register?

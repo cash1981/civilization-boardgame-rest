@@ -31,6 +31,10 @@ public class PBF {
     @JsonIgnore
     public static final String COL_NAME = "pbf";
 
+    public enum Color {
+        YELLOW, GREEN, PURPLE, RED;
+    }
+
     @ObjectId
     @Id
     private String id;

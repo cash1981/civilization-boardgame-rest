@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
+import com.google.common.collect.Sets;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import lombok.Cleanup;
@@ -13,6 +14,7 @@ import no.asgari.civilization.server.dto.*;
 import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.exception.PlayerExistException;
 import no.asgari.civilization.server.model.*;
+import no.asgari.civilization.server.model.PBF.Color;
 import no.asgari.civilization.server.util.Java8Util;
 import no.asgari.civilization.server.util.SecurityCheck;
 import org.mongojack.DBCursor;
@@ -24,11 +26,9 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.time.ZoneId;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Log4j
@@ -140,11 +140,12 @@ public class GameAction extends BaseAction {
         return dto;
     }
 
-    private static Playerhand createPlayerHand(Player player) {
+    private static Playerhand createPlayerHand(Player player, String color) {
         Playerhand playerhand = new Playerhand();
         playerhand.setUsername(player.getUsername());
         playerhand.setPlayerId(player.getId());
         playerhand.setYourTurn(false);
+        playerhand.setColor(color);
         return playerhand;
     }
 
@@ -165,12 +166,33 @@ public class GameAction extends BaseAction {
         player.getGameIds().add(pbfId);
         playerCollection.updateById(player.getId(), player);
 
-        Playerhand playerhand = createPlayerHand(player);
+        String color = chooseColorForPlayer(pbf, playerId);
+
+        Playerhand playerhand = createPlayerHand(player, color);
         if (!pbf.getPlayers().contains(playerhand)) {
             pbf.getPlayers().add(playerhand);
         }
         startIfAllPlayers(pbf);
         pbfCollection.updateById(pbf.getId(), pbf);
+    }
+
+    private String chooseColorForPlayer(PBF pbf, String playerId) {
+        if(pbf.getPlayers().isEmpty()) {
+            return "Yellow";
+        }
+
+        Set<String> allColors = new HashSet<>();
+        allColors.add("Yellow");
+        allColors.add("Red");
+        allColors.add("Purple");
+        allColors.add("Green");
+
+        Set<String> colors = pbf.getPlayers().stream()
+                .map(Playerhand::getColor)
+                .collect(Collectors.toSet());
+
+        Sets.SetView<String> difference = Sets.difference(allColors, colors);
+        return difference.iterator().next();
     }
 
     /**
