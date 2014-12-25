@@ -26,7 +26,7 @@
 
       <tbody>
       <!-- Games that are not active anymore should have a light grey background -->
-      <tr ng-repeat="game in gameListCtrl.games | filter: filterContent" class="{{game.active ? 'active' : ''}}"
+      <tr ng-repeat="game in gameListCtrl.games | filter: filterContent" class="{{game.active ? 'active' : ''}} fadeIn"
           ng-class-even="'row-even'" ng-class-odd="'row-odd'">
         <td>{{$index+1}}</td>
         <td>{{game.created | date}}</td>

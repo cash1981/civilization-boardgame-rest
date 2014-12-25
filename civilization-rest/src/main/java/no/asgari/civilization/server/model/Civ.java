@@ -46,7 +46,7 @@ public class Civ implements Item {
 
     @Override
     public String revealAll() {
-        return getClass().getSimpleName() + " " + name;
+        return getClass().getSimpleName() + " : " + name;
     }
 
     @Override

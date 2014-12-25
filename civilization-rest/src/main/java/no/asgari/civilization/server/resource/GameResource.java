@@ -181,7 +181,7 @@ public class GameResource {
     @Path("/{pbfId}/publiclog")
     public List<GameLogDTO> getPublicLog(@NotEmpty @PathParam("pbfId") String pbfId) {
         GameLogAction gameLogAction = new GameLogAction(db);
-        List<GameLog> allPublicLogs = gameLogAction.getAllPublicLogs(pbfId);
+        List<GameLog> allPublicLogs = gameLogAction.getGameLogs(pbfId);
         List<GameLogDTO> gameLogDTOs = new ArrayList<>();
         if (!allPublicLogs.isEmpty()) {
             gameLogDTOs = allPublicLogs.stream()
@@ -197,7 +197,7 @@ public class GameResource {
     public List<GameLogDTO> getPrivateLog(@NotEmpty @PathParam("pbfId") String pbfId, @Auth Player player) {
         GameLogAction gameLogAction = new GameLogAction(db);
 
-        List<GameLog> allPrivateLogs = gameLogAction.getAllPrivateLogs(pbfId, player.getUsername());
+        List<GameLog> allPrivateLogs = gameLogAction.getGameLogsBelongingToPlayer(pbfId, player.getUsername());
         List<GameLogDTO> gameLogDTOs = new ArrayList<>();
         if (!allPrivateLogs.isEmpty()) {
             gameLogDTOs = allPrivateLogs.stream()

@@ -1,12 +1,26 @@
 <div class="row">
 
-  <h2>Your items</h2>
-  <div class="well well-lg">
-    <p>Here should be a list of items you have. Units, GPs, Culture cards...</p>
-
+  <h2>Private log</h2>
+  <div class="col-md-3">
+    <table ng-table="gameCtrl.tablePrivateLog" ng-show="$data.length > 0"
+           class="table table-bordered table-hover table-condensed text-center table-responsive">
+      <tr ng-repeat="log in $data" class="active" ng-class-even="'row-even'" ng-class-odd="'row-odd'">
+        <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+        <td data-title="'Log'" sortable="'log'">{{log.log}}</td>
+        <td data-title="'Vote for undo'">
+          <button ng-really-message="This will initiate vote for Undo. Are you sure?"  ng-really-click="gameCtrl.initiateUndo(log.id)"
+                  class="btn btn-sm btn-warning" tooltip="Initiate a vote for undo">Undo</button>
+        </td>
+      </tr>
+    </table>
   </div>
 
-  <h2>Choose which item to draw</h2>
+
+  <div class="well well-lg col-md-3">
+    <p>Here should be a list of items you have. Units, GPs, Culture cards...</p>
+  </div>
+
+  <h2>Choose item to draw</h2>
   <div class="btn-group" dropdown is-open="status.isopen">
     <button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
       Button dropdown <span class="caret"></span>

@@ -81,13 +81,18 @@
 /* view.ng-enter f.eks */
 
 /* TODO mÃ¥ legge pÃ¥ vendor specific for alle samme (IE, mozilla, safari)
-
 .ng-enter {
-  -webkit-animation: fadeInRight 1s;
-  animation: fadeInRight 1s;
-  /*animation-delay: 0.5s;
-  -webkit-delay: 0.5s;
+  -webkit-animation: fadeIn 1s;
+  -moz-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+  animation-delay: 0.5s;
+  -webkit-animation-delay: 0.5s;
+  -moz-animation-delay: 0.5s;
+  opacity: 0;
+}
 
+.ng-enter.ng-enter-active {
+  opacity: 1;
 }
 */
 
@@ -97,4 +102,47 @@
 
 .padd-right-5 {
   padding: 5px !important;
+}
+
+
+/* Ting jeg har added fra kurset */
+input.ng-touched.ng-invalid {
+  border: 2px #ff0000 solid;
+}
+
+.ng-move {
+  -webkit-animation: pulse 0.3s;
+  -moz-animation: pulse 0.3s;
+  -o-animation: pulse 0.3s;
+  animation: pulse 0.3s;
+}
+
+.ng-enter {
+  -webkit-animation: fadeIn 0.5s;
+  -moz-animation: fadeIn 0.5s;
+  -o-animation: fadeIn 0.5s;
+  animation: fadeIn 0.5s;
+}
+
+.ng-hide-add {
+  -webkit-animation: fadeOut 0.5s;
+  -moz-animation: fadeOut 0.5s;
+  -o-animation: fadeOut 0.5s;
+  animation: fadeOut 0.5s;
+  display: block !important;
+}
+
+.ng-hide-remove {
+  -webkit-animation: fadeIn 0.5s;
+  -moz-animation: fadeIn 0.5s;
+  -o-animation: fadeIn 0.5s;
+  animation: fadeIn 0.5s;
+  display: block !important;
+}
+
+.work-spinner {
+  position: fixed;
+  z-index: 1;
+  left: 45%;
+  top: 65px;
 }

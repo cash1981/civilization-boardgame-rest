@@ -2,6 +2,7 @@ package no.asgari.civilization.server.model;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
@@ -24,6 +25,8 @@ public class DrawTest extends AbstractMongoDBTest {
         GameLog gameLog = gameLogOptional.get();
         assertThat(gameLog.getDraw().getPlayerId()).isEqualToIgnoringCase(playerId);
         assertThat(gameLog.getDraw().getItem()).isExactlyInstanceOf(Civ.class);
+        assertThat(gameLog.getPrivateLog()).matches(".+drew.*Civ.+");
+        assertFalse(gameLog.getPublicLog().matches(".+drew.*Civ.+"));
 
         PBF pbf = pbfCollection.findOneById(pbfId);
         assertThat(pbf).isNotNull();

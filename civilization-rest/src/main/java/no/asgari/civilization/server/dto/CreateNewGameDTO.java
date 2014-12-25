@@ -21,4 +21,6 @@ public class CreateNewGameDTO {
     @NotNull
     @Min(1)
     private Integer numOfPlayers;
+
+    private String color;
 }

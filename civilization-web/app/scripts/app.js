@@ -35,6 +35,12 @@ angular.module('civApp', [
          }
          */
       })
+      .when('/help', {
+        templateUrl: 'views/help.html'
+      })
+      .when('/about', {
+        templateUrl: 'views/about.html'
+      })
       .otherwise({
         redirectTo: '/'
       });

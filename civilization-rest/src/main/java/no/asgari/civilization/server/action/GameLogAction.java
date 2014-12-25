@@ -103,7 +103,7 @@ public class GameLogAction {
         return playerCollection.findOneById(playerId).getUsername();
     }
 
-    public List<GameLog> getAllPublicLogs(String pbfId) {
+    public List<GameLog> getGameLogs(String pbfId) {
         @Cleanup DBCursor<GameLog> gameLogsCursor = gameLogCollection.find(DBQuery.is("pbfId", pbfId), new BasicDBObject());
         List<GameLog> gamelogs = new ArrayList<>(gameLogsCursor.size());
         while(gameLogsCursor.hasNext()) {
@@ -112,7 +112,7 @@ public class GameLogAction {
         return gamelogs;
     }
 
-    public List<GameLog> getAllPrivateLogs(String pbfId, String username) {
+    public List<GameLog> getGameLogsBelongingToPlayer(String pbfId, String username) {
         @Cleanup DBCursor<GameLog> gameLogsCursor = gameLogCollection.find(DBQuery.is("pbfId", pbfId).is("username", username), new BasicDBObject());
         List<GameLog> gamelogs = new ArrayList<>(gameLogsCursor.size());
         while(gameLogsCursor.hasNext()) {

@@ -12,9 +12,7 @@ import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.dto.*;
 import no.asgari.civilization.server.excel.ItemReader;
-import no.asgari.civilization.server.exception.PlayerExistException;
 import no.asgari.civilization.server.model.*;
-import no.asgari.civilization.server.model.PBF.Color;
 import no.asgari.civilization.server.util.Java8Util;
 import no.asgari.civilization.server.util.SecurityCheck;
 import org.mongojack.DBCursor;
@@ -28,7 +26,6 @@ import java.io.IOException;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Log4j
@@ -163,6 +160,17 @@ public class GameAction extends BaseAction {
         }
 
         Player player = playerCollection.findOneById(playerId);
+
+        boolean playerAlreadyJoined = pbf.getPlayers().stream()
+                .anyMatch(p -> p.getPlayerId().equals(player.getId()));
+        if(playerAlreadyJoined) {
+            log.warn("Cannot join the game. Player has already joined it");
+            Response badReq = Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Cannot join the game. You have already joined it!")
+                    .build();
+            throw new WebApplicationException(badReq);
+        }
+
         player.getGameIds().add(pbfId);
         playerCollection.updateById(player.getId(), player);
 
@@ -247,7 +255,7 @@ public class GameAction extends BaseAction {
         dto.setWhosTurnIsIt(pbf.getNameOfUsersTurn());
 
         //Set logs
-        List<GameLog> allPublicLogs = gameLogAction.getAllPublicLogs(pbf.getId());
+        List<GameLog> allPublicLogs = gameLogAction.getGameLogs(pbf.getId());
         List<GameLogDTO> publicGamelogDTOs = allPublicLogs.stream()
                 .map(log -> new GameLogDTO(log.getId(), log.getPublicLog(), log.getCreatedInMillis()))
                 .collect(Collectors.toList());
@@ -262,9 +270,9 @@ public class GameAction extends BaseAction {
                     .findFirst();
 
             if (playerhand.isPresent()) {
-                List<GameLog> allPrivateLogs = gameLogAction.getAllPrivateLogs(pbf.getId(), playerhand.get().getUsername());
+                List<GameLog> allPrivateLogs = gameLogAction.getGameLogsBelongingToPlayer(pbf.getId(), playerhand.get().getUsername());
                 List<GameLogDTO> privateGamelogDTOs = allPrivateLogs.stream()
-                        .map(log -> new GameLogDTO(log.getId(), log.getPublicLog(), log.getCreatedInMillis()))
+                        .map(log -> new GameLogDTO(log.getId(), log.getPrivateLog(), log.getCreatedInMillis()))
                         .collect(Collectors.toList());
 
                 dto.setPlayer(playerhand.get());
