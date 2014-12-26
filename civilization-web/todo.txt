@@ -24,6 +24,7 @@ Inside a game
 
 Proper login/authentication, restrict pages
 
+- Should not be able to draw items unless your turn
 - My Items
     -- List of your current items
     -- Selection with what you want to draw

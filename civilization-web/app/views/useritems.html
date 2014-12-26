@@ -1,37 +1,97 @@
-<div class="row">
+<div class="row padd-top-7" ng-controller="UserItemController as userCtrl">
 
-  <h2>Private log</h2>
-  <div class="col-md-3">
-    <table ng-table="gameCtrl.tablePrivateLog" ng-show="$data.length > 0"
-           class="table table-bordered table-hover table-condensed text-center table-responsive">
-      <tr ng-repeat="log in $data" class="active" ng-class-even="'row-even'" ng-class-odd="'row-odd'">
-        <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
-        <td data-title="'Log'" sortable="'log'">{{log.log}}</td>
-        <td data-title="'Vote for undo'">
-          <button ng-really-message="This will initiate vote for Undo. Are you sure?"  ng-really-click="gameCtrl.initiateUndo(log.id)"
-                  class="btn btn-sm btn-warning" tooltip="Initiate a vote for undo">Undo</button>
-        </td>
-      </tr>
-    </table>
+  <div class="col-md-4">
+    <button class="btn btn-info" ng-click="privateLogCollapse = !privateLogCollapse">Toggle Private log</button>
+    <hr>
+    <div collapse="privateLogCollapse">
+      <table ng-table="gameCtrl.tablePrivateLog" ng-show="$data.length > 0"
+             class="table table-bordered table-hover table-condensed text-center table-responsive">
+        <tr>
+          <th>Date</th>
+          <th>Log</th>
+          <th>Vote for undo <span class="glyphicon glyphicon-question-sign" tooltip="Press undo button to request a vote for undo. All players must vote yes for undo to be made.
+            Once all players have voted yes, the item will be put back in the deck and reshuffled"></span></th>
+        </tr>
+
+        <tr ng-repeat="log in $data" class="active" ng-class-even="'row-even'" ng-class-odd="'row-odd'">
+          <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+          <td data-title="'Log'" sortable="'log'">{{log.log}}</td>
+          <td data-title="'Vote for undo'">
+            <button ng-really-message="This will initiate vote for Undo. Are you sure?"
+                    ng-really-click="gameCtrl.initiateUndo(log.id)"
+                    class="btn btn-sm btn-warning" tooltip="Initiate a vote for undo">Undo
+            </button>
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
+  <div ng-if="gameCtrl.yourTurn" class="col-md-8">
+    <h2>Choose item to draw</h2>
 
-
-  <div class="well well-lg col-md-3">
-    <p>Here should be a list of items you have. Units, GPs, Culture cards...</p>
+    <div class="btn-group" dropdown is-open="status.isopen">
+      <button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+        Button dropdown <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li><a href="#">Action</a></li>
+        <li><a href="#">Another action</a></li>
+        <li><a href="#">Something else here</a></li>
+        <li class="divider"></li>
+        <li><a href="#">Separated link</a></li>
+      </ul>
+    </div>
   </div>
+</div>
 
-  <h2>Choose item to draw</h2>
-  <div class="btn-group" dropdown is-open="status.isopen">
-    <button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
-      Button dropdown <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" role="menu">
-      <li><a href="#">Action</a></li>
-      <li><a href="#">Another action</a></li>
-      <li><a href="#">Something else here</a></li>
-      <li class="divider"></li>
-      <li><a href="#">Separated link</a></li>
-    </ul>
+<div class="row padd-top-7">
+  <div class="col-md-2">
+    <button class="btn btn-info" ng-click="itemCollapse = !itemCollapse">Toggle Items</button>
+    <hr>
+    <div collapse="itemCollapse">
+      <div class="well well-sm">Here should be a list of all items you have. Units, GPs, Culture cards...</div>
+    </div>
   </div>
-
+  <div class="col-sm-1">
+    <button class="btn btn-info" ng-click="civCollapse = !civCollapse">Toggle CIV</button>
+    <hr>
+    <div collapse="civCollapse">
+      <div class="well well-sm">Here should be a list of all the races you have drawn</div>
+    </div>
+  </div>
+  <div class="col-sm-2">
+    <button class="btn btn-info" ng-click="gpCollapse = !gpCollapse ">Toggle Great Persons</button>
+    <hr>
+    <div collapse="gpCollapse">
+      <div class="well well-sm">Here should be a list of all your Great Persons</div>
+    </div>
+  </div>
+  <div class="col-sm-2">
+    <button class="btn btn-info" ng-click="unitCollapse = !unitCollapse">Toggle Units</button>
+    <hr>
+    <div collapse="unitCollapse">
+      <div class="well well-sm">Here should be a list of all your units</div>
+    </div>
+  </div>
+  <div class="col-sm-2">
+    <button class="btn btn-info" ng-click="cultureCardsCollapse = !cultureCardsCollapse">Toggle Culture Cards</button>
+    <hr>
+    <div collapse="cultureCardsCollapse">
+      <div class="well well-sm">Here should be a list of all your culture cards</div>
+    </div>
+  </div>
+  <div class="col-sm-2">
+    <button class="btn btn-info" ng-click="hutsCollapse = !hutsCollapse">Toggle Huts</button>
+    <hr>
+    <div collapse="hutsCollapse">
+      <div class="well well-sm">Here should be a list of all your huts</div>
+    </div>
+  </div>
+  <div class="col-sm-1">
+    <button class="btn btn-info" ng-click="villagesCollapse = !villagesCollapse">Toggle Villages</button>
+    <hr>
+    <div collapse="villagesCollapse">
+      <div class="well well-sm">Here should be a list of all your villages</div>
+    </div>
+  </div>
 </div>

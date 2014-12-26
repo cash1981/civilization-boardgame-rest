@@ -104,6 +104,10 @@
   padding: 5px !important;
 }
 
+.padd-top-7 {
+  padding-top: 7px !important;
+}
+
 
 /* Ting jeg har added fra kurset */
 input.ng-touched.ng-invalid {

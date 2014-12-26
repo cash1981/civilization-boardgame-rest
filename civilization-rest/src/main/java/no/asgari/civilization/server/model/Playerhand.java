@@ -36,6 +36,78 @@ public class Playerhand {
     private List<Item> items = Lists.newArrayList();
     private Set<Tech> techsChosen = Sets.newTreeSet();
 
+    private List<Item> civs = Lists.newArrayList();
+    private List<Item> infantries = Lists.newArrayList();
+    private List<Item> cultureCards = Lists.newArrayList();
+    private List<Item> greatPersons = Lists.newArrayList();
+    private List<Item> aircrafts = Lists.newArrayList();
+    private List<Item> artilleries = Lists.newArrayList();
+    private List<Item> mounteds = Lists.newArrayList();
+    private List<Item> huts = Lists.newArrayList();
+    private List<Item> villages = Lists.newArrayList();
+    private List<Item> tiles = Lists.newArrayList();
+
+    @JsonIgnore
+    public void addItem(Item item) {
+        items.add(item);
+        switch (item.getSheetName()) {
+            case CIV:
+                civs.add(item);
+                break;
+            case CULTURE_1:
+            case CULTURE_2:
+            case CULTURE_3:
+                cultureCards.add(item);
+                break;
+            case AIRCRAFT:
+                aircrafts.add(item);
+                break;
+            case INFANTRY:
+                infantries.add(item);
+                break;
+            case MOUNTED:
+                mounteds.add(item);
+                break;
+            case GREAT_PERSON:
+                greatPersons.add(item);
+                break;
+            case HUTS:
+                huts.add(item);
+                break;
+            case VILLAGES:
+                villages.add(item);
+                break;
+        }
+
+    }
+
+    @JsonIgnore
+    public boolean removeItem(Item item) {
+        boolean removed = items.remove(item);
+        switch (item.getSheetName()) {
+            case CIV:
+                return civs.remove(item);
+            case CULTURE_1:
+            case CULTURE_2:
+            case CULTURE_3:
+                return cultureCards.remove(item);
+            case AIRCRAFT:
+                return aircrafts.remove(item);
+            case INFANTRY:
+                return infantries.remove(item);
+            case MOUNTED:
+                return mounteds.remove(item);
+            case GREAT_PERSON:
+                return greatPersons.remove(item);
+            case HUTS:
+                return huts.remove(item);
+            case VILLAGES:
+                return villages.remove(item);
+        }
+        return removed;
+    }
+
+
     @JsonIgnore
     public String green() {
         return "Green";

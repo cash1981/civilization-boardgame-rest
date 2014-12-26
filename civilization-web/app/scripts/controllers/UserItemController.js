@@ -1,6 +1,6 @@
 'use strict';
 (function (module) {
-  var GameController = function ($log, $routeParams, GameService, currentUser, $filter, ngTableParams, $scope) {
+  var UserItemController = function ($log, $routeParams, GameService, currentUser, $filter, ngTableParams, $scope) {
     var model = this;
     model.user = currentUser.profile;
     $scope.userHasAccess = false;
@@ -65,7 +65,7 @@
 
   };
 
-  module.controller("GameController",
-    ["$log", "$routeParams", "GameService", "currentUser", "$filter", "ngTableParams", "$scope", GameController]);
+  module.controller("UserItemController",
+    ["$log", "$routeParams", "GameService", "currentUser", "$filter", "ngTableParams", "$scope", UserItemController]);
 
 }(angular.module("civApp")));

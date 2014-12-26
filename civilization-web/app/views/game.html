@@ -11,7 +11,7 @@
     <div class="col-md-6" ng-if="userHasAccess">
       <div class="jumbotron">
         <h1>Kanskje diverse info her</h1>
-        <h2>End of turn button</h2>
+        <p><a ng-show="gameCtrl.yourTurn" ng-href class="btn btn-primary btn-lg" role="button" tooltip="Will end your turn">End turn</a></p>
         <h3>Write message/chat</h3>
         <p class="lead" ng-show="gameCtrl.yourTurn">Its your turn</p>
       </div>
@@ -24,6 +24,13 @@
     <tab heading="Gamelog" class="col-md-3">
       <table ng-table="gameCtrl.tableParams" ng-show="$data.length > 0"
              class="table table-bordered table-hover table-condensed text-center table-responsive">
+        <tr>
+          <th>Date</th>
+          <th>Log</th>
+          <th>Vote for undo <span class="glyphicon glyphicon-question-sign" tooltip="Press undo button to request a vote for undo. All players must vote yes for undo to be made.
+          Once all players have voted yes, the item will be put back in the deck and reshuffled"></span></th>
+        </tr>
+
         <tr ng-repeat="log in $data" class="active" ng-class-even="'row-even'" ng-class-odd="'row-odd'">
           <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
           <td data-title="'Log'" sortable="'log'">{{log.log}}</td>
