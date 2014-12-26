@@ -23,7 +23,13 @@ angular.module('civApp', [
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'views/list.html'
+        templateUrl: 'views/list.html',
+        controller: "GameListController as gameListCtrl",
+        resolve: {
+          games: ["gameData", function(m) {
+            return m.getAllGames();
+          }]
+        }
       })
       .when('/game/:id', {
         templateUrl: 'views/game.html'

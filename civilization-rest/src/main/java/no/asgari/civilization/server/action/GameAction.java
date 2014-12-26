@@ -245,6 +245,7 @@ public class GameAction extends BaseAction {
 
     //TODO test it
     public GameDTO getGame(PBF pbf, Player player) {
+        Preconditions.checkNotNull(pbf);
         //Set common stuff
         GameDTO dto = new GameDTO();
         long created = pbf.getCreated().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();

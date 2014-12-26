@@ -4,7 +4,7 @@
     <button class="btn btn-info" ng-click="privateLogCollapse = !privateLogCollapse">Toggle Private log</button>
     <hr>
     <div collapse="privateLogCollapse">
-      <table ng-table="gameCtrl.tablePrivateLog" ng-show="$data.length > 0"
+      <table ng-table="userCtrl.tablePrivateLog" ng-show="$data.length > 0"
              class="table table-bordered table-hover table-condensed text-center table-responsive">
         <tr>
           <th>Date</th>

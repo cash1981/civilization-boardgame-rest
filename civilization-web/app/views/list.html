@@ -8,7 +8,7 @@
     </p>
   </div>
 
-  <div class="table-responsive" ng-controller="GameListController as gameListCtrl">
+  <div class="table-responsive">
     <input type="text" ng-model="filterContent" alt="Filter the table" placeholder="Search games"/>
     <table class="table table-striped table-hover table-condensed text-center">
       <thead>
@@ -40,11 +40,11 @@
         </td>
         <td>{{game.active ? 'Active' : 'Finished'}}</td>
         <td>
-          <button id="btnJoinGame" ng-if="(game.numOfPlayers > game.players.length) && gameListCtrl.user.loggedIn"
+          <a ng-href="#/game/{{game.id}}" id="btnJoinGame" ng-if="(game.numOfPlayers > game.players.length) && gameListCtrl.user.loggedIn && !gameListCtrl.isUserPlaying(game.players)"
                   type="button"
                   class="btn btn-success" ng-click="gameListCtrl.joinGame(game)">
             Join
-          </button>
+          </a>
         </td>
       </tr>
       </tbody>
