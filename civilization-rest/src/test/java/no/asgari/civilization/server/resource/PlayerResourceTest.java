@@ -1,10 +1,9 @@
 package no.asgari.civilization.server.resource;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.net.URI;
 import java.util.List;
@@ -17,14 +16,13 @@ import javax.ws.rs.core.UriBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+import junit.framework.Assert;
 import no.asgari.civilization.server.SheetName;
+import no.asgari.civilization.server.action.DrawAction;
 import no.asgari.civilization.server.application.CivilizationApplication;
 import no.asgari.civilization.server.application.CivilizationConfiguration;
 import no.asgari.civilization.server.dto.ItemDTO;
-import no.asgari.civilization.server.model.GameLog;
-import no.asgari.civilization.server.model.Item;
-import no.asgari.civilization.server.model.PBF;
-import no.asgari.civilization.server.model.Playerhand;
+import no.asgari.civilization.server.model.*;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
@@ -205,6 +203,27 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
     }
 
     @Test
+    public void testRevealItem() throws Exception {
+        DrawAction drawAction = new DrawAction(db);
+        //Before draw
+        Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.INFANTRY);
+        assertTrue(gameLogOptional.isPresent());
+        assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Infantry.class);
+
+        GameLog gameLog = gameLogCollection.findOneById(gameLogOptional.get().getId());
+        if(gameLog.getDraw() != null && gameLog.getDraw().getItem() != null && gameLog.getPbfId().equals(pbfId)) {
+            URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/revealItem/%s", RULE.getLocalPort(), pbfId, gameLog.getId())).build();
+            ClientResponse response = client().resource(uri)
+                    .type(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                    .put(ClientResponse.class);
+            assertEquals(response.getStatus(), HttpStatus.OK_200);
+        } else {
+            fail("Should have gamelog");
+        }
+    }
+
+    @Test
     public void testDrawInfantryCard() throws Exception {
         URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/draw/%s", RULE.getLocalPort(), pbfId, SheetName.INFANTRY)).build();
         ClientResponse response = client().resource(uri)
@@ -339,6 +358,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         testDrawVillage();
 
         PBF pbf = pbfCollection.findOneById(pbfId);
+        assertThat(pbf.getDiscardedItems()).isEmpty();
         Item village = getItemFromPlayerhand(pbf, SheetName.VILLAGES);
         assertNotNull(village);
 
@@ -351,6 +371,9 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
                 .entity(itemDTO)
                 .delete(ClientResponse.class);
         assertEquals(response.getStatus(), HttpStatus.OK_200);
+
+        pbf = pbfCollection.findOneById(pbfId);
+        assertThat(pbf.getDiscardedItems()).isNotEmpty();
     }
 
     @Test

@@ -148,24 +148,36 @@ public class PlayerAction extends BaseAction {
      * Revealing of items are really just saving a public log with the hidden content information
      * @param pbfId
      * @param playerId
-     * @param itemDTO
+     * @param gameLogId - The id of the GameLog which contains the item to reveal
      */
     @SuppressWarnings("unchecked")
-    public void revealItem(String pbfId, String playerId, ItemDTO itemDTO) {
-        PBF pbf = pbfCollection.findOneById(pbfId);
-        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+    public void revealItem(String pbfId, String playerId, String gameLogId) {
+        Preconditions.checkNotNull(gameLogId);
+        Preconditions.checkNotNull(pbfId);
+        Preconditions.checkNotNull(playerId);
 
-        Stream<Item> combinedItemStream = Stream.concat(playerhand.getItems().stream(), (Stream<Item>) playerhand.getTechsChosen());
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        GameLog gameLog = logAction.findGameLogById(gameLogId);
+        if(gameLog.getDraw() == null || gameLog.getDraw().getItem() == null) {
+            log.error("Nothing to reveal");
+            throw new WebApplicationException(Response.status(Response.Status.NOT_MODIFIED)
+                    .entity("Nothing to reveal")
+                    .build());
+        }
+
+        Item itemToReveal = gameLog.getDraw().getItem();
+
+        /*Stream<Item> combinedItemStream = Stream.concat(playerhand.getItems().stream(), (Stream<Item>) playerhand.getTechsChosen());
 
         Item itemToReveal = combinedItemStream
-                .filter(it -> it.getSheetName() == itemDTO.getSheetName())
-                .filter(it -> it.getName().equals(itemDTO.getName()))
+                .filter(it -> it.getSheetName() == gameLogId.getSheetName())
+                .filter(it -> it.getName().equals(gameLogId.getName()))
                 .findFirst()
                 .orElseThrow(PlayerAction::cannotFindItem);
-
+        */
 
         itemToReveal.setHidden(false);
-        logAction.createGameLog(itemToReveal, pbfId, GameLog.LogType.ITEM);
+        logAction.createGameLog(itemToReveal, pbfId, GameLog.LogType.REVEAL);
         log.debug("item to be reveal " + itemToReveal);
         pbfCollection.updateById(pbfId, pbf);
     }
@@ -249,6 +261,7 @@ public class PlayerAction extends BaseAction {
         while(iterator.hasNext()) {
             Item item = iterator.next();
             if(item.getSheetName() == itemdto.getSheetName() && item.getName().equals(itemdto.getName())) {
+                pbf.getDiscardedItems().add(item);
                 iterator.remove();
                 createLog(item, pbf.getId(), GameLog.LogType.DISCARD);
                 pbfCollection.updateById(pbf.getId(), pbf);

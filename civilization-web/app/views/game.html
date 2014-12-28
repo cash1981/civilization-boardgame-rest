@@ -35,7 +35,7 @@
           <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
           <td data-title="'Log'" sortable="'log'">{{log.log}}</td>
           <td data-title="'Vote for undo'">
-            <button ng-really-message="This will initiate vote for Undo. Are you sure?"  ng-really-click="gameCtrl.initiateUndo(log.id)"
+            <button ng-if="log.draw" ng-really-message="This will initiate vote for Undo. Are you sure?"  ng-really-click="gameCtrl.initiateUndo(log.id)"
               class="btn btn-sm btn-warning" tooltip="Initiate a vote for undo">Undo</button>
           </td>
         </tr>

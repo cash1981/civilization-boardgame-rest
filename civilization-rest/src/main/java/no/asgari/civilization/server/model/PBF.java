@@ -31,10 +31,6 @@ public class PBF {
     @JsonIgnore
     public static final String COL_NAME = "pbf";
 
-    public enum Color {
-        YELLOW, GREEN, PURPLE, RED;
-    }
-
     @ObjectId
     @Id
     private String id;
@@ -53,6 +49,8 @@ public class PBF {
     private List<Item> items = Lists.newArrayList();
     private List<Playerhand> players = Lists.newArrayList();
     private List<Tech> techs = Lists.newArrayList();
+
+    private List<Item> discardedItems = Lists.newArrayList();
 
     /**
      * Returns the username of the player who is start of turn

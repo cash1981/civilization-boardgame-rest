@@ -149,13 +149,13 @@ public class DrawTest extends AbstractMongoDBTest {
     public void drawHutAndMakeSureItsNoLongerInPBFCollection() throws Exception {
         DrawAction drawAction = new DrawAction(db);
         //Before draw
-        long aircrafts = pbfCollection.findOneById(pbfId).getItems().parallelStream()
+        long hut = pbfCollection.findOneById(pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.HUTS)
                 .count();
 
         Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.HUTS);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts-1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
+        assertEquals(hut-1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.HUTS)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Hut.class);
@@ -165,13 +165,13 @@ public class DrawTest extends AbstractMongoDBTest {
     public void drawInfantryAndMakeSureItsNoLongerInPBFCollection() throws Exception {
         DrawAction drawAction = new DrawAction(db);
         //Before draw
-        long aircrafts = pbfCollection.findOneById(pbfId).getItems().parallelStream()
+        long infantries = pbfCollection.findOneById(pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.INFANTRY)
                 .count();
 
         Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.INFANTRY);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts-1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
+        assertEquals(infantries-1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.INFANTRY)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Infantry.class);

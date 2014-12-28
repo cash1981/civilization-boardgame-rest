@@ -75,6 +75,13 @@ public class UndoAction extends BaseAction {
             log.error("Couldn't find playerId " + playerId + " in PBF's players");
             throw new IllegalArgumentException("Wrong playerId");
         }
+
+        if(gameLog.getDraw() == null) {
+            throw new WebApplicationException(Response.status(Response.Status.NOT_MODIFIED)
+                    .entity("This item cannot be undone. Nothing to undo.")
+                    .build());
+        }
+
         gameLog.getDraw().getUndo().vote(playerId, vote);
 
         Optional<Boolean> resultOfVotes = gameLog.getDraw().getUndo().getResultOfVotes();

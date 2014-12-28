@@ -50,15 +50,24 @@
           }
         };
 
+        var revealItem = function (gameId, logid) {
+          baseUrl = "http://localhost:8080/civilization/player/";
+          var url = baseUrl + gameId + "/revealItem/" + logid;
+          return $http.put(url)
+            .then(function (response) {
+              return response;
+            });
+        };
+
 
         return {
           getAllGames: getAllGames,
           joinGame: joinGame,
           getGameById: getGameById,
-          createGame: createGame
+          createGame: createGame,
+          revealItem: revealItem
         };
       };
-
 
     });
   });

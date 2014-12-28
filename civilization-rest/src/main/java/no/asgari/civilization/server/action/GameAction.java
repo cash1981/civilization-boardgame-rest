@@ -178,9 +178,11 @@ public class GameAction extends BaseAction {
 
         Playerhand playerhand = createPlayerHand(player, color);
         if (!pbf.getPlayers().contains(playerhand)) {
+            createInfoLog(pbf.getId(), playerhand.getUsername() + " joined the game and is playing color " + playerhand.getColor());
             pbf.getPlayers().add(playerhand);
+
         }
-        startIfAllPlayers(pbf);
+        pbf = startIfAllPlayers(pbf);
         pbfCollection.updateById(pbf.getId(), pbf);
     }
 
@@ -227,15 +229,15 @@ public class GameAction extends BaseAction {
                 .collect(Collectors.toList());
     }
 
-    private void startIfAllPlayers(PBF pbf) {
+    private PBF startIfAllPlayers(PBF pbf) {
         final int numOfPlayersNeeded = pbf.getNumOfPlayers();
         if (numOfPlayersNeeded == pbf.getPlayers().size()) {
             Playerhand randomPlayer = getRandomPlayer(pbf.getPlayers());
             log.debug("Setting starting player " + randomPlayer);
             randomPlayer.setYourTurn(true);
             createInfoLog(pbf.getId(), "Starting player is " + randomPlayer.getUsername());
-            pbfCollection.updateById(pbf.getId(), pbf);
         }
+        return pbf;
     }
 
     private Playerhand getRandomPlayer(List<Playerhand> players) {
@@ -258,7 +260,7 @@ public class GameAction extends BaseAction {
         //Set logs
         List<GameLog> allPublicLogs = gameLogAction.getGameLogs(pbf.getId());
         List<GameLogDTO> publicGamelogDTOs = allPublicLogs.stream()
-                .map(log -> new GameLogDTO(log.getId(), log.getPublicLog(), log.getCreatedInMillis()))
+                .map(log -> new GameLogDTO(log.getId(), log.getPublicLog(), log.getCreatedInMillis(), log.getDraw()))
                 .collect(Collectors.toList());
         dto.setPublicLogs(publicGamelogDTOs);
 
@@ -273,7 +275,7 @@ public class GameAction extends BaseAction {
             if (playerhand.isPresent()) {
                 List<GameLog> allPrivateLogs = gameLogAction.getGameLogsBelongingToPlayer(pbf.getId(), playerhand.get().getUsername());
                 List<GameLogDTO> privateGamelogDTOs = allPrivateLogs.stream()
-                        .map(log -> new GameLogDTO(log.getId(), log.getPrivateLog(), log.getCreatedInMillis()))
+                        .map(log -> new GameLogDTO(log.getId(), log.getPrivateLog(), log.getCreatedInMillis(), log.getDraw()))
                         .collect(Collectors.toList());
 
                 dto.setPlayer(playerhand.get());

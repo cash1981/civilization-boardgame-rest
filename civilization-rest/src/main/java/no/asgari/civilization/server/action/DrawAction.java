@@ -97,8 +97,16 @@ public class DrawAction extends BaseAction {
 
             log.debug("Not adding these items which are in use " + playersItem);
             itemsFromExcel.removeAll(playersItem);
+
+            //Now add the discarded items
+            List<Item> discardedItems = pbf.getDiscardedItems().stream()
+                    .filter(it -> it.getSheetName() == sheetName)
+                    .collect(Collectors.toList());
+            log.debug("Found " + discardedItems.size() + " discarded items of type " + sheetName + " to add in the deck");
+            itemsFromExcel.addAll(discardedItems);
+
             if(itemsFromExcel.size() == 0) {
-                log.warn("All items are still in use, cannot make a shuffle");
+                log.warn("All items are still in use, cannot make a shuffle. Nothing to draw!");
                 throw new NoMoreItemsException(sheetName.getName());
             }
 

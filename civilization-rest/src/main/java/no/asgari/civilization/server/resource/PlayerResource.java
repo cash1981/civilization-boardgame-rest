@@ -103,10 +103,10 @@ public class PlayerResource {
     }
 
     @PUT
-    @Path("/revealItem")
+    @Path("/revealItem/{gameLogId}")
     @Timed
-    public Response revealItem(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
-        playerAction.revealItem(pbfId, player.getId(), item);
+    public Response revealItem(@Auth Player player, @PathParam("pbfId") String pbfId, @PathParam("gameLogId") String gameLogId) {
+        playerAction.revealItem(pbfId, player.getId(), gameLogId);
         return  Response.ok().build();
     }
 

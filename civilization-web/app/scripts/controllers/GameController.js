@@ -4,14 +4,6 @@
     var model = this;
     model.user = currentUser.profile;
     $scope.userHasAccess = false;
-    $scope.privateLogCollapse = true;
-    $scope.itemCollapse = true;
-    $scope.gpCollapse = true;
-    $scope.unitCollapse = true;
-    $scope.cultureCardsCollapse = true;
-    $scope.civCollapse = true;
-    $scope.hutsCollapse = true;
-    $scope.villagesCollapse = true;
     model.yourTurn = false;
 
     var gamePromise = gameData.getGameById($routeParams.id)
@@ -41,27 +33,6 @@
         });
       }
     });
-
-    model.tablePrivateLog = new ngTableParams({
-      page: 1,            // show first page
-      count: 10,          // count per page
-      sorting: {
-        created: 'desc'     // initial sorting
-      }
-    }, {
-      total: 0, // length of data
-      getData: function ($defer, params) {
-        // use build-in angular filter
-        // update table params
-
-        gamePromise.then(function (game) {
-          var orderedData = params.sorting() ? $filter('orderBy')(game.privateLogs, params.orderBy()) : game.privateLogs;
-          params.total(game.privateLogs.length);
-          $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-        });
-      }
-    });
-
 
   };
 
