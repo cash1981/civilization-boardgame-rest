@@ -17,6 +17,14 @@
       return gameData.revealItem($routeParams.id, gamelogid)
     };
 
+    var gamePromise = gameData.getGameById($routeParams.id)
+      .then(function (game) {
+        model.game = game;
+        $scope.userHasAccess = game.player && game.player.username === model.user.username;
+        model.yourTurn = game.player && game.player.yourTurn;
+        return game;
+      });
+
     model.tablePrivateLog = new ngTableParams({
       page: 1,            // show first page
       count: 10,          // count per page

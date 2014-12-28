@@ -16,8 +16,10 @@
         <tr ng-repeat="log in $data" class="active" ng-class-even="'row-even'" ng-class-odd="'row-odd'">
           <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
           <td data-title="'Log'" sortable="'log'">{{log.log}}</td>
+
           <td data-title="'Reveal'">
-            <button ng-if="log.draw" ng-really-message="This will reveal your item. Are you sure?"
+            Lets see '{{log.draw.item | json | filter: {"hidden": 'true'} }}'
+            <button ng-if="log.draw && log.draw.item && log.draw.item.hidden" ng-really-message="This will reveal your item. Are you sure?"
                     ng-really-click="userCtrl.revealItem(log.id)"
                     class="btn btn-sm btn-warning" tooltip="Reveal your item">Reveal Item</button>
           </td>

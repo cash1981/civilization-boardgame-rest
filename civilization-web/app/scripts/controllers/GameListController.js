@@ -6,7 +6,6 @@
 
     model.isUserPlaying = function(players) {
       if(players) {
-
         for(var i = 0; i < players.length; i++) {
           var player = players[i];
           if(player && player.username == model.user.username) {

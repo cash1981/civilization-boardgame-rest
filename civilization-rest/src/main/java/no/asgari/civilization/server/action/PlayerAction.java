@@ -166,15 +166,12 @@ public class PlayerAction extends BaseAction {
         }
 
         Item itemToReveal = gameLog.getDraw().getItem();
-
-        /*Stream<Item> combinedItemStream = Stream.concat(playerhand.getItems().stream(), (Stream<Item>) playerhand.getTechsChosen());
-
-        Item itemToReveal = combinedItemStream
-                .filter(it -> it.getSheetName() == gameLogId.getSheetName())
-                .filter(it -> it.getName().equals(gameLogId.getName()))
-                .findFirst()
-                .orElseThrow(PlayerAction::cannotFindItem);
-        */
+        if(!itemToReveal.isHidden()) {
+            log.warn("Item already revealed");
+            throw new WebApplicationException(Response.status(Response.Status.NOT_MODIFIED)
+                    .entity("Item already revealed")
+                    .build());
+        }
 
         itemToReveal.setHidden(false);
         logAction.createGameLog(itemToReveal, pbfId, GameLog.LogType.REVEAL);
