@@ -6,22 +6,14 @@
     <div collapse="privateLogCollapse">
       <table ng-table="userCtrl.tablePrivateLog" ng-show="$data.length > 0"
              class="table table-bordered table-hover table-condensed text-center table-responsive">
-        <tr>
-          <th>Date</th>
-          <th>Log</th>
-          <th>Vote for undo <span class="glyphicon glyphicon-question-sign" tooltip="Press undo button to request a vote for undo. All players must vote yes for undo to be made.
-            Once all players have voted yes, the item will be put back in the deck and reshuffled"></span></th>
-        </tr>
-
         <tr ng-repeat="log in $data" class="active" ng-class-even="'row-even'" ng-class-odd="'row-odd'">
           <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
           <td data-title="'Log'" sortable="'log'">{{log.log}}</td>
 
           <td data-title="'Reveal'">
-            Lets see '{{log.draw.item | json | filter: {"hidden": 'true'} }}'
-            <button ng-if="log.draw && log.draw.item && log.draw.item.hidden" ng-really-message="This will reveal your item. Are you sure?"
+            <button ng-if="userCtrl.nextElement(log.draw.item).hidden" ng-really-message="This will reveal your item. Are you sure?"
                     ng-really-click="userCtrl.revealItem(log.id)"
-                    class="btn btn-sm btn-warning" tooltip="Reveal your item">Reveal Item</button>
+                    class="btn btn-sm btn-warning" tooltip="Reveal your item. This will make an entry in the game log">Reveal Item</button>
           </td>
         </tr>
       </table>

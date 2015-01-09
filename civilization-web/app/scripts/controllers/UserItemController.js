@@ -3,7 +3,7 @@
   var UserItemController = function ($log, $routeParams, gameData, currentUser, $filter, ngTableParams, $scope) {
     var model = this;
     model.user = currentUser.profile;
-    $scope.privateLogCollapse = true;
+    $scope.privateLogCollapse = false;
     $scope.itemCollapse = true;
     $scope.gpCollapse = true;
     $scope.unitCollapse = true;
@@ -11,6 +11,18 @@
     $scope.civCollapse = true;
     $scope.hutsCollapse = true;
     $scope.villagesCollapse = true;
+
+    //Returns the next element in the array
+    model.nextElement = function(obj) {
+      if(obj) {
+        var keys = Object.keys(obj);
+        if(keys && keys.length > 0) {
+          return obj[keys[0]];
+        }
+      }
+      return obj;
+    };
+
     model.yourTurn = false;
 
     model.revealItem = function (gamelogid) {

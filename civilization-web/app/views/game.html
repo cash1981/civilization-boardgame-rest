@@ -5,14 +5,18 @@
         <h1>{{gameCtrl.game.name}}</h1>
 
         <p class="lead">{{gameCtrl.game.type}} - Created: {{gameCtrl.game.created | date:'dd-MM-yyyy'}}</p>
+
         <p><a ng-href class="btn btn-primary btn-lg" role="button">{{gameCtrl.game.whosTurnIsIt}}</a> to play</p>
       </div>
     </div>
     <div class="col-md-6" ng-if="userHasAccess">
       <div class="jumbotron">
         <h1>Kanskje diverse info her</h1>
+
         <p><a ng-show="gameCtrl.yourTurn" ng-href class="btn btn-primary btn-lg" role="button" tooltip="Will end your turn">End turn</a></p>
+
         <h3>Write message/chat</h3>
+
         <p class="lead" ng-show="gameCtrl.yourTurn">Its your turn</p>
       </div>
     </div>
@@ -24,21 +28,17 @@
     <tab heading="Gamelog" class="col-md-3">
       <table ng-table="gameCtrl.tableParams" ng-show="$data.length > 0"
              class="table table-bordered table-hover table-condensed text-center table-responsive">
-        <tr>
-          <th>Date</th>
-          <th>Log</th>
-          <th>Vote for undo <span class="glyphicon glyphicon-question-sign" tooltip="Press undo button to request a vote for undo. All players must vote yes for undo to be made.
-          Once all players have voted yes, the item will be put back in the deck and reshuffled"></span></th>
-        </tr>
 
-        <tr ng-repeat="log in $data" class="active" ng-class-even="'row-even'" ng-class-odd="'row-odd'">
-          <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
-          <td data-title="'Log'" sortable="'log'">{{log.log}}</td>
-          <td data-title="'Vote for undo'">
-            <button ng-if="log.draw" ng-really-message="This will initiate vote for Undo. Are you sure?"  ng-really-click="gameCtrl.initiateUndo(log.id)"
-              class="btn btn-sm btn-warning" tooltip="Initiate a vote for undo">Undo</button>
-          </td>
-        </tr>
+      <tr ng-repeat="log in $data" class="active" ng-class-even="'row-even'" ng-class-odd="'row-odd'">
+        <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+        <td data-title="'Log'" sortable="'log'">{{log.log}}</td>
+        <td data-title="'Vote for undo'" sortable="'log.draw'">
+          <button ng-if="log.draw" ng-really-message="This will initiate vote for Undo. Are you sure?" ng-really-click="gameCtrl.initiateUndo(log.id)"
+                  class="btn btn-sm btn-warning" tooltip="Press undo button to request a vote for undo. All players must vote yes for undo to be made.
+                  Once all players have voted yes, the item will be put back in the deck and reshuffled">Undo
+          </button>
+        </td>
+      </tr>
       </table>
     </tab>
     <tab heading="The current map" class="col-md-3">Here should be uploaded image of map</tab>
