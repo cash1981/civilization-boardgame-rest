@@ -1,7 +1,7 @@
 ﻿'use strict';
 (function (module) {
 
-  var LoginController = function (basicauth, currentUser, alerting, loginRedirect) {
+  var LoginController = function (basicauth, currentUser, growl, loginRedirect) {
     var model = this;
     model.user = currentUser.profile;
 
@@ -13,7 +13,7 @@
       if (form.$valid) {
         basicauth.login(model.username, model.password)
           .then(loginRedirect.redirectPreLogin)
-          .catch(alerting.errorHandler("Could not login"));
+          .catch(growl.error("Could not login"));
         model.password = "";
       }
     };
@@ -23,6 +23,6 @@
     };
   };
 
-  module.controller("LoginController", ['basicauth', 'currentUser', 'alerting', 'loginRedirect', LoginController]);
+  module.controller("LoginController", ['basicauth', 'currentUser', 'growl', 'loginRedirect', LoginController]);
 
 }(angular.module("civApp")));

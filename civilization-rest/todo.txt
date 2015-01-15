@@ -72,5 +72,10 @@ Nice to have
 - Support for more game types
 	-- Change all sheetnames in parameters to combination of GameType and Sheetname
 
+- Reveal Item
+    -- Fikse OK eller ERROR melding når ting er revealed
+    -- Gjøre nytt kall til getGameById
+        -- Redirecte til riktig tab
+
 Future roadmap
 - Replace MongoJack with Morphia as MongoJack is no longer maintained it seems

@@ -3,7 +3,7 @@
   var UserItemController = function ($log, $routeParams, gameData, currentUser, $filter, ngTableParams, $scope) {
     var model = this;
     model.user = currentUser.profile;
-    $scope.privateLogCollapse = true;
+    $scope.privateLogCollapse = false;
     $scope.itemCollapse = true;
     $scope.gpCollapse = true;
     $scope.unitCollapse = true;
@@ -13,8 +13,22 @@
     $scope.villagesCollapse = true;
     model.yourTurn = false;
 
+    model.nextKey = function nextKey(obj) {
+      var keys = Object.keys(obj);
+      if(keys && keys.length > 0) return obj[keys[0]];
+    };
+
     model.revealItem = function (gamelogid) {
-      return gameData.revealItem($routeParams.id, gamelogid)
+      gameData.revealItem($routeParams.id, gamelogid)
+        .then(function (response) {
+            $log.info("Call to reveal made, lets get ");
+            gameData.setBaseUrl = "http://localhost:8080/civilization/game/";
+            gameData.getGameById($routeParams.id)
+              .then(function (game) {
+                model.game = game;
+                return game;
+              });
+        });
     };
 
     var gamePromise = gameData.getGameById($routeParams.id)

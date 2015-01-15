@@ -1,26 +1,22 @@
 'use strict';
 
-/**
- * @ngdoc overview
- * @name civApp
- * @description
- * # civApp
- *
- * Main module of the application.
- */
-angular.module('civApp', [
-  'ngAnimate',
-  'ngCookies',
-  'ngResource',
-  'ngRoute',
-  'ngSanitize',
-  'ngMessages',
-  'ui.bootstrap',
-  'ngTouch',
-  'ab-base64',
-  'ngTable'
-])
-  .config(function ($routeProvider) {
+(function () {
+
+  var application = angular.module('civApp', [
+    'ngAnimate',
+    'ngCookies',
+    'ngResource',
+    'ngRoute',
+    'ngSanitize',
+    'ngMessages',
+    'ui.bootstrap',
+    'ngTouch',
+    'ab-base64',
+    'angular-growl',
+    'ngTable'
+  ]);
+
+  application.config(function ($routeProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/list.html',
@@ -51,3 +47,12 @@ angular.module('civApp', [
         redirectTo: '/'
       });
   });
+
+  application.config(function (growlProvider) {
+    growlProvider.globalTimeToLive(7000);
+    growlProvider.globalDisableCountDown(false);
+    growlProvider.globalPosition('top-center');
+    growlProvider.onlyUniqueMessages(true);
+  });
+
+}());

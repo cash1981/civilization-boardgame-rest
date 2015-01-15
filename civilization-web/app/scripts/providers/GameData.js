@@ -54,8 +54,14 @@
           baseUrl = "http://localhost:8080/civilization/player/";
           var url = baseUrl + gameId + "/revealItem/" + logid;
           return $http.put(url)
-            .then(function (response) {
+            .success(function (response) {
+              baseUrl = "http://localhost:8080/civilization/game/";
               return response;
+            })
+            .error(function(data) {
+              baseUrl = "http://localhost:8080/civilization/game/";
+              //TODO Sette error et sted
+              return data;
             });
         };
 

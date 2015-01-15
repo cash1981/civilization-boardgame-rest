@@ -7,6 +7,9 @@ import lombok.Data;
 import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.Playerhand;
 
+/**
+ * DTO for inside a specific game
+ */
 @Data
 @JsonRootName("gameDTO")
 public class GameDTO {

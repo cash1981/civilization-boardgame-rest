@@ -18,8 +18,7 @@
           <td data-title="'Log'" sortable="'log'">{{log.log}}</td>
 
           <td data-title="'Reveal'">
-            Lets see '{{log.draw.item | json | filter: {"hidden": 'true'} }}'
-            <button ng-if="log.draw && log.draw.item && log.draw.item.hidden" ng-really-message="This will reveal your item. Are you sure?"
+            <button ng-if="log.draw && log.draw.item && userCtrl.nextKey(log.draw.item).hidden" ng-really-message="This will reveal your item. Are you sure?"
                     ng-really-click="userCtrl.revealItem(log.id)"
                     class="btn btn-sm btn-warning" tooltip="Reveal your item">Reveal Item</button>
           </td>

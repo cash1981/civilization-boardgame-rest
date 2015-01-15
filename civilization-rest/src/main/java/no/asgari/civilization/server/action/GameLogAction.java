@@ -99,6 +99,10 @@ public class GameLogAction {
         return gameLogCollection.findOneById(id);
     }
 
+    public WriteResult<GameLog, String> updateGameLogById(GameLog gameLog) {
+        return gameLogCollection.updateById(gameLog.getId(), gameLog);
+    }
+
     private String getUsernameFromPlayerId(String playerId) {
         return playerCollection.findOneById(playerId).getUsername();
     }

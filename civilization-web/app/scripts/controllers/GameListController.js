@@ -30,16 +30,6 @@
       return joinPromise;
     };
 
-    var error = function (error) {
-      $log.info("Got error loading games");
-      if (error.data) {
-        model.errorMessage = error.data.message;
-      } else {
-        model.errorMessage = "Unknown error";
-      }
-    };
-
-
     var initialize = function () {
       model.games = games;
       $log.info("Got games");

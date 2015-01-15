@@ -26,7 +26,6 @@
           if (lastPath) {
             $location.path(lastPath);
             lastPath = "";
-
           } else {
             $location.path("/");
           }

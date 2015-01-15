@@ -7,9 +7,10 @@
   <meta name="viewport" content="width=device-width">
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
+  <link rel="stylesheet" href="bower_components/ng-table/ng-table.css"/>
+  <link rel="stylesheet" href="bower_components/angular-growl-v2/build/angular-growl.css"/>
   <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="styles/animate.css">
-  <link rel="stylesheet" href="bower_components/ng-table/ng-table.css"/>
 
 </head>
 <body ng-app="civApp" ng-cloak>
@@ -24,10 +25,7 @@
   <div class="work-spinner">
     <img src="images/ajax-loader.gif" class="center-block"/>
   </div>
-  <!--TODO fikse bra sted å vise alert -->
-  <div class="row">
-    <alerts></alerts>
-  </div>
+  <div growl></div>
   <div ng-view></div>
 
 </div>
@@ -84,6 +82,7 @@
 <script src="bower_components/ng-table/ng-table.js"></script>
 <script src="bower_components/ng-file-upload/angular-file.upload.js"></script>
 <script src="bower_components/ng-file-upload-shim/angular-file.upload-shim.js"></script>
+<script src="bower_components/angular-growl-v2/build/angular-growl.js"></script>
 
 
 <script src="scripts/app.js"></script>
@@ -92,11 +91,9 @@
 <script src="scripts/services/localStorage.js"></script>
 <script src="scripts/services/formEncode.js"></script>
 <script src="scripts/services/loginRedirect.js"></script>
-<script src="scripts/services/alerting.js"></script>
 <script src="scripts/services/currentUser.js"></script>
 <script src="scripts/services/addToken.js"></script>
 <script src="scripts/services/basicauth.js"></script>
-<script src="scripts/directives/alerts.js"></script>
 <script src="scripts/directives/workSpinner.js"></script>
 <script src="scripts/directives/ng-really.js"></script>
 <script src="scripts/controllers/GameListController.js"></script>

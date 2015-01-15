@@ -156,7 +156,7 @@ public class PlayerAction extends BaseAction {
         Preconditions.checkNotNull(pbfId);
         Preconditions.checkNotNull(playerId);
 
-        PBF pbf = pbfCollection.findOneById(pbfId);
+        //PBF pbf = pbfCollection.findOneById(pbfId);
         GameLog gameLog = logAction.findGameLogById(gameLogId);
         if(gameLog.getDraw() == null || gameLog.getDraw().getItem() == null) {
             log.error("Nothing to reveal");
@@ -174,9 +174,11 @@ public class PlayerAction extends BaseAction {
         }
 
         itemToReveal.setHidden(false);
+        logAction.updateGameLogById(gameLog);
+
+        //Create a new log entry
         logAction.createGameLog(itemToReveal, pbfId, GameLog.LogType.REVEAL);
         log.debug("item to be reveal " + itemToReveal);
-        pbfCollection.updateById(pbfId, pbf);
     }
 
     /**

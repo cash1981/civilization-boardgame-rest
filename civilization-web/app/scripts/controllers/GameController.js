@@ -1,6 +1,6 @@
 'use strict';
 (function (module) {
-  var GameController = function ($log, $routeParams, gameData, currentUser, $filter, ngTableParams, $scope) {
+  var GameController = function ($log, $routeParams, gameData, currentUser, $filter, ngTableParams, $scope, growl) {
     var model = this;
     model.user = currentUser.profile;
     $scope.userHasAccess = false;
@@ -11,6 +11,11 @@
         model.game = game;
         $scope.userHasAccess = game.player && game.player.username === model.user.username;
         model.yourTurn = game.player && game.player.yourTurn;
+
+        if(model.yourTurn) {
+          growl.success("<strong>It's your turn!</strong>", {disableCountDown: true, ttl: -1});
+        }
+
         return game;
       });
 
@@ -37,6 +42,6 @@
   };
 
   module.controller("GameController",
-    ["$log", "$routeParams", "gameData", "currentUser", "$filter", "ngTableParams", "$scope", GameController]);
+    ["$log", "$routeParams", "gameData", "currentUser", "$filter", "ngTableParams", "$scope", "growl", GameController]);
 
 }(angular.module("civApp")));
