@@ -11,12 +11,19 @@
     $scope.civCollapse = true;
     $scope.hutsCollapse = true;
     $scope.villagesCollapse = true;
-    model.yourTurn = false;
 
-    model.nextKey = function nextKey(obj) {
-      var keys = Object.keys(obj);
-      if(keys && keys.length > 0) return obj[keys[0]];
+    //Returns the next element in the array
+    model.nextElement = function(obj) {
+      if(obj) {
+        var keys = Object.keys(obj);
+        if(keys && keys.length > 0) {
+          return obj[keys[0]];
+        }
+      }
+      return obj;
     };
+
+    model.yourTurn = false;
 
     model.revealItem = function (gamelogid) {
       gameData.revealItem($routeParams.id, gamelogid)

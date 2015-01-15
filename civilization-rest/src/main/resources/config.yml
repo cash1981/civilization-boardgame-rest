@@ -29,7 +29,7 @@ logging:
   # Logger-specific levels.
   loggers:
 
-    # Sets the level for 'com.example.app' to DEBUG.
+    # Sets the level for 'no.asgari.civilization' to DEBUG.
     no.asgari.civilization: DEBUG
 
   appenders:

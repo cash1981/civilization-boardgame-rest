@@ -107,7 +107,6 @@ public class Playerhand {
         return removed;
     }
 
-
     @JsonIgnore
     public String green() {
         return "Green";
