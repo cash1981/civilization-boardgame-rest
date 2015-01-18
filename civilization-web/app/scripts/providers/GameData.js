@@ -1,3 +1,4 @@
+'use strict';
 (function (civApp) {
 
   civApp.config(function ($provide) {
@@ -50,28 +51,11 @@
           }
         };
 
-        var revealItem = function (gameId, logid) {
-          baseUrl = "http://localhost:8080/civilization/player/";
-          var url = baseUrl + gameId + "/revealItem/" + logid;
-          return $http.put(url)
-            .success(function (response) {
-              baseUrl = "http://localhost:8080/civilization/game/";
-              return response;
-            })
-            .error(function(data) {
-              baseUrl = "http://localhost:8080/civilization/game/";
-              //TODO Sette error et sted
-              return data;
-            });
-        };
-
-
         return {
           getAllGames: getAllGames,
           joinGame: joinGame,
           getGameById: getGameById,
-          createGame: createGame,
-          revealItem: revealItem
+          createGame: createGame
         };
       };
 

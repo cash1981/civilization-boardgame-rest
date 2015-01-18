@@ -1,6 +1,6 @@
 'use strict';
 (function (module) {
-  var UserItemController = function ($log, $routeParams, gameData, currentUser, $filter, ngTableParams, $scope) {
+  var UserItemController = function ($log, $routeParams, gameData, currentUser, $filter, ngTableParams, $scope, PlayerService) {
     var model = this;
     model.user = currentUser.profile;
     $scope.privateLogCollapse = false;
@@ -26,16 +26,8 @@
     model.yourTurn = false;
 
     model.revealItem = function (gamelogid) {
-      gameData.revealItem($routeParams.id, gamelogid)
-        .then(function (response) {
-            $log.info("Call to reveal made, lets get ");
-            gameData.setBaseUrl = "http://localhost:8080/civilization/game/";
-            gameData.getGameById($routeParams.id)
-              .then(function (game) {
-                model.game = game;
-                return game;
-              });
-        });
+      var response = PlayerService.revealItem($routeParams.id, gamelogid);
+      $log.info("Revealed item, response is " + response);
     };
 
     var gamePromise = gameData.getGameById($routeParams.id)
@@ -70,6 +62,6 @@
   };
 
   module.controller("UserItemController",
-    ["$log", "$routeParams", "gameData", "currentUser", "$filter", "ngTableParams", "$scope", UserItemController]);
+    ["$log", "$routeParams", "gameData", "currentUser", "$filter", "ngTableParams", "$scope", "PlayerService", UserItemController]);
 
 }(angular.module("civApp")));
