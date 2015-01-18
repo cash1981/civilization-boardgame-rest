@@ -24,10 +24,21 @@
     };
 
     model.yourTurn = false;
+    model.items = [];
+    model.techsChosen = [];
+    model.civs = [];
+    model.cultureCards = [];
+    model.greatPersons = [];
+    model.huts = [];
+    model.villages = [];
+    model.tiles = [];
+    model.units = [];
 
     model.revealItem = function (gamelogid) {
       var response = PlayerService.revealItem($routeParams.id, gamelogid);
       $log.info("Revealed item, response is " + response);
+      //TODO hvordan kaller jeg på getGameById igjen?
+      //dette funker ikke: updateGame($routeParams.id);
     };
 
     var gamePromise = gameData.getGameById($routeParams.id)
@@ -35,6 +46,17 @@
         model.game = game;
         $scope.userHasAccess = game.player && game.player.username === model.user.username;
         model.yourTurn = game.player && game.player.yourTurn;
+
+        model.items = game.player.items;
+        model.techsChosen = game.player.techsChosen;
+        model.civs = game.player.civs;
+        model.cultureCards = game.player.cultureCards;
+        model.greatPersons = game.player.greatPersons;
+        model.huts = game.player.huts;
+        model.villages = game.player.villages;
+        model.tiles = game.player.tiles;
+        //TODO model.units add infantries,aircrafts,artilleries,mounteds if not empty
+
         return game;
       });
 

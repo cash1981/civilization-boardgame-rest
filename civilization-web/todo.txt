@@ -9,8 +9,6 @@ Front page
 
 Inside a game
 #DONE	-- Display public log
-		https://docs.angularjs.org/guide/services <-- Something like this 'batchLog'?
-
 #DONE Footer on all pages
 #DONE     - Copyright
 #DONE - Donate button
@@ -22,13 +20,15 @@ Inside a game
            --- Register
             -- Link to the register page
 
-Proper login/authentication, restrict pages
+#DONE Proper login/authentication, restrict pages
 
-- Should not be able to draw items unless your turn
+#DONE - Should not be able to draw items unless your turn
 - My Items
     -- List of your current items
     -- Selection with what you want to draw
         -- confirmation
+    -- Discard your item
+      -- confirmation
 - Option to withdraw from a game after they have joined, before it is started
 
 - Lage en appConfig service som constant så kan jeg injecte den overalt å få tilgang til alle mine url
@@ -44,3 +44,10 @@ Nice to have:
 
 
 sjekk ngmodules.org for å finne moduler
+
+
+
+#Spørsmål
+- Jeg har både getGameById i GameController og UserItemController. Ønsker vel kun å ha den et sted?
+- Når jeg revealer item, ønsker jeg å gjøre nytt kall på getGameById slik at loggene blir oppdatert.
+  -- Samme egentlig når jeg discard item, draw item og tech osv

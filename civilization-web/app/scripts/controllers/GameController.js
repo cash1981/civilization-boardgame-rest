@@ -13,7 +13,8 @@
         model.yourTurn = game.player && game.player.yourTurn;
 
         if(model.yourTurn) {
-          growl.success("<strong>It's your turn!</strong>", {disableCountDown: true, ttl: -1});
+          //growl.success("<strong>It's your turn!</strong>", {disableCountDown: true, ttl: -1});
+          growl.success("<strong>It's your turn!</strong>");
         }
 
         return game;

@@ -12,8 +12,8 @@
     model.login = function (form) {
       if (form.$valid) {
         basicauth.login(model.username, model.password)
-          .then(loginRedirect.redirectPreLogin)
-          .catch(growl.error("Could not login"));
+          .then(loginRedirect.redirectPreLogin);
+          //.catch(growl.error("Could not login"));
         model.password = "";
       }
     };
