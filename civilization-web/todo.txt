@@ -1,4 +1,4 @@
-Front page
+﻿Front page
 
 #DONE - Title and welcome info
 #DONE - Active games
@@ -14,11 +14,11 @@ Inside a game
 #DONE - Donate button
 
 #DONE Navbar on all pages
-#DONE    - Login (if not logged in)
-        -- Opens popup with login form
+#DONE   - Login (if not logged in)
+          -- Opens popup with register form
            --- Save button
            --- Register
-            -- Link to the register page
+          -- Link to the register page
 
 #DONE Proper login/authentication, restrict pages
 
@@ -31,11 +31,10 @@ Inside a game
       -- confirmation
 - Option to withdraw from a game after they have joined, before it is started
 
-- Lage en appConfig service som constant så kan jeg injecte den overalt å få tilgang til alle mine url
-f.eks appConfig.getGame = "http://localhost:8080/civilization
-
 - Upload map feature
   -- Will send the jpg/png to the server, and install it on the file system, or in mongodb
+
+- Fix the baseurl stuff
 
 Nice to have:
 - Implement email verification on register?
@@ -49,5 +48,5 @@ sjekk ngmodules.org for å finne moduler
 
 #Spørsmål
 - Jeg har både getGameById i GameController og UserItemController. Ønsker vel kun å ha den et sted?
-- Når jeg revealer item, ønsker jeg å gjøre nytt kall på getGameById slik at loggene blir oppdatert.
+- Når jeg revealer item, ønsker jeg å gjøre nytt kall på getGameById slik at loggene og items blir oppdatert.
   -- Samme egentlig når jeg discard item, draw item og tech osv

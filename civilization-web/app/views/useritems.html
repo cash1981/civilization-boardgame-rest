@@ -49,7 +49,8 @@
       <div collapse="itemCollapse">
         <div class="well well-sm">
           <ul>
-            <li ng-repeat="item in userCtrl.items">Item name: {{item}}</li>
+            <li ng-repeat="item in userCtrl.items">Item {{item}}<br/> Item name: {{userCtrl.itemName(item)}}</li>
+
           </ul>
         </div>
       </div>

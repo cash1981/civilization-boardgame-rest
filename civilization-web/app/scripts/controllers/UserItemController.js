@@ -23,6 +23,14 @@
       return obj;
     };
 
+    model.itemName = function(obj) {
+      var val = Object.keys(obj);
+      if(val && val.length > -1) {
+        return val[0];
+      }
+      return obj;
+    };
+
     model.yourTurn = false;
     model.items = [];
     model.techsChosen = [];
@@ -37,7 +45,7 @@
     model.revealItem = function (gamelogid) {
       var response = PlayerService.revealItem($routeParams.id, gamelogid);
       $log.info("Revealed item, response is " + response);
-      //TODO hvordan kaller jeg på getGameById igjen?
+      //TODO hvordan kaller jeg pÃ¥ getGameById igjen?
       //dette funker ikke: updateGame($routeParams.id);
     };
 
