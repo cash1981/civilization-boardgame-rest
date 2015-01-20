@@ -22,7 +22,7 @@
         templateUrl: 'views/list.html',
         controller: "GameListController as gameListCtrl",
         resolve: {
-          games: ["gameData", function(m) {
+          games: ["GameService", function(m) {
             return m.getAllGames();
           }]
         }
@@ -44,7 +44,7 @@
         templateUrl: 'views/about.html'
       })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '404.html'
       });
   });
 

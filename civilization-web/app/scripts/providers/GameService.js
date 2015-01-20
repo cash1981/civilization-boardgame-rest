@@ -2,7 +2,7 @@
 (function (civApp) {
 
   civApp.config(function ($provide) {
-    $provide.provider("gameData", function () {
+    $provide.provider("GameService", function () {
 
       var baseUrl = "http://localhost:8080/civilization/game/";
       this.setBaseUrl = function (url) {

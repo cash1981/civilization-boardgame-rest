@@ -1,6 +1,6 @@
 'use strict';
 (function (module) {
-  var UserItemController = function ($log, $routeParams, gameData, currentUser, $filter, ngTableParams, $scope, PlayerService) {
+  var UserItemController = function ($log, $routeParams, GameService, currentUser, $filter, ngTableParams, $scope, PlayerService) {
     var model = this;
     model.user = currentUser.profile;
     $scope.privateLogCollapse = false;
@@ -23,13 +23,55 @@
       return obj;
     };
 
-    model.itemName = function(obj) {
-      var val = Object.keys(obj);
-      if(val && val.length > -1) {
-        return val[0];
+    model.itemName = function(item) {
+      var key = Object.keys(item);
+      if(key && key.length > -1) {
+        //TODO lodash doesn't work? return _.capitalize(key[0]);
+        return toTitleCase(key[0]);
       }
-      return obj;
+      return item;
     };
+
+    model.itemDetail = function(item) {
+      var returnValue = null;
+      $.each(item, function(index, element) {
+        $log.info(index + " " + element);
+        if(index === "aircraft" ||index === "mounted" || index === "infantry" || index === "artillery") {
+          var name = toTitleCase(index);
+          var details = element.attack + "." + element.health;
+          returnValue = name + " " + details;
+        }
+/* TODO FIXME for some reason when adding this code below, nothing is printed out
+        else if(element.name) {
+          var returnValue = element.name;
+          if(element.type) {
+            returnValue = returnValue + " Type: " + element.type;
+          }
+          if(element.description) {
+            returnValue = returnValue + " Description: " + element.description;
+          }
+        }
+*/
+
+        return returnValue;
+      });
+
+      return returnValue;
+    };
+
+    /*
+      Object.keys(myVar).forEach(function(k) {
+        if(k === "typeA") {
+          // do stuff
+        }
+        else if (k === "typeA") {
+          // do more stuff
+        }
+        else {
+          // do something
+        }
+      });
+    */
 
     model.yourTurn = false;
     model.items = [];
@@ -49,7 +91,7 @@
       //dette funker ikke: updateGame($routeParams.id);
     };
 
-    var gamePromise = gameData.getGameById($routeParams.id)
+    var gamePromise = GameService.getGameById($routeParams.id)
       .then(function (game) {
         model.game = game;
         $scope.userHasAccess = game.player && game.player.username === model.user.username;
@@ -79,7 +121,6 @@
       getData: function ($defer, params) {
         // use build-in angular filter
         // update table params
-
         gamePromise.then(function (game) {
           var orderedData = params.sorting() ? $filter('orderBy')(game.privateLogs, params.orderBy()) : game.privateLogs;
           params.total(game.privateLogs.length);
@@ -88,10 +129,12 @@
       }
     });
 
-
+    function toTitleCase(str) {
+      return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    }
   };
 
   module.controller("UserItemController",
-    ["$log", "$routeParams", "gameData", "currentUser", "$filter", "ngTableParams", "$scope", "PlayerService", UserItemController]);
+    ["$log", "$routeParams", "GameService", "currentUser", "$filter", "ngTableParams", "$scope", "PlayerService", UserItemController]);
 
 }(angular.module("civApp")));

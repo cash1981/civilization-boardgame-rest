@@ -50,3 +50,4 @@ sjekk ngmodules.org for å finne moduler
 - Jeg har både getGameById i GameController og UserItemController. Ønsker vel kun å ha den et sted?
 - Når jeg revealer item, ønsker jeg å gjøre nytt kall på getGameById slik at loggene og items blir oppdatert.
   -- Samme egentlig når jeg discard item, draw item og tech osv
+- Hvorfor fungerer ikke lodash? Den skal jo legge seg på window object
