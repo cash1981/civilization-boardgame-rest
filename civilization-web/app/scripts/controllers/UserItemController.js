@@ -36,7 +36,7 @@
       var returnValue = null;
       $.each(item, function(index, element) {
         $log.info(index + " " + element);
-        if(index === "aircraft" ||index === "mounted" || index === "infantry" || index === "artillery") {
+        if(index === "aircraft" || index === "mounted" || index === "infantry" || index === "artillery") {
           var name = toTitleCase(index);
           var details = element.attack + "." + element.health;
           returnValue = name + " " + details;
@@ -50,28 +50,12 @@
           if(element.description) {
             returnValue = returnValue + " Description: " + element.description;
           }
-        }
-*/
-
+        }*/
         return returnValue;
       });
 
       return returnValue;
     };
-
-    /*
-      Object.keys(myVar).forEach(function(k) {
-        if(k === "typeA") {
-          // do stuff
-        }
-        else if (k === "typeA") {
-          // do more stuff
-        }
-        else {
-          // do something
-        }
-      });
-    */
 
     model.yourTurn = false;
     model.items = [];
@@ -98,8 +82,10 @@
         model.yourTurn = game.player && game.player.yourTurn;
 
         model.items = game.player.items;
+        $log.debug(model.items);
         model.techsChosen = game.player.techsChosen;
         model.civs = game.player.civs;
+        $log.debug(model.civs);
         model.cultureCards = game.player.cultureCards;
         model.greatPersons = game.player.greatPersons;
         model.huts = game.player.huts;

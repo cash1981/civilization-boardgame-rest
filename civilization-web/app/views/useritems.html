@@ -49,7 +49,7 @@
       <div collapse="itemCollapse">
         <div class="well well-sm">
           <ul>
-            <li ng-repeat="item in userCtrl.items">Item: {{userCtrl.itemDetail(item)}}</li>
+            <li ng-repeat="item in userCtrl.items">{{userCtrl.itemDetail(item)}}</li>
           </ul>
         </div>
       </div>
@@ -58,42 +58,67 @@
       <button class="btn btn-info" ng-click="civCollapse = !civCollapse">Toggle CIV</button>
       <hr>
       <div collapse="civCollapse">
-        <div class="well well-sm">Here should be a list of all the races you have drawn</div>
+        <div class="well well-sm" ng-show="userCtrl.civs">
+          <ul>
+            <li ng-repeat="item in userCtrl.civs">{{item.civ.name}}</li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="col-sm-2">
       <button class="btn btn-info" ng-click="gpCollapse = !gpCollapse ">Toggle Great Persons</button>
       <hr>
       <div collapse="gpCollapse">
-        <div class="well well-sm">Here should be a list of all your Great Persons</div>
+        <div class="well well-sm" ng-show="userCtrl.greatPersons">
+          <ul>
+            <li ng-repeat="item in userCtrl.greatPersons">{{item.greatperson.name}} {{item.greatperson.type}} {{item.greatperson.description}}</li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="col-sm-2">
       <button class="btn btn-info" ng-click="unitCollapse = !unitCollapse">Toggle Units</button>
       <hr>
       <div collapse="unitCollapse">
-        <div class="well well-sm">Here should be a list of all your units</div>
+        <div class="well well-sm" ng-show="userCtrl.units">
+          <ul>
+            <!--TODO -->
+            <li ng-repeat="item in userCtrl.units">{{unit}}</li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="col-sm-2">
       <button class="btn btn-info" ng-click="cultureCardsCollapse = !cultureCardsCollapse">Toggle Culture Cards</button>
       <hr>
       <div collapse="cultureCardsCollapse">
-        <div class="well well-sm">Here should be a list of all your culture cards</div>
+        <div class="well well-sm" ng-show="userCtrl.cultureCards">
+          <ul>
+            <li ng-repeat="item in userCtrl.cultureCards">{{userCtrl.nextElement(item).name}}</li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="col-sm-2">
       <button class="btn btn-info" ng-click="hutsCollapse = !hutsCollapse">Toggle Huts</button>
       <hr>
       <div collapse="hutsCollapse">
-        <div class="well well-sm">Here should be a list of all your huts</div>
+        <div class="well well-sm" ng-show="userCtrl.huts">
+          <ul>
+            <li ng-repeat="item in userCtrl.huts">{{item.hut.name}}</li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="col-sm-1">
       <button class="btn btn-info" ng-click="villagesCollapse = !villagesCollapse">Toggle Villages</button>
       <hr>
       <div collapse="villagesCollapse">
-        <div class="well well-sm">Here should be a list of all your villages</div>
+        <div class="well well-sm" ng-show="userCtrl.villages">
+          <ul>
+            <li ng-repeat="item in userCtrl.villages">{{item.village.name}}</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
