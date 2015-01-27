@@ -121,7 +121,7 @@ public class UndoTest extends AbstractMongoDBTest {
         dto.setName("Navy");
         dto.setPbfId(pbfId);
         dto.setOwnerId(playerId);
-        dto.setSheetName(SheetName.LEVEL_1_TECH);
+        dto.setSheetName(SheetName.LEVEL_1_TECH.name());
 
         GameLog gameLog = playerAction.chooseTech(pbfId, dto, playerId);
 

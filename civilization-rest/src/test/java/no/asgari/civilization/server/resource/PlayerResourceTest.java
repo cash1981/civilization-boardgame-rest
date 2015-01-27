@@ -177,7 +177,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         assertNotNull(artillery);
 
         ItemDTO itemDTO = new ItemDTO();
-        itemDTO.setSheetName(SheetName.ARTILLERY);
+        itemDTO.setSheetName(SheetName.ARTILLERY.name());
         itemDTO.setName(artillery.getName());
         itemDTO.setOwnerId(anotherPlayerId);
         itemDTO.setPbfId(pbfId);
@@ -396,7 +396,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
 
     private ItemDTO createItemDTO(SheetName sheetName, String itemName) {
         ItemDTO itemDTO = new ItemDTO();
-        itemDTO.setSheetName(sheetName);
+        itemDTO.setSheetName(sheetName.name());
         itemDTO.setName(itemName);
         itemDTO.setOwnerId(playerId);
         itemDTO.setPbfId(pbfId);

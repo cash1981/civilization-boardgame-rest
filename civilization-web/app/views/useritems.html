@@ -47,9 +47,30 @@
       <button class="btn btn-info" ng-click="itemCollapse = !itemCollapse">Toggle Items</button>
       <hr>
       <div collapse="itemCollapse">
-        <div class="well well-sm">
+        <div class="well well-lg">
           <ul>
-            <li ng-repeat="item in userCtrl.items">{{userCtrl.itemDetail(item)}}</li>
+            <li ng-repeat="item in userCtrl.items">{{userCtrl.itemDetail(item)}}
+              <ul>
+                <li>
+                  <button ng-really-message="This will discard your item. Are you sure?"
+                          ng-really-click="userCtrl.discardItem(item)"
+                          class="btn btn-sm btn-warning"
+                          tooltip="Discard your item. This will make an entry in the game log">
+                    Discard Item
+                  </button>
+                </li>
+                <li>
+                  <button class="btn btn-sm btn-warning" disabled>
+                    Send to Player
+                  </button>
+                </li>
+                <li>
+                  <button class="btn btn-sm btn-warning" disabled>
+                    Reveal Item
+                  </button>
+                </li>
+              </ul>
+            </li>
           </ul>
         </div>
       </div>
@@ -58,9 +79,30 @@
       <button class="btn btn-info" ng-click="civCollapse = !civCollapse">Toggle CIV</button>
       <hr>
       <div collapse="civCollapse">
-        <div class="well well-sm" ng-show="userCtrl.civs">
+        <div class="well well-lg" ng-show="userCtrl.civs">
           <ul>
-            <li ng-repeat="item in userCtrl.civs">{{item.civ.name}}</li>
+            <li ng-repeat="item in userCtrl.civs">{{item.civ.name}}
+              <ul>
+                <li>
+                  <button ng-really-message="This will discard your item. Are you sure?"
+                          ng-really-click="userCtrl.discardItem(item)"
+                          class="btn btn-sm btn-warning"
+                          tooltip="Discard your item. This will make an entry in the game log">
+                    Discard Item
+                  </button>
+                </li>
+                <li>
+                  <button class="btn btn-sm btn-warning" disabled>
+                    Send to Player
+                  </button>
+                </li>
+                <li>
+                  <button class="btn btn-sm btn-warning" disabled>
+                    Reveal Item
+                  </button>
+                </li>
+              </ul>
+            </li>
           </ul>
         </div>
       </div>
@@ -69,9 +111,30 @@
       <button class="btn btn-info" ng-click="gpCollapse = !gpCollapse ">Toggle Great Persons</button>
       <hr>
       <div collapse="gpCollapse">
-        <div class="well well-sm" ng-show="userCtrl.greatPersons">
+        <div class="well well-lg" ng-show="userCtrl.greatPersons">
           <ul>
-            <li ng-repeat="item in userCtrl.greatPersons">{{item.greatperson.name}} {{item.greatperson.type}} {{item.greatperson.description}}</li>
+            <li ng-repeat="item in userCtrl.greatPersons">{{item.greatperson.name}} {{item.greatperson.type}} {{item.greatperson.description}}
+              <ul>
+                <li>
+                  <button ng-really-message="This will discard your item. Are you sure?"
+                          ng-really-click="userCtrl.discardItem(item)"
+                          class="btn btn-sm btn-warning"
+                          tooltip="Discard your item. This will make an entry in the game log">
+                    Discard Item
+                  </button>
+                </li>
+                <li>
+                  <button class="btn btn-sm btn-warning" disabled>
+                    Send to Player
+                  </button>
+                </li>
+                <li>
+                  <button class="btn btn-sm btn-warning" disabled>
+                    Reveal Item
+                  </button>
+                </li>
+              </ul>
+            </li>
           </ul>
         </div>
       </div>
@@ -80,10 +143,31 @@
       <button class="btn btn-info" ng-click="unitCollapse = !unitCollapse">Toggle Units</button>
       <hr>
       <div collapse="unitCollapse">
-        <div class="well well-sm" ng-show="userCtrl.units">
+        <div class="well well-lg" ng-show="userCtrl.units">
           <ul>
             <!--TODO -->
-            <li ng-repeat="item in userCtrl.units">{{unit}}</li>
+            <li ng-repeat="item in userCtrl.units">{{unit}}
+              <ul>
+                <li>
+                  <button ng-really-message="This will discard your item. Are you sure?"
+                          ng-really-click="userCtrl.discardItem(item)"
+                          class="btn btn-sm btn-warning"
+                          tooltip="Discard your item. This will make an entry in the game log">
+                    Discard Item
+                  </button>
+                </li>
+                <li>
+                  <button class="btn btn-sm btn-warning" disabled>
+                    Send to Player
+                  </button>
+                </li>
+                <li>
+                  <button class="btn btn-sm btn-warning" disabled>
+                    Reveal Item
+                  </button>
+                </li>
+              </ul>
+            </li>
           </ul>
         </div>
       </div>
@@ -92,9 +176,30 @@
       <button class="btn btn-info" ng-click="cultureCardsCollapse = !cultureCardsCollapse">Toggle Culture Cards</button>
       <hr>
       <div collapse="cultureCardsCollapse">
-        <div class="well well-sm" ng-show="userCtrl.cultureCards">
+        <div class="well well-lg" ng-show="userCtrl.cultureCards">
           <ul>
-            <li ng-repeat="item in userCtrl.cultureCards">{{userCtrl.nextElement(item).name}}</li>
+            <li ng-repeat="item in userCtrl.cultureCards">{{userCtrl.nextElement(item).name}}
+              <ul>
+                <li>
+                  <button ng-really-message="This will discard your item. Are you sure?"
+                          ng-really-click="userCtrl.discardItem(item)"
+                          class="btn btn-sm btn-warning"
+                          tooltip="Discard your item. This will make an entry in the game log">
+                    Discard Item
+                  </button>
+                </li>
+                <li>
+                  <button class="btn btn-sm btn-warning" disabled>
+                    Send to Player
+                  </button>
+                </li>
+                <li>
+                  <button class="btn btn-sm btn-warning" disabled>
+                    Reveal Item
+                  </button>
+                </li>
+              </ul>
+            </li>
           </ul>
         </div>
       </div>
@@ -103,9 +208,30 @@
       <button class="btn btn-info" ng-click="hutsCollapse = !hutsCollapse">Toggle Huts</button>
       <hr>
       <div collapse="hutsCollapse">
-        <div class="well well-sm" ng-show="userCtrl.huts">
+        <div class="well well-lg" ng-show="userCtrl.huts">
           <ul>
-            <li ng-repeat="item in userCtrl.huts">{{item.hut.name}}</li>
+            <li ng-repeat="item in userCtrl.huts">{{item.hut.name}}
+              <ul>
+                <li>
+                  <button ng-really-message="This will discard your item. Are you sure?"
+                          ng-really-click="userCtrl.discardItem(item)"
+                          class="btn btn-sm btn-warning"
+                          tooltip="Discard your item. This will make an entry in the game log">
+                    Discard Item
+                  </button>
+                </li>
+                <li>
+                  <button class="btn btn-sm btn-warning" disabled>
+                    Send to Player
+                  </button>
+                </li>
+                <li>
+                  <button class="btn btn-sm btn-warning" disabled>
+                    Reveal Item
+                  </button>
+                </li>
+              </ul>
+            </li>
           </ul>
         </div>
       </div>
@@ -114,9 +240,30 @@
       <button class="btn btn-info" ng-click="villagesCollapse = !villagesCollapse">Toggle Villages</button>
       <hr>
       <div collapse="villagesCollapse">
-        <div class="well well-sm" ng-show="userCtrl.villages">
+        <div class="well well-lg" ng-show="userCtrl.villages">
           <ul>
-            <li ng-repeat="item in userCtrl.villages">{{item.village.name}}</li>
+            <li ng-repeat="item in userCtrl.villages">{{item.village.name}}
+              <ul>
+                <li>
+                  <button ng-really-message="This will discard your item. Are you sure?"
+                          ng-really-click="userCtrl.discardItem(item)"
+                          class="btn btn-sm btn-warning"
+                          tooltip="Discard your item. This will make an entry in the game log">
+                    Discard Item
+                  </button>
+                </li>
+                <li>
+                  <button class="btn btn-sm btn-warning" disabled>
+                    Send to Player
+                  </button>
+                </li>
+                <li>
+                  <button class="btn btn-sm btn-warning" disabled>
+                    Reveal Item
+                  </button>
+                </li>
+              </ul>
+            </li>
           </ul>
         </div>
       </div>

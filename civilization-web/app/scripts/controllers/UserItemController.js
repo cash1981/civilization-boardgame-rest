@@ -4,13 +4,13 @@
     var model = this;
     model.user = currentUser.profile;
     $scope.privateLogCollapse = false;
-    $scope.itemCollapse = true;
-    $scope.gpCollapse = true;
-    $scope.unitCollapse = true;
-    $scope.cultureCardsCollapse = true;
-    $scope.civCollapse = true;
-    $scope.hutsCollapse = true;
-    $scope.villagesCollapse = true;
+    $scope.itemCollapse = false;
+    $scope.gpCollapse = false;
+    $scope.unitCollapse = false;
+    $scope.cultureCardsCollapse = false;
+    $scope.civCollapse = false;
+    $scope.hutsCollapse = false;
+    $scope.villagesCollapse = false;
 
     //Returns the next element in the array
     model.nextElement = function(obj) {
@@ -71,7 +71,14 @@
     model.revealItem = function (gamelogid) {
       var response = PlayerService.revealItem($routeParams.id, gamelogid);
       $log.info("Revealed item, response is " + response);
-      //TODO hvordan kaller jeg pÃ¥ getGameById igjen?
+      //TODO hvordan kaller jeg på getGameById?
+      //dette funker ikke: updateGame($routeParams.id);
+    };
+
+    model.discardItem = function (item) {
+      $log.info("Discard item " + item.name);
+      var response = PlayerService.discardItem($routeParams.id, item);
+      //TODO hvordan kaller jeg på getGameById?
       //dette funker ikke: updateGame($routeParams.id);
     };
 

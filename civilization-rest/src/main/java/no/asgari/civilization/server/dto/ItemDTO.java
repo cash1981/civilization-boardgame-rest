@@ -29,7 +29,7 @@ public class ItemDTO {
     private String type;
     /** ie Great Person */
     @NotNull
-    private SheetName sheetName;
+    private String sheetName;
 
     private String pbfId;
 }

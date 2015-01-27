@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import com.google.common.base.Preconditions;
 import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
+import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.dto.PlayerDTO;
@@ -230,10 +231,15 @@ public class PlayerAction extends BaseAction {
         PBF pbf = pbfCollection.findOneById(item.getPbfId());
         Playerhand fromPlayer = getPlayerhandByPlayerId(playerId, pbf);
         Playerhand toPlayer = getPlayerhandByPlayerId(item.getOwnerId(), pbf);
+        Optional<SheetName> dtoSheet = SheetName.find(item.getSheetName());
+        if(!dtoSheet.isPresent()) {
+            log.error("Couldn't find sheetname " + item.getSheetName());
+            throw cannotFindItem();
+        }
 
         Item itemToTrade = fromPlayer.getItems().stream()
                 .filter(it -> it instanceof Tradable)
-                .filter(it -> it.getSheetName() == item.getSheetName())
+                .filter(it -> it.getSheetName() == dtoSheet.get())
                 .filter(it -> it.getName().equals(item.getName()))
                 .findFirst()
                 .orElseThrow(PlayerAction::cannotFindItem);
@@ -259,7 +265,12 @@ public class PlayerAction extends BaseAction {
         Iterator<Item> iterator = playerhand.getItems().iterator();
         while(iterator.hasNext()) {
             Item item = iterator.next();
-            if(item.getSheetName() == itemdto.getSheetName() && item.getName().equals(itemdto.getName())) {
+            Optional<SheetName> dtoSheet = SheetName.find(itemdto.getSheetName());
+            if(!dtoSheet.isPresent()) {
+                log.error("Couldn't find sheetname " + itemdto.getSheetName());
+                throw cannotFindItem();
+            }
+            if(item.getSheetName() == dtoSheet.get() && item.getName().equals(itemdto.getName())) {
                 pbf.getDiscardedItems().add(item);
                 iterator.remove();
                 createLog(item, pbf.getId(), GameLog.LogType.DISCARD);

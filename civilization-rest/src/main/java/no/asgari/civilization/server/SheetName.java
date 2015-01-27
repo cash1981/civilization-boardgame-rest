@@ -35,7 +35,7 @@ public enum SheetName {
 
     public static Optional<SheetName> find(String name) {
         return SHEETS.stream()
-                .filter(sheet -> sheet.label.equalsIgnoreCase(name))
+                .filter(sheet -> sheet.label.replaceAll("\\s", "").equalsIgnoreCase(name))
                 .findFirst();
     }
 }
