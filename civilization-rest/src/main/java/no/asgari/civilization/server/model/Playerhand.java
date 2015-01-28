@@ -46,6 +46,8 @@ public class Playerhand {
     private List<Item> huts = Lists.newArrayList();
     private List<Item> villages = Lists.newArrayList();
     private List<Item> tiles = Lists.newArrayList();
+    private List<Item> citystates = Lists.newArrayList();
+    private List<Item> wonders = Lists.newArrayList();
 
     @JsonIgnore
     public void addItem(Item item) {
@@ -68,6 +70,9 @@ public class Playerhand {
             case MOUNTED:
                 mounteds.add(item);
                 break;
+            case ARTILLERY:
+                artilleries.add(item);
+                break;
             case GREAT_PERSON:
                 greatPersons.add(item);
                 break;
@@ -77,13 +82,24 @@ public class Playerhand {
             case VILLAGES:
                 villages.add(item);
                 break;
+            case CITY_STATES:
+                citystates.add(item);
+                break;
+            case WONDERS:
+                wonders.add(item);
+                break;
+            case TILES:
+                tiles.add(item);
+                break;
+            default:
+                throw new RuntimeException("You forgot " + item.getSheetName());
         }
 
     }
 
     @JsonIgnore
     public boolean removeItem(Item item) {
-        boolean removed = items.remove(item);
+        items.remove(item);
         switch (item.getSheetName()) {
             case CIV:
                 return civs.remove(item);
@@ -97,14 +113,24 @@ public class Playerhand {
                 return infantries.remove(item);
             case MOUNTED:
                 return mounteds.remove(item);
+            case ARTILLERY:
+                return artilleries.remove(item);
             case GREAT_PERSON:
                 return greatPersons.remove(item);
             case HUTS:
                 return huts.remove(item);
             case VILLAGES:
                 return villages.remove(item);
+            case CITY_STATES:
+                return citystates.remove(item);
+            case WONDERS:
+                return wonders.remove(item);
+            case TILES:
+                return tiles.remove(item);
+
+            default:
+                throw new RuntimeException("You forgot " + item.getSheetName());
         }
-        return removed;
     }
 
     @JsonIgnore

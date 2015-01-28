@@ -14,12 +14,9 @@
 
       var processToken = function (username, password) {
         return function (response) {
-          $log.info("Is player info here " + response)
-          $log.info("Is player info here response.data" + response.data);
           currentUser.profile.username = username;
           currentUser.profile.id = response.data.id;
           var encoded = base64.encode(username + ":" + password);
-          $log.info("Encoded string from username:password= " + username + ":" + password + " is encoded= " + encoded);
           currentUser.profile.authorizationEncoded = encoded;
           currentUser.save();
           return username;

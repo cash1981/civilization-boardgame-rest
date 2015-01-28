@@ -1,10 +1,8 @@
 package no.asgari.civilization.server.action;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -261,23 +259,31 @@ public class PlayerAction extends BaseAction {
         PBF pbf = pbfCollection.findOneById(pbfId);
 
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-
-        Iterator<Item> iterator = playerhand.getItems().iterator();
-        while(iterator.hasNext()) {
-            Item item = iterator.next();
-            Optional<SheetName> dtoSheet = SheetName.find(itemdto.getSheetName());
-            if(!dtoSheet.isPresent()) {
-                log.error("Couldn't find sheetname " + itemdto.getSheetName());
-                throw cannotFindItem();
-            }
-            if(item.getSheetName() == dtoSheet.get() && item.getName().equals(itemdto.getName())) {
-                pbf.getDiscardedItems().add(item);
-                iterator.remove();
-                createLog(item, pbf.getId(), GameLog.LogType.DISCARD);
-                pbfCollection.updateById(pbf.getId(), pbf);
-                return;
-            }
+        Optional<SheetName> dtoSheet = SheetName.find(itemdto.getSheetName());
+        if(!dtoSheet.isPresent()) {
+            log.error("Couldn't find sheetname " + itemdto.getSheetName());
+            throw cannotFindItem();
         }
+
+        //Find the item, then delete it
+        Optional<Item> itemToDeleteOptional = playerhand.getItems().parallelStream()
+                .filter(item -> item.getSheetName() == dtoSheet.get() && item.getName().equals(itemdto.getName()))
+                .findAny();
+
+        if(!itemToDeleteOptional.isPresent()) throw cannotFindItem();
+
+        Item itemToDelete = itemToDeleteOptional.get();
+        itemToDelete.setHidden(false);
+        itemToDelete.setOwnerId(null);
+
+        boolean removed = playerhand.removeItem(itemToDeleteOptional.get());
+        if(removed) {
+            pbf.getDiscardedItems().add(itemToDeleteOptional.get());
+            createLog(itemToDeleteOptional.get(), pbf.getId(), GameLog.LogType.DISCARD);
+            pbfCollection.updateById(pbf.getId(), pbf);
+            return;
+        }
+        log.error("Found the item " + itemToDeleteOptional.get() + " , but couldn't delete it for some reason");
         throw cannotFindItem();
     }
 }

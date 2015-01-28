@@ -11,6 +11,7 @@ import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.action.DrawAction;
 import no.asgari.civilization.server.exception.NoMoreItemsException;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class DrawTest extends AbstractMongoDBTest {
@@ -273,6 +274,7 @@ public class DrawTest extends AbstractMongoDBTest {
     }
 
     @Test
+    @Ignore("This test clear the items, and makes incosistencies")
     public void makeSureSystemCorrectlyShuffles() throws Exception {
         DrawAction drawAction = new DrawAction(db);
         //Before draw

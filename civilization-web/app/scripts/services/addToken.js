@@ -5,9 +5,8 @@
     return {
       request: function (config) {
         if (currentUser.profile.authorizationEncoded) {
-          $log.debug("Adding authorization to header " + "Basic " + currentUser.profile.authorizationEncoded);
+          //$log.debug("Adding authorization to header " + "Basic " + currentUser.profile.authorizationEncoded);
           config.headers.Authorization = "Basic " + currentUser.profile.authorizationEncoded;
-          //TODO I possibly need to add it in config.headers.common.Authorization
         }
         return $q.when(config);
       }

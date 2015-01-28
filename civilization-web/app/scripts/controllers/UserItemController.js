@@ -35,7 +35,6 @@
     model.itemDetail = function(item) {
       var returnValue = null;
       $.each(item, function(index, element) {
-        $log.info(index + " " + element);
         if(index === "aircraft" || index === "mounted" || index === "infantry" || index === "artillery") {
           var name = toTitleCase(index);
           var details = element.attack + "." + element.health;
@@ -89,10 +88,8 @@
         model.yourTurn = game.player && game.player.yourTurn;
 
         model.items = game.player.items;
-        $log.debug(model.items);
         model.techsChosen = game.player.techsChosen;
         model.civs = game.player.civs;
-        $log.debug(model.civs);
         model.cultureCards = game.player.cultureCards;
         model.greatPersons = game.player.greatPersons;
         model.huts = game.player.huts;

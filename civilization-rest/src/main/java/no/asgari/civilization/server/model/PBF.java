@@ -50,6 +50,7 @@ public class PBF {
     private List<Playerhand> players = Lists.newArrayList();
     private List<Tech> techs = Lists.newArrayList();
 
+    //Will use these to reshuffle items which are discarded and can be drawn again
     private List<Item> discardedItems = Lists.newArrayList();
 
     /**

@@ -1,7 +1,7 @@
 'use strict';
 (function (civApp) {
 
-  civApp.factory('PlayerService', function($http, $q, $log, growl) {
+  civApp.factory('PlayerService', function ($http, $q, $log, growl) {
     var baseUrl = "http://localhost:8080/civilization/player/";
     this.setBaseUrl = function (url) {
       baseUrl = url;
@@ -14,52 +14,72 @@
           growl.success("Item revealed");
           return response;
         })
-        .error(function(data) {
+        .error(function (data) {
           growl.error("Item could not be revealed");
           return data;
         });
     };
 
-    var discardItem = function(gameId, item) {
+    var discardItem = function (gameId, item) {
       var url = baseUrl + gameId + "/item";
 
-      var nextElement;
-      if(item) {
-        var keys = Object.keys(item);
-        if(keys && keys.length > 0) {
-          nextElement = item[keys[0]];
-        }
-        else {
-          nextElement = item;
-        }
-      }
-
-      var sheetName = Object.keys(item)[0];
-      //TODO to upper case this
-
+      var sheetName = angular.lowercase(Object.keys(item)[0]);
       var itemDTO = {
-        "name": item.nextElement.name,
-        "ownerId": item.nextElement.ownerId,
-        "hidden":item.nextElement.hidden,
-        "used":item.nextElement.used,
-        "description": item.nextElement.description,
-        "type": item.nextElement.type,
+        "name": nextElement(item).name,
+        "ownerId": nextElement(item).ownerId,
+        "hidden": nextElement(item).hidden,
+        "used": nextElement(item).used,
+        "description": nextElement(item).description,
+        "type": nextElement(item).type,
         "sheetName": sheetName,
         "pbfId": gameId
       };
 
-      $http.delete(url, itemDTO)
+      $log.info("Before calling delete, json is ", angular.toJson(itemDTO));
+
+      var configuration = {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      };
+
+     /* $http({
+        url: url,
+        dataType: "json",
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }).success(function (response) {
+          //TODO need to call get game again so that everything is refreshed
+          growl.success("Item discarded");
+          return response;
+        }).error(function (data) {
+          growl.error("Item could not be discarded");
+          return data;
+        });
+*/
+     $http.delete(url, itemDTO, configuration)
         .success(function (response) {
           //TODO need to call get game again so that everything is refreshed
           growl.success("Item discarded");
           return response;
-      })
-        .error(function(data) {
+        }).error(function (data) {
           growl.error("Item could not be discarded");
           return data;
         });
-    };
 
+      //TODO Flytt denne i util? Duplikat i UserItemController
+      function nextElement(obj) {
+        if(obj) {
+          var keys = Object.keys(obj);
+          if(keys && keys.length > 0) {
+            return obj[keys[0]];
+          }
+        }
+        return obj;
+      }
+    };
 
     return {
       revealItem: revealItem,

@@ -39,4 +39,4 @@
     $httpProvider.interceptors.push("loginRedirect");
   });
 
-}(angular.module("civApp")))
+}(angular.module("civApp")));

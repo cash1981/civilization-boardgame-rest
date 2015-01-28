@@ -98,7 +98,7 @@ public class GameLog {
                 break;
             case DISCARD:
                 privateLog = username + " has discarded  " + DELIM + draw.getItem().revealAll();
-                publicLog = username + " has discarded " + DELIM + draw.getItem().revealPublic();
+                publicLog = username + " has discarded " + DELIM + draw.getItem().revealAll();
                 break;
             case REVEAL:
                 privateLog = username + " has revealed " + DELIM + draw.getItem().revealAll();
