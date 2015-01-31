@@ -13,8 +13,15 @@
       <div class="jumbotron">
         <h1>Perhaps something here??</h1>
 
-        <p><a ng-show="gameCtrl.yourTurn" ng-href class="btn btn-primary btn-lg" role="button" tooltip="Will end your turn">End turn</a></p>
-
+        <p>
+          <button ng-show="gameCtrl.yourTurn"
+                  role="button"
+                  ng-really-message="This will end your turn. You cannot make any more draws when it is not your turn. Are you sure?"
+                  ng-really-click="gameCtrl.endTurn()"
+                  class="btn btn-primary btn-lg"
+                  tooltip="Will end your turn">
+            End turn
+          </button>
         <h3>Write message/chat</h3>
 
         <p class="lead" ng-show="gameCtrl.yourTurn">Its your turn</p>
@@ -29,16 +36,17 @@
       <table ng-table="gameCtrl.tableParams" ng-show="$data.length > 0"
              class="table table-bordered table-hover table-condensed text-center table-responsive">
 
-      <tr ng-repeat="log in $data" class="active" ng-class-even="'row-even'" ng-class-odd="'row-odd'">
-        <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
-        <td data-title="'Log'" sortable="'log'">{{log.log}}</td>
-        <td data-title="'Vote for undo'" sortable="'log.draw'">
-          <button ng-if="log.draw" ng-really-message="This will initiate vote for Undo. Are you sure?" ng-really-click="gameCtrl.initiateUndo(log.id)"
-                  class="btn btn-sm btn-warning" tooltip="Press undo button to request a vote for undo. All players must vote yes for undo to be made.
+        <tr ng-repeat="log in $data" class="active" ng-class-even="'row-even'" ng-class-odd="'row-odd'">
+          <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+          <td data-title="'Log'" sortable="'log'">{{log.log}}</td>
+          <td data-title="'Vote for undo'" sortable="'log.draw'">
+            <button ng-if="log.draw" ng-really-message="This will initiate vote for Undo. Are you sure?"
+                    ng-really-click="gameCtrl.initiateUndo(log.id)"
+                    class="btn btn-sm btn-warning" tooltip="Press undo button to request a vote for undo. All players must vote yes for undo to be made.
                   Once all players have voted yes, the item will be put back in the deck and reshuffled">Undo
-          </button>
-        </td>
-      </tr>
+            </button>
+          </td>
+        </tr>
       </table>
     </tab>
     <tab heading="The current map" class="col-md-3">

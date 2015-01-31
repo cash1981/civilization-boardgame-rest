@@ -1,12 +1,13 @@
 'use strict';
 (function (module) {
-  var GameController = function ($log, $routeParams, GameService, currentUser, $filter, ngTableParams, $scope, growl) {
+  var GameController = function ($log, $routeParams, GameService, PlayerService, currentUser, $filter, ngTableParams, $scope, growl) {
     var model = this;
     model.user = currentUser.profile;
     $scope.userHasAccess = false;
     model.yourTurn = false;
+    var gameId = $routeParams.id;
 
-    var gamePromise = GameService.getGameById($routeParams.id)
+    var gamePromise = GameService.getGameById(gameId)
       .then(function (game) {
         model.game = game;
         $scope.userHasAccess = game.player && game.player.username === model.user.username;
@@ -19,6 +20,14 @@
 
         return game;
       });
+
+    model.endTurn = function () {
+      $log.info("Ending turn");
+      var response = PlayerService.endTurn(gameId);
+      //TODO hvordan kaller jeg på getGameById?
+      //dette funker ikke: updateGame($routeParams.id);
+    };
+
 
     model.tableParams = new ngTableParams({
       page: 1,            // show first page
@@ -43,6 +52,6 @@
   };
 
   module.controller("GameController",
-    ["$log", "$routeParams", "GameService", "currentUser", "$filter", "ngTableParams", "$scope", "growl", GameController]);
+    ["$log", "$routeParams", "GameService", "PlayerService", "currentUser", "$filter", "ngTableParams", "$scope", "growl", GameController]);
 
 }(angular.module("civApp")));

@@ -81,9 +81,23 @@
       }
     };
 
+    var endTurn = function (gameId) {
+      var url = baseUrl + gameId + "/endturn";
+      return $http.put(url)
+        .success(function (response) {
+          growl.success("Turn ended");
+          return response;
+        })
+        .error(function (data) {
+          growl.error("Could not end turn");
+          return data;
+        });
+    };
+
     return {
       revealItem: revealItem,
-      discardItem: discardItem
+      discardItem: discardItem,
+      endTurn: endTurn
     };
 
   });
