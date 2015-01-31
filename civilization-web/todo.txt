@@ -30,19 +30,21 @@ Inside a game
     -- Discard your item
       -- confirmation
 - Option to withdraw from a game after they have joined, before it is started
-
-- Upload map feature
-  -- Will send the jpg/png to the server, and install it on the file system, or in mongodb
+- Chat system, so that players can do table talk and negotiations etc
+  -- Websocket?
 
 - Fix the baseurl stuff
 
-Nice to have:
+Nice to have: (Will be implemented in later versions)
 - Implement email verification on register?
 - Upload of the map after you powerpoint it
+  -- Must have forward/back buttons so that you can review history of the maps
+  -- Will send the jpg/png to the server, and save it in mongodb
+- Probably need to implement turns, so that you can filter on turns and see what orders where from what turns etc
+  -- Same with maps. Should perhaps be connected with the turns
 
 
-
-sjekk ngmodules.org for å finne moduler
+check ngmodules.org to find modules
 
 
 

@@ -11,7 +11,7 @@
     </div>
     <div class="col-md-6" ng-if="userHasAccess">
       <div class="jumbotron">
-        <h1>Kanskje diverse info her</h1>
+        <h1>Perhaps something here??</h1>
 
         <p><a ng-show="gameCtrl.yourTurn" ng-href class="btn btn-primary btn-lg" role="button" tooltip="Will end your turn">End turn</a></p>
 
@@ -41,12 +41,17 @@
       </tr>
       </table>
     </tab>
-    <tab heading="The current map" class="col-md-3">Here should be uploaded image of map</tab>
+    <tab heading="The current map" class="col-md-3">
+      <h1>For now, we will use the forum to upload maps</h1>
+    </tab>
+    <tab heading="Chat" class="col-md-3">
+      <h1>For now, we will use the forum to upload maps</h1>
+    </tab>
     <tab ng-if="userHasAccess" heading="User stuff" class="col-md-6">
       <ng-include src="'views/useritems.html'"></ng-include>
     </tab>
   </tabset>
 
-  <div class="row">json '{{gameCtrl.game | json}}'</div>
+  <!--<div class="row">json '{{gameCtrl.game | json}}'</div>-->
 
 </div>
