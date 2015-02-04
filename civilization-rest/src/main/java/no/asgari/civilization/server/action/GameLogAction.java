@@ -1,12 +1,5 @@
 package no.asgari.civilization.server.action;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
 import com.google.common.base.Preconditions;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -16,14 +9,17 @@ import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Item;
-import no.asgari.civilization.server.model.Level;
 import no.asgari.civilization.server.model.Player;
-import no.asgari.civilization.server.model.Spreadsheet;
-import no.asgari.civilization.server.model.Tech;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Action class responsible for logging private and public logs
@@ -61,17 +57,21 @@ public class GameLogAction {
         return pl;
     }
 
-    public GameLog createGameLog(Item item, String pdfId, GameLog.LogType logType) {
+    public GameLog createGameLog(Item item, String pbfId, GameLog.LogType logType) {
+        return createGameLog(item, pbfId, logType, item.getOwnerId());
+    }
+
+    public GameLog createGameLog(Item item, String pbfId, GameLog.LogType logType, String playerId) {
         GameLog pl = new GameLog();
-        Draw<Item> draw = new Draw<>(pdfId, item.getOwnerId());
+        Draw<Item> draw = new Draw<>(pbfId, item.getOwnerId());
         draw.setItem(item);
         pl.setDraw(draw);
-        pl.setPbfId(pdfId);
+        pl.setPbfId(pbfId);
         try {
-            pl.setUsername(CivSingleton.instance().playerCache().get(draw.getPlayerId()));
+            pl.setUsername(CivSingleton.instance().playerCache().get(playerId));
         } catch (ExecutionException e) {
             log.error("Couldn't retrieve username from cache");
-            pl.setUsername(getUsernameFromPlayerId(draw.getPlayerId()));
+            pl.setUsername(getUsernameFromPlayerId(playerId));
         }
         pl.createAndSetLog(logType);
         pl.setId(save(pl));
@@ -110,16 +110,17 @@ public class GameLogAction {
     public List<GameLog> getGameLogs(String pbfId) {
         @Cleanup DBCursor<GameLog> gameLogsCursor = gameLogCollection.find(DBQuery.is("pbfId", pbfId), new BasicDBObject());
         List<GameLog> gamelogs = new ArrayList<>(gameLogsCursor.size());
-        while(gameLogsCursor.hasNext()) {
+        while (gameLogsCursor.hasNext()) {
             gamelogs.add(gameLogsCursor.next());
         }
         return gamelogs;
     }
 
+
     public List<GameLog> getGameLogsBelongingToPlayer(String pbfId, String username) {
         @Cleanup DBCursor<GameLog> gameLogsCursor = gameLogCollection.find(DBQuery.is("pbfId", pbfId).is("username", username), new BasicDBObject());
         List<GameLog> gamelogs = new ArrayList<>(gameLogsCursor.size());
-        while(gameLogsCursor.hasNext()) {
+        while (gameLogsCursor.hasNext()) {
             gamelogs.add(gameLogsCursor.next());
         }
         return gamelogs;

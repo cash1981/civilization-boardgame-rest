@@ -12,16 +12,16 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Getter
 @Setter
 @JsonTypeName("cultureI")
-@ToString(of="name")
+@ToString(of = "name")
 @NoArgsConstructor
-@EqualsAndHashCode(exclude={"ownerId", "hidden", "used"})
+@EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"})
 public class CultureI implements Item, Tradable {
     @NotEmpty
     private String name;
     private String description;
     private String type;
     private boolean used;
-    private boolean hidden;
+    private boolean hidden = true;
     private String ownerId; // player_id
 
     public CultureI(String name) {

@@ -1,8 +1,5 @@
 package no.asgari.civilization.server.action;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-
 import com.google.common.base.Preconditions;
 import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
@@ -15,6 +12,8 @@ import no.asgari.civilization.server.model.Spreadsheet;
 import no.asgari.civilization.server.model.Tech;
 import org.mongojack.JacksonDBCollection;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Log4j
@@ -27,21 +26,27 @@ public abstract class BaseAction {
         this.logAction = new GameLogAction(db);
     }
 
-    /** Creates public and private logs of draws **/
+    /**
+     * Creates public and private logs of draws *
+     */
     protected GameLog createLog(Draw<? extends Spreadsheet> draw, GameLog.LogType logType) {
-        return logAction.createGameLog(draw,logType);
+        return logAction.createGameLog(draw, logType);
     }
 
     protected GameLog createLog(Tech chosenTech, String pbfId, GameLog.LogType logType) {
-        return logAction.createGameLog(chosenTech, pbfId,logType);
+        return logAction.createGameLog(chosenTech, pbfId, logType);
     }
 
     protected void createLog(List<? extends Item> items, String pbfId) {
         items.forEach(item -> logAction.createGameLog(item, pbfId, GameLog.LogType.ITEM));
     }
 
-    protected void createLog(Item item, String pbfId, GameLog.LogType logType) {
-        logAction.createGameLog(item, pbfId, logType);
+    protected GameLog createLog(Item item, String pbfId, GameLog.LogType logType) {
+        return logAction.createGameLog(item, pbfId, logType);
+    }
+
+    protected GameLog createLog(Item item, String pbfId, GameLog.LogType logType, String playerId) {
+        return logAction.createGameLog(item, pbfId, logType, playerId);
     }
 
     protected void createInfoLog(String pbfId, String message) {
@@ -56,7 +61,7 @@ public abstract class BaseAction {
     public PBF findPBFById(String pbfId) {
         try {
             return pbfCollection.findOneById(pbfId);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             log.error("Couldn't find pbf");
             Response badReq = Response.status(Response.Status.BAD_REQUEST)
                     .entity("Cannot find pbf")
@@ -67,9 +72,9 @@ public abstract class BaseAction {
 
     /**
      * Checks whether is the players turn. If not FORBIDDEN exception is thrown
+     *
      * @param pbfId
      * @param playerId
-     *
      * @throws WebApplicationException(Response) - Throws Response.FORBIDDEN if not your turn
      */
     //TODO Perhaps its best to have this in a filter, but its not always intended to be run

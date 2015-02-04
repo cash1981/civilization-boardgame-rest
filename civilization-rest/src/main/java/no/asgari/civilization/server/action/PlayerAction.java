@@ -1,12 +1,5 @@
 package no.asgari.civilization.server.action;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-
 import com.google.common.base.Preconditions;
 import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
@@ -26,6 +19,12 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 @Log4j
 public class PlayerAction extends BaseAction {
 
@@ -40,6 +39,7 @@ public class PlayerAction extends BaseAction {
 
     /**
      * Returns the id to the player created
+     *
      * @param playerDTO - The DTO object
      * @return the id of the newly created player
      * @throws PlayerExistException - Throws this exception if username already exists
@@ -51,12 +51,12 @@ public class PlayerAction extends BaseAction {
         Preconditions.checkNotNull(playerDTO.getPassword());
         Preconditions.checkNotNull(playerDTO.getPasswordCopy());
 
-        if(!playerDTO.getPassword().equals(playerDTO.getPasswordCopy())) {
+        if (!playerDTO.getPassword().equals(playerDTO.getPasswordCopy())) {
             throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-                                            .entity("Passwords are not identical")
-                                            .build());
+                    .entity("Passwords are not identical")
+                    .build());
         }
-        if(CivSingleton.instance().playerCache().asMap().containsValue(playerDTO.getUsername())) {
+        if (CivSingleton.instance().playerCache().asMap().containsValue(playerDTO.getUsername())) {
             throw new PlayerExistException();
         }
 
@@ -82,23 +82,23 @@ public class PlayerAction extends BaseAction {
 
     /**
      * Choose a tech for player and store back in the pbf collection
-     * @param pbfId - The pbf id
-     * @param item - The tech
+     *
+     * @param pbfId    - The pbf id
+     * @param techName - The tech
      * @param playerId - The id of player
      */
-    public GameLog chooseTech(String pbfId, ItemDTO item, String playerId) {
+    public GameLog chooseTech(String pbfId, String techName, String playerId) {
         Preconditions.checkNotNull(pbfId);
-        Preconditions.checkNotNull(item);
-        Preconditions.checkNotNull(item.getName()); 
+        Preconditions.checkNotNull(techName);
 
         //This can be done out of turn, because of EOI played in SOT
         //checkYourTurn(pbfId, playerId);
 
         PBF pbf = pbfCollection.findOneById(pbfId);
         Optional<Tech> tech = pbf.getTechs().stream()
-                .filter(techToFind -> techToFind.getName().equals(item.getName()))
+                .filter(techToFind -> techToFind.getName().equals(techName))
                 .findFirst();
-                                           //if not static then this::cannotFindItem
+        //if not static then this::cannotFindItem
         Tech chosenTech = tech.orElseThrow(PlayerAction::cannotFindItem);
         chosenTech.setHidden(true);
         chosenTech.setOwnerId(playerId);
@@ -119,16 +119,16 @@ public class PlayerAction extends BaseAction {
         PBF pbf = pbfCollection.findOneById(pbfId);
 
         //Loop through the list and find next starting player
-        for(int i = 0; i < pbf.getPlayers().size(); i++) {
+        for (int i = 0; i < pbf.getPlayers().size(); i++) {
             Playerhand playerhand = pbf.getPlayers().get(i);
-            if(playerhand.getUsername().equals(username)) {
+            if (playerhand.getUsername().equals(username)) {
                 playerhand.setYourTurn(false);
-                if(pbf.getPlayers().size() == (i+1)) {
+                if (pbf.getPlayers().size() == (i + 1)) {
                     //We are at the end, pick the first player
                     pbf.getPlayers().get(0).setYourTurn(true);
                 }
                 //Choose next player in line to be starting player
-                pbf.getPlayers().get(i+1).setYourTurn(true);
+                pbf.getPlayers().get(i + 1).setYourTurn(true);
                 try {
                     pbfCollection.updateById(pbf.getId(), pbf);
                     return true;
@@ -145,6 +145,7 @@ public class PlayerAction extends BaseAction {
 
     /**
      * Revealing of items are really just saving a public log with the hidden content information
+     *
      * @param pbfId
      * @param playerId
      * @param gameLogId - The id of the GameLog which contains the item to reveal
@@ -157,7 +158,7 @@ public class PlayerAction extends BaseAction {
 
         //PBF pbf = pbfCollection.findOneById(pbfId);
         GameLog gameLog = logAction.findGameLogById(gameLogId);
-        if(gameLog.getDraw() == null || gameLog.getDraw().getItem() == null) {
+        if (gameLog.getDraw() == null || gameLog.getDraw().getItem() == null) {
             log.error("Nothing to reveal");
             throw new WebApplicationException(Response.status(Response.Status.NOT_MODIFIED)
                     .entity("Nothing to reveal")
@@ -165,7 +166,7 @@ public class PlayerAction extends BaseAction {
         }
 
         Item itemToReveal = gameLog.getDraw().getItem();
-        if(!itemToReveal.isHidden()) {
+        if (!gameLog.getDraw().isHidden()) {
             log.warn("Item already revealed");
             throw new WebApplicationException(Response.status(Response.Status.NOT_MODIFIED)
                     .entity("Item already revealed")
@@ -173,6 +174,7 @@ public class PlayerAction extends BaseAction {
         }
 
         itemToReveal.setHidden(false);
+        gameLog.getDraw().setHidden(false);
         logAction.updateGameLogById(gameLog);
 
         //Create a new log entry
@@ -182,8 +184,9 @@ public class PlayerAction extends BaseAction {
 
     /**
      * Returns the remaining techs the player can choose from
+     *
      * @param playerId - The player
-     * @param pbfId - The PBF
+     * @param pbfId    - The PBF
      * @return
      */
     public List<Tech> getRemaingTechsForPlayer(String playerId, String pbfId) {
@@ -204,10 +207,10 @@ public class PlayerAction extends BaseAction {
      * Method that's checks whether it is players turn.
      * Not the same as #checkYourTurn()
      *
-     * @see #checkYourTurn(String, String)
-     * @param pbfId - PBF id
+     * @param pbfId    - PBF id
      * @param playerId - Player id
      * @return - true if it is players turn
+     * @see #checkYourTurn(String, String)
      */
     public boolean isYourTurn(String pbfId, String playerId) {
         PBF pbf = pbfCollection.findOneById(pbfId);
@@ -217,6 +220,7 @@ public class PlayerAction extends BaseAction {
 
     /**
      * Will send the item to the new owner
+     *
      * @param item
      * @param playerId
      * @return
@@ -230,7 +234,7 @@ public class PlayerAction extends BaseAction {
         Playerhand fromPlayer = getPlayerhandByPlayerId(playerId, pbf);
         Playerhand toPlayer = getPlayerhandByPlayerId(item.getOwnerId(), pbf);
         Optional<SheetName> dtoSheet = SheetName.find(item.getSheetName());
-        if(!dtoSheet.isPresent()) {
+        if (!dtoSheet.isPresent()) {
             log.error("Couldn't find sheetname " + item.getSheetName());
             throw cannotFindItem();
         }
@@ -243,7 +247,7 @@ public class PlayerAction extends BaseAction {
                 .orElseThrow(PlayerAction::cannotFindItem);
 
         boolean remove = fromPlayer.getItems().remove(itemToTrade);
-        if(!remove) {
+        if (!remove) {
             log.error("Didn't find item from playerhand: " + item);
             return false;
         }
@@ -260,7 +264,7 @@ public class PlayerAction extends BaseAction {
 
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         Optional<SheetName> dtoSheet = SheetName.find(itemdto.getSheetName());
-        if(!dtoSheet.isPresent()) {
+        if (!dtoSheet.isPresent()) {
             log.error("Couldn't find sheetname " + itemdto.getSheetName());
             throw cannotFindItem();
         }
@@ -270,20 +274,20 @@ public class PlayerAction extends BaseAction {
                 .filter(item -> item.getSheetName() == dtoSheet.get() && item.getName().equals(itemdto.getName()))
                 .findAny();
 
-        if(!itemToDeleteOptional.isPresent()) throw cannotFindItem();
+        if (!itemToDeleteOptional.isPresent()) throw cannotFindItem();
 
         Item itemToDelete = itemToDeleteOptional.get();
         itemToDelete.setHidden(false);
         itemToDelete.setOwnerId(null);
 
         boolean removed = playerhand.removeItem(itemToDeleteOptional.get());
-        if(removed) {
+        if (removed) {
             pbf.getDiscardedItems().add(itemToDeleteOptional.get());
-            createLog(itemToDeleteOptional.get(), pbf.getId(), GameLog.LogType.DISCARD);
+            createLog(itemToDelete, pbf.getId(), GameLog.LogType.DISCARD, playerId);
             pbfCollection.updateById(pbf.getId(), pbf);
             return;
         }
-        log.error("Found the item " + itemToDeleteOptional.get() + " , but couldn't delete it for some reason");
+        log.error("Found the item " + itemToDelete + " , but couldn't delete it for some reason");
         throw cannotFindItem();
     }
 }

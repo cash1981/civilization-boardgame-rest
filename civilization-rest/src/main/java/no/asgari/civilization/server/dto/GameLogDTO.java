@@ -1,14 +1,15 @@
 package no.asgari.civilization.server.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.asgari.civilization.server.model.Draw;
-import no.asgari.civilization.server.model.Undo;
 
 @JsonRootName("gameLogDTO")
 @Data
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GameLogDTO {
     private String id;
     private String log;

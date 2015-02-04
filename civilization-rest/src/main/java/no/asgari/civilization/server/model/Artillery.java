@@ -13,11 +13,11 @@ import no.asgari.civilization.server.SheetName;
 @Setter
 @JsonTypeName("artillery")
 @NoArgsConstructor
-@EqualsAndHashCode(exclude={"ownerId", "hidden", "used"}, callSuper = false)
+@EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"}, callSuper = false)
 public class Artillery extends Unit {
     private int level = LEVEL_1;
     private String ownerId;
-    private boolean hidden;
+    private boolean hidden = true;
     private boolean used;
     private boolean killed;
     private int attack;

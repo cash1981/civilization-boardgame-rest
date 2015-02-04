@@ -43,7 +43,10 @@ public final class CivSingleton {
 
     /**
      * Key is a combination of GameType and SheetName
+     *
      * @return
      */
-    public LoadingCache<GameType, ItemReader> itemsCache() { return itemsCache;}
+    public LoadingCache<GameType, ItemReader> itemsCache() {
+        return itemsCache;
+    }
 }

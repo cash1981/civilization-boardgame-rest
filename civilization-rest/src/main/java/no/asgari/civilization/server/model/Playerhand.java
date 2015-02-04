@@ -18,7 +18,7 @@ import java.util.Set;
 @Data
 @JsonRootName("players")
 @NoArgsConstructor
-@EqualsAndHashCode(of={"username", "playerId"})
+@EqualsAndHashCode(of = {"username", "playerId"})
 public class Playerhand {
     @NotBlank
     //Can consider using the playerId instead or removing @NotBlank
@@ -30,7 +30,9 @@ public class Playerhand {
     private String color;
 
     //Only one starting player each turn
-    /** Determines whos turn it is each round **/
+    /**
+     * Determines whos turn it is each round *
+     */
     private boolean yourTurn = false;
 
     private List<Item> items = Lists.newArrayList();

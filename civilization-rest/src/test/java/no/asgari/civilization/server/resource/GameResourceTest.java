@@ -127,17 +127,11 @@ public class GameResourceTest extends MongoDBBaseTest {
     }
 
     private void chooseTechForPlayer() throws JsonProcessingException {
-        ItemDTO dto = new ItemDTO();
-        dto.setName("Agriculture");
-
-        ObjectMapper mapper = new ObjectMapper();
-        String dtoAsJSon = mapper.writeValueAsString(dto);
-
         URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/tech/choose", RULE.getLocalPort(), pbfId)).build();
         ClientResponse response = client().resource(uri)
+                .queryParam("name", "Agriculture")
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .entity(dtoAsJSon)
                 .put(ClientResponse.class);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT_204);

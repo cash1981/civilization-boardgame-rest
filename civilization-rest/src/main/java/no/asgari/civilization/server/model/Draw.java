@@ -9,20 +9,17 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
-import org.mongojack.Id;
-import org.mongojack.ObjectId;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 /**
  * This class is used in GameLog to show what item have been drawn
- *
+ * <p/>
  * It will support undo of draws, which will put the item back in the deck and shuffle
  * Each draw will have a collection of Undo, which contains information about a possible undo with votes and outcome
- *
+ * <p/>
  * <T> - Typically implementation of Unit, Item, or Tech
- *
  */
 @NoArgsConstructor
 @JsonRootName(value = "draw")
@@ -32,11 +29,15 @@ import java.time.LocalDateTime;
 public class Draw<T extends Item> {
     public static final String COL_NAME = "draw";
 
-    /** Typically implementation of Unit or Item. Should have #getSheetName() to determine the type */
+    /**
+     * Typically implementation of Unit or Item. Should have #getSheetName() to determine the type
+     */
     @NotNull
     private T item;
 
-    /** Used to hidden draw, which will make it public if set to false*/
+    /**
+     * Used to hidden draw, which will make it public if set to false
+     */
     private boolean hidden = true;
 
     public Draw(String pbfId, String playerId) {
@@ -51,14 +52,20 @@ public class Draw<T extends Item> {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime created;
 
-    /** The user that made the draw. Its always a player that initiates a draw, so this cannot be blank. */
+    /**
+     * The user that made the draw. Its always a player that initiates a draw, so this cannot be blank.
+     */
     @NotBlank
     private String playerId;
-    /**A draw must always belong to a game. The pbf game id */
+    /**
+     * A draw must always belong to a game. The pbf game id
+     */
     @NotBlank
     private String pbfId;
 
-    /** If null, then no undo has been performed */
+    /**
+     * If null, then no undo has been performed
+     */
     private Undo undo = null;
 
     /**

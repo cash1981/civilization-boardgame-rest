@@ -18,9 +18,12 @@ import java.util.Set;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Player {
-    @JsonIgnore public static final String COL_NAME = "player";
-    @JsonIgnore public static final String USERNAME = "username";
-    @JsonIgnore public static final String EMAIL = "email";
+    @JsonIgnore
+    public static final String COL_NAME = "player";
+    @JsonIgnore
+    public static final String USERNAME = "username";
+    @JsonIgnore
+    public static final String EMAIL = "email";
 
     @ObjectId
     @Id
@@ -38,6 +41,8 @@ public class Player {
     @NotBlank
     private String password;
 
-    /** Set of unique active games This may be reduntant as it can be calculated by looping through all pbfs.players and finding match. */
+    /**
+     * Set of unique active games This may be reduntant as it can be calculated by looping through all pbfs.players and finding match.
+     */
     private Set<String> gameIds = new HashSet<>();
 }

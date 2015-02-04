@@ -25,7 +25,7 @@ public class CivAuthenticator implements Authenticator<BasicCredentials, Player>
         @Cleanup DBCursor<Player> dbPlayer = playerCollection.find(
                 DBQuery.is("username", credentials.getUsername()), new BasicDBObject());
 
-        if(dbPlayer == null || !dbPlayer.hasNext()) {
+        if (dbPlayer == null || !dbPlayer.hasNext()) {
             return Optional.empty();
         }
 
@@ -33,7 +33,7 @@ public class CivAuthenticator implements Authenticator<BasicCredentials, Player>
 
         CivSingleton.instance().playerCache().put(player.getId(), player.getUsername());
 
-        if(player.getPassword().equals(DigestUtils.sha1Hex(credentials.getPassword()))) {
+        if (player.getPassword().equals(DigestUtils.sha1Hex(credentials.getPassword()))) {
             return Optional.of(player);
         }
         return Optional.empty();

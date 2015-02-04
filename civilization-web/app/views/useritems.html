@@ -49,7 +49,8 @@
       <div collapse="itemCollapse">
         <div class="well well-lg">
           <ul>
-            <li ng-repeat="item in userCtrl.items">{{userCtrl.itemDetail(item)}}
+            <li ng-repeat="item in userCtrl.items" class="unstyled">
+              {{userCtrl.itemDetail(item)}}
               <ul>
                 <li>
                   <button ng-really-message="This will discard your item. Are you sure?"
@@ -178,7 +179,11 @@
       <div collapse="cultureCardsCollapse">
         <div class="well well-lg" ng-show="userCtrl.cultureCards">
           <ul>
-            <li ng-repeat="item in userCtrl.cultureCards">{{userCtrl.nextElement(item).name}}
+            <li ng-repeat="item in userCtrl.cultureCards">
+              <!--TODO Would be nice to put these duplicate code in another file, but doesnt work
+                <ng-include src="mystuff/itemActions.html"></ng-include>
+              -->
+              {{userCtrl.nextElement(item).name}}
               <ul>
                 <li>
                   <button ng-really-message="This will discard your item. Are you sure?"
@@ -267,6 +272,18 @@
           </ul>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- techs -->
+  <div class="row">
+    <hr/>
+    <h2>Techs</h2>
+    <div class="well well-lg col-lg-8">
+      List of all the techs chosen
+    </div>
+    <div class="well well-lg col-lg-4">
+      Choose tech here
     </div>
   </div>
 </div>

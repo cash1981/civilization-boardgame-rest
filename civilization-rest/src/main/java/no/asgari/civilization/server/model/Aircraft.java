@@ -2,7 +2,6 @@ package no.asgari.civilization.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +14,7 @@ import no.asgari.civilization.server.SheetName;
 //@EqualsAndHashCode(of = {"used", "attack", "health", "type"}, callSuper = true)
 public class Aircraft extends Unit {
     private String ownerId; // id of the player which owns this item
-    private boolean hidden;
+    private boolean hidden = true;
     private boolean used;
     private boolean killed;
     private int attack;
@@ -35,6 +34,7 @@ public class Aircraft extends Unit {
 
     /**
      * Aircrafts have no level
+     *
      * @return 0
      */
     @JsonIgnore

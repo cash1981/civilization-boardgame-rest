@@ -12,7 +12,6 @@ import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.java8.auth.CachingAuthenticator;
 import io.dropwizard.java8.auth.basic.BasicAuthProvider;
-import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import lombok.extern.log4j.Log4j;
@@ -23,18 +22,17 @@ import no.asgari.civilization.server.resource.PlayerResource;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.mongojack.JacksonDBCollection;
 
-import java.util.EnumSet;
-import java.util.concurrent.TimeUnit;
-
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
+import java.util.EnumSet;
+import java.util.concurrent.TimeUnit;
 
 @Log4j
 @SuppressWarnings("unchecked")
 public class CivilizationApplication extends Application<CivilizationConfiguration> {
 
     public static void main(String[] args) throws Exception {
-        new CivilizationApplication().run(new String[] { "server", "src/main/resources/config.yml" });
+        new CivilizationApplication().run(new String[]{"server", "src/main/resources/config.yml"});
     }
 
     @Override
@@ -86,11 +84,12 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         LoadingCache<String, String> usernameCache = CacheBuilder.newBuilder()
                 .expireAfterWrite(2, TimeUnit.HOURS)
                 .maximumSize(100)
-                .removalListener(lis ->  log.debug("Removing " + lis.toString() + " from the usernameCache"))
+                .removalListener(lis -> log.debug("Removing " + lis.toString() + " from the usernameCache"))
                 .build(new CacheLoader<String, String>() {
-                            public String load(String playerId) {
-                                return playerCollection.findOneById(playerId).getUsername();
-                            }});
+                    public String load(String playerId) {
+                        return playerCollection.findOneById(playerId).getUsername();
+                    }
+                });
 
         CivSingleton.instance().setPlayerCache(usernameCache);
     }

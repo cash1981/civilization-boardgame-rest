@@ -1,0 +1,23 @@
+<div ng-controller="UserItemController as userCtrl">
+<span>{{userCtrl.nextElement(item).name}}</span>
+<ul>
+  <li>
+    <button ng-really-message="This will discard your item. Are you sure?"
+            ng-really-click="userCtrl.discardItem(item)"
+            class="btn btn-sm btn-warning"
+            tooltip="Discard your item. This will make an entry in the game log">
+      Discard Item
+    </button>
+  </li>
+  <li>
+    <button class="btn btn-sm btn-warning" disabled>
+      Send to Player
+    </button>
+  </li>
+  <li>
+    <button class="btn btn-sm btn-warning" disabled>
+      Reveal Item
+    </button>
+  </li>
+</ul>
+</div>

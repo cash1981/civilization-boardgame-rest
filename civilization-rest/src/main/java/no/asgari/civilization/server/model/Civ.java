@@ -13,18 +13,18 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 @Getter
 @Setter
-@ToString(of="name")
+@ToString(of = "name")
 @JsonTypeName("civ")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "objectType")
 @NoArgsConstructor
-@EqualsAndHashCode(exclude={"ownerId", "hidden", "used"})
+@EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"})
 public class Civ implements Item {
     @NotEmpty
     private String name;
     private String type;
     private String description;
     private boolean used;
-    private boolean hidden;
+    private boolean hidden = true;
     private String ownerId; // id of the player which owns this item
 
     public Civ(String name) {

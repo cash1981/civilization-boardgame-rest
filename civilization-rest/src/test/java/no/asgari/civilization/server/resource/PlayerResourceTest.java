@@ -6,6 +6,7 @@ import static org.fest.assertions.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,17 +56,12 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
                 .filter(p -> p.getUsername().equals("cash1981"))
                 .forEach(p -> assertThat(p.getTechsChosen()).isEmpty());
 
-        ItemDTO dto = new ItemDTO();
-        dto.setName("Agriculture");
-
-        ObjectMapper mapper = new ObjectMapper();
-        String dtoAsJSon = mapper.writeValueAsString(dto);
-
         URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/tech/choose", RULE.getLocalPort(), pbfId)).build();
         ClientResponse response = client().resource(uri)
+                .queryParam("name", "Agriculture")
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .entity(dtoAsJSon)
+
                 .put(ClientResponse.class);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT_204);
@@ -209,15 +205,17 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.INFANTRY);
         assertTrue(gameLogOptional.isPresent());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Infantry.class);
+        assertTrue(gameLogOptional.get().getDraw().getItem().isHidden());
 
         GameLog gameLog = gameLogCollection.findOneById(gameLogOptional.get().getId());
         if(gameLog.getDraw() != null && gameLog.getDraw().getItem() != null && gameLog.getPbfId().equals(pbfId)) {
+            assertThat(gameLog.getDraw().isHidden()).isTrue();
             URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/revealItem/%s", RULE.getLocalPort(), pbfId, gameLog.getId())).build();
             ClientResponse response = client().resource(uri)
                     .type(MediaType.APPLICATION_JSON)
                     .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                     .put(ClientResponse.class);
-            assertEquals(response.getStatus(), HttpStatus.OK_200);
+            assertEquals(HttpStatus.OK_200, response.getStatus());
         } else {
             fail("Should have gamelog");
         }

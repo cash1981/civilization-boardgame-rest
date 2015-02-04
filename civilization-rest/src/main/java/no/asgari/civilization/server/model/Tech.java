@@ -12,7 +12,8 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(of={"name", "level"})
+@EqualsAndHashCode(of = {"name", "level"})
+
 public class Tech implements Item, Level {
     @JsonIgnore
     public static final int LEVEL_1 = 1;
@@ -43,6 +44,7 @@ public class Tech implements Item, Level {
         hidden = true;
     }
 
+    @JsonIgnore
     @Override
     public SheetName getSheetName() {
         switch (getLevel()) {

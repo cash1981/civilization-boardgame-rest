@@ -13,13 +13,13 @@ import no.asgari.civilization.server.SheetName;
 @Setter
 @JsonTypeName("infantry")
 @NoArgsConstructor
-@EqualsAndHashCode(exclude={"ownerId", "hidden", "used"}, callSuper = false)
+@EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"}, callSuper = false)
 public class Infantry extends Unit {
     private int level = LEVEL_1;
     private int attack;
     private int health;
     private String ownerId;
-    private boolean hidden;
+    private boolean hidden = true;
     private boolean used;
     private boolean killed;
     private boolean isInBattle;

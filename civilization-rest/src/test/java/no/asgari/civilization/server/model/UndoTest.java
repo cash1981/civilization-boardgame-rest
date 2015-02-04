@@ -117,13 +117,7 @@ public class UndoTest extends AbstractMongoDBTest {
         assertThat(pbf.getItems()).isNotEmpty();
 
         PlayerAction playerAction = new PlayerAction(db);
-        ItemDTO dto = new ItemDTO();
-        dto.setName("Navy");
-        dto.setPbfId(pbfId);
-        dto.setOwnerId(playerId);
-        dto.setSheetName(SheetName.LEVEL_1_TECH.name());
-
-        GameLog gameLog = playerAction.chooseTech(pbfId, dto, playerId);
+        GameLog gameLog = playerAction.chooseTech(pbfId, "Navy", playerId);
 
         assertThat(gameLog.getDraw().getUndo()).isNull();
         undoAction.initiateUndo(gameLog, playerId);

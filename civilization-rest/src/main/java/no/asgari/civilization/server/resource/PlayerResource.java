@@ -12,9 +12,7 @@ import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.action.UndoAction;
 import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.model.GameLog;
-import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.Player;
-import no.asgari.civilization.server.model.Undo;
 import no.asgari.civilization.server.model.Unit;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -55,24 +53,26 @@ public class PlayerResource {
 
     /**
      * Will choose a tech and update the player collection.
-     *
+     * <p/>
      * This method will also check if other players have chosen
+     *
      * @param player
      * @param pbfId
-     * @param item
+     * @param techName
      * @return
      */
     @PUT
     @Path("/tech/choose")
     @Timed
-    public Response chooseTech(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
-        playerAction.chooseTech(pbfId, item, player.getId());
+    public Response chooseTech(@Auth Player player, @PathParam("pbfId") String pbfId, @NotEmpty @QueryParam("name") String techName) {
+        playerAction.chooseTech(pbfId, techName, player.getId());
         return Response.noContent().build();
     }
 
     /**
      * Will end the turn for a given player, and take the next player from the list and
      * make that player current starting player.
+     *
      * @param player
      * @param pbfId
      * @return
@@ -84,13 +84,14 @@ public class PlayerResource {
     public Response endTurn(@Auth Player player, @PathParam("pbfId") String pbfId) {
         boolean success = playerAction.endTurn(pbfId, player.getUsername());
 
-        if(success) return Response.noContent().build();
+        if (success) return Response.noContent().build();
 
         return Response.serverError().build();
     }
 
     /**
      * This method checks whether it is the players turn
+     *
      * @param player
      * @param pbfId
      * @return
@@ -99,7 +100,7 @@ public class PlayerResource {
     @Path("/yourturn")
     @Timed
     public boolean isYourTurn(@Auth Player player, @PathParam("pbfId") String pbfId) {
-        return  playerAction.isYourTurn(pbfId, player.getId());
+        return playerAction.isYourTurn(pbfId, player.getId());
     }
 
     @PUT
@@ -107,7 +108,7 @@ public class PlayerResource {
     @Timed
     public Response revealItem(@Auth Player player, @PathParam("pbfId") String pbfId, @PathParam("gameLogId") String gameLogId) {
         playerAction.revealItem(pbfId, player.getId(), gameLogId);
-        return  Response.ok().build();
+        return Response.ok().build();
     }
 
     @DELETE
@@ -115,19 +116,19 @@ public class PlayerResource {
     @Timed
     public Response discardItem(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
         playerAction.discardItem(pbfId, player.getId(), item);
-        return  Response.ok().build();
+        return Response.ok().build();
     }
 
     @PUT
     @Path("/trade")
     @Timed
     public Response giveItemToPlayer(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
-        if(player.getId().equals(item.getOwnerId())) {
+        if (player.getId().equals(item.getOwnerId())) {
             return Response.status(Response.Status.FORBIDDEN).entity("You cannot trade with your self").build();
         }
         item.setPbfId(pbfId);
         boolean result = playerAction.tradeToPlayer(item, player.getId());
-        if(result) {
+        if (result) {
             return Response.ok().build();
         }
         return Response.status(Response.Status.NOT_MODIFIED).build();
@@ -139,7 +140,7 @@ public class PlayerResource {
     public Response drawItem(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @PathParam("sheetName") SheetName sheetName) {
         DrawAction drawAction = new DrawAction(db);
         Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, player.getId(), sheetName);
-        if(gameLogOptional.isPresent())
+        if (gameLogOptional.isPresent())
             return Response.ok().build();
 
         return Response.status(Response.Status.NOT_MODIFIED).build();
@@ -166,7 +167,7 @@ public class PlayerResource {
     /**
      * Will end a battle for one player
      * Will set the isBattle = false
-     *
+     * <p/>
      * Both players need to call this method
      *
      * @param player
@@ -186,8 +187,9 @@ public class PlayerResource {
 
     /**
      * Initiates undo for an item.
-     *
+     * <p/>
      * Will throw BAD_REQUEST if undo has already been performed
+     *
      * @param player
      * @param pbfId
      * @param gameLogId
@@ -206,6 +208,7 @@ public class PlayerResource {
 
     /**
      * Returns a list of all undoes that a player needs to vote for
+     *
      * @param player
      * @param pbfId
      * @return

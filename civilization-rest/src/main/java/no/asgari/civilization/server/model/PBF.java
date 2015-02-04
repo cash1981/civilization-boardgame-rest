@@ -23,10 +23,11 @@ import java.util.Optional;
  * PBF stands for Play By Forum
  */
 @Data
-@JsonRootName(value="pbf")
+@JsonRootName(value = "pbf")
 @XmlRootElement
 @JsonInclude
-@JsonIgnoreProperties(ignoreUnknown = true) //Perhaps use this when the object keep getting changed, otherwise jackson throws exception when it cannot map
+@JsonIgnoreProperties(ignoreUnknown = true)
+//Perhaps use this when the object keep getting changed, otherwise jackson throws exception when it cannot map
 public class PBF {
     @JsonIgnore
     public static final String COL_NAME = "pbf";
@@ -62,7 +63,7 @@ public class PBF {
                 .filter(Playerhand::isYourTurn)
                 .findFirst();
 
-        if(optional.isPresent()) {
+        if (optional.isPresent()) {
             return optional.get().getUsername();
         }
 

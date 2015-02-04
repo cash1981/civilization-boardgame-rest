@@ -1,12 +1,5 @@
 package no.asgari.civilization.server.action;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-
 import com.mongodb.DB;
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.model.GameLog;
@@ -14,6 +7,12 @@ import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.model.Unit;
 import org.mongojack.JacksonDBCollection;
+
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class BattleAction extends BaseAction {
     private final JacksonDBCollection<PBF, String> pbfCollection;
@@ -31,7 +30,7 @@ public class BattleAction extends BaseAction {
                 .map(p -> (Unit) p)
                 .collect(Collectors.toList());
 
-        if(unitsInHand.isEmpty()) {
+        if (unitsInHand.isEmpty()) {
             return unitsInHand;
         }
 
@@ -39,13 +38,13 @@ public class BattleAction extends BaseAction {
         long inBattle = unitsInHand.stream()
                 .filter(Unit::isInBattle)
                 .count();
-        if(inBattle > 0L) {
+        if (inBattle > 0L) {
             throw new WebApplicationException(Response.status(Response.Status.PRECONDITION_FAILED)
                     .entity("Some of your units are still in battle. You need to end the battle first")
                     .build());
         }
 
-        if(unitsInHand.size() <= numberOfDraws) {
+        if (unitsInHand.size() <= numberOfDraws) {
             createLog(unitsInHand, pbfId);
             return unitsInHand;
         }
@@ -58,6 +57,7 @@ public class BattleAction extends BaseAction {
 
     /**
      * Sets playerhands units to isBattle = false
+     *
      * @param pbfId
      * @param playerId
      */

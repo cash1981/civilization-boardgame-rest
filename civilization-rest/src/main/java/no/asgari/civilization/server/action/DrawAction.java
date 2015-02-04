@@ -13,7 +13,6 @@ import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
-import no.asgari.civilization.server.model.Unit;
 import org.mongojack.JacksonDBCollection;
 
 import javax.ws.rs.WebApplicationException;
@@ -78,7 +77,7 @@ public class DrawAction extends BaseAction {
     }
 
     private void reshuffleItems(GameType gameType, SheetName sheetName, PBF pbf) {
-        if(!SheetName.SHUFFLABLE_ITEMS.contains(sheetName)) {
+        if (!SheetName.SHUFFLABLE_ITEMS.contains(sheetName)) {
             log.warn("Tried to reshuffle " + sheetName.getName() + " but not a shufflable type");
             return;
         }
@@ -105,7 +104,7 @@ public class DrawAction extends BaseAction {
             log.debug("Found " + discardedItems.size() + " discarded items of type " + sheetName + " to add in the deck");
             itemsFromExcel.addAll(discardedItems);
 
-            if(itemsFromExcel.size() == 0) {
+            if (itemsFromExcel.size() == 0) {
                 log.warn("All items are still in use, cannot make a shuffle. Nothing to draw!");
                 throw new NoMoreItemsException(sheetName.getName());
             }
@@ -127,13 +126,14 @@ public class DrawAction extends BaseAction {
      * Finds the item or unit from the PBF matching the SheetName.
      * Then it removes the first item it finds
      * Draws item and units and puts the draw in the gamelog
-     * @param pbfId - PBF id
-     * @param playerId - Player id
+     *
+     * @param pbfId     - PBF id
+     * @param playerId  - Player id
      * @param sheetName - SheetName
      * @return
      */
     public Optional<GameLog> draw(String pbfId, String playerId, SheetName sheetName) {
-        return draw(pbfId,playerId,sheetName, GameType.WAW);
+        return draw(pbfId, playerId, sheetName, GameType.WAW);
     }
 
     private void logShuffle(SheetName sheetName, PBF pbf) {

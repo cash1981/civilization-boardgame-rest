@@ -172,7 +172,7 @@ public class ItemReader {
                 .collect(Collectors.toList());
 
         //Description should be in the same order as cultures
-        for(int i = 0; i < cultures.size(); i++) {
+        for (int i = 0; i < cultures.size(); i++) {
             CultureI item = cultures.get(i);
             item.setDescription(description.get(i));
         }
@@ -204,7 +204,7 @@ public class ItemReader {
                 .collect(Collectors.toList());
 
         //Description should be in the same order as culture2s
-        for(int i = 0; i < culture2s.size(); i++) {
+        for (int i = 0; i < culture2s.size(); i++) {
             CultureII item = culture2s.get(i);
             item.setDescription(description.get(i));
         }
@@ -236,7 +236,7 @@ public class ItemReader {
                 .collect(Collectors.toList());
 
         //Description should be in the same order as culture3s
-        for(int i = 0; i < culture3s.size(); i++) {
+        for (int i = 0; i < culture3s.size(); i++) {
             CultureIII item = culture3s.get(i);
             item.setDescription(description.get(i));
         }
@@ -276,7 +276,7 @@ public class ItemReader {
                 .collect(Collectors.toList());
 
         //Description should be in the same order as cultures
-        for(int i = 0; i < gps.size(); i++) {
+        for (int i = 0; i < gps.size(); i++) {
             GreatPerson item = gps.get(i);
             item.setDescription(description.get(i));
             item.setType(tile.get(i));
@@ -410,6 +410,7 @@ public class ItemReader {
 
     /**
      * Tech cards do not need to be shuffled as the player is supposed to pick the card they want
+     *
      * @param wb
      * @return
      */

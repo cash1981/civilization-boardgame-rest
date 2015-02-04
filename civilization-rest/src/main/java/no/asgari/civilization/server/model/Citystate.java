@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Setter
 @JsonTypeName("citystate")
 @NoArgsConstructor
-@EqualsAndHashCode(exclude={"ownerId", "hidden", "used"}, callSuper = false)
+@EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"}, callSuper = false)
 public class Citystate implements Item {
     @JsonProperty
     @NotEmpty
@@ -28,7 +28,7 @@ public class Citystate implements Item {
     @JsonProperty
     private boolean used;
     @JsonProperty
-    private boolean hidden;
+    private boolean hidden = true;
     @JsonProperty
     private String ownerId; // (playerId)
 

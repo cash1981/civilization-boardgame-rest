@@ -10,7 +10,11 @@ import no.asgari.civilization.server.action.GameAction;
 import no.asgari.civilization.server.action.GameLogAction;
 import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.action.UndoAction;
-import no.asgari.civilization.server.dto.*;
+import no.asgari.civilization.server.dto.CreateNewGameDTO;
+import no.asgari.civilization.server.dto.GameDTO;
+import no.asgari.civilization.server.dto.GameLogDTO;
+import no.asgari.civilization.server.dto.PbfDTO;
+import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
@@ -18,7 +22,13 @@ import no.asgari.civilization.server.model.Tech;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -61,7 +71,8 @@ public class GameResource {
 
     /**
      * Returns a specific game
-     *f
+     * f
+     *
      * @return
      */
     @Path("/{gameId}")
@@ -151,7 +162,7 @@ public class GameResource {
 
         GameAction gameAction = new GameAction(db);
         boolean ok = gameAction.withdrawFromGame(pbfId, player.getId());
-        if(ok) {
+        if (ok) {
             return Response.ok().build();
         }
 

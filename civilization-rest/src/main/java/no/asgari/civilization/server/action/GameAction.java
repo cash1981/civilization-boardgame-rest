@@ -10,9 +10,17 @@ import com.mongodb.DB;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.application.CivSingleton;
-import no.asgari.civilization.server.dto.*;
+import no.asgari.civilization.server.dto.CreateNewGameDTO;
+import no.asgari.civilization.server.dto.GameDTO;
+import no.asgari.civilization.server.dto.GameLogDTO;
+import no.asgari.civilization.server.dto.PbfDTO;
+import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.excel.ItemReader;
-import no.asgari.civilization.server.model.*;
+import no.asgari.civilization.server.model.GameLog;
+import no.asgari.civilization.server.model.GameType;
+import no.asgari.civilization.server.model.PBF;
+import no.asgari.civilization.server.model.Player;
+import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.util.Java8Util;
 import no.asgari.civilization.server.util.SecurityCheck;
 import org.mongojack.DBCursor;
@@ -24,7 +32,12 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
@@ -163,7 +176,7 @@ public class GameAction extends BaseAction {
 
         boolean playerAlreadyJoined = pbf.getPlayers().stream()
                 .anyMatch(p -> p.getPlayerId().equals(player.getId()));
-        if(playerAlreadyJoined) {
+        if (playerAlreadyJoined) {
             log.warn("Cannot join the game. Player has already joined it");
             Response badReq = Response.status(Response.Status.BAD_REQUEST)
                     .entity("Cannot join the game. You have already joined it!")
@@ -187,7 +200,7 @@ public class GameAction extends BaseAction {
     }
 
     private String chooseColorForPlayer(PBF pbf, String playerId) {
-        if(pbf.getPlayers().isEmpty()) {
+        if (pbf.getPlayers().isEmpty()) {
             return "Yellow";
         }
 
@@ -300,9 +313,9 @@ public class GameAction extends BaseAction {
         }
 
         Iterator<Playerhand> iterator = pbf.getPlayers().iterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             Playerhand playerhand = iterator.next();
-            if(playerhand.getPlayerId().equals(playerId)) {
+            if (playerhand.getPlayerId().equals(playerId)) {
                 iterator.remove();
                 //TOOD Create log player withdrew from game
                 gameLogAction.createCommonPublicLog("Withdrew from join", pbfId, playerId);

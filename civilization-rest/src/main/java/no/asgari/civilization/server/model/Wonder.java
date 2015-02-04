@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @ToString()
 @JsonTypeName("wonder")
 @NoArgsConstructor
-@EqualsAndHashCode(exclude={"ownerId", "hidden", "used"})
+@EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"})
 public class Wonder implements Item {
     @JsonIgnore
     public static final String ANCIENT = "Ancient";
@@ -28,7 +28,7 @@ public class Wonder implements Item {
     private String type;
     private String description;
     private boolean used;
-    private boolean hidden;
+    private boolean hidden = true;
     private String ownerId; // game_id or player_id (username)
 
     public Wonder(String name, String description, String type) {

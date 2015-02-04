@@ -4,9 +4,9 @@ import com.mongodb.Mongo;
 import io.dropwizard.lifecycle.Managed;
 
 public class MongoManaged implements Managed {
-    
+
     private Mongo mongo;
-    
+
     public MongoManaged(Mongo mongo) {
         this.mongo = mongo;
     }
