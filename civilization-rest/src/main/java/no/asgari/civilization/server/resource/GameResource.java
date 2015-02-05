@@ -183,7 +183,6 @@ public class GameResource {
     @Timed
     @Path("/{pbfId}/techs")
     public List<Tech> getAvailableTechs(@NotEmpty @PathParam("pbfId") String pbfId, @Auth Player player) {
-        //TODO Change return type to TechDTO or use ItemDTO
         return new PlayerAction(db).getRemaingTechsForPlayer(player.getId(), pbfId);
     }
 

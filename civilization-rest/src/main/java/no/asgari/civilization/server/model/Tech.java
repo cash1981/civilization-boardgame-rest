@@ -13,7 +13,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"name", "level"})
-
 public class Tech implements Item, Level {
     @JsonIgnore
     public static final int LEVEL_1 = 1;

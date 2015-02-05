@@ -51,11 +51,21 @@
           }
         };
 
+        var getAvailableTechs = function(gameid) {
+          var url = baseUrl + gameid + "/techs";
+          return $http.get(url)
+            .then(function(response) {
+              $log.info("Got all available techs");
+              return response.data;
+            });
+        };
+
         return {
           getAllGames: getAllGames,
           joinGame: joinGame,
           getGameById: getGameById,
-          createGame: createGame
+          createGame: createGame,
+          getAvailableTechs: getAvailableTechs
         };
       };
 

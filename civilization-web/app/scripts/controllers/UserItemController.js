@@ -100,6 +100,14 @@
         return game;
       });
 
+
+    model.allAvailableTechs = [];
+    GameService.getAvailableTechs($routeParams.id)
+      .then(function(techs) {
+        model.allAvailableTechs = techs;
+      });
+
+
     model.tablePrivateLog = new ngTableParams({
       page: 1,            // show first page
       count: 10,          // count per page

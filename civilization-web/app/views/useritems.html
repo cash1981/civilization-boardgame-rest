@@ -275,15 +275,23 @@
     </div>
   </div>
 
-  <!-- techs -->
+  <!-- allAvailableTechs -->
   <div class="row">
     <hr/>
-    <h2>Techs</h2>
+    <h2>Your Techs</h2>
     <div class="well well-lg col-lg-8">
       List of all the techs chosen
     </div>
     <div class="well well-lg col-lg-4">
-      Choose tech here
+      Choose tech here, put data in select box
+      <h3>Selectize theme</h3>
+      <p>Selected: {{userCtrl.tech.selected}}</p>
+      <ui-select ng-model="userCtrl.tech.selected" theme="bootstrap" ng-disabled="disabled" style="width: 300px;">
+        <ui-select-match placeholder="Select or search a tech">{{$select.selected.name}}</ui-select-match>
+        <ui-select-choices repeat="tech in userCtrl.allAvailableTechs | filter: $select.search">
+          <span ng-bind-html="tech.tech.name | highlight: $select.search"></span>
+        </ui-select-choices>
+      </ui-select>
     </div>
   </div>
 </div>

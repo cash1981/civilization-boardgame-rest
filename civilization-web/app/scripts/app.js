@@ -10,6 +10,7 @@
     'ngSanitize',
     'ngMessages',
     'ui.bootstrap',
+    'ui.select',
     'ngTouch',
     'ab-base64',
     'angular-growl',

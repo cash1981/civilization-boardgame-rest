@@ -198,7 +198,6 @@ public class PlayerAction extends BaseAction {
                 .orElseThrow(PlayerAction::cannotFindPlayer)
                 .getTechsChosen();
 
-
         pbf.getTechs().removeAll(techsChosen);
         return pbf.getTechs();
     }
