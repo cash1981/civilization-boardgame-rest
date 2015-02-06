@@ -7,7 +7,7 @@ import no.asgari.civilization.server.model.PBF;
  */
 public class SecurityCheck {
 
-    public static boolean hasUserAcces(PBF pbf, String playerId) {
+    public static boolean hasUserAccess(PBF pbf, String playerId) {
         if (pbf != null) {
             return pbf.getPlayers().stream().anyMatch(p -> p.getPlayerId().equals(playerId));
         }

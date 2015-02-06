@@ -304,7 +304,7 @@ public class GameAction extends BaseAction {
             return false;
         }
 
-        if (!SecurityCheck.hasUserAcces(pbf, playerId)) {
+        if (!SecurityCheck.hasUserAccess(pbf, playerId)) {
             log.warn("User with id " + playerId + " is not player this game, and cannot withdraw");
             Response badReq = Response.status(Response.Status.FORBIDDEN)
                     .entity("No access")

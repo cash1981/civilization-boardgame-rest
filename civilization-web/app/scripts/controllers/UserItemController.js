@@ -102,11 +102,23 @@
 
 
     model.allAvailableTechs = [];
+    model.chosenTechs = [];
+    model.chosenTechs1 = [];
+    model.chosenTechs2 = [];
+    model.chosenTechs3 = [];
+    model.chosenTechs4 = [];
+    model.chosenTechs5 = [];
     GameService.getAvailableTechs($routeParams.id)
       .then(function(techs) {
         model.allAvailableTechs = techs;
       });
 
+    PlayerService.getChosenTechs($routeParams.id)
+      .then(function(techs) {
+        model.chosenTechs = techs;
+        //TODO Sort by level, and add in corresponding var
+        //if(level == 1) model.chosenTechs().put(techs) 
+      });
 
     model.tablePrivateLog = new ngTableParams({
       page: 1,            // show first page

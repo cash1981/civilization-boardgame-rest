@@ -281,6 +281,30 @@
     <h2>Your Techs</h2>
     <div class="well well-lg col-lg-8">
       List of all the techs chosen
+      <ul>
+        <li ng-repeat="tech in userCtrl.chosenTechs | filter: tech.level == 1">
+          Name {{tech.name}}
+        </li>
+      </ul>
+
+      <ul>
+        <li ng-repeat="tech in userCtrl.chosenTechs | filter: tech.level == 2">
+          Name {{tech.name}}
+        </li>
+      </ul>
+
+      <ul>
+        <li ng-repeat="tech in userCtrl.chosenTechs | filter: tech.level == 3">
+          Name {{tech.name}}
+        </li>
+      </ul>
+
+      <ul>
+        <li ng-repeat="tech in userCtrl.chosenTechs | filter: tech.level == 5">
+          Name {{tech.name}}
+        </li>
+      </ul>
+
     </div>
     <div class="well well-lg col-lg-4">
       Choose tech here, put data in select box

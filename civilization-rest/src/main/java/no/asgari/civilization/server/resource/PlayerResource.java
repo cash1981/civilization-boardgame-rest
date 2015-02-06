@@ -1,6 +1,7 @@
 package no.asgari.civilization.server.resource;
 
 import com.codahale.metrics.annotation.Timed;
+import com.google.common.base.Strings;
 import com.mongodb.DB;
 import io.dropwizard.auth.Auth;
 import lombok.extern.log4j.Log4j;
@@ -13,7 +14,9 @@ import no.asgari.civilization.server.action.UndoAction;
 import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Player;
+import no.asgari.civilization.server.model.Tech;
 import no.asgari.civilization.server.model.Unit;
+import no.asgari.civilization.server.util.SecurityCheck;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
@@ -31,6 +34,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Contains player specific resources
@@ -67,6 +71,25 @@ public class PlayerResource {
     public Response chooseTech(@Auth Player player, @PathParam("pbfId") String pbfId, @NotEmpty @QueryParam("name") String techName) {
         playerAction.chooseTech(pbfId, techName, player.getId());
         return Response.noContent().build();
+    }
+
+    /**
+     * If logged in playerId is specified we will use that, otherwise we will use logged in player.
+     * This because a logged in player, might go into someone elses game 
+     * @param playerId
+     * @return
+     */
+    @GET
+    @Path("/tech/{playerId}")
+    public Response getChosenTechs(@PathParam("pbfId") String pbfId, @PathParam("playerId") String playerId) {
+        Player pl = playerAction.getPlayerById(playerId);
+        if(pl == null ) {
+            log.error("Didn't find player with id " + playerId);
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Need correct player id to get a game").build();
+        }
+        Set<Tech> playersTechs = playerAction.getPlayersTechs(pbfId, playerId);
+        return Response.ok().entity(playersTechs).build();
     }
 
     /**
