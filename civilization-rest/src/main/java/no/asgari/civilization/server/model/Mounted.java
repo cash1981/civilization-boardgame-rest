@@ -16,7 +16,7 @@ import no.asgari.civilization.server.SheetName;
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"}, callSuper = false)
 public class Mounted extends Unit implements Image {
-    private int level = LEVEL_1;
+    private int level = 0;
     private String ownerId;
     private boolean hidden = true;
     private boolean used;
@@ -31,10 +31,10 @@ public class Mounted extends Unit implements Image {
         this.health = health;
     }
 
-    @JsonIgnore
     @Override
     public String getType() {
-        return "Mounted";
+        type = getClass().getSimpleName();
+        return type;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class Mounted extends Unit implements Image {
             case LEVEL_4:
                 return "Tank " + (attack + LEVEL_3) + "." + (health + LEVEL_3);
             default:
-                return "Mounted unknown level " + attack + "." + health;
+                return "Mounted " + attack + "." + health;
         }
     }
 

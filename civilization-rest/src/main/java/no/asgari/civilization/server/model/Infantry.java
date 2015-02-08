@@ -16,7 +16,7 @@ import no.asgari.civilization.server.SheetName;
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"}, callSuper = false)
 public class Infantry extends Unit implements Image {
-    private int level = LEVEL_1;
+    private int level = 0;
     private int attack;
     private int health;
     private String ownerId;
@@ -31,10 +31,9 @@ public class Infantry extends Unit implements Image {
         this.health = health;
     }
 
-    @JsonIgnore
     @Override
     public String getType() {
-        return "Infantry";
+        return type = getClass().getSimpleName();
     }
 
     @Override
@@ -75,7 +74,7 @@ public class Infantry extends Unit implements Image {
             case LEVEL_4:
                 return "Modern Infantry " + (attack + LEVEL_3) + "." + (health + LEVEL_3);
             default:
-                return "Infantry Unknown level " + attack + "." + health;
+                return "Infantry " + attack + "." + health;
         }
     }
 

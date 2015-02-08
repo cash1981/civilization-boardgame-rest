@@ -32,30 +32,6 @@
       return item;
     };
 
-    model.itemDetail = function(item) {
-      var returnValue = null;
-      $.each(item, function(index, element) {
-        if(index === "aircraft" || index === "mounted" || index === "infantry" || index === "artillery") {
-          var name = toTitleCase(index);
-          var details = element.attack + "." + element.health;
-          returnValue = name + " " + details;
-        }
-/* TODO FIXME for some reason when adding this code below, nothing is printed out
-        else if(element.name) {
-          var returnValue = element.name;
-          if(element.type) {
-            returnValue = returnValue + " Type: " + element.type;
-          }
-          if(element.description) {
-            returnValue = returnValue + " Description: " + element.description;
-          }
-        }*/
-        return returnValue;
-      });
-
-      return returnValue;
-    };
-
     model.yourTurn = false;
     model.items = [];
     model.techsChosen = [];
@@ -95,7 +71,7 @@
         model.huts = game.player.huts;
         model.villages = game.player.villages;
         model.tiles = game.player.tiles;
-        //TODO model.units add infantries,aircrafts,artilleries,mounteds if not empty
+        model.units = game.player.units;
 
         return game;
       });
@@ -117,7 +93,7 @@
       .then(function(techs) {
         model.chosenTechs = techs;
         //TODO Sort by level, and add in corresponding var
-        //if(level == 1) model.chosenTechs().put(techs) 
+        //if(level == 1) model.chosenTechs().put(techs)
       });
 
     model.tablePrivateLog = new ngTableParams({

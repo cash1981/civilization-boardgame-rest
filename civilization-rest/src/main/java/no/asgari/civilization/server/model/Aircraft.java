@@ -27,10 +27,9 @@ public class Aircraft extends Unit implements Image {
         this.health = health;
     }
 
-    @JsonIgnore
     @Override
     public String getType() {
-        return "Aircraft";
+        return type = getClass().getSimpleName();
     }
 
     /**
@@ -76,9 +75,8 @@ public class Aircraft extends Unit implements Image {
         if (health != aircraft.health) return false;
         if (hidden != aircraft.hidden) return false;
         if (used != aircraft.used) return false;
-        if (isInBattle != aircraft.isInBattle) return false;
+        return isInBattle == aircraft.isInBattle;
 
-        return true;
     }
 
     @Override

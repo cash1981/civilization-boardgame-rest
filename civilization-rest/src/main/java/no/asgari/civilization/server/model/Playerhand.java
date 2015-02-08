@@ -3,12 +3,14 @@ package no.asgari.civilization.server.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -39,18 +41,15 @@ public class Playerhand {
     private Set<Tech> techsChosen = Sets.newTreeSet();
 
     private List<Item> civs = Lists.newArrayList();
-    private List<Item> infantries = Lists.newArrayList();
     private List<Item> cultureCards = Lists.newArrayList();
     private List<Item> greatPersons = Lists.newArrayList();
-    private List<Item> aircrafts = Lists.newArrayList();
-    private List<Item> artilleries = Lists.newArrayList();
-    private List<Item> mounteds = Lists.newArrayList();
     private List<Item> huts = Lists.newArrayList();
     private List<Item> villages = Lists.newArrayList();
     private List<Item> tiles = Lists.newArrayList();
     private List<Item> citystates = Lists.newArrayList();
     private List<Item> wonders = Lists.newArrayList();
-
+    private List<Unit> units = Lists.newArrayList();
+    
     @JsonIgnore
     public void addItem(Item item) {
         items.add(item);
@@ -64,16 +63,11 @@ public class Playerhand {
                 cultureCards.add(item);
                 break;
             case AIRCRAFT:
-                aircrafts.add(item);
-                break;
             case INFANTRY:
-                infantries.add(item);
-                break;
             case MOUNTED:
-                mounteds.add(item);
-                break;
             case ARTILLERY:
-                artilleries.add(item);
+                units.add((Unit) item);
+                Collections.sort(units);
                 break;
             case GREAT_PERSON:
                 greatPersons.add(item);
@@ -110,13 +104,10 @@ public class Playerhand {
             case CULTURE_3:
                 return cultureCards.remove(item);
             case AIRCRAFT:
-                return aircrafts.remove(item);
             case INFANTRY:
-                return infantries.remove(item);
             case MOUNTED:
-                return mounteds.remove(item);
             case ARTILLERY:
-                return artilleries.remove(item);
+                return units.remove(item);
             case GREAT_PERSON:
                 return greatPersons.remove(item);
             case HUTS:

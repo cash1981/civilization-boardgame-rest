@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.action.DrawAction;
 import no.asgari.civilization.server.exception.NoMoreItemsException;
