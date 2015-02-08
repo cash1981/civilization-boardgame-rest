@@ -16,14 +16,15 @@ import org.hibernate.validator.constraints.NotEmpty;
 @JsonTypeName("hut")
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"})
-public class Hut implements Item, Tradable {
+public class Hut implements Item, Tradable, Image {
     @NotEmpty
     private String name;
     private String type;
     private String description;
     private boolean used;
     private boolean hidden = true;
-    private String ownerId; // game_id or player_id (username)
+    private String ownerId;
+    private String image;
 
     public Hut(String name) {
         this.name = name;
@@ -49,5 +50,11 @@ public class Hut implements Item, Tradable {
     @Override
     public int compareTo(Spreadsheet o) {
         return getSheetName().compareTo(o.getSheetName());
+    }
+
+    @Override
+    public String getImage() {
+        image = name + PNG;
+        return image.replaceAll(" ", "");
     }
 }

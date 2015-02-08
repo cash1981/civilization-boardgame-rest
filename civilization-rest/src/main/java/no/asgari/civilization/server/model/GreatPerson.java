@@ -53,10 +53,9 @@ public class GreatPerson implements Item, Image {
         return 0;
     }
 
-    @JsonGetter("image")
     @Override
     public String getImage() {
-        image = "klein " + name + ".png";
-        return image;
+        image = "klein" + name + PNG;
+        return image.replaceAll(" ", "");
     }
 }

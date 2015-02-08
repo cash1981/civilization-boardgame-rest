@@ -9,13 +9,15 @@ import lombok.ToString;
 import no.asgari.civilization.server.SheetName;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.util.Hashtable;
+
 @Getter
 @Setter
 @ToString(of = "name")
 @JsonTypeName("village")
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"})
-public class Village implements Item, Tradable {
+public class Village implements Item, Tradable, Image {
     @NotEmpty
     private String name;
     private String type;
@@ -23,6 +25,7 @@ public class Village implements Item, Tradable {
     private boolean used;
     private boolean hidden = true;
     private String ownerId; // game_id or player_id (username)
+    private String image;
 
     public Village(String name) {
         this.name = name;
@@ -48,5 +51,11 @@ public class Village implements Item, Tradable {
     @Override
     public int compareTo(Spreadsheet o) {
         return getSheetName().compareTo(o.getSheetName());
+    }
+
+    @Override
+    public String getImage() {
+        image = name + PNG;
+        return image.replaceAll(" ", "");
     }
 }

@@ -99,7 +99,7 @@ public class Aircraft extends Unit implements Image {
 
     @Override
     public String getImage() {
-        image = toString() + ".png";
-        return image;
+        image = toString() + PNG;
+        return image.replaceAll(" ", "");
     }
 }

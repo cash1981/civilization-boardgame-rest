@@ -53,7 +53,7 @@ public class CultureII implements Item, Tradable, Image {
 
     @Override
     public String getImage() {
-        image = name.replaceAll("!", "") + ".png";
-        return image;
+        image = name.replaceAll("!", "") + PNG;
+        return image.replaceAll(" ", "");
     }
 }

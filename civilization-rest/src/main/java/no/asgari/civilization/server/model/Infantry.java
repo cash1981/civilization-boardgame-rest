@@ -87,7 +87,7 @@ public class Infantry extends Unit implements Image {
     @JsonGetter("image")
     @Override
     public String getImage() {
-        image = getType() + attack + "." + health + ".png";
-        return image;
+        image = getType() + attack + "." + health + PNG;
+        return image.replaceAll(" ", "");
     }
 }

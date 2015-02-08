@@ -55,7 +55,7 @@ public class Tile implements Item, Image {
     @JsonGetter("image")
     @Override
     public String getImage() {
-        image = getClass().getSimpleName().toLowerCase() + name + ".png";
-        return image;
+        image = getClass().getSimpleName().toLowerCase() + name + PNG;
+        return image.replaceAll(" ", "");
     }
 }

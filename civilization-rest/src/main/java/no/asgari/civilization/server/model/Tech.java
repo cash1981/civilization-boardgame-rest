@@ -81,6 +81,6 @@ public class Tech implements Item, Level, Image {
     @Override
     public String getImage() {
         image = name + ".png";
-        return image;
+        return image.replaceAll(" ", "");
     }
 }

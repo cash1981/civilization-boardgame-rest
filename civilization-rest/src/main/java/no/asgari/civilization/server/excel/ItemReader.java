@@ -115,16 +115,30 @@ public class ItemReader {
     private LinkedList<? extends Item> getShuffledCityStates(Workbook wb) {
         Sheet civSheet = wb.getSheet(SheetName.CITY_STATES.getName());
 
-        List<Cell> unfilteredCivCells = new ArrayList<>();
-        civSheet.forEach(row -> row.forEach(unfilteredCivCells::add));
+        List<Cell> unfilteredCSCells = new ArrayList<>();
+        civSheet.forEach(row -> row.forEach(unfilteredCSCells::add));
 
-        List<Citystate> cityStates = unfilteredCivCells.stream()
+        List<Citystate> cityStates = unfilteredCSCells.stream()
                 .filter(notEmptyPredicate)
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
-                .map(civname -> new Citystate(civname.toString()))
+                .map(cs -> new Citystate(cs.toString()))
                 .collect(Collectors.toList());
+
+        List<String> description = unfilteredCSCells.stream()
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
+                .filter(cell -> cell.getColumnIndex() == 1)
+                .map(Object::toString)
+                .collect(Collectors.toList());
+
+        //Description should be in the same order as city states
+        for (int i = 0; i < cityStates.size(); i++) {
+            Citystate item = cityStates.get(i);
+            item.setDescription(description.get(i));
+        }
 
         Collections.shuffle(cityStates);
         return new LinkedList<>(cityStates);

@@ -42,7 +42,9 @@ Nice to have: (Will be implemented in later versions)
   -- Will send the jpg/png to the server, and save it in mongodb
 - Probably need to implement turns, so that you can filter on turns and see what orders where from what turns etc
   -- Same with maps. Should perhaps be connected with the turns
-
+- Register new players
+- Undo
+  -- Only players playing the game can undo
 
 check ngmodules.org to find modules
 
@@ -54,3 +56,4 @@ check ngmodules.org to find modules
   -- Samme egentlig når jeg discard item, draw item og tech osv
 - Hvorfor fungerer ikke lodash? Den skal jo legge seg på window object
 - Hvorfor fungerer ikke <ng-include> på itemActions.html
+- Hvorfor vises ikke alt på bildet?

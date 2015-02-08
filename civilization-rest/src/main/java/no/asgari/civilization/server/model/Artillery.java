@@ -75,7 +75,7 @@ public class Artillery extends Unit implements Image {
 
     @Override
     public String getImage() {
-        image = getType() + attack + "." + health + ".png";
-        return image;
+        image = getType() + attack + "." + health + PNG;
+        return image.replaceAll(" ", "");
     }
 }

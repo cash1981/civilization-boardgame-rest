@@ -16,7 +16,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @JsonTypeName("citystate")
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"}, callSuper = false)
-public class Citystate implements Item {
+public class Citystate implements Item, Image {
     @JsonProperty
     @NotEmpty
     private String name;
@@ -31,6 +31,7 @@ public class Citystate implements Item {
     private boolean hidden = true;
     @JsonProperty
     private String ownerId; // (playerId)
+    private String image;
 
     public Citystate(String name) {
         this.name = name;
@@ -56,5 +57,11 @@ public class Citystate implements Item {
     @Override
     public int compareTo(Spreadsheet o) {
         return getSheetName().compareTo(o.getSheetName());
+    }
+
+    @Override
+    public String getImage() {
+        image = description + PNG;
+        return image.replaceAll(" ", "");
     }
 }

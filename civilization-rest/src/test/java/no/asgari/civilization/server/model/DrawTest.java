@@ -64,6 +64,10 @@ public class DrawTest extends AbstractMongoDBTest {
                 .filter(p -> p.getSheetName() == SheetName.ARTILLERY)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Artillery.class);
+        
+        Artillery artillery = (Artillery)gameLogOptional.get().getDraw().getItem();
+        assertThat(artillery.getImage()).doesNotContain(" ");
+        assertThat(artillery.getImage()).endsWith(".png");
     }
 
     @Test
