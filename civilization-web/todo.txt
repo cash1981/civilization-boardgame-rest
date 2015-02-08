@@ -45,6 +45,8 @@ Nice to have: (Will be implemented in later versions)
 - Register new players
 - Undo
   -- Only players playing the game can undo
+Reveal from useritem
+  -- To do this I need to send the item info and use the gamelog to find the item and reveal it.
 
 check ngmodules.org to find modules
 

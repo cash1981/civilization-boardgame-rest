@@ -108,10 +108,7 @@
                       tooltip="Discard your item. This will make an entry in the game log">
                 Discard Item
               </button>
-              <button tooltip="TODO" class="btn btn-sm btn-warning" disabled>
-                Send to Player
-              </button>
-              <button tooltip="TODO" class="btn btn-sm btn-warning" disabled>
+              <button ng-if="item.greatperson.hidden" tooltip="TODO" class="btn btn-sm btn-warning" disabled>
                 Reveal Item
               </button>
             </p>
@@ -138,10 +135,7 @@
                       tooltip="Discard your item. This will make an entry in the game log">
                 Discard Item
               </button>
-              <button tooltip="TODO" class="btn btn-sm btn-warning" disabled>
-                Send to Player
-              </button>
-              <button tooltip="TODO" class="btn btn-sm btn-warning" disabled>
+              <button ng-if="userCtrl.nextElement(item).hidden" tooltip="TODO" class="btn btn-sm btn-warning" disabled>
                 Reveal Item
               </button>
             </p>
@@ -188,11 +182,11 @@
       <hr>
       <div collapse="hutsCollapse">
         <div ng-repeat="item in userCtrl.huts" class="thumbnail" ng-show="userCtrl.huts">
-          <img ng-src="/images/useritems/{{userCtrl.nextElement(item).image}}"
-               tooltip="{{userCtrl.nextElement(item).name}}"/>
+          <img ng-src="/images/useritems/{{item.hut.image}}"
+               tooltip="{{item.hut.name}}"/>
 
           <div class="caption">
-            <p><strong>{{userCtrl.nextElement(item).name}}</strong></p>
+            <p><strong>{{item.hut.name}}</strong></p>
 
             <p>
               <button ng-really-message="This will discard your item. Are you sure?"
