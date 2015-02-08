@@ -96,11 +96,11 @@ public class PlayerAction extends BaseAction {
         //checkYourTurn(pbfId, playerId);
 
         PBF pbf = pbfCollection.findOneById(pbfId);
-        if(!SecurityCheck.hasUserAccess(pbf, playerId)) {
+        if (!SecurityCheck.hasUserAccess(pbf, playerId)) {
             log.error("User with id " + playerId + " has no access to pbf " + pbf.getName());
             throw new WebApplicationException(Response.Status.FORBIDDEN);
         }
-        
+
         Optional<Tech> tech = pbf.getTechs().stream()
                 .filter(techToFind -> techToFind.getName().equals(techName))
                 .findFirst();
@@ -295,7 +295,7 @@ public class PlayerAction extends BaseAction {
         log.error("Found the item " + itemToDelete + " , but couldn't delete it for some reason");
         throw cannotFindItem();
     }
-    
+
     public Player getPlayerById(String playerId) {
         return playerCollection.findOneById(playerId);
     }
@@ -303,11 +303,11 @@ public class PlayerAction extends BaseAction {
     public Set<Tech> getPlayersTechs(String pbfId, String playerId) {
         Preconditions.checkNotNull(pbfId);
         Preconditions.checkNotNull(playerId);
-        
+
         PBF pbf = pbfCollection.findOneById(pbfId);
         return pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(playerId))
                 .findFirst().orElseThrow(PlayerAction::cannotFindPlayer)
                 .getTechsChosen();
-                
+
     }
 }

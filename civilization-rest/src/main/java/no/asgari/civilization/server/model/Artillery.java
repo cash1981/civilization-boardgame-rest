@@ -14,7 +14,7 @@ import no.asgari.civilization.server.SheetName;
 @JsonTypeName("artillery")
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"}, callSuper = false)
-public class Artillery extends Unit {
+public class Artillery extends Unit implements Image {
     private int level = LEVEL_1;
     private String ownerId;
     private boolean hidden = true;
@@ -23,6 +23,7 @@ public class Artillery extends Unit {
     private int attack;
     private int health;
     private boolean isInBattle;
+    private String image;
 
     public Artillery(int attack, int health) {
         this.attack = attack;
@@ -70,5 +71,11 @@ public class Artillery extends Unit {
     @Override
     public int compareTo(Spreadsheet o) {
         return getSheetName().compareTo(o.getSheetName());
+    }
+
+    @Override
+    public String getImage() {
+        image = getType() + attack + "." + health + ".png";
+        return image;
     }
 }

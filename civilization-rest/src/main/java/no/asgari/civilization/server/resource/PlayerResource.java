@@ -1,7 +1,6 @@
 package no.asgari.civilization.server.resource;
 
 import com.codahale.metrics.annotation.Timed;
-import com.google.common.base.Strings;
 import com.mongodb.DB;
 import io.dropwizard.auth.Auth;
 import lombok.extern.log4j.Log4j;
@@ -16,7 +15,6 @@ import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Tech;
 import no.asgari.civilization.server.model.Unit;
-import no.asgari.civilization.server.util.SecurityCheck;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
@@ -75,7 +73,8 @@ public class PlayerResource {
 
     /**
      * If logged in playerId is specified we will use that, otherwise we will use logged in player.
-     * This because a logged in player, might go into someone elses game 
+     * This because a logged in player, might go into someone elses game
+     *
      * @param playerId
      * @return
      */
@@ -83,7 +82,7 @@ public class PlayerResource {
     @Path("/tech/{playerId}")
     public Response getChosenTechs(@PathParam("pbfId") String pbfId, @PathParam("playerId") String playerId) {
         Player pl = playerAction.getPlayerById(playerId);
-        if(pl == null ) {
+        if (pl == null) {
             log.error("Didn't find player with id " + playerId);
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Need correct player id to get a game").build();

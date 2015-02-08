@@ -28,7 +28,6 @@ package no.asgari.civilization.server.model;
  * used = true
  * hidden = true;
  */
-
 public interface Item extends Spreadsheet, Type, Comparable<Spreadsheet> {
 
     /**

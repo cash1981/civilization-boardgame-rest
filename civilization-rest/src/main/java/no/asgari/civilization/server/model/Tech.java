@@ -1,5 +1,6 @@
 package no.asgari.civilization.server.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,7 +14,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"name", "level"})
-public class Tech implements Item, Level {
+public class Tech implements Item, Level, Image {
     @JsonIgnore
     public static final int LEVEL_1 = 1;
     @JsonIgnore
@@ -36,6 +37,7 @@ public class Tech implements Item, Level {
     private boolean hidden = true;
     private String ownerId; // player_id
     private int level;
+    private String image;
 
     public Tech(String name, int level) {
         this.name = name;
@@ -73,5 +75,12 @@ public class Tech implements Item, Level {
     @Override
     public int compareTo(Spreadsheet o) {
         return getSheetName().compareTo(o.getSheetName());
+    }
+
+    @JsonGetter("image")
+    @Override
+    public String getImage() {
+        image = name + ".png";
+        return image;
     }
 }

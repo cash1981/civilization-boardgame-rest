@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @ToString(of = "name")
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"})
-public class CultureI implements Item, Tradable {
+public class CultureI implements Item, Tradable, Image {
     @NotEmpty
     private String name;
     private String description;
@@ -23,6 +23,7 @@ public class CultureI implements Item, Tradable {
     private boolean used;
     private boolean hidden = true;
     private String ownerId; // player_id
+    private String image;
 
     public CultureI(String name) {
         this.name = name;
@@ -48,5 +49,11 @@ public class CultureI implements Item, Tradable {
     @Override
     public int compareTo(Spreadsheet o) {
         return getSheetName().compareTo(o.getSheetName());
+    }
+
+    @Override
+    public String getImage() {
+        image = name.replaceAll("!", "") + ".png";
+        return image;
     }
 }

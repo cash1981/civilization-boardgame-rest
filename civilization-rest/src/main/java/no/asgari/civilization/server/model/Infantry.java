@@ -1,6 +1,7 @@
 package no.asgari.civilization.server.model;
 
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.EqualsAndHashCode;
@@ -14,7 +15,7 @@ import no.asgari.civilization.server.SheetName;
 @JsonTypeName("infantry")
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"}, callSuper = false)
-public class Infantry extends Unit {
+public class Infantry extends Unit implements Image {
     private int level = LEVEL_1;
     private int attack;
     private int health;
@@ -23,6 +24,7 @@ public class Infantry extends Unit {
     private boolean used;
     private boolean killed;
     private boolean isInBattle;
+    private String image;
 
     public Infantry(int attack, int health) {
         this.attack = attack;
@@ -80,5 +82,12 @@ public class Infantry extends Unit {
     @Override
     public int compareTo(Spreadsheet o) {
         return getSheetName().compareTo(o.getSheetName());
+    }
+
+    @JsonGetter("image")
+    @Override
+    public String getImage() {
+        image = getType() + attack + "." + health + ".png";
+        return image;
     }
 }

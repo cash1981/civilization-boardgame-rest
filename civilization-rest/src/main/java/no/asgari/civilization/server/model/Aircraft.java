@@ -12,7 +12,7 @@ import no.asgari.civilization.server.SheetName;
 @JsonTypeName("aircraft")
 @NoArgsConstructor
 //@EqualsAndHashCode(of = {"used", "attack", "health", "type"}, callSuper = true)
-public class Aircraft extends Unit {
+public class Aircraft extends Unit implements Image {
     private String ownerId; // id of the player which owns this item
     private boolean hidden = true;
     private boolean used;
@@ -20,6 +20,7 @@ public class Aircraft extends Unit {
     private int attack;
     private int health;
     private boolean isInBattle;
+    private String image;
 
     public Aircraft(int attack, int health) {
         this.attack = attack;
@@ -94,5 +95,11 @@ public class Aircraft extends Unit {
     @Override
     public int compareTo(Spreadsheet o) {
         return getSheetName().compareTo(o.getSheetName());
+    }
+
+    @Override
+    public String getImage() {
+        image = toString() + ".png";
+        return image;
     }
 }
