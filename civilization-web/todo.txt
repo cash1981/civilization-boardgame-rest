@@ -58,4 +58,7 @@ check ngmodules.org to find modules
   -- Samme egentlig når jeg discard item, draw item og tech osv
 - Hvorfor fungerer ikke lodash? Den skal jo legge seg på window object
 - Hvorfor fungerer ikke <ng-include> på itemActions.html
-- Hvorfor vises ikke alt på bildet?
+- Får ikke sendt json via rest, revealItem og discardItem funker ikke, men funker gjennom rest-client i chrome
+- Hvordan bruke items hele veien, istedet for å duplisere civ,greatpersons units etc
+- Orderby i ng-repeat funker ikke?
+- Fixe baseurl?

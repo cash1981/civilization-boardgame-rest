@@ -49,7 +49,7 @@ public class UndoAction extends BaseAction {
             else log.error("Didn't find tech to remove from playerhand: " + item);
         } else {
             pbf.getItems().add(item);
-            boolean remove = playerhand.removeItem(item);
+            boolean remove = playerhand.getItems().remove(item);
             if (remove) log.debug("Successfully undoed item");
             else log.error("Didn't find item to remove from playerhand: " + item);
         }

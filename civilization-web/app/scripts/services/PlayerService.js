@@ -7,9 +7,35 @@
       baseUrl = url;
     };
 
-    var revealItem = function (gameId, logid) {
-      var url = baseUrl + gameId + "/revealItem/" + logid;
-      return $http.put(url)
+    function nextElement(obj) {
+      if (obj) {
+        var keys = Object.keys(obj);
+        if (keys && keys.length > 0) {
+          return obj[keys[0]];
+        }
+      }
+      return obj;
+    }
+
+    var revealItem = function (gameId, item) {
+      var url = baseUrl + gameId + "/revealItem/";
+
+      var sheetName = angular.lowercase(Object.keys(item)[0]);
+      var itemDTO = {
+        "name": nextElement(item).name,
+        "ownerId": nextElement(item).ownerId,
+        "sheetName": sheetName,
+        "pbfId": gameId
+      };
+
+      $log.info("Before calling delete, json is ", angular.toJson(itemDTO));
+      var configuration = {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      };
+
+      return $http.put(url, itemDTO, configuration)
         .success(function (response) {
           growl.success("Item revealed");
           return response;
@@ -70,15 +96,6 @@
         });
 
       //TODO Flytt denne i util? Duplikat i UserItemController
-      function nextElement(obj) {
-        if (obj) {
-          var keys = Object.keys(obj);
-          if (keys && keys.length > 0) {
-            return obj[keys[0]];
-          }
-        }
-        return obj;
-      }
     };
 
     var endTurn = function (gameId) {

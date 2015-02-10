@@ -258,7 +258,6 @@ public class GameAction extends BaseAction {
         return players.get(0);
     }
 
-    //TODO test it
     public GameDTO getGame(PBF pbf, Player player) {
         Preconditions.checkNotNull(pbf);
         //Set common stuff

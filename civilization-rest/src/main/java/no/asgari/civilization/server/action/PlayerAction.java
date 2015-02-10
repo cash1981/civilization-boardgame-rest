@@ -155,8 +155,10 @@ public class PlayerAction extends BaseAction {
      * @param pbfId
      * @param playerId
      * @param gameLogId - The id of the GameLog which contains the item to reveal
+     *
      */
     @SuppressWarnings("unchecked")
+    @Deprecated
     public void revealItem(String pbfId, String playerId, String gameLogId) {
         Preconditions.checkNotNull(gameLogId);
         Preconditions.checkNotNull(pbfId);
@@ -185,6 +187,57 @@ public class PlayerAction extends BaseAction {
 
         //Create a new log entry
         logAction.createGameLog(itemToReveal, pbfId, GameLog.LogType.REVEAL);
+        log.debug("item to be reveal " + itemToReveal);
+    }
+
+    /**
+     * Revealing of items are really just saving a public log with the hidden content information
+     *
+     * @param pbfId
+     * @param playerId
+     * @param itemDTO - The item to reveal
+     */
+    @SuppressWarnings("unchecked")
+    public void revealItem(String pbfId, String playerId, ItemDTO itemDTO) {
+        Preconditions.checkNotNull(itemDTO);
+        Preconditions.checkNotNull(pbfId);
+        Preconditions.checkNotNull(playerId);
+        
+        //Check if item can be found on the player
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        Playerhand playerhand = pbf.getPlayers().stream()
+                .filter(p -> p.getPlayerId().equals(playerId))
+                .findFirst()
+                .orElseThrow(PlayerAction::cannotFindPlayer);
+
+        List<Item> items = playerhand.getItems();
+
+        Optional<SheetName> sheetName = SheetName.find(itemDTO.getSheetName());
+        if(!sheetName.isPresent()) {
+            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Cannot find Sheetname " + itemDTO.getSheetName())
+                    .build());
+        }
+        
+        Optional<Item> itemToRevealOptional = items.stream()
+                .filter(it -> it.getName().equals(itemDTO.getName()))
+                .filter(it -> it.getSheetName() == sheetName.get())
+                .filter(Item::isHidden)
+                .findAny();
+
+        if (!itemToRevealOptional.isPresent()) {
+            log.warn("Item " + itemDTO.getName() + " already revealed");
+            throw new WebApplicationException(Response.status(Response.Status.NOT_MODIFIED)
+                    .entity("Item already revealed")
+                    .build());
+        }
+        Item itemToReveal = itemToRevealOptional.get();
+        itemToReveal.setHidden(false);
+
+        pbfCollection.updateById(pbf.getId(), pbf);
+
+        //Create a new log entry
+        logAction.createGameLog(itemToReveal, pbf.getId(), GameLog.LogType.REVEAL);
         log.debug("item to be reveal " + itemToReveal);
     }
 
@@ -285,7 +338,7 @@ public class PlayerAction extends BaseAction {
         itemToDelete.setHidden(false);
         itemToDelete.setOwnerId(null);
 
-        boolean removed = playerhand.removeItem(itemToDeleteOptional.get());
+        boolean removed = playerhand.getItems().remove(itemToDeleteOptional.get());
         if (removed) {
             pbf.getDiscardedItems().add(itemToDeleteOptional.get());
             createLog(itemToDelete, pbf.getId(), GameLog.LogType.DISCARD, playerId);

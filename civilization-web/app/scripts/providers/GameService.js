@@ -9,7 +9,7 @@
         baseUrl = url;
       };
 
-      this.$get = function ($http, $q, $log) {
+      this.$get = function ($http, $q, $log, growl) {
         var games = [];
         $log.info("Creating game data service");
 
@@ -51,6 +51,22 @@
           }
         };
 
+        var undoDraw = function(gameid, logid) {
+          var url = baseUrl + gameid + "/undo/" + logid;
+          $http.put(url)
+            .success(function (response) {
+            growl.success("Undo initiated!");
+            return response;
+            }).error(function (data, status) {
+              if(status == 400) {
+                growl.error("Undo already initiated")
+              } else {
+                growl.error("Could not initiate undo: " + data);
+              }
+              return data;
+            });
+        };
+
         var getAvailableTechs = function(gameid) {
           var url = baseUrl + gameid + "/techs";
           return $http.get(url)
@@ -65,6 +81,7 @@
           joinGame: joinGame,
           getGameById: getGameById,
           createGame: createGame,
+          undoDraw: undoDraw,
           getAvailableTechs: getAvailableTechs
         };
       };

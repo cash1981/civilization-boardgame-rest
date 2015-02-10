@@ -43,8 +43,8 @@
     model.tiles = [];
     model.units = [];
 
-    model.revealItem = function (gamelogid) {
-      var response = PlayerService.revealItem($routeParams.id, gamelogid);
+    model.revealItem = function (item) {
+      var response = PlayerService.revealItem($routeParams.id, item);
       $log.info("Revealed item, response is " + response);
       //TODO hvordan kaller jeg på getGameById?
       //dette funker ikke: updateGame($routeParams.id);
@@ -63,19 +63,36 @@
         $scope.userHasAccess = game.player && game.player.username === model.user.username;
         model.yourTurn = game.player && game.player.yourTurn;
 
-        model.items = game.player.items;
         model.techsChosen = game.player.techsChosen;
-        model.civs = game.player.civs;
-        model.cultureCards = game.player.cultureCards;
-        model.greatPersons = game.player.greatPersons;
-        model.huts = game.player.huts;
-        model.villages = game.player.villages;
-        model.tiles = game.player.tiles;
-        model.units = game.player.units;
+
+        readKeysFromItems(game.player.items);
 
         return game;
       });
 
+    function readKeysFromItems(items) {
+      for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        var itemKey = Object.keys(item);
+        if ("civ" == itemKey) {
+          model.civs.push(item);
+        } else if ("cultureI" == itemKey || "cultureII" == itemKey || "cultureIII" == itemKey) {
+          model.cultureCards.push(item);
+        } else if ("greatperson" == itemKey) {
+          model.greatPersons.push(item);
+        } else if ("hut" == itemKey) {
+          model.huts.push(item);
+        } else if ("village" == itemKey) {
+          model.villages.push(item);
+        } else if ("tile" == itemKey) {
+          model.tiles.push(item);
+        } else if ("aircraft" == itemKey || "mounted" == itemKey || "infantry" == itemKey || "artillery" == itemKey) {
+          model.units.push(item);
+        } else {
+          model.items.push(item);
+        }
+      }
+    }
 
     model.allAvailableTechs = [];
     model.chosenTechs = [];

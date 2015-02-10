@@ -10,4 +10,6 @@ Finally I installed nodejs from source and used $HOME/local for all the global f
 
 Now I could finally get yeoman to generate a angular app for me. However cleverstack still complained about some issues.
 
-
+- Huge downside when your API is set, and you decide to change your API. You can't remove items unless you know there are no one that uses your API
+and that there are no active games up and running. I think accessing inactive games for readability later is problematic!
+-- Its exactly like the serilization issues we had with Java that made us go away from that

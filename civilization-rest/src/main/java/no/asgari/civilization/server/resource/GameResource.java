@@ -29,6 +29,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -71,7 +72,6 @@ public class GameResource {
 
     /**
      * Returns a specific game
-     * f
      *
      * @return
      */
@@ -245,6 +245,28 @@ public class GameResource {
         UndoAction undoAction = new UndoAction(db);
         List<GameLog> gamelogs = undoAction.getAllFinishedUndos(pbfId);
         return Response.ok().entity(gamelogs).build();
+    }
+
+
+    /**
+     * Initiates undo for an item.
+     * <p/>
+     * Will throw BAD_REQUEST if undo has already been performed
+     *
+     * @param player
+     * @param pbfId
+     * @param gameLogId
+     * @return 200 ok
+     */
+    @PUT
+    @Path("/{pbfId}/undo/{gameLogId}")
+    @Timed
+    public Response undoItem(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @PathParam("gameLogId") String gameLogId) {
+        GameLogAction gameLogAction = new GameLogAction(db);
+        GameLog gameLog = gameLogAction.findGameLogById(gameLogId);
+        UndoAction undoAction = new UndoAction(db);
+        undoAction.initiateUndo(gameLog, player.getId());
+        return Response.ok().build();
     }
 
 }

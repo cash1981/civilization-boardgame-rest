@@ -125,11 +125,25 @@ public class PlayerResource {
         return playerAction.isYourTurn(pbfId, player.getId());
     }
 
+    /**
+     * Not in use, use the one taking item instead
+     * @deprecated 
+     * @see #revealItem(Player,String,ItemDTO)
+     */
+    @Deprecated
     @PUT
     @Path("/revealItem/{gameLogId}")
     @Timed
     public Response revealItem(@Auth Player player, @PathParam("pbfId") String pbfId, @PathParam("gameLogId") String gameLogId) {
         playerAction.revealItem(pbfId, player.getId(), gameLogId);
+        return Response.ok().build();
+    }
+
+    @PUT
+    @Path("/revealItem")
+    @Timed
+    public Response revealItem(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
+        playerAction.revealItem(pbfId, player.getId(), item);
         return Response.ok().build();
     }
 
@@ -204,27 +218,6 @@ public class PlayerResource {
         BattleAction battleAction = new BattleAction(db);
 
         battleAction.endBattle(pbfId, player.getId());
-        return Response.ok().build();
-    }
-
-    /**
-     * Initiates undo for an item.
-     * <p/>
-     * Will throw BAD_REQUEST if undo has already been performed
-     *
-     * @param player
-     * @param pbfId
-     * @param gameLogId
-     * @return
-     */
-    @PUT
-    @Path("/undo")
-    @Timed
-    public Response undoItem(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @QueryParam("gameLogId") String gameLogId) {
-        GameLogAction gameLogAction = new GameLogAction(db);
-        GameLog gameLog = gameLogAction.findGameLogById(gameLogId);
-        UndoAction undoAction = new UndoAction(db);
-        undoAction.initiateUndo(gameLog, player.getId());
         return Response.ok().build();
     }
 

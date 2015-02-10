@@ -146,7 +146,7 @@ public class DrawAction extends BaseAction {
 
     private void putItemToPlayer(Item item, PBF pbf, String playerId) {
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        playerhand.addItem(item);
+        playerhand.getItems().add(item);
     }
 
     private static Draw<Item> createDraw(String pbfId, String playerId, Item item) {

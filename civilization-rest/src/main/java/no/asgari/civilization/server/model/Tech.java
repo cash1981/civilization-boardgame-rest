@@ -2,6 +2,7 @@ package no.asgari.civilization.server.model;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 /**
  * All the Level 1, 2, 3, 4 and Space Flight techs
  */
+@JsonRootName("tech")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"name", "level"})

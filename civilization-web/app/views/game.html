@@ -40,7 +40,7 @@
           <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
           <td data-title="'Log'" sortable="'log'">{{log.log}}</td>
           <td data-title="'Vote for undo'" sortable="'log.draw'">
-            <button ng-if="log.draw" ng-really-message="This will initiate vote for Undo. Are you sure?"
+            <button ng-if="gameCtrl.hasDraw(log)" ng-really-message="This will initiate vote for Undo. Are you sure?"
                     ng-really-click="gameCtrl.initiateUndo(log.id)"
                     class="btn btn-sm btn-warning" tooltip="Press undo button to request a vote for undo. All players must vote yes for undo to be made.
                   Once all players have voted yes, the item will be put back in the deck and reshuffled">Undo

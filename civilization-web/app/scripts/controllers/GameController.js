@@ -14,7 +14,6 @@
         model.yourTurn = game.player && game.player.yourTurn;
 
         if(model.yourTurn) {
-          //growl.success("<strong>It's your turn!</strong>", {disableCountDown: true, ttl: -1});
           growl.success("<strong>It's your turn!</strong>");
         }
 
@@ -23,11 +22,16 @@
 
     model.endTurn = function () {
       $log.info("Ending turn");
-      var response = PlayerService.endTurn(gameId);
-      //TODO hvordan kaller jeg på getGameById?
-      //dette funker ikke: updateGame($routeParams.id);
+      PlayerService.endTurn(gameId);
     };
 
+    model.hasDraw = function(log) {
+      return log && log.draw && !log.draw.undo && log.log.indexOf("drew") > -1;
+    };
+
+    model.initiateUndo = function(logid) {
+      GameService.undoDraw($routeParams.id, logid);
+    };
 
     model.tableParams = new ngTableParams({
       page: 1,            // show first page
