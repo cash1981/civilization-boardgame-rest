@@ -41,7 +41,7 @@ public class GameLog {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     public enum LogType {
-        TRADE, BATTLE, ITEM, TECH, SHUFFLE, DISCARD, WITHDRAW, JOIN, REVEAL;
+        TRADE, BATTLE, ITEM, TECH, SHUFFLE, DISCARD, WITHDRAW, JOIN, REVEAL, UNDO;
     }
 
     @Id
@@ -103,6 +103,10 @@ public class GameLog {
             case REVEAL:
                 privateLog = username + " has revealed " + DELIM + draw.getItem().revealAll();
                 publicLog = username + " has revealed " + DELIM + draw.getItem().revealAll();
+                break;
+            case UNDO:
+                privateLog = username + " has requested undo of " + DELIM + draw.getItem().revealAll();
+                publicLog = username + " has requested undo of " + DELIM + draw.getItem().revealAll();
         }
     }
 

@@ -335,7 +335,7 @@ public class PlayerAction extends BaseAction {
         if (!itemToDeleteOptional.isPresent()) throw cannotFindItem();
 
         Item itemToDelete = itemToDeleteOptional.get();
-        itemToDelete.setHidden(false);
+        itemToDelete.setHidden(true);
         itemToDelete.setOwnerId(null);
 
         boolean removed = playerhand.getItems().remove(itemToDeleteOptional.get());

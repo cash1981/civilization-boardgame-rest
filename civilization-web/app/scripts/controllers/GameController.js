@@ -25,11 +25,13 @@
       PlayerService.endTurn(gameId);
     };
 
-    model.hasDraw = function(log) {
+    //In scope so that we can use it from another view which is included
+    $scope.canInitiateDraw = function(log) {
       return log && log.draw && !log.draw.undo && log.log.indexOf("drew") > -1;
     };
 
-    model.initiateUndo = function(logid) {
+    //In scope so that we can use it from another view which is included
+    $scope.initiateUndo = function(logid) {
       GameService.undoDraw($routeParams.id, logid);
     };
 

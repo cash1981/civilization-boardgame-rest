@@ -53,10 +53,6 @@
       var itemDTO = {
         "name": nextElement(item).name,
         "ownerId": nextElement(item).ownerId,
-        "hidden": nextElement(item).hidden,
-        "used": nextElement(item).used,
-        "description": nextElement(item).description,
-        "type": nextElement(item).type,
         "sheetName": sheetName,
         "pbfId": gameId
       };

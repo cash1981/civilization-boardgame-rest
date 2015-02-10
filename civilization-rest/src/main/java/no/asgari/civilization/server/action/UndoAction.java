@@ -122,6 +122,8 @@ public class UndoAction extends BaseAction {
         draw.setUndo(new Undo(pbf.getNumOfPlayers()));
         draw.getUndo().vote(playerId, true);
         gameLogCollection.updateById(gameLog.getId(), gameLog);
+        
+        createLog(draw.getItem(), pbf.getId(), GameLog.LogType.UNDO, playerId);
     }
 
     //TODO test
