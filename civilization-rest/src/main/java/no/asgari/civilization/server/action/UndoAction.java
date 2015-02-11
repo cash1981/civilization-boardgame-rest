@@ -19,6 +19,8 @@ import org.mongojack.JacksonDBCollection;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,26 +36,37 @@ public class UndoAction extends BaseAction {
         this.gameLogCollection = JacksonDBCollection.wrap(db.getCollection(GameLog.COL_NAME), GameLog.class, String.class);
     }
 
-    public void putDrawnItemBackInPBF(PBF pbf, Draw draw) {
+    private boolean putDrawnItemBackInPBF(PBF pbf, Draw draw) {
         Preconditions.checkNotNull(pbf);
         Preconditions.checkNotNull(draw);
         Preconditions.checkNotNull(draw.getItem());
 
         Item item = draw.getItem();
-
+        boolean removed;
         Playerhand playerhand = getPlayerhandByPlayerId(draw.getPlayerId(), pbf);
         if (item instanceof Tech) {
             //Remove from tech
-            boolean remove = playerhand.getTechsChosen().remove(item);
-            if (remove) log.debug("Successfully undoed tech");
+            removed = playerhand.getTechsChosen().remove(item);
+            if (removed) {
+                createInfoLog(pbf.getId(), "has removed " + draw.getItem().getName() + " from " + playerhand.getUsername());
+                log.debug("Successfully undoed tech");
+            }
             else log.error("Didn't find tech to remove from playerhand: " + item);
         } else {
-            pbf.getItems().add(item);
-            boolean remove = playerhand.getItems().remove(item);
-            if (remove) log.debug("Successfully undoed item");
+            removed = playerhand.getItems().remove(item);
+            if (removed) {
+                createInfoLog(pbf.getId(), "has removed " + draw.getItem().getName() + " from " + playerhand.getUsername() + " and put back in the deck. Deck is reshuffled");
+                pbf.getItems().add(item);
+                Collections.shuffle(pbf.getItems());
+                log.debug("Successfully undoed item");
+            }
             else log.error("Didn't find item to remove from playerhand: " + item);
         }
-        pbfCollection.updateById(pbf.getId(), pbf);
+        if(removed) {
+            pbfCollection.updateById(pbf.getId(), pbf);
+        }
+        
+        return removed;
     }
 
     /**
@@ -72,18 +85,16 @@ public class UndoAction extends BaseAction {
         Preconditions.checkNotNull(gameLog.getDraw().getUndo());
 
         PBF pbf = pbfCollection.findOneById(gameLog.getPbfId());
-        if (!pbf.getPlayers().stream().anyMatch(p -> p.getPlayerId().equals(playerId))) {
-            log.error("Couldn't find playerId " + playerId + " in PBF's players");
-            throw new IllegalArgumentException("Wrong playerId");
-        }
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
 
-        if (gameLog.getDraw() == null) {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_MODIFIED)
+        if (gameLog.getDraw() == null || gameLog.getDraw().getUndo() == null) {
+            throw new WebApplicationException(Response.status(Response.Status.PRECONDITION_FAILED)
                     .entity("This item cannot be undone. Nothing to undo.")
                     .build());
         }
 
         gameLog.getDraw().getUndo().vote(playerId, vote);
+        createLog(gameLog.getDraw(), pbf.getId(), playerhand.getUsername(), vote);
 
         Optional<Boolean> resultOfVotes = gameLog.getDraw().getUndo().getResultOfVotes();
         if (resultOfVotes.isPresent() && resultOfVotes.get()) {
@@ -98,32 +109,30 @@ public class UndoAction extends BaseAction {
     /**
      * Will request for undo and initiate a vote
      *
-     * @param gameLog
+     * @param logContainingItemToUndo
      * @param playerId
      * @return
      */
-    public void initiateUndo(GameLog gameLog, String playerId) {
-        Preconditions.checkNotNull(gameLog);
-        Preconditions.checkNotNull(gameLog.getDraw());
+    public void initiateUndo(GameLog logContainingItemToUndo, String playerId) {
+        Preconditions.checkNotNull(logContainingItemToUndo);
+        Preconditions.checkNotNull(logContainingItemToUndo.getDraw());
 
-        Draw<?> draw = gameLog.getDraw();
-        if (draw.getUndo() != null) {
+        if (logContainingItemToUndo.getDraw().getUndo() != null) {
             log.error("Cannot initiate a undo. Its already been initiated");
             throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
                     .entity("Undo already initiated")
                     .build());
         }
-        PBF pbf = pbfCollection.findOneById(gameLog.getPbfId());
+        PBF pbf = pbfCollection.findOneById(logContainingItemToUndo.getPbfId());
         if (!pbf.getPlayers().stream().anyMatch(p -> p.getPlayerId().equals(playerId))) {
             log.error("Couldn't find playerId " + playerId + " in PBF's players");
             throw new IllegalArgumentException("Wrong playerId");
         }
 
-        draw.setUndo(new Undo(pbf.getNumOfPlayers()));
-        draw.getUndo().vote(playerId, true);
-        gameLogCollection.updateById(gameLog.getId(), gameLog);
-        
-        createLog(draw.getItem(), pbf.getId(), GameLog.LogType.UNDO, playerId);
+        GameLog gamelogToVote = createLog(logContainingItemToUndo.getDraw().getItem(), pbf.getId(), GameLog.LogType.UNDO, playerId);
+        Draw draw = gamelogToVote.getDraw();
+        draw.setUndo(new Undo(pbf.getNumOfPlayers(), playerId));
+        gameLogCollection.updateById(gamelogToVote.getId(), gamelogToVote);
     }
 
     //TODO test

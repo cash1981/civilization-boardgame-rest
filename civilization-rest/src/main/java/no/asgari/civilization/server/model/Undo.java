@@ -34,9 +34,15 @@ public class Undo {
      */
     private Map<String, Boolean> votes = new HashMap<>();
 
-    public Undo(int numberOfVotesRequired) {
+    /**
+     * Will vote yes for the player since they initiated the request for undo
+     * @param numberOfVotesRequired
+     * @param playerId
+     */
+    public Undo(int numberOfVotesRequired, String playerId) {
         this.numberOfVotesRequired = numberOfVotesRequired;
         done = false;
+        vote(playerId, Boolean.TRUE);
     }
 
     /**

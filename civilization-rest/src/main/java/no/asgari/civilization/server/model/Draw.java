@@ -25,7 +25,6 @@ import java.time.LocalDateTime;
 @JsonRootName(value = "draw")
 @Data
 //TODO Draw is not a good name really. Its really more a UndoableItem
-//TODO Perhaps we need a name so that we can list what undoes are currently being performed
 public class Draw<T extends Item> {
     public static final String COL_NAME = "draw";
 

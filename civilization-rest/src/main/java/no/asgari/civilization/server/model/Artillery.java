@@ -1,7 +1,5 @@
 package no.asgari.civilization.server.model;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -24,6 +22,7 @@ public class Artillery extends Unit implements Image {
     private int health;
     private boolean isInBattle;
     private String image;
+    private SheetName sheetName;
 
     public Artillery(int attack, int health) {
         this.attack = attack;
@@ -35,10 +34,9 @@ public class Artillery extends Unit implements Image {
         return type = getClass().getSimpleName();
     }
 
-    @JsonIgnore
     @Override
     public SheetName getSheetName() {
-        return SheetName.ARTILLERY;
+        return sheetName = SheetName.ARTILLERY;
     }
 
     @Override

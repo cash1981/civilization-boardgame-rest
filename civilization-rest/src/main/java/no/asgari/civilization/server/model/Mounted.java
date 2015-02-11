@@ -25,6 +25,7 @@ public class Mounted extends Unit implements Image {
     private int health;
     private boolean isInBattle;
     private String image;
+    private SheetName sheetName;
 
     public Mounted(int attack, int health) {
         this.attack = attack;
@@ -39,7 +40,7 @@ public class Mounted extends Unit implements Image {
 
     @Override
     public SheetName getSheetName() {
-        return SheetName.MOUNTED;
+        return sheetName = SheetName.MOUNTED;
     }
 
     @Override

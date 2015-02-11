@@ -247,7 +247,6 @@ public class GameResource {
         return Response.ok().entity(gamelogs).build();
     }
 
-
     /**
      * Initiates undo for an item.
      * <p/>
@@ -266,6 +265,58 @@ public class GameResource {
         GameLog gameLog = gameLogAction.findGameLogById(gameLogId);
         UndoAction undoAction = new UndoAction(db);
         undoAction.initiateUndo(gameLog, player.getId());
+        return Response.ok().build();
+    }
+
+    /**
+     * Performs yes vote on an undo
+     * 
+     * Returns error if no undo is found 
+     *
+     * @param player
+     * @param pbfId
+     * @param gameLogId
+     * @return 200 ok
+     */
+    @PUT
+    @Path("/{pbfId}/vote/{gameLogId}/yes")
+    @Timed
+    public Response voteYes(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @PathParam("gameLogId") String gameLogId) {
+        GameLogAction gameLogAction = new GameLogAction(db);
+        GameLog gameLog = gameLogAction.findGameLogById(gameLogId);
+        if(gameLog.getDraw() == null || gameLog.getDraw().getUndo() == null) {
+            return Response.status(Response.Status.PRECONDITION_FAILED)
+                    .entity("There is no undo to vote on")
+                    .build();
+        }
+        UndoAction undoAction = new UndoAction(db);
+        undoAction.vote(gameLog, player.getId(), true);
+        return Response.ok().build();
+    }
+
+    /**
+     * Performs no vote on an undo
+     *
+     * Returns "412 Precondition failed" if no undo is found 
+     *
+     * @param player
+     * @param pbfId
+     * @param gameLogId
+     * @return 200 ok
+     */
+    @PUT
+    @Path("/{pbfId}/vote/{gameLogId}/no")
+    @Timed
+    public Response voteNo(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @PathParam("gameLogId") String gameLogId) {
+        GameLogAction gameLogAction = new GameLogAction(db);
+        GameLog gameLog = gameLogAction.findGameLogById(gameLogId);
+        if(gameLog.getDraw() == null || gameLog.getDraw().getUndo() == null) {
+            return Response.status(Response.Status.PRECONDITION_FAILED)
+                    .entity("There is no undo to vote on")
+                    .build();
+        }
+        UndoAction undoAction = new UndoAction(db);
+        undoAction.vote(gameLog, player.getId(), false);
         return Response.ok().build();
     }
 

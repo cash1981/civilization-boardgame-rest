@@ -80,7 +80,7 @@
 /* Kan legge denne effekten pÃ¥ forskjellige ting ved Ã¥ kombinere class */
 /* view.ng-enter f.eks */
 
-/* TODO mÃ¥ legge pÃ¥ vendor specific for alle samme (IE, mozilla, safari)
+/* TODO add vendor specific
 .ng-enter {
   -webkit-animation: fadeIn 1s;
   -moz-animation: fadeIn 1s;

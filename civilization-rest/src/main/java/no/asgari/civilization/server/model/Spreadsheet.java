@@ -25,7 +25,6 @@ import no.asgari.civilization.server.SheetName;
 })
 public interface Spreadsheet {
 
-    @JsonIgnore
     public abstract SheetName getSheetName();
 
     /**

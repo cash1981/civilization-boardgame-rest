@@ -1,0 +1,26 @@
+table.tech-pyramid {
+  table-layout: fixed;
+  margin-top: 30px;
+  width: 100%;
+}
+table.tech-pyramid td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border: 1px solid #ddd;
+  text-align: center;
+  font-size: 12px;
+  height: 22px;
+}
+table.tech-pyramid td.available {
+  background-color: #eee;
+  text-align: right;
+  font-size: 10px;
+  vertical-align: top;
+  color: #bbb;
+  padding-right: 4px;
+}
+table.tech-pyramid tr.spacer > td,
+table.tech-pyramid td.spacer {
+  border: none;
+}

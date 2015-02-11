@@ -25,6 +25,7 @@ public class Infantry extends Unit implements Image {
     private boolean killed;
     private boolean isInBattle;
     private String image;
+    private SheetName sheetName;
 
     public Infantry(int attack, int health) {
         this.attack = attack;
@@ -38,7 +39,7 @@ public class Infantry extends Unit implements Image {
 
     @Override
     public SheetName getSheetName() {
-        return SheetName.INFANTRY;
+        return sheetName = SheetName.INFANTRY;
     }
 
     @Override

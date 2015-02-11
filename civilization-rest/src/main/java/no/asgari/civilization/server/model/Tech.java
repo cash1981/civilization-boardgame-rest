@@ -29,6 +29,7 @@ public class Tech implements Item, Level, Image {
     public static final int LEVEL_5 = 5;
 
     @JsonIgnore
+    //TODO Do I need to create level 5 sheet?
     public static final Tech SPACE_FLIGHT = new Tech("Space Flight", LEVEL_5);
 
     @NotEmpty
@@ -40,6 +41,7 @@ public class Tech implements Item, Level, Image {
     private String ownerId; // player_id
     private int level;
     private String image;
+    private SheetName sheetName;
 
     public Tech(String name, int level) {
         this.name = name;
@@ -47,21 +49,20 @@ public class Tech implements Item, Level, Image {
         hidden = true;
     }
 
-    @JsonIgnore
     @Override
     public SheetName getSheetName() {
         switch (getLevel()) {
             case LEVEL_1:
-                return SheetName.LEVEL_1_TECH;
+                return sheetName = SheetName.LEVEL_1_TECH;
             case LEVEL_2:
-                return SheetName.LEVEL_2_TECH;
+                return sheetName = SheetName.LEVEL_2_TECH;
             case LEVEL_3:
-                return SheetName.LEVEL_3_TECH;
+                return sheetName = SheetName.LEVEL_3_TECH;
             case LEVEL_4:
-                return SheetName.LEVEL_4_TECH;
+                return sheetName = SheetName.LEVEL_4_TECH;
         }
 
-        return SheetName.LEVEL_1_TECH;
+        return sheetName = SheetName.LEVEL_1_TECH;
     }
 
     @Override

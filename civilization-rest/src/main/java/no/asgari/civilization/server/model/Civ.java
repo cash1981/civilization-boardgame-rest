@@ -26,17 +26,17 @@ public class Civ implements Item {
     private boolean used;
     private boolean hidden = true;
     private String ownerId; // id of the player which owns this item
-
+    private SheetName sheetName;
+    
     public Civ(String name) {
         this.name = name;
         this.used = false;
         this.hidden = true;
     }
 
-    @JsonIgnore
     @Override
     public SheetName getSheetName() {
-        return SheetName.CIV;
+        return sheetName =SheetName.CIV;
     }
 
     @Override

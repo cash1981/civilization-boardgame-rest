@@ -25,6 +25,7 @@ public class Tile implements Item, Image {
     private boolean hidden = true;
     private String ownerId; // game_id or player_id (username)
     private String image;
+    private SheetName sheetName;
 
     public Tile(String name) {
         this.name = name;
@@ -34,7 +35,7 @@ public class Tile implements Item, Image {
 
     @Override
     public SheetName getSheetName() {
-        return SheetName.TILES;
+        return sheetName = SheetName.TILES;
     }
 
     @Override

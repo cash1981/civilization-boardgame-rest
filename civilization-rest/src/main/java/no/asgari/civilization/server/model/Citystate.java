@@ -32,7 +32,8 @@ public class Citystate implements Item, Image {
     @JsonProperty
     private String ownerId; // (playerId)
     private String image;
-
+    private SheetName sheetName;
+    
     public Citystate(String name) {
         this.name = name;
         this.used = false;
@@ -41,7 +42,7 @@ public class Citystate implements Item, Image {
 
     @Override
     public SheetName getSheetName() {
-        return SheetName.CITY_STATES;
+        return sheetName =SheetName.CITY_STATES;
     }
 
     @Override

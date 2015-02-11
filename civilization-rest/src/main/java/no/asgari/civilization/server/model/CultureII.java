@@ -24,7 +24,8 @@ public class CultureII implements Item, Tradable, Image {
     private boolean hidden = true;
     private String ownerId; // player_id
     private String image;
-
+    private SheetName sheetName;
+    
     public CultureII(String name) {
         this.name = name;
         this.used = false;
@@ -33,7 +34,7 @@ public class CultureII implements Item, Tradable, Image {
 
     @Override
     public SheetName getSheetName() {
-        return SheetName.CULTURE_2;
+        return sheetName = SheetName.CULTURE_2;
     }
 
     @Override

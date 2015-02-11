@@ -49,10 +49,14 @@ public abstract class BaseAction {
         return logAction.createGameLog(item, pbfId, logType, playerId);
     }
 
+    protected GameLog createLog(Draw draw, String pbfId, String username, boolean vote) {
+        return logAction.createGameLog(draw, pbfId, username, vote);
+    }
+
     protected void createInfoLog(String pbfId, String message) {
         Preconditions.checkNotNull(message);
         GameLog log = new GameLog();
-        log.setPublicLog(log.getCreated() + " - System - " + message);
+        log.setPublicLog("System " + message);
         log.setUsername("System");
         log.setPbfId(pbfId);
         logAction.save(log);

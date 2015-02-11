@@ -237,5 +237,4 @@ public class PlayerResource {
         return Response.ok().build();
     }
 
-
 }

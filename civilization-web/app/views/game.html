@@ -40,11 +40,31 @@
           <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
           <td data-title="'Log'" sortable="'log'">{{log.log}}</td>
           <td data-title="'Vote for undo'" sortable="'log.draw'">
+            <!-- Modal for vote -->
+            <script type="text/ng-template" id="modalVote.html">
+              <div class="modal-header">
+                <h3 class="modal-title">Vote for undo!</h3>
+              </div>
+              <div class="modal-body">
+                <h4>Vote <strong>yes</strong> or <strong>no</strong> to undo {{log.draw.item.name}}?</h4>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="voteOk()">YES</button>
+                <button class="btn btn-danger" ng-click="voteNok()">NO</button>
+                <button class="btn btn-warning" ng-click="voteCancel()">Cancel</button>
+              </div>
+            </script>
+
             <button ng-if="canInitiateDraw(log)"
                     ng-really-message="This will initiate vote for Undo. Are you sure?"
                     ng-really-click="initiateUndo(log.id)"
                     class="btn btn-sm btn-warning" tooltip="Press undo button to request a vote for undo. All players must vote yes for undo to be made.
                   Once all players have voted yes, the item will be put back in the deck and reshuffled">Undo
+            </button>
+            <button ng-if="canVote(log)"
+                    ng-click="$scope.itemToUndo = log.draw.item; openModalVote('sm')"
+                    class="btn btn-sm btn-danger" tooltip="Press vote in order to vote if undo is to be made or not. All players must vote yes for undo to be made.
+                  Once all players have voted yes, the item will be put back in the deck and reshuffled">Vote
             </button>
           </td>
         </tr>
@@ -56,7 +76,7 @@
     <tab heading="Chat" class="col-md-3">
       <h1>For now, we will use the forum for table talk</h1>
     </tab>
-    <tab ng-if="userHasAccess" heading="User stuff" class="col-md-3">
+    <tab ng-if="userHasAccess" heading="My Items" class="col-md-3">
       <ng-include src="'views/useritems.html'"></ng-include>
     </tab>
   </tabset>

@@ -59,6 +59,6 @@ check ngmodules.org to find modules
 - Hvorfor fungerer ikke lodash? Den skal jo legge seg på window object
 - Hvorfor fungerer ikke <ng-include> på itemActions.html
 - Får ikke sendt json via rest, revealItem og discardItem funker ikke, men funker gjennom rest-client i chrome
-- Hvordan bruke items hele veien, istedet for å duplisere civ,greatpersons units etc
-- Orderby i ng-repeat funker ikke?
+- Orderby i ng-repeat er ikke så lett å få til da det er "nextElement" i noen tilfeller
 - Fixe baseurl?
+- Det er en recursive kall på vote av en merkelig grunn. Samme kode som også sjekker om bruker er logget inn

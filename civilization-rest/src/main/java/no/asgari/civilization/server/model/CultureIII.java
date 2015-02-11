@@ -25,7 +25,8 @@ public class CultureIII implements Item, Tradable, Image {
     private boolean hidden = true;
     private String ownerId; // game_id or player_id (username)
     private String image;
-
+    private SheetName sheetName;
+    
     public CultureIII(String name) {
         this.name = name;
         this.used = false;
@@ -34,7 +35,7 @@ public class CultureIII implements Item, Tradable, Image {
 
     @Override
     public SheetName getSheetName() {
-        return SheetName.CULTURE_3;
+        return sheetName = SheetName.CULTURE_3;
     }
 
     @Override

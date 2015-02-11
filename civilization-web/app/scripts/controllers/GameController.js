@@ -1,6 +1,6 @@
 'use strict';
 (function (module) {
-  var GameController = function ($log, $routeParams, GameService, PlayerService, currentUser, $filter, ngTableParams, $scope, growl) {
+  var GameController = function ($log, $routeParams, GameService, PlayerService, currentUser, $filter, ngTableParams, $scope, growl, $modalN) {
     var model = this;
     model.user = currentUser.profile;
     $scope.userHasAccess = false;
@@ -27,12 +27,51 @@
 
     //In scope so that we can use it from another view which is included
     $scope.canInitiateDraw = function(log) {
-      return log && log.draw && !log.draw.undo && log.log.indexOf("drew") > -1;
+      return $scope.userHasAccess && log && log.draw && !log.draw.undo && log.log.indexOf("drew") > -1;
     };
 
     //In scope so that we can use it from another view which is included
     $scope.initiateUndo = function(logid) {
       GameService.undoDraw($routeParams.id, logid);
+    };
+
+    //In scope so that we can use it from another view which is included
+    $scope.canVote = function(log) {
+      var hasVoted = false;
+      if($scope.userHasAccess && log && log.draw && log.draw.undo && log.log.indexOf("undo") > -1) {
+        //Take out the users
+        var votes = log.draw.undo.votes;
+
+        for(var vote in votes) {
+          if(vote == model.user.id) {
+            return false;
+          }
+        }
+
+        growl.warning("An undo was requested which needs your vote");
+        return true;
+      }
+      return hasVoted;
+    };
+
+    $scope.openModalVote = function(size) {
+      var modalInstance = $modal.open({
+        templateUrl: 'modalVote.html',
+        controller: 'VoteController',
+        size: size,
+        resolve: {
+          itemToUndo: function () {
+            return $scope.itemToUndo;
+          }
+        }
+      });
+
+      modalInstance.result.then(function(vote) {
+        $log.info('Vote was ' + vote);
+        //TODO call vote service
+      }, function () {
+        $log.info('Modal dismissed at: ' + new Date());
+      });
     };
 
     model.tableParams = new ngTableParams({
@@ -58,6 +97,6 @@
   };
 
   module.controller("GameController",
-    ["$log", "$routeParams", "GameService", "PlayerService", "currentUser", "$filter", "ngTableParams", "$scope", "growl", GameController]);
+    ["$log", "$routeParams", "GameService", "PlayerService", "currentUser", "$filter", "ngTableParams", "$scope", "growl", "$modal", GameController]);
 
 }(angular.module("civApp")));

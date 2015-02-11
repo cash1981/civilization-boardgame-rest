@@ -29,7 +29,8 @@ public class Wonder implements Item {
     private String description;
     private boolean used;
     private boolean hidden = true;
-    private String ownerId; // game_id or player_id (username)
+    private String ownerId;
+    private SheetName sheetName;
 
     public Wonder(String name, String description, String type) {
         this.name = name;
@@ -41,7 +42,7 @@ public class Wonder implements Item {
 
     @Override
     public SheetName getSheetName() {
-        return SheetName.WONDERS;
+        return sheetName = SheetName.WONDERS;
     }
 
     @Override

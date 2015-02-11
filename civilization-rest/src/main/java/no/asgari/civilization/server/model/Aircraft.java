@@ -21,7 +21,8 @@ public class Aircraft extends Unit implements Image {
     private int health;
     private boolean isInBattle;
     private String image;
-
+    private SheetName sheetName;
+    
     public Aircraft(int attack, int health) {
         this.attack = attack;
         this.health = health;
@@ -45,7 +46,7 @@ public class Aircraft extends Unit implements Image {
 
     @Override
     public SheetName getSheetName() {
-        return SheetName.AIRCRAFT;
+        return sheetName = SheetName.AIRCRAFT;
     }
 
     @Override

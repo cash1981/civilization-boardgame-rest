@@ -78,6 +78,15 @@ public class GameLogAction {
         return pl;
     }
 
+    public GameLog createGameLog(Draw draw, String pbfId, String username, boolean vote) {
+        GameLog pl = new GameLog();
+        pl.setPbfId(pbfId);
+        pl.setUsername(username);
+        pl.setPublicLog(username + " has voted " + (vote ? "yes" : "no") + " to undo " + draw.getItem().getName());
+        pl.setId(save(pl));
+        return pl;
+    }
+
     /**
      * Common messages like, user joined game, user withdrew game etc
      */

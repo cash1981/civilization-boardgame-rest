@@ -26,6 +26,7 @@ public class Village implements Item, Tradable, Image {
     private boolean hidden = true;
     private String ownerId; // game_id or player_id (username)
     private String image;
+    private SheetName sheetName;
 
     public Village(String name) {
         this.name = name;
@@ -35,7 +36,7 @@ public class Village implements Item, Tradable, Image {
 
     @Override
     public SheetName getSheetName() {
-        return SheetName.VILLAGES;
+        return sheetName = SheetName.VILLAGES;
     }
 
     @Override

@@ -25,6 +25,7 @@ public class Hut implements Item, Tradable, Image {
     private boolean hidden = true;
     private String ownerId;
     private String image;
+    private SheetName sheetName;
 
     public Hut(String name) {
         this.name = name;
@@ -34,7 +35,7 @@ public class Hut implements Item, Tradable, Image {
 
     @Override
     public SheetName getSheetName() {
-        return SheetName.HUTS;
+        return sheetName = SheetName.HUTS;
     }
 
     @Override

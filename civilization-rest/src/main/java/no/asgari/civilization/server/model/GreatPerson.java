@@ -24,6 +24,7 @@ public class GreatPerson implements Item, Image {
     private boolean hidden = true;
     private String ownerId; // game_id or player_id (username)
     private String image;
+    private SheetName sheetName;
 
     public GreatPerson(String name) {
         this.name = name;
@@ -33,7 +34,7 @@ public class GreatPerson implements Item, Image {
 
     @Override
     public SheetName getSheetName() {
-        return SheetName.GREAT_PERSON;
+        return sheetName = SheetName.GREAT_PERSON;
     }
 
     @Override
