@@ -1,8 +1,8 @@
 'use strict';
 (function (civApp) {
 
-  civApp.factory('PlayerService', function ($http, $q, $log, growl, currentUser) {
-    var baseUrl = "http://localhost:8080/civilization/player/";
+  civApp.factory('PlayerService', function ($http, $q, $log, growl, currentUser, BASE_URL) {
+    var baseUrl = BASE_URL + "/player/";
     this.setBaseUrl = function (url) {
       baseUrl = url;
     };
@@ -57,7 +57,7 @@
         "pbfId": gameId
       };
 
-      $log.info("Before calling delete, json is ", angular.toJson(itemDTO));
+      $log.info("Before calling post, json is ", angular.toJson(itemDTO));
 
       var configuration = {
         headers: {
@@ -65,23 +65,7 @@
         }
       };
 
-      /* $http({
-       url: url,
-       dataType: "json",
-       method: "DELETE",
-       headers: {
-       "Content-Type": "application/json"
-       }
-       }).success(function (response) {
-       //TODO need to call get game again so that everything is refreshed
-       growl.success("Item discarded");
-       return response;
-       }).error(function (data) {
-       growl.error("Item could not be discarded");
-       return data;
-       });
-       */
-      $http.delete(url, itemDTO, configuration)
+      $http.post(url, itemDTO, configuration)
         .success(function (response) {
           //TODO need to call get game again so that everything is refreshed
           growl.success("Item discarded");
@@ -90,8 +74,6 @@
           growl.error("Item could not be discarded");
           return data;
         });
-
-      //TODO Flytt denne i util? Duplikat i UserItemController
     };
 
     var endTurn = function (gameId) {
@@ -115,7 +97,7 @@
         }, function (data) {
           $log.error(data);
           growl.error("Could not get chosen techs");
-          return data;
+          $q.reject();
         });
     };
 

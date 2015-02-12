@@ -54,6 +54,7 @@
     growlProvider.globalDisableCountDown(false);
     growlProvider.globalPosition('top-center');
     growlProvider.onlyUniqueMessages(true);
-  });
+  })
+    .constant('BASE_URL', 'http://localhost:8080/civilization');
 
 }());

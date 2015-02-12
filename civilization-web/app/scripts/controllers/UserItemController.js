@@ -12,7 +12,7 @@
     $scope.hutsCollapse = false;
     $scope.villagesCollapse = false;
 
-    //Returns the next element in the array
+    //Returns the next element in the object
     model.nextElement = function(obj) {
       if(obj) {
         var keys = Object.keys(obj);
@@ -27,7 +27,8 @@
       var key = Object.keys(item);
       if(key && key.length > -1) {
         //TODO lodash doesn't work? return _.capitalize(key[0]);
-        return toTitleCase(key[0]);
+        //return toTitleCase(key[0]);
+        return _.capitalize(key[0]);
       }
       return item;
     };
@@ -57,22 +58,26 @@
       //dette funker ikke: updateGame($routeParams.id);
     };
 
-    var gamePromise = GameService.getGameById($routeParams.id)
-      .then(function (game) {
-        model.game = game;
-        $scope.userHasAccess = game.player && game.player.username === model.user.username;
-        model.yourTurn = game.player && game.player.yourTurn;
+    $scope.$watch(function () {
+      return GameService.getGameById($routeParams.id);
+    }, function (newVal) {
+      if (!newVal) {
+        return;
+      }
+      var game = newVal;
+      model.game = game;
+      $scope.userHasAccess = game.player && game.player.username === model.user.username;
+      model.yourTurn = game.player && game.player.yourTurn;
 
-        model.techsChosen = game.player.techsChosen;
+      model.techsChosen = game.player.techsChosen;
 
-        readKeysFromItems(game.player.items);
-
-        return game;
-      });
+      readKeysFromItems(game.player.items);
+      model.tablePrivateLog.reload();
+      return game;
+    });
 
     function readKeysFromItems(items) {
-      for (var i = 0; i < items.length; i++) {
-        var item = items[i];
+      items.forEach(function (item) {
         var itemKey = Object.keys(item);
         if ("civ" == itemKey) {
           model.civs.push(item);
@@ -91,9 +96,10 @@
         } else {
           model.items.push(item);
         }
-      }
-    }
 
+      });
+
+    }
     model.allAvailableTechs = [];
     model.chosenTechs = [];
     model.chosenTechs1 = [];
@@ -124,17 +130,17 @@
       getData: function ($defer, params) {
         // use build-in angular filter
         // update table params
-        gamePromise.then(function (game) {
-          var orderedData = params.sorting() ? $filter('orderBy')(game.privateLogs, params.orderBy()) : game.privateLogs;
-          params.total(game.privateLogs.length);
-          $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-        });
-      }
+        if (!model.game) {
+          $defer.reject("No game yet");
+          return;
+        }
+        var game = model.game;
+        var orderedData = params.sorting() ? $filter('orderBy')(game.privateLogs, params.orderBy()) : game.privateLogs;
+        params.total(game.privateLogs.length);
+        $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+      },
+      $scope: { $data: {}, $emit: function () {}}
     });
-
-    function toTitleCase(str) {
-      return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-    }
   };
 
   module.controller("UserItemController",

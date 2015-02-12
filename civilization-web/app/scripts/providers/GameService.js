@@ -3,18 +3,17 @@
 
   civApp.config(function ($provide) {
     $provide.provider("GameService", function () {
-
+      var games = {};
+      var loading = {};
       var baseUrl = "http://localhost:8080/civilization/game/";
       this.setBaseUrl = function (url) {
         baseUrl = url;
       };
 
-      this.$get = function ($http, $q, $log, growl) {
-        var games = [];
+      this.$get = function ($http, $log, growl) {
         $log.info("Creating game data service");
 
         var createGame = function (game) {
-          games = [];
           return $http.post(baseUrl, game)
             .then(function (response) {
               return response.data;
@@ -22,33 +21,40 @@
         };
 
         var joinGame = function (game) {
-          games = [];
           return $http.put(baseUrl + game.id + "/join")
             .then(function (response) {
               return response.data;
             });
         };
 
-        var getGameById = function (id) {
+        var fetchGameById = function (id) {
           var url = baseUrl + id;
+          loading[id] = true;
           return $http.get(url)
             .then(function (response) {
+              games[id] = response.data;
+              loading[id] = false;
               return response.data;
             });
         };
 
-        var getAllGames = function () {
-          if (games.length > 0) {
-            $log.info("Got games from cache");
-            return $q.when(games);
-          } else {
-            return $http.get(baseUrl)
-              .then(function (response) {
-                $log.info("Got games from API");
-                games = response.data;
-                return games;
-              });
+        var getGameById = function (id) {
+          if (games[id]) {
+            return games[id];
           }
+          if (loading[id]) {
+            return;
+          }
+
+          fetchGameById(id);
+        };
+
+        var getAllGames = function () {
+          return $http.get(baseUrl, {cache: true})
+            .then(function (response) {
+              $log.debug("Got games");
+              return response.data;
+            });
         };
 
         var undoDraw = function(gameid, logid) {
@@ -57,7 +63,11 @@
             .success(function (response) {
             growl.success("Undo initiated!");
             return response;
-            }).error(function (data, status) {
+            }).success(function (response) {
+              fetchGameById(gameid);
+              return response;
+            })
+            .error(function (data, status) {
               if(status == 400) {
                 growl.error("Undo already initiated")
               } else {

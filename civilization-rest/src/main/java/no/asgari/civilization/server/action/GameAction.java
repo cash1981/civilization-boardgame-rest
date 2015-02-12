@@ -167,7 +167,6 @@ public class GameAction extends BaseAction {
         if (pbf.getNumOfPlayers() == pbf.getPlayers().size()) {
             log.warn("Cannot join the game. Its full");
             Response badReq = Response.status(Response.Status.BAD_REQUEST)
-                    .entity("Cannot join the game. Its full.")
                     .build();
             throw new WebApplicationException(badReq);
         }
@@ -179,7 +178,6 @@ public class GameAction extends BaseAction {
         if (playerAlreadyJoined) {
             log.warn("Cannot join the game. Player has already joined it");
             Response badReq = Response.status(Response.Status.BAD_REQUEST)
-                    .entity("Cannot join the game. You have already joined it!")
                     .build();
             throw new WebApplicationException(badReq);
         }
@@ -306,7 +304,6 @@ public class GameAction extends BaseAction {
         if (!SecurityCheck.hasUserAccess(pbf, playerId)) {
             log.warn("User with id " + playerId + " is not player this game, and cannot withdraw");
             Response badReq = Response.status(Response.Status.FORBIDDEN)
-                    .entity("No access")
                     .build();
             throw new WebApplicationException(badReq);
         }
@@ -316,7 +313,6 @@ public class GameAction extends BaseAction {
             Playerhand playerhand = iterator.next();
             if (playerhand.getPlayerId().equals(playerId)) {
                 iterator.remove();
-                //TOOD Create log player withdrew from game
                 gameLogAction.createCommonPublicLog("Withdrew from join", pbfId, playerId);
                 pbfCollection.updateById(pbf.getId(), pbf);
                 return true;

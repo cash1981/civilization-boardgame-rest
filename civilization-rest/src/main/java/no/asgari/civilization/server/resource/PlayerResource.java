@@ -1,6 +1,7 @@
 package no.asgari.civilization.server.resource;
 
 import com.codahale.metrics.annotation.Timed;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.DB;
 import io.dropwizard.auth.Auth;
 import lombok.extern.log4j.Log4j;
@@ -21,6 +22,7 @@ import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -84,8 +86,7 @@ public class PlayerResource {
         Player pl = playerAction.getPlayerById(playerId);
         if (pl == null) {
             log.error("Didn't find player with id " + playerId);
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("Need correct player id to get a game").build();
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
         Set<Tech> playersTechs = playerAction.getPlayersTechs(pbfId, playerId);
         return Response.ok().entity(playersTechs).build();
@@ -147,7 +148,8 @@ public class PlayerResource {
         return Response.ok().build();
     }
 
-    @DELETE
+    //@DELETE doesn't work on angularjs with content-type
+    @POST
     @Path("/item")
     @Timed
     public Response discardItem(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
@@ -160,7 +162,8 @@ public class PlayerResource {
     @Timed
     public Response giveItemToPlayer(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
         if (player.getId().equals(item.getOwnerId())) {
-            return Response.status(Response.Status.FORBIDDEN).entity("You cannot trade with your self").build();
+            log.error("You cannot trade with your self");
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
         item.setPbfId(pbfId);
         boolean result = playerAction.tradeToPlayer(item, player.getId());

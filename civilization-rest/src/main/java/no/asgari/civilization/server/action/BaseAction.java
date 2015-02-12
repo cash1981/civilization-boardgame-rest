@@ -109,14 +109,12 @@ public abstract class BaseAction {
     }
 
     static WebApplicationException cannotFindItem() {
-        return new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-                .entity("Could not find item")
+        return new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
                 .build());
     }
 
     static WebApplicationException cannotFindPlayer() {
-        return new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-                .entity("Could not find player")
+        return new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
                 .build());
     }
 

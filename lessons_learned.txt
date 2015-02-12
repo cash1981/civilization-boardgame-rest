@@ -13,3 +13,7 @@ Now I could finally get yeoman to generate a angular app for me. However clevers
 - Huge downside when your API is set, and you decide to change your API. You can't remove items unless you know there are no one that uses your API
 and that there are no active games up and running. I think accessing inactive games for readability later is problematic!
 -- Its exactly like the serilization issues we had with Java that made us go away from that
+
+
+GOTCHA
+$http.delete funker ikke med content-type

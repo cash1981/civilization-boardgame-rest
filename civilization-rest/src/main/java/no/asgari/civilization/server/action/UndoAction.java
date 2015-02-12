@@ -88,8 +88,8 @@ public class UndoAction extends BaseAction {
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
 
         if (gameLog.getDraw() == null || gameLog.getDraw().getUndo() == null) {
+            log.error("This item cannot be undone. Nothing to undo.");
             throw new WebApplicationException(Response.status(Response.Status.PRECONDITION_FAILED)
-                    .entity("This item cannot be undone. Nothing to undo.")
                     .build());
         }
 
@@ -120,7 +120,6 @@ public class UndoAction extends BaseAction {
         if (logContainingItemToUndo.getDraw().getUndo() != null) {
             log.error("Cannot initiate a undo. Its already been initiated");
             throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-                    .entity("Undo already initiated")
                     .build());
         }
         PBF pbf = pbfCollection.findOneById(logContainingItemToUndo.getPbfId());

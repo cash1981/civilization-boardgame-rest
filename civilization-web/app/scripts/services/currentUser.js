@@ -4,7 +4,6 @@
   var USERKEY = "authorizationEncoded";
 
   var currentUser = function (localStorage, $log) {
-
     var saveUser = function () {
       localStorage.add(USERKEY, profile);
     };
@@ -20,7 +19,7 @@
         id: "",
         authorizationEncoded: "",
         get loggedIn() {
-          $log.info("Checking if user is logged in " + this.authorizationEncoded);
+          //$log.info("Checking if user is logged in " + this.authorizationEncoded);
           return this.authorizationEncoded ? true : false;
         }
       };

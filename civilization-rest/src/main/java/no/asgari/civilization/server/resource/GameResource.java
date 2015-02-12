@@ -81,8 +81,8 @@ public class GameResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getGame(@Auth(required = false) Player player, @PathParam("gameId") String pbfId) {
         if (Strings.isNullOrEmpty(pbfId)) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("GameId is missing").build();
+            log.error("GameId is missing");
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
         GameAction gameAction = new GameAction(db);
         PBF pbf = gameAction.findPBFById(pbfId);
@@ -102,7 +102,6 @@ public class GameResource {
     public Response getGamesByPlayer(@Auth Player player) {
         PlayerAction playerAction = new PlayerAction(db);
         Set<String> games = playerAction.getGames(player);
-        //TODO Perhaps nice to create location for all the games
         return Response.ok().entity(games).build();
     }
 
@@ -150,7 +149,7 @@ public class GameResource {
     }
 
     /**
-     * With draw from exisiting game.
+     * Withdraw from existing game.
      * Game must not have started
      */
     @PUT
@@ -166,8 +165,8 @@ public class GameResource {
             return Response.ok().build();
         }
 
-        return Response.notModified()
-                .entity("Cannot withdraw from game. It is already started")
+        log.warn("Cannot withdraw from game. Its already started");
+        return Response.status(Response.Status.NOT_ACCEPTABLE)
                 .location(uriInfo.getAbsolutePathBuilder().path(pbfId).build())
                 .build();
     }
@@ -285,8 +284,8 @@ public class GameResource {
         GameLogAction gameLogAction = new GameLogAction(db);
         GameLog gameLog = gameLogAction.findGameLogById(gameLogId);
         if(gameLog.getDraw() == null || gameLog.getDraw().getUndo() == null) {
+            log.error("There is no undo to vote on");
             return Response.status(Response.Status.PRECONDITION_FAILED)
-                    .entity("There is no undo to vote on")
                     .build();
         }
         UndoAction undoAction = new UndoAction(db);
@@ -311,8 +310,8 @@ public class GameResource {
         GameLogAction gameLogAction = new GameLogAction(db);
         GameLog gameLog = gameLogAction.findGameLogById(gameLogId);
         if(gameLog.getDraw() == null || gameLog.getDraw().getUndo() == null) {
+            log.error("There is no undo to vote on");
             return Response.status(Response.Status.PRECONDITION_FAILED)
-                    .entity("There is no undo to vote on")
                     .build();
         }
         UndoAction undoAction = new UndoAction(db);

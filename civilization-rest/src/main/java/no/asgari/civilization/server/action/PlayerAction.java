@@ -20,6 +20,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
 
+import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -53,8 +54,8 @@ public class PlayerAction extends BaseAction {
         Preconditions.checkNotNull(playerDTO.getPasswordCopy());
 
         if (!playerDTO.getPassword().equals(playerDTO.getPasswordCopy())) {
+            log.error("Passwords are not identical");
             throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-                    .entity("Passwords are not identical")
                     .build());
         }
         if (CivSingleton.instance().playerCache().asMap().containsValue(playerDTO.getUsername())) {
@@ -141,7 +142,6 @@ public class PlayerAction extends BaseAction {
                 } catch (Exception ex) {
                     log.error("Couldn't update pbf " + ex.getMessage(), ex);
                     throw new WebApplicationException(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                            .entity("Couldn't update pbf")
                             .build());
                 }
             }
@@ -169,7 +169,6 @@ public class PlayerAction extends BaseAction {
         if (gameLog.getDraw() == null || gameLog.getDraw().getItem() == null) {
             log.error("Nothing to reveal");
             throw new WebApplicationException(Response.status(Response.Status.NOT_MODIFIED)
-                    .entity("Nothing to reveal")
                     .build());
         }
 
@@ -177,7 +176,6 @@ public class PlayerAction extends BaseAction {
         if (!gameLog.getDraw().isHidden()) {
             log.warn("Item already revealed");
             throw new WebApplicationException(Response.status(Response.Status.NOT_MODIFIED)
-                    .entity("Item already revealed")
                     .build());
         }
 
@@ -214,8 +212,8 @@ public class PlayerAction extends BaseAction {
 
         Optional<SheetName> sheetName = SheetName.find(itemDTO.getSheetName());
         if(!sheetName.isPresent()) {
+            log.error("Cannot find Sheetname " + itemDTO.getSheetName());
             throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-                    .entity("Cannot find Sheetname " + itemDTO.getSheetName())
                     .build());
         }
         
@@ -228,7 +226,6 @@ public class PlayerAction extends BaseAction {
         if (!itemToRevealOptional.isPresent()) {
             log.warn("Item " + itemDTO.getName() + " already revealed");
             throw new WebApplicationException(Response.status(Response.Status.NOT_MODIFIED)
-                    .entity("Item already revealed")
                     .build());
         }
         Item itemToReveal = itemToRevealOptional.get();

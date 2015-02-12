@@ -122,8 +122,8 @@
     <div class="col-sm-2">
       <button class="btn btn-info" ng-click="unitCollapse = !unitCollapse">Toggle Units</button>
       <hr>
-      <div collapse="unitCollapse"> <!--TODO orderBy doesnt work-->
-        <div ng-repeat="item in userCtrl.units | orderBy: 'name'" class="thumbnail" ng-show="userCtrl.units">
+      <div collapse="unitCollapse">
+        <div ng-repeat="item in userCtrl.units" class="thumbnail" ng-show="userCtrl.units">
           <img ng-src="/images/useritems/{{userCtrl.nextElement(item).image}}"
                tooltip="{{userCtrl.nextElement(item).name}}"/>
 

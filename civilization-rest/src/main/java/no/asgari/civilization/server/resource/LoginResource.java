@@ -48,7 +48,7 @@ public class LoginResource {
     @POST
     @Consumes(value = MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(value = MediaType.APPLICATION_JSON)
-    public Response login(@FormParam("username") @NotEmpty String username, @FormParam("password") @NotEmpty String password) {
+    public Response ogin(@FormParam("username") @NotEmpty String username, @FormParam("password") @NotEmpty String password) {
         Preconditions.checkNotNull(username);
         Preconditions.checkNotNull(password);
 
