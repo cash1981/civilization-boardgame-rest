@@ -2,7 +2,15 @@
 (function (module) {
   var UserItemController = function ($log, $routeParams, GameService, currentUser, $filter, ngTableParams, $scope, PlayerService) {
     var model = this;
+
     model.user = currentUser.profile;
+    model.allAvailableTechs = [];
+    model.chosenTechs = [];
+    model.chosenTechs1 = [];
+    model.chosenTechs2 = [];
+    model.chosenTechs3 = [];
+    model.chosenTechs4 = [];
+    model.chosenTechs5 = [];
     $scope.privateLogCollapse = false;
     $scope.itemCollapse = false;
     $scope.gpCollapse = false;
@@ -11,8 +19,22 @@
     $scope.civCollapse = false;
     $scope.hutsCollapse = false;
     $scope.villagesCollapse = false;
+    model.yourTurn = false;
+    model.items = [];
+    model.techsChosen = [];
+    model.civs = [];
+    model.cultureCards = [];
+    model.greatPersons = [];
+    model.huts = [];
+    model.villages = [];
+    model.tiles = [];
+    model.units = [];
 
-    //Returns the next element in the object
+    /**
+     * Returns the next element in the object
+     * @param obj
+     * @returns obj.next
+     */
     model.nextElement = function(obj) {
       if(obj) {
         var keys = Object.keys(obj);
@@ -26,36 +48,19 @@
     model.itemName = function(item) {
       var key = Object.keys(item);
       if(key && key.length > -1) {
-        //TODO lodash doesn't work? return _.capitalize(key[0]);
-        //return toTitleCase(key[0]);
         return _.capitalize(key[0]);
       }
       return item;
     };
 
-    model.yourTurn = false;
-    model.items = [];
-    model.techsChosen = [];
-    model.civs = [];
-    model.cultureCards = [];
-    model.greatPersons = [];
-    model.huts = [];
-    model.villages = [];
-    model.tiles = [];
-    model.units = [];
-
     model.revealItem = function (item) {
       var response = PlayerService.revealItem($routeParams.id, item);
       $log.info("Revealed item, response is " + response);
-      //TODO hvordan kaller jeg på getGameById?
-      //dette funker ikke: updateGame($routeParams.id);
     };
 
     model.discardItem = function (item) {
       $log.info("Discard item " + item.name);
-      var response = PlayerService.discardItem($routeParams.id, item);
-      //TODO hvordan kaller jeg på getGameById?
-      //dette funker ikke: updateGame($routeParams.id);
+      PlayerService.discardItem($routeParams.id, item);
     };
 
     $scope.$watch(function () {
@@ -100,13 +105,7 @@
       });
 
     }
-    model.allAvailableTechs = [];
-    model.chosenTechs = [];
-    model.chosenTechs1 = [];
-    model.chosenTechs2 = [];
-    model.chosenTechs3 = [];
-    model.chosenTechs4 = [];
-    model.chosenTechs5 = [];
+
     GameService.getAvailableTechs($routeParams.id)
       .then(function(techs) {
         model.allAvailableTechs = techs;

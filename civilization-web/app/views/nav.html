@@ -10,7 +10,7 @@
     <div ng-controller="LoginController as login" class="padd-right-5">
       <div ng-show="login.user.loggedIn" class="navbar-text navbar-right">
         <span class="padd-right-5">Hello {{ login.user.username }}!</span>
-        <button class="btn btn-default btn-sm" ng-click="login.signOut()">Sign Out</button>
+        <a href="#/logout" class="btn btn-default btn-sm" ng-click="login.signOut()">Sign Out</a>
       </div>
       <form ng-if="!login.user.loggedIn" name="loginForm" class="navbar-form navbar-right"
             ng-submit="login.login(loginForm)" novalidate>

@@ -46,23 +46,23 @@
                 <h3 class="modal-title">Vote for undo!</h3>
               </div>
               <div class="modal-body">
-                <h4>Vote <strong>yes</strong> or <strong>no</strong> to undo {{log.draw.item.name}}?</h4>
+                <h4>Vote <strong>yes</strong> or <strong>no</strong> to undo {{itemToUndo}}?</h4>
               </div>
               <div class="modal-footer">
-                <button class="btn btn-primary" ng-click="voteOk()">YES</button>
-                <button class="btn btn-danger" ng-click="voteNok()">NO</button>
+                <button class="btn btn-primary" ng-click="voteOk(log.id)">YES</button>
+                <button class="btn btn-danger" ng-click="voteNok(log.id)">NO</button>
                 <button class="btn btn-warning" ng-click="voteCancel()">Cancel</button>
               </div>
             </script>
 
-            <button ng-if="canInitiateDraw(log)"
+            <button ng-if="canInitiateUndo(log)"
                     ng-really-message="This will initiate vote for Undo. Are you sure?"
                     ng-really-click="initiateUndo(log.id)"
                     class="btn btn-sm btn-warning" tooltip="Press undo button to request a vote for undo. All players must vote yes for undo to be made.
                   Once all players have voted yes, the item will be put back in the deck and reshuffled">Undo
             </button>
             <button ng-if="canVote(log)"
-                    ng-click="$scope.itemToUndo = log.draw.item; openModalVote('sm')"
+                    ng-click="openModalVote('sm', log.draw.item)"
                     class="btn btn-sm btn-danger" tooltip="Press vote in order to vote if undo is to be made or not. All players must vote yes for undo to be made.
                   Once all players have voted yes, the item will be put back in the deck and reshuffled">Vote
             </button>

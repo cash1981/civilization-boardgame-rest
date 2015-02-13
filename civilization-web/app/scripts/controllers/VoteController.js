@@ -1,11 +1,13 @@
 'use strict';
 angular.module('civApp').controller('VoteController', function ($scope, $modalInstance) {
 
-  $scope.voteOk = function () {
+  $scope.voteOk = function (logid) {
+    $scope.votedLogid = logid;
     $modalInstance.close(true);
   };
 
-  $scope.voteNok = function () {
+  $scope.voteNok = function (logid) {
+    $scope.votedLogid = logid;
     $modalInstance.close(false);
   };
 

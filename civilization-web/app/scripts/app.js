@@ -44,6 +44,9 @@
       .when('/about', {
         templateUrl: 'views/about.html'
       })
+      .when('/logout', {
+        redirectTo: '/'
+      })
       .otherwise({
         redirectTo: '404.html'
       });

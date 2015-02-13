@@ -2,22 +2,14 @@
 (function (module) {
 
   var basicauth = function () {
-
-    //var url = "/login";
-    var url = "http://localhost:8080/civilization/login";
-
-    this.setUrl = function (newUrl) {
-      url = newUrl;
-    };
-
-    this.$get = function ($http, formEncode, currentUser, base64, $log) {
+    this.$get = function ($http, formEncode, currentUser, base64, BASE_URL, growl, $rootScope) {
+      var url = BASE_URL + "/login/";
 
       var processToken = function (username, password) {
         return function (response) {
           currentUser.profile.username = username;
           currentUser.profile.id = response.data.id;
-          var encoded = base64.encode(username + ":" + password);
-          currentUser.profile.authorizationEncoded = encoded;
+          currentUser.profile.authorizationEncoded = base64.encode(username + ":" + password);
           currentUser.save();
           return username;
         }
@@ -37,7 +29,13 @@
           grant_type: "password"
         });
 
-        return $http.post(url, data, configuration).then(processToken(username, password));
+        return $http.post(url, data, configuration)
+          .then(
+            processToken(username, password),
+              function() {
+                growl.error("Invalid login");
+              }
+        );
       };
 
       var logout = function () {
@@ -46,6 +44,7 @@
         currentUser.profile.authorizationEncoded = "";
         currentUser.profile.id = "";
         currentUser.remove();
+        $rootScope.broadcast('logout');
       };
 
       return {

@@ -1,6 +1,6 @@
 'use strict';
 (function (module) {
-var GameController = function ($log, $routeParams, GameService, PlayerService, currentUser, $filter, ngTableParams, $scope, growl, $modalN) {
+var GameController = function ($log, $routeParams, GameService, PlayerService, currentUser, $filter, ngTableParams, $scope, growl, $modal) {
   var model = this;
   model.user = currentUser.profile;
   $scope.userHasAccess = false;
@@ -20,7 +20,7 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
     model.yourTurn = game.player && game.player.yourTurn;
 
     if(model.yourTurn) {
-      growl.success("<strong>It's your turn!</strong>");
+      growl.success("<strong>It's your turn! Press end turn when you are done!</strong>");
     }
     console.log("Kaller reload");
     model.tableParams.reload();
@@ -33,9 +33,13 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
   };
 
   //In scope so that we can use it from another view which is included
-  $scope.canInitiateDraw = function(log) {
-    return $scope.userHasAccess && log && log.draw && !log.draw.undo && log.log.indexOf("drew") > -1;
+  $scope.canInitiateUndo = function(log) {
+    return checkPermissionForVote(log) && !log.draw.undo;
   };
+
+  function checkPermissionForVote(log) {
+    return $scope.userHasAccess && log && log.draw && log.log.indexOf("drew") > -1;
+  }
 
   //In scope so that we can use it from another view which is included
   $scope.initiateUndo = function(logid) {
@@ -45,7 +49,7 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
   //In scope so that we can use it from another view which is included
   $scope.canVote = function(log) {
     var hasVoted = false;
-    if($scope.userHasAccess && log && log.draw && log.draw.undo && log.log.indexOf("undo") > -1) {
+    if(checkPermissionForVote(log) && log.draw.undo) {
       //Take out the users
       var votes = log.draw.undo.votes;
 
@@ -54,27 +58,33 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
           return false;
         }
       }
+      //TODO This growl message is spamming us
+      //growl.warning("An undo was requested which needs your vote");
 
-      growl.warning("An undo was requested which needs your vote");
       return true;
     }
     return hasVoted;
   };
 
-  $scope.openModalVote = function(size) {
+  $scope.openModalVote = function(size, item) {
     var modalInstance = $modal.open({
       templateUrl: 'modalVote.html',
       controller: 'VoteController',
       size: size,
       resolve: {
         itemToUndo: function () {
-          return $scope.itemToUndo;
+          return item.name;
         }
       }
     });
 
     modalInstance.result.then(function(vote) {
       $log.info('Vote was ' + vote);
+      if(vote) {
+        GameService.voteYes(gameId, $scope.votedLogid);
+      } else {
+        GameService.voteNo(gameId, $scope.votedLogid);
+      }
       //TODO call vote service
     }, function () {
       $log.info('Modal dismissed at: ' + new Date());

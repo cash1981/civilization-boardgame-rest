@@ -210,7 +210,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         GameLog gameLog = gameLogCollection.findOneById(gameLogOptional.get().getId());
         if(gameLog.getDraw() != null && gameLog.getDraw().getItem() != null && gameLog.getPbfId().equals(pbfId)) {
             assertThat(gameLog.getDraw().isHidden()).isTrue();
-            URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/revealItem/%s", RULE.getLocalPort(), pbfId, gameLog.getId())).build();
+            URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/item/reveal/%s", RULE.getLocalPort(), pbfId, gameLog.getId())).build();
             ClientResponse response = client().resource(uri)
                     .type(MediaType.APPLICATION_JSON)
                     .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
@@ -362,12 +362,12 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
 
         ItemDTO itemDTO = createItemDTO(SheetName.VILLAGES, village.getName());
 
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/item", RULE.getLocalPort(), pbfId)).build();
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/item/discard", RULE.getLocalPort(), pbfId)).build();
         ClientResponse response = client().resource(uri)
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .entity(itemDTO)
-                .delete(ClientResponse.class);
+                .post(ClientResponse.class);
         assertEquals(response.getStatus(), HttpStatus.OK_200);
 
         pbf = pbfCollection.findOneById(pbfId);
@@ -383,12 +383,12 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
 
         ItemDTO itemDTO = createItemDTO(SheetName.INFANTRY, infantry.getName());
 
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/item", RULE.getLocalPort(), pbfId)).build();
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/item/discard", RULE.getLocalPort(), pbfId)).build();
         ClientResponse response = client().resource(uri)
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .entity(itemDTO)
-                .delete(ClientResponse.class);
+                .post(ClientResponse.class);
         assertEquals(response.getStatus(), HttpStatus.OK_200);
     }
 

@@ -2,13 +2,10 @@
 (function (civApp) {
 
   civApp.config(function ($provide) {
-    $provide.provider("GameService", function () {
+    $provide.provider("GameService", function (BASE_URL) {
       var games = {};
       var loading = {};
-      var baseUrl = "http://localhost:8080/civilization/game/";
-      this.setBaseUrl = function (url) {
-        baseUrl = url;
-      };
+      var baseUrl = BASE_URL + "/game/";
 
       this.$get = function ($http, $log, growl) {
         $log.info("Creating game data service");
@@ -27,7 +24,7 @@
             });
         };
 
-        var fetchGameById = function (id) {
+        var fetchGameByIdFromServer = function (id) {
           var url = baseUrl + id;
           loading[id] = true;
           return $http.get(url)
@@ -46,13 +43,12 @@
             return;
           }
 
-          fetchGameById(id);
+          fetchGameByIdFromServer(id);
         };
 
         var getAllGames = function () {
           return $http.get(baseUrl, {cache: true})
             .then(function (response) {
-              $log.debug("Got games");
               return response.data;
             });
         };
@@ -64,14 +60,14 @@
             growl.success("Undo initiated!");
             return response;
             }).success(function (response) {
-              fetchGameById(gameid);
+              fetchGameByIdFromServer(gameid);
               return response;
             })
             .error(function (data, status) {
               if(status == 400) {
                 growl.error("Undo already initiated")
               } else {
-                growl.error("Could not initiate undo: " + data);
+                growl.error("Could not initiate undo for unknown reason");
               }
               return data;
             });
@@ -86,13 +82,57 @@
             });
         };
 
+        var voteYes = function(gameid, logid) {
+          var url = baseUrl + gameid + "/vote/" + logid + "/yes";
+          $http.put(url)
+            .success(function (response) {
+              growl.success("You voted yes!");
+              return response;
+            }).success(function (response) {
+              fetchGameByIdFromServer(gameid);
+              return response;
+            })
+            .error(function (data, status) {
+              if(status == 412) {
+                growl.error("Could not register vote. Nothing to vote on")
+              } else {
+                growl.error("Could not vote for unknown reason");
+              }
+              return data;
+            });
+        };
+
+        var voteNo = function(gameid, logid) {
+          var url = baseUrl + gameid + "/vote/" + logid + "/no";
+          $http.put(url)
+            .success(function (response) {
+              growl.success("You voted no!");
+              return response;
+            }).success(function (response) {
+              fetchGameByIdFromServer(gameid);
+              return response;
+            })
+            .error(function (data, status) {
+              if(status == 412) {
+                growl.error("Could not register vote. Nothing to vote on")
+              } else {
+                growl.error("Could not vote for unknown reason");
+              }
+              return data;
+            });
+        };
+
+
         return {
           getAllGames: getAllGames,
-          joinGame: joinGame,
           getGameById: getGameById,
+          fetchGameByIdFromServer: fetchGameByIdFromServer,
+          joinGame: joinGame,
           createGame: createGame,
           undoDraw: undoDraw,
-          getAvailableTechs: getAvailableTechs
+          getAvailableTechs: getAvailableTechs,
+          voteYes: voteYes,
+          voteNo: voteNo
         };
       };
 

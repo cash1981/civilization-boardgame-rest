@@ -117,7 +117,8 @@ public class UndoAction extends BaseAction {
         Preconditions.checkNotNull(logContainingItemToUndo);
         Preconditions.checkNotNull(logContainingItemToUndo.getDraw());
 
-        if (logContainingItemToUndo.getDraw().getUndo() != null) {
+        Draw<?> draw = logContainingItemToUndo.getDraw();
+        if (draw.getUndo() != null) {
             log.error("Cannot initiate a undo. Its already been initiated");
             throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
                     .build());
@@ -125,13 +126,13 @@ public class UndoAction extends BaseAction {
         PBF pbf = pbfCollection.findOneById(logContainingItemToUndo.getPbfId());
         if (!pbf.getPlayers().stream().anyMatch(p -> p.getPlayerId().equals(playerId))) {
             log.error("Couldn't find playerId " + playerId + " in PBF's players");
-            throw new IllegalArgumentException("Wrong playerId");
+            throw PlayerAction.cannotFindPlayer();
         }
 
-        GameLog gamelogToVote = createLog(logContainingItemToUndo.getDraw().getItem(), pbf.getId(), GameLog.LogType.UNDO, playerId);
-        Draw draw = gamelogToVote.getDraw();
         draw.setUndo(new Undo(pbf.getNumOfPlayers(), playerId));
-        gameLogCollection.updateById(gamelogToVote.getId(), gamelogToVote);
+        gameLogCollection.updateById(logContainingItemToUndo.getId(), logContainingItemToUndo);
+
+        createLog(draw.getItem(), pbf.getId(), GameLog.LogType.UNDO, playerId);
     }
 
     //TODO test

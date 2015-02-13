@@ -1,12 +1,12 @@
 'use strict';
 (function (civApp) {
 
-  civApp.factory('PlayerService', function ($http, $q, $log, growl, currentUser, BASE_URL) {
+  civApp.factory('PlayerService', function ($http, $q, $log, growl, currentUser, BASE_URL, GameService) {
     var baseUrl = BASE_URL + "/player/";
-    this.setBaseUrl = function (url) {
-      baseUrl = url;
-    };
 
+    /**
+     * Returns next element in the object
+     */
     function nextElement(obj) {
       if (obj) {
         var keys = Object.keys(obj);
@@ -18,7 +18,7 @@
     }
 
     var revealItem = function (gameId, item) {
-      var url = baseUrl + gameId + "/revealItem/";
+      var url = baseUrl + gameId + "/item/reveal";
 
       var sheetName = angular.lowercase(Object.keys(item)[0]);
       var itemDTO = {
@@ -28,7 +28,7 @@
         "pbfId": gameId
       };
 
-      $log.info("Before calling delete, json is ", angular.toJson(itemDTO));
+      $log.info("Before calling put, json is ", angular.toJson(itemDTO));
       var configuration = {
         headers: {
           "Content-Type": "application/json"
@@ -39,15 +39,17 @@
         .success(function (response) {
           growl.success("Item revealed");
           return response;
+        }).success(function (response) {
+          GameService.fetchGameByIdFromServer(gameId);
+          return response;
         })
-        .error(function (data) {
+        .error(function () {
           growl.error("Item could not be revealed");
-          return data;
         });
     };
 
     var discardItem = function (gameId, item) {
-      var url = baseUrl + gameId + "/item";
+      var url = baseUrl + gameId + "/item/discard";
 
       var sheetName = angular.lowercase(Object.keys(item)[0]);
       var itemDTO = {
@@ -67,8 +69,10 @@
 
       $http.post(url, itemDTO, configuration)
         .success(function (response) {
-          //TODO need to call get game again so that everything is refreshed
           growl.success("Item discarded");
+          return response;
+        }).success(function (response) {
+          GameService.fetchGameByIdFromServer(gameId);
           return response;
         }).error(function (data) {
           growl.error("Item could not be discarded");
@@ -81,6 +85,9 @@
       return $http.put(url)
         .success(function (response) {
           growl.success("Turn ended");
+          return response;
+        }).success(function (response) {
+          GameService.fetchGameByIdFromServer(gameId);
           return response;
         })
         .error(function (data) {

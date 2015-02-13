@@ -141,7 +141,7 @@ public class PlayerResource {
     }
 
     @PUT
-    @Path("/revealItem")
+    @Path("/item/reveal")
     @Timed
     public Response revealItem(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
         playerAction.revealItem(pbfId, player.getId(), item);
@@ -150,7 +150,7 @@ public class PlayerResource {
 
     //@DELETE doesn't work on angularjs with content-type
     @POST
-    @Path("/item")
+    @Path("/item/discard")
     @Timed
     public Response discardItem(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
         playerAction.discardItem(pbfId, player.getId(), item);
@@ -224,6 +224,7 @@ public class PlayerResource {
         return Response.ok().build();
     }
 
+    //TODO Perhaps no need for this. In this case we need to implement a new view with list of all votes
     /**
      * Returns a list of all undoes that a player needs to vote for
      *
