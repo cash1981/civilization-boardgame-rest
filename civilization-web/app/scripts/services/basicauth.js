@@ -2,7 +2,7 @@
 (function (module) {
 
   var basicauth = function () {
-    this.$get = function ($http, formEncode, currentUser, base64, BASE_URL, growl, $rootScope) {
+    this.$get = function ($http, formEncode, currentUser, base64, BASE_URL, growl) {
       var url = BASE_URL + "/login/";
 
       var processToken = function (username, password) {
@@ -44,7 +44,6 @@
         currentUser.profile.authorizationEncoded = "";
         currentUser.profile.id = "";
         currentUser.remove();
-        $rootScope.broadcast('logout');
       };
 
       return {

@@ -83,6 +83,7 @@
         };
 
         var voteYes = function(gameid, logid) {
+          $log.info("Voted no on gameid " + gameid + " and logid " + logid);
           var url = baseUrl + gameid + "/vote/" + logid + "/yes";
           $http.put(url)
             .success(function (response) {
@@ -103,6 +104,7 @@
         };
 
         var voteNo = function(gameid, logid) {
+          $log.info("Voted no on gameid " + gameid + " and logid " + logid);
           var url = baseUrl + gameid + "/vote/" + logid + "/no";
           $http.put(url)
             .success(function (response) {

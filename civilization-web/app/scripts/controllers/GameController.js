@@ -66,26 +66,25 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
     return hasVoted;
   };
 
-  $scope.openModalVote = function(size, item) {
+  $scope.openModalVote = function(size, log) {
     var modalInstance = $modal.open({
       templateUrl: 'modalVote.html',
       controller: 'VoteController',
       size: size,
       resolve: {
-        itemToUndo: function () {
-          return item.name;
+        logToUndo: function () {
+          return log;
         }
       }
     });
 
     modalInstance.result.then(function(vote) {
-      $log.info('Vote was ' + vote);
-      if(vote) {
-        GameService.voteYes(gameId, $scope.votedLogid);
+      $log.info('Vote was ' + vote.vote + ' and logid is ' + vote.id);
+      if(vote.vote) {
+        GameService.voteYes(gameId, vote.id);
       } else {
-        GameService.voteNo(gameId, $scope.votedLogid);
+        GameService.voteNo(gameId, vote.id);
       }
-      //TODO call vote service
     }, function () {
       $log.info('Modal dismissed at: ' + new Date());
     });
@@ -113,6 +112,21 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
     },
     $scope: { $data: {}, $emit: function () {}}
   });
+
+  /**
+   * Returns the next element in the object
+   * @param obj
+   * @returns obj.next
+   */
+  model.nextElement = function(obj) {
+    if(obj) {
+      var keys = Object.keys(obj);
+      if(keys && keys.length > 0) {
+        return obj[keys[0]];
+      }
+    }
+    return obj;
+  };
 
 };
 
