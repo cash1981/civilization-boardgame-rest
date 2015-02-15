@@ -59,26 +59,6 @@ public class GameAction extends BaseAction {
         pbf.setName(dto.getName());
         pbf.setType(dto.getType());
         pbf.setNumOfPlayers(dto.getNumOfPlayers());
-        if (CivSingleton.instance().itemsCache() == null) {
-            CivSingleton.instance().setItemsCache(
-                    CacheBuilder.newBuilder()
-                            .maximumSize(4) //1 for each game type
-                            .removalListener(lis -> log.debug("Removing " + lis.getKey() + " from the gameCache"))
-                            .build(new CacheLoader<GameType, ItemReader>() {
-                                public ItemReader load(GameType type) {
-                                    ItemReader itemReader = new ItemReader();
-                                    try {
-                                        itemReader.readItemsFromExcel(dto.getType());
-                                    } catch (IOException e) {
-                                        log.error("Couldn't read from Excel file " + e.getMessage(), e);
-                                        throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
-                                    }
-                                    return itemReader;
-                                }
-                            })
-            );
-        }
-
         ItemReader itemReader;
         try {
             itemReader = CivSingleton.instance().itemsCache().get(dto.getType());

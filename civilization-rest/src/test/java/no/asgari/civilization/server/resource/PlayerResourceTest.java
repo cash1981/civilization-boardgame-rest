@@ -194,7 +194,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         ClientResponse response = client().resource(uri)
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .put(ClientResponse.class);
+                .post(ClientResponse.class);
         assertEquals(response.getStatus(), HttpStatus.OK_200);
     }
 
@@ -227,7 +227,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         ClientResponse response = client().resource(uri)
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .put(ClientResponse.class);
+                .post(ClientResponse.class);
         assertEquals(response.getStatus(), HttpStatus.OK_200);
     }
 
@@ -237,7 +237,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         ClientResponse response = client().resource(uri)
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .put(ClientResponse.class);
+                .post(ClientResponse.class);
         assertEquals(response.getStatus(), HttpStatus.OK_200);
     }
 
@@ -247,7 +247,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         ClientResponse response = client().resource(uri)
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .put(ClientResponse.class);
+                .post(ClientResponse.class);
         assertEquals(response.getStatus(), HttpStatus.OK_200);
     }
 
@@ -257,7 +257,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         ClientResponse response = client().resource(uri)
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .put(ClientResponse.class);
+                .post(ClientResponse.class);
         assertEquals(response.getStatus(), HttpStatus.OK_200);
     }
 
@@ -267,7 +267,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         ClientResponse response = client().resource(uri)
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .put(ClientResponse.class);
+                .post(ClientResponse.class);
         assertEquals(response.getStatus(), HttpStatus.NOT_MODIFIED_304);
     }
 
@@ -277,7 +277,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         ClientResponse response = client().resource(uri)
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .put(ClientResponse.class);
+                .post(ClientResponse.class);
         assertEquals(response.getStatus(), HttpStatus.NOT_FOUND_404);
     }
 
@@ -296,7 +296,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
                 .queryParam("numOfUnits", "3")
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .put(ClientResponse.class);
+                .post(ClientResponse.class);
         assertEquals(response.getStatus(), HttpStatus.OK_200);
         List list = response.getEntity(List.class);
         assertThat(list).hasSize(3);

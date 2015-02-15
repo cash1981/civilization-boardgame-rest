@@ -79,47 +79,47 @@ public class DrawAction extends BaseAction {
     private void reshuffleItems(GameType gameType, SheetName sheetName, PBF pbf) {
         if (!SheetName.SHUFFLABLE_ITEMS.contains(sheetName)) {
             log.warn("Tried to reshuffle " + sheetName.getName() + " but not a shufflable type");
-            return;
+            throw new NoMoreItemsException(sheetName.getName());
         }
+        ItemReader itemReader;
         try {
-            ItemReader itemReader = CivSingleton.instance().itemsCache().get(gameType);
-
-            List<Item> itemsFromExcel = itemReader.redrawableItems.parallelStream()
-                    .filter(s -> s.getSheetName() == sheetName)
-                    .collect(Collectors.toList());
-
-            //Find the items in use by all players
-            List<Item> playersItem = pbf.getPlayers().stream()
-                    .flatMap(p -> p.getItems().stream())
-                    .filter(it -> it.getSheetName() == sheetName)
-                    .collect(Collectors.toList());
-
-            log.debug("Not adding these items which are in use " + playersItem);
-            itemsFromExcel.removeAll(playersItem);
-
-            //Now add the discarded items
-            List<Item> discardedItems = pbf.getDiscardedItems().stream()
-                    .filter(it -> it.getSheetName() == sheetName)
-                    .collect(Collectors.toList());
-            log.debug("Found " + discardedItems.size() + " discarded items of type " + sheetName + " to add in the deck");
-            itemsFromExcel.addAll(discardedItems);
-
-            if (itemsFromExcel.size() == 0) {
-                log.warn("All items are still in use, cannot make a shuffle. Nothing to draw!");
-                throw new NoMoreItemsException(sheetName.getName());
-            }
-
-            log.debug("Shuffling, and adding items back in the pbf");
-            Collections.shuffle(itemsFromExcel);
-            pbf.getItems().addAll(itemsFromExcel);
-            pbfCollection.updateById(pbf.getId(), pbf);
-
-            logShuffle(sheetName, pbf);
-
+            itemReader = CivSingleton.instance().itemsCache().get(gameType);
         } catch (ExecutionException e) {
-            log.error("Couldn't get itemcache by " + gameType, e);
+            log.error("Couldnt get itemReader from cache " + e.getMessage(), e);
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
+
+        List<Item> itemsFromExcel = itemReader.redrawableItems.parallelStream()
+                .filter(s -> s.getSheetName() == sheetName)
+                .collect(Collectors.toList());
+
+        //Find the items in use by all players
+        List<Item> playersItem = pbf.getPlayers().stream()
+                .flatMap(p -> p.getItems().stream())
+                .filter(it -> it.getSheetName() == sheetName)
+                .collect(Collectors.toList());
+
+        log.debug("Not adding these items which are in use " + playersItem);
+        itemsFromExcel.removeAll(playersItem);
+
+        //Now add the discarded items
+        List<Item> discardedItems = pbf.getDiscardedItems().stream()
+                .filter(it -> it.getSheetName() == sheetName)
+                .collect(Collectors.toList());
+        log.debug("Found " + discardedItems.size() + " discarded items of type " + sheetName + " to add in the deck");
+        itemsFromExcel.addAll(discardedItems);
+
+        if (itemsFromExcel.size() == 0) {
+            log.warn("All items are still in use, cannot make a shuffle. Nothing to draw!");
+            throw new NoMoreItemsException(sheetName.getName());
+        }
+
+        log.debug("Shuffling, and adding items back in the pbf");
+        Collections.shuffle(itemsFromExcel);
+        pbf.getItems().addAll(itemsFromExcel);
+        pbfCollection.updateById(pbf.getId(), pbf);
+
+        logShuffle(sheetName, pbf);
     }
 
     /**

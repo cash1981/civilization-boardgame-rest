@@ -36,8 +36,9 @@ public enum SheetName {
             SheetName.GREAT_PERSON, SheetName.CULTURE_1, SheetName.CULTURE_2, SheetName.CULTURE_3);
 
     public static Optional<SheetName> find(String name) {
+        String spacesRemovedName = name.replaceAll("\\s", "");
         return SHEETS.stream()
-                .filter(sheet -> sheet.label.replaceAll("\\s", "").equalsIgnoreCase(name))
+                .filter(sheet -> sheet.label.replaceAll("\\s", "").equalsIgnoreCase(spacesRemovedName))
                 .findFirst();
     }
 }

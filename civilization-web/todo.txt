@@ -16,24 +16,24 @@ Inside a game
 #DONE Navbar on all pages
 #DONE   - Login (if not logged in)
           -- Opens popup with register form
-           --- Save button
+#DONE           --- Save button
            --- Register
-          -- Link to the register page
+#DONE          -- Link to the register page
 
 #DONE Proper login/authentication, restrict pages
 
 #DONE - Should not be able to draw items unless your turn
 - My Items
-    -- List of your current items
+#DONE    -- List of your current items
     -- Selection with what you want to draw
         -- confirmation
-    -- Discard your item
-      -- confirmation
+#DONE    -- Discard your item
+#DONE      -- confirmation
 - Option to withdraw from a game after they have joined, before it is started
 - Chat system, so that players can do table talk and negotiations etc
   -- Websocket?
 
-- Fix the baseurl stuff
+#DONE - Fix the baseurl stuff
 
 Nice to have: (Will be implemented in later versions)
 - Implement email verification on register?
@@ -43,22 +43,12 @@ Nice to have: (Will be implemented in later versions)
 - Probably need to implement turns, so that you can filter on turns and see what orders where from what turns etc
   -- Same with maps. Should perhaps be connected with the turns
 - Register new players
-- Undo
-  -- Only players playing the game can undo
-Reveal from useritem
-  -- To do this I need to send the item info and use the gamelog to find the item and reveal it.
+#DONE - Undo
+#DONE  -- Only players playing the game can undo
+#DONE Reveal from useritem
+#DONE  -- To do this I need to send the item info and use the gamelog to find the item and reveal it.
 
 check ngmodules.org to find modules
 
-
-
 #Spørsmål
-- Jeg har både getGameById i GameController og UserItemController. Ønsker vel kun å ha den et sted?
-- Når jeg revealer item, ønsker jeg å gjøre nytt kall på getGameById slik at loggene og items blir oppdatert.
-  -- Samme egentlig når jeg discard item, draw item og tech osv
-- Hvorfor fungerer ikke lodash? Den skal jo legge seg på window object
-- Hvorfor fungerer ikke <ng-include> på itemActions.html
-- Får ikke sendt json via rest, revealItem og discardItem funker ikke, men funker gjennom rest-client i chrome
-- Orderby i ng-repeat er ikke så lett å få til da det er "nextElement" i noen tilfeller
-- Fixe baseurl?
-- Det er en recursive kall på vote av en merkelig grunn. Samme kode som også sjekker om bruker er logget inn
+- Why can't I get log.item.name to appear in voting modal

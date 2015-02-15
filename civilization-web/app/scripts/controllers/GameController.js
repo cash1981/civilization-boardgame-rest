@@ -15,14 +15,12 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
     }
     var game = newVal;
     model.game = game;
-    console.log(game.name);
     $scope.userHasAccess = game.player && game.player.username === model.user.username;
     model.yourTurn = game.player && game.player.yourTurn;
 
     if(model.yourTurn) {
       growl.success("<strong>It's your turn! Press end turn when you are done!</strong>");
     }
-    console.log("Kaller reload");
     model.tableParams.reload();
     return game;
   });

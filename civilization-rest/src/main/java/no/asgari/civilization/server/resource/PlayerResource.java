@@ -173,16 +173,22 @@ public class PlayerResource {
         return Response.status(Response.Status.NOT_MODIFIED).build();
     }
 
-    @PUT
+    @POST
     @Path("/draw/{sheetName}")
     @Timed
-    public Response drawItem(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @PathParam("sheetName") SheetName sheetName) {
+    public Response drawItem(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @PathParam("sheetName") String sheetNameString) {
         DrawAction drawAction = new DrawAction(db);
-        Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, player.getId(), sheetName);
+
+        Optional<SheetName> sheetNameOptional = SheetName.find(sheetNameString);
+        if(!sheetNameOptional.isPresent()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, player.getId(), sheetNameOptional.get());
         if (gameLogOptional.isPresent())
             return Response.ok().build();
 
-        return Response.status(Response.Status.NOT_MODIFIED).build();
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 
     /**

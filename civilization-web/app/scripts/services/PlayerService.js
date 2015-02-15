@@ -48,6 +48,25 @@
         });
     };
 
+    var drawItem = function(gameId, sheetName) {
+      var url = baseUrl + gameId + "/draw/" + sheetName;
+      return $http.post(url)
+        .success(function (response) {
+          growl.success("Item successfully drawn");
+          return response;
+        }).success(function (response) {
+          GameService.fetchGameByIdFromServer(gameId);
+          return response;
+        })
+        .error(function (data, status) {
+          if(status == 410) {
+            growl.error("There are no more " + sheetName + " to draw!");
+          } else {
+            growl.error("Item could not be drawn");
+          }
+        });
+    };
+
     var discardItem = function (gameId, item) {
       var url = baseUrl + gameId + "/item/discard";
 
@@ -110,6 +129,7 @@
 
     return {
       revealItem: revealItem,
+      drawItem: drawItem,
       discardItem: discardItem,
       endTurn: endTurn,
       getChosenTechs: getChosenTechs

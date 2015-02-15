@@ -71,11 +71,14 @@
       }
       var game = newVal;
       model.game = game;
-      $scope.userHasAccess = game.player && game.player.username === model.user.username;
-      model.yourTurn = game.player && game.player.yourTurn;
-
       model.techsChosen = game.player.techsChosen;
-
+      model.cultureCards = [];
+      model.greatPersons = [];
+      model.huts = [];
+      model.villages = [];
+      model.tiles = [];
+      model.units = [];
+      model.items = [];Nt
       readKeysFromItems(game.player.items);
       model.tablePrivateLog.reload();
       return game;
@@ -83,10 +86,8 @@
 
     function readKeysFromItems(items) {
       items.forEach(function (item) {
-        var itemKey = Object.keys(item);
-        if ("civ" == itemKey) {
-          model.civs.push(item);
-        } else if ("cultureI" == itemKey || "cultureII" == itemKey || "cultureIII" == itemKey) {
+        var itemKey = Object.keys(item)[0];
+        if ("cultureI" == itemKey || "cultureII" == itemKey || "cultureIII" == itemKey) {
           model.cultureCards.push(item);
         } else if ("greatperson" == itemKey) {
           model.greatPersons.push(item);
@@ -101,10 +102,14 @@
         } else {
           model.items.push(item);
         }
-
       });
-
     }
+
+    model.drawItem = function(itemToDraw) {
+      if(itemToDraw) {
+        PlayerService.drawItem($routeParams.id, itemToDraw)
+      }
+    };
 
     GameService.getAvailableTechs($routeParams.id)
       .then(function(techs) {
