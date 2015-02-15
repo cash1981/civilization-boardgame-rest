@@ -78,7 +78,7 @@
       model.villages = [];
       model.tiles = [];
       model.units = [];
-      model.items = [];Nt
+      model.items = [];
       readKeysFromItems(game.player.items);
       model.tablePrivateLog.reload();
       return game;
