@@ -1,19 +1,16 @@
 package no.asgari.civilization.server.model;
 
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Optional;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.action.DrawAction;
 import no.asgari.civilization.server.exception.NoMoreItemsException;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.Optional;
+
+import static org.fest.assertions.api.Assertions.assertThat;
+import static org.junit.Assert.*;
 
 public class DrawTest extends AbstractMongoDBTest {
 
@@ -22,7 +19,7 @@ public class DrawTest extends AbstractMongoDBTest {
         DrawAction drawAction = new DrawAction(db);
         SheetName CIV = SheetName.find("CIV").get();
         Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, CIV);
-        
+
         assertThat(gameLogOptional.isPresent()).isTrue();
         GameLog gameLog = gameLogOptional.get();
         assertThat(gameLog.getDraw().getPlayerId()).isEqualToIgnoringCase(playerId);
@@ -45,7 +42,7 @@ public class DrawTest extends AbstractMongoDBTest {
 
         Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.AIRCRAFT);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts-1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.AIRCRAFT)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Aircraft.class);
@@ -61,12 +58,12 @@ public class DrawTest extends AbstractMongoDBTest {
 
         Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.ARTILLERY);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts-1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.ARTILLERY)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Artillery.class);
-        
-        Artillery artillery = (Artillery)gameLogOptional.get().getDraw().getItem();
+
+        Artillery artillery = (Artillery) gameLogOptional.get().getDraw().getItem();
         assertThat(artillery.getImage()).doesNotContain(" ");
         assertThat(artillery.getImage()).endsWith(".png");
     }
@@ -81,7 +78,7 @@ public class DrawTest extends AbstractMongoDBTest {
 
         Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.CITY_STATES);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts-1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.CITY_STATES)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Citystate.class);
@@ -97,7 +94,7 @@ public class DrawTest extends AbstractMongoDBTest {
 
         Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.CULTURE_1);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts-1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.CULTURE_1)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(CultureI.class);
@@ -113,7 +110,7 @@ public class DrawTest extends AbstractMongoDBTest {
 
         Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.CULTURE_2);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts-1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.CULTURE_2)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(CultureII.class);
@@ -129,7 +126,7 @@ public class DrawTest extends AbstractMongoDBTest {
 
         Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.CULTURE_3);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts-1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.CULTURE_3)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(CultureIII.class);
@@ -145,7 +142,7 @@ public class DrawTest extends AbstractMongoDBTest {
 
         Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.GREAT_PERSON);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts-1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.GREAT_PERSON)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(GreatPerson.class);
@@ -161,7 +158,7 @@ public class DrawTest extends AbstractMongoDBTest {
 
         Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.HUTS);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(hut-1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
+        assertEquals(hut - 1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.HUTS)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Hut.class);
@@ -177,7 +174,7 @@ public class DrawTest extends AbstractMongoDBTest {
 
         Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.INFANTRY);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(infantries-1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
+        assertEquals(infantries - 1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.INFANTRY)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Infantry.class);
@@ -193,7 +190,7 @@ public class DrawTest extends AbstractMongoDBTest {
 
         Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.MOUNTED);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts-1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.MOUNTED)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Mounted.class);
@@ -209,7 +206,7 @@ public class DrawTest extends AbstractMongoDBTest {
 
         Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.TILES);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts-1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.TILES)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Tile.class);
@@ -225,7 +222,7 @@ public class DrawTest extends AbstractMongoDBTest {
 
         Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.VILLAGES);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts-1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.VILLAGES)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Village.class);
@@ -241,7 +238,7 @@ public class DrawTest extends AbstractMongoDBTest {
 
         Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.WONDERS);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts-1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, pbfCollection.findOneById(pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.WONDERS)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Wonder.class);
@@ -263,7 +260,7 @@ public class DrawTest extends AbstractMongoDBTest {
                 .filter(p -> p.getSheetName() == SheetName.AIRCRAFT)
                 .count();
 
-        for(int i = 0; i < aircrafts; i++) {
+        for (int i = 0; i < aircrafts; i++) {
             Optional<GameLog> draw = drawAction.draw(pbfId, playerId, SheetName.AIRCRAFT, GameType.WAW);
             assertThat(draw.isPresent());
         }
@@ -287,7 +284,7 @@ public class DrawTest extends AbstractMongoDBTest {
                 .filter(p -> p.getSheetName() == SheetName.AIRCRAFT)
                 .count();
 
-        for(int i = 0; i < aircrafts; i++) {
+        for (int i = 0; i < aircrafts; i++) {
             Optional<GameLog> draw = drawAction.draw(pbfId, playerId, SheetName.AIRCRAFT, GameType.WAW);
             assertThat(draw.isPresent());
         }

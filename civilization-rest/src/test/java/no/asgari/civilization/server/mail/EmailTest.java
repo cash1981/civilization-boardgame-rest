@@ -1,8 +1,6 @@
 package no.asgari.civilization.server.mail;
 
 import com.google.common.base.Charsets;
-import jdk.nashorn.internal.ir.annotations.Ignore;
-import org.junit.Test;
 
 import javax.mail.Message;
 import javax.mail.Multipart;

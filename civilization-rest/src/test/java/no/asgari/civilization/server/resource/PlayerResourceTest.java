@@ -1,29 +1,17 @@
 package no.asgari.civilization.server.resource;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.*;
-
-import java.net.URI;
-import java.net.URLEncoder;
-import java.util.List;
-import java.util.Optional;
-
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.testing.junit.DropwizardAppRule;
-import junit.framework.Assert;
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.action.DrawAction;
 import no.asgari.civilization.server.application.CivilizationApplication;
 import no.asgari.civilization.server.application.CivilizationConfiguration;
 import no.asgari.civilization.server.dto.ItemDTO;
-import no.asgari.civilization.server.model.*;
+import no.asgari.civilization.server.model.GameLog;
+import no.asgari.civilization.server.model.Infantry;
+import no.asgari.civilization.server.model.Item;
+import no.asgari.civilization.server.model.PBF;
+import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
@@ -31,6 +19,18 @@ import org.junit.ClassRule;
 import org.junit.Test;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
+
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriBuilder;
+import java.net.URI;
+import java.util.List;
+import java.util.Optional;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static org.fest.assertions.api.Assertions.assertThat;
+import static org.junit.Assert.*;
 
 public class PlayerResourceTest extends AbstractMongoDBTest {
 
@@ -80,9 +80,9 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         int i = -1;
         Playerhand nextPlayer = null;
         boolean found = false;
-        for(Playerhand p : pbf.getPlayers()) {
+        for (Playerhand p : pbf.getPlayers()) {
             i++;
-            if(p.getUsername().equals("cash1981")) {
+            if (p.getUsername().equals("cash1981")) {
                 nextPlayer = pbf.getPlayers().get(++i);
                 assertFalse(nextPlayer.isYourTurn());
                 found = true;
@@ -101,8 +101,8 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
 
         pbf = pbfCollection.findOneById(pbfId);
         found = false;
-        for(Playerhand p : pbf.getPlayers()) {
-            if(p.equals(nextPlayer)) {
+        for (Playerhand p : pbf.getPlayers()) {
+            if (p.equals(nextPlayer)) {
                 assertTrue(p.isYourTurn());
                 found = true;
                 break;
@@ -183,8 +183,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .entity(itemDTO)
                 .put(ClientResponse.class);
-        assertEquals(response.getStatus(), HttpStatus.BAD_REQUEST_400);
-        assertEquals(response.getEntity(String.class), "Could not find item");
+        assertEquals(HttpStatus.NOT_FOUND_404, response.getStatus());
     }
 
     @Test
@@ -207,12 +206,17 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         assertTrue(gameLogOptional.get().getDraw().getItem().isHidden());
 
         GameLog gameLog = gameLogCollection.findOneById(gameLogOptional.get().getId());
-        if(gameLog.getDraw() != null && gameLog.getDraw().getItem() != null && gameLog.getPbfId().equals(pbfId)) {
-            assertThat(gameLog.getDraw().isHidden()).isTrue();
-            URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/item/reveal/%s", RULE.getLocalPort(), pbfId, gameLog.getId())).build();
+        if (gameLog.getDraw() != null && gameLog.getDraw().getItem() != null && gameLog.getPbfId().equals(pbfId)) {
+            ItemDTO itemDTO = new ItemDTO();
+            itemDTO.setSheetName(SheetName.INFANTRY.name());
+            itemDTO.setName(gameLog.getDraw().getItem().getName());
+            itemDTO.setPbfId(pbfId);
+
+            URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/item/reveal", RULE.getLocalPort(), pbfId)).build();
             ClientResponse response = client().resource(uri)
                     .type(MediaType.APPLICATION_JSON)
                     .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                    .entity(itemDTO)
                     .put(ClientResponse.class);
             assertEquals(HttpStatus.OK_200, response.getStatus());
         } else {
@@ -262,12 +266,12 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
 
     @Test
     public void testTech() throws Exception {
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/draw/%s", RULE.getLocalPort(), pbfId, SheetName.LEVEL_1_TECH)).build();
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/tech/%s", RULE.getLocalPort(), pbfId, SheetName.LEVEL_1_TECH)).build();
         ClientResponse response = client().resource(uri)
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .post(ClientResponse.class);
-        assertEquals(response.getStatus(), HttpStatus.NOT_MODIFIED_304);
+        assertEquals(response.getStatus(), HttpStatus.METHOD_NOT_ALLOWED_405);
     }
 
     @Test
@@ -295,13 +299,13 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
                 .queryParam("numOfUnits", "3")
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .post(ClientResponse.class);
-        assertEquals(response.getStatus(), HttpStatus.OK_200);
+                .put(ClientResponse.class);
+        assertEquals(HttpStatus.OK_200, response.getStatus());
         List list = response.getEntity(List.class);
         assertThat(list).hasSize(3);
 
         gameLogs = gameLogCollection.find(DBQuery.is("pbfId", pbfId));
-        assertThat(gameLogs.count()).isEqualTo(count+3);
+        assertThat(gameLogs.count()).isEqualTo(count + 3);
 
         //finally end battle
         endBattle();

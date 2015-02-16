@@ -19,7 +19,6 @@ import org.mongojack.JacksonDBCollection;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -50,8 +49,7 @@ public class UndoAction extends BaseAction {
             if (removed) {
                 createInfoLog(pbf.getId(), "has removed " + draw.getItem().getName() + " from " + playerhand.getUsername());
                 log.debug("Successfully undoed tech");
-            }
-            else log.error("Didn't find tech to remove from playerhand: " + item);
+            } else log.error("Didn't find tech to remove from playerhand: " + item);
         } else {
             removed = playerhand.getItems().remove(item);
             if (removed) {
@@ -59,13 +57,12 @@ public class UndoAction extends BaseAction {
                 pbf.getItems().add(item);
                 Collections.shuffle(pbf.getItems());
                 log.debug("Successfully undoed item");
-            }
-            else log.error("Didn't find item to remove from playerhand: " + item);
+            } else log.error("Didn't find item to remove from playerhand: " + item);
         }
-        if(removed) {
+        if (removed) {
             pbfCollection.updateById(pbf.getId(), pbf);
         }
-        
+
         return removed;
     }
 

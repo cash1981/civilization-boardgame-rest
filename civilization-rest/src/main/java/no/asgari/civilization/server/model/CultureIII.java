@@ -26,7 +26,7 @@ public class CultureIII implements Item, Tradable, Image {
     private String ownerId; // game_id or player_id (username)
     private String image;
     private SheetName sheetName;
-    
+
     public CultureIII(String name) {
         this.name = name;
         this.used = false;

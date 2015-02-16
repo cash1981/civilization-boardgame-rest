@@ -1,24 +1,20 @@
 package no.asgari.civilization.server.model;
 
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.action.DrawAction;
-import no.asgari.civilization.server.action.GameAction;
-import no.asgari.civilization.server.action.GameLogAction;
 import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.action.UndoAction;
-import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.mongojack.DBQuery;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.fest.assertions.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("unchecked")
 public class UndoTest extends AbstractMongoDBTest {
@@ -27,7 +23,7 @@ public class UndoTest extends AbstractMongoDBTest {
 
     @Before
     public void before() throws Exception {
-        if (gameLogCollection.findOne() == null) {
+        if (gameLogCollection.findOne() == null || gameLogCollection.findOne().getDraw() == null) {
             createADrawAndInitiateAVoteForUndo();
         }
     }
@@ -52,7 +48,7 @@ public class UndoTest extends AbstractMongoDBTest {
     @Test
     public void performAVoteAndCheckIt() throws Exception {
         String gamelogId = gameLogCollection.findOne().getId();
-        if(gameLogCollection.findOne().getDraw().getUndo().isDone()) {
+        if (gameLogCollection.findOne().getDraw().getUndo() == null || gameLogCollection.findOne().getDraw().getUndo().isDone()) {
             gamelogId = createADrawAndInitiateAVoteForUndo();
         }
 
@@ -80,7 +76,7 @@ public class UndoTest extends AbstractMongoDBTest {
     @Test
     public void allPlayersVoteYesThenPerformUndo() throws Exception {
         GameLog gameLog = gameLogCollection.findOne();
-        if(gameLog.getDraw().getUndo().isDone()) {
+        if (gameLog.getDraw().getUndo() == null || gameLog.getDraw().getUndo().isDone()) {
             String gamelogId = createADrawAndInitiateAVoteForUndo();
             gameLog = gameLogCollection.findOneById(gamelogId);
         }
@@ -126,7 +122,7 @@ public class UndoTest extends AbstractMongoDBTest {
     }
 
     @Test
-    public void voteAndCountRemaingVotes() throws Exception{
+    public void voteAndCountRemaingVotes() throws Exception {
         GameLog gameLog = gameLogCollection.findOne();
         //make another vote
 

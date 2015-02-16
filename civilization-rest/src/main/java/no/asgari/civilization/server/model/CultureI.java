@@ -25,7 +25,7 @@ public class CultureI implements Item, Tradable, Image {
     private String ownerId; // player_id
     private String image;
     private SheetName sheetName;
-    
+
     public CultureI(String name) {
         this.name = name;
         this.used = false;

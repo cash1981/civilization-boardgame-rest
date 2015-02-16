@@ -4,11 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.testing.junit.DropwizardAppRule;
-import no.asgari.civilization.server.application.CivilizationConfiguration;
 import no.asgari.civilization.server.application.CivilizationApplication;
+import no.asgari.civilization.server.application.CivilizationConfiguration;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.GameDTO;
-import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
 import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.PBF;
@@ -98,7 +97,7 @@ public class GameResourceTest extends MongoDBBaseTest {
 
         assertThat(list).isNotEmpty();
         PBF pbf = pbfCollection.findOneById(pbfId);
-        assertThat(list.size()).isEqualTo(pbf.getTechs().size()-1);
+        assertThat(list.size()).isEqualTo(pbf.getTechs().size() - 1);
     }
 
     @Test

@@ -22,7 +22,7 @@ public class Aircraft extends Unit implements Image {
     private boolean isInBattle;
     private String image;
     private SheetName sheetName;
-    
+
     public Aircraft(int attack, int health) {
         this.attack = attack;
         this.health = health;

@@ -1,22 +1,11 @@
 package no.asgari.civilization.server.mongodb;
 
-import static org.junit.Assert.assertNotNull;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheBuilderSpec;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.google.common.collect.ImmutableList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
@@ -30,9 +19,8 @@ import io.dropwizard.jersey.DropwizardResourceConfig;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.PBFTestAction;
 import no.asgari.civilization.server.application.CivAuthenticator;
-import no.asgari.civilization.server.application.CivilizationConfiguration;
 import no.asgari.civilization.server.application.CivSingleton;
-import no.asgari.civilization.server.excel.ItemReader;
+import no.asgari.civilization.server.application.CivilizationConfiguration;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
@@ -45,10 +33,13 @@ import org.eclipse.jetty.util.B64Code;
 import org.eclipse.jetty.util.StringUtil;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.mongojack.DBCursor;
-import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.Assert.assertNotNull;
 
 @Log4j
 public abstract class AbstractMongoDBTest extends JerseyTest {
@@ -162,7 +153,7 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         Playerhand playerhand = new Playerhand();
         playerhand.setUsername(player.getUsername());
         playerhand.setPlayerId(player.getId());
-        if(player.getUsername().equals("cash1981")) {
+        if (player.getUsername().equals("cash1981")) {
             playerhand.setYourTurn(true);
         }
         return playerhand;

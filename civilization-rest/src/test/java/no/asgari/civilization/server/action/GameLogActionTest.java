@@ -1,17 +1,16 @@
 package no.asgari.civilization.server.action;
 
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Optional;
-
 import no.asgari.civilization.server.SheetName;
-import no.asgari.civilization.server.action.DrawAction;
 import no.asgari.civilization.server.model.Artillery;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.GreatPerson;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
 import org.junit.Test;
+
+import java.util.Optional;
+
+import static org.fest.assertions.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class GameLogActionTest extends AbstractMongoDBTest {
 

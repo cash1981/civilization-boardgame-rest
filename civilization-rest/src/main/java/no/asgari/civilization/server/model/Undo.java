@@ -36,6 +36,7 @@ public class Undo {
 
     /**
      * Will vote yes for the player since they initiated the request for undo
+     *
      * @param numberOfVotesRequired
      * @param playerId
      */

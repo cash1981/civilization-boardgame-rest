@@ -29,7 +29,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -269,8 +268,8 @@ public class GameResource {
 
     /**
      * Performs yes vote on an undo
-     * 
-     * Returns error if no undo is found 
+     * <p/>
+     * Returns error if no undo is found
      *
      * @param player
      * @param pbfId
@@ -283,7 +282,7 @@ public class GameResource {
     public Response voteYes(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @PathParam("gameLogId") String gameLogId) {
         GameLogAction gameLogAction = new GameLogAction(db);
         GameLog gameLog = gameLogAction.findGameLogById(gameLogId);
-        if(gameLog.getDraw() == null || gameLog.getDraw().getUndo() == null) {
+        if (gameLog.getDraw() == null || gameLog.getDraw().getUndo() == null) {
             log.error("There is no undo to vote on");
             return Response.status(Response.Status.PRECONDITION_FAILED)
                     .build();
@@ -295,8 +294,8 @@ public class GameResource {
 
     /**
      * Performs no vote on an undo
-     *
-     * Returns "412 Precondition failed" if no undo is found 
+     * <p/>
+     * Returns "412 Precondition failed" if no undo is found
      *
      * @param player
      * @param pbfId
@@ -309,7 +308,7 @@ public class GameResource {
     public Response voteNo(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @PathParam("gameLogId") String gameLogId) {
         GameLogAction gameLogAction = new GameLogAction(db);
         GameLog gameLog = gameLogAction.findGameLogById(gameLogId);
-        if(gameLog.getDraw() == null || gameLog.getDraw().getUndo() == null) {
+        if (gameLog.getDraw() == null || gameLog.getDraw().getUndo() == null) {
             log.error("There is no undo to vote on");
             return Response.status(Response.Status.PRECONDITION_FAILED)
                     .build();

@@ -7,7 +7,7 @@ import lombok.Setter;
 public abstract class Unit implements Item, Level {
     String type;
     String name;
-    
+
     @JsonIgnore
     static final int LEVEL_1 = 1;
     @JsonIgnore

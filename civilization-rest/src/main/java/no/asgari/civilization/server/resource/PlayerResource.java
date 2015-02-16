@@ -1,14 +1,12 @@
 package no.asgari.civilization.server.resource;
 
 import com.codahale.metrics.annotation.Timed;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.DB;
 import io.dropwizard.auth.Auth;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.action.BattleAction;
 import no.asgari.civilization.server.action.DrawAction;
-import no.asgari.civilization.server.action.GameLogAction;
 import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.action.UndoAction;
 import no.asgari.civilization.server.dto.ItemDTO;
@@ -20,7 +18,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -126,20 +123,6 @@ public class PlayerResource {
         return playerAction.isYourTurn(pbfId, player.getId());
     }
 
-    /**
-     * Not in use, use the one taking item instead
-     * @deprecated 
-     * @see #revealItem(Player,String,ItemDTO)
-     */
-    @Deprecated
-    @PUT
-    @Path("/revealItem/{gameLogId}")
-    @Timed
-    public Response revealItem(@Auth Player player, @PathParam("pbfId") String pbfId, @PathParam("gameLogId") String gameLogId) {
-        playerAction.revealItem(pbfId, player.getId(), gameLogId);
-        return Response.ok().build();
-    }
-
     @PUT
     @Path("/item/reveal")
     @Timed
@@ -180,7 +163,7 @@ public class PlayerResource {
         DrawAction drawAction = new DrawAction(db);
 
         Optional<SheetName> sheetNameOptional = SheetName.find(sheetNameString);
-        if(!sheetNameOptional.isPresent()) {
+        if (!sheetNameOptional.isPresent()) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -231,6 +214,7 @@ public class PlayerResource {
     }
 
     //TODO Perhaps no need for this. In this case we need to implement a new view with list of all votes
+
     /**
      * Returns a list of all undoes that a player needs to vote for
      *

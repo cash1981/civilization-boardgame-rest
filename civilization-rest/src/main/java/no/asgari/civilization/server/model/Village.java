@@ -9,8 +9,6 @@ import lombok.ToString;
 import no.asgari.civilization.server.SheetName;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import java.util.Hashtable;
-
 @Getter
 @Setter
 @ToString(of = "name")

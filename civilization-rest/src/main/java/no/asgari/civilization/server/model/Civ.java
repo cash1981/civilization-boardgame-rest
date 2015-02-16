@@ -1,6 +1,5 @@
 package no.asgari.civilization.server.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.EqualsAndHashCode;
@@ -27,7 +26,7 @@ public class Civ implements Item {
     private boolean hidden = true;
     private String ownerId; // id of the player which owns this item
     private SheetName sheetName;
-    
+
     public Civ(String name) {
         this.name = name;
         this.used = false;
@@ -36,7 +35,7 @@ public class Civ implements Item {
 
     @Override
     public SheetName getSheetName() {
-        return sheetName =SheetName.CIV;
+        return sheetName = SheetName.CIV;
     }
 
     @Override

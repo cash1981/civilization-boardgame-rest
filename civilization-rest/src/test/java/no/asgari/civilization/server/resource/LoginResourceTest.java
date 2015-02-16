@@ -17,8 +17,8 @@ import io.dropwizard.jersey.DropwizardResourceConfig;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import lombok.Cleanup;
 import no.asgari.civilization.server.application.CivAuthenticator;
-import no.asgari.civilization.server.application.CivilizationConfiguration;
 import no.asgari.civilization.server.application.CivilizationApplication;
+import no.asgari.civilization.server.application.CivilizationConfiguration;
 import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
@@ -63,8 +63,8 @@ public class LoginResourceTest extends AbstractMongoDBTest {
         final DropwizardResourceConfig config = DropwizardResourceConfig.forTesting(new MetricRegistry());
         //final Authenticator<BasicCredentials, Player> authenticator = new CivAuthenticator(playerCollection);
         final CachingAuthenticator<BasicCredentials, Player> authenticator =
-        new CachingAuthenticator<>(new MetricRegistry(), new CivAuthenticator(db),
-                CacheBuilderSpec.parse("maximumSize=1"));
+                new CachingAuthenticator<>(new MetricRegistry(), new CivAuthenticator(db),
+                        CacheBuilderSpec.parse("maximumSize=1"));
 
         config.getSingletons().add(new BasicAuthProvider<>(authenticator, "civilization"));
         config.getSingletons().add(new ExampleResource());
@@ -149,7 +149,7 @@ public class LoginResourceTest extends AbstractMongoDBTest {
     @Test
     public void createPlayer() throws JsonProcessingException {
         @Cleanup DBCursor<Player> foobar = playerCollection.find(DBQuery.is("username", "foobar"));
-        if(foobar.hasNext()) {
+        if (foobar.hasNext()) {
             playerCollection.removeById(foobar.next().getId());
         }
 
@@ -175,12 +175,12 @@ public class LoginResourceTest extends AbstractMongoDBTest {
     @Test
     public void deletePlayer() throws Exception {
         DBCursor<Player> foobar = playerCollection.find(DBQuery.is("username", "foobar"));
-        if(!foobar.hasNext()) {
+        if (!foobar.hasNext()) {
             createPlayer();
         }
 
         foobar = playerCollection.find(DBQuery.is("username", "foobar"));
-        if(!foobar.hasNext()) {
+        if (!foobar.hasNext()) {
             Assert.fail("Should have created foobar");
         }
 
@@ -194,7 +194,7 @@ public class LoginResourceTest extends AbstractMongoDBTest {
 
     @Test
     public void deleteUserThatDoesntExist() throws Exception {
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/login/%s", RULE.getLocalPort(), "abc1234" )).build();
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/login/%s", RULE.getLocalPort(), "abc1234")).build();
         ClientResponse response = client().resource(uri)
                 .delete(ClientResponse.class);
 
@@ -219,7 +219,6 @@ public class LoginResourceTest extends AbstractMongoDBTest {
                 .post(ClientResponse.class);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST_400);
-        assertThat(response.getEntity(String.class)).isEqualTo("Passwords are not identical");
     }
 
     @Test

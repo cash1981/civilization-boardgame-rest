@@ -1,17 +1,17 @@
 package no.asgari.civilization.server;
 
-import static org.fest.assertions.api.Assertions.assertThat;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import com.google.common.base.Stopwatch;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static org.fest.assertions.api.Assertions.assertThat;
 
 @Ignore("No need to run this test on each build")
 public class ParallelStreamTest extends AbstractMongoDBTest {
@@ -24,7 +24,7 @@ public class ParallelStreamTest extends AbstractMongoDBTest {
 
         List<Item> list = new ArrayList<>();
 
-        for(int i = 0; i < NR_OF_LOOPS; i++) {
+        for (int i = 0; i < NR_OF_LOOPS; i++) {
             list.addAll(pbf.getItems());
         }
 
@@ -45,7 +45,7 @@ public class ParallelStreamTest extends AbstractMongoDBTest {
 
         List<Item> list = new ArrayList<>();
 
-        for(int i = 0; i < NR_OF_LOOPS; i++) {
+        for (int i = 0; i < NR_OF_LOOPS; i++) {
             list.addAll(pbf.getItems());
         }
 
