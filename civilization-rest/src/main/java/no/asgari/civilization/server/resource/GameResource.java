@@ -82,7 +82,7 @@ public class GameResource {
     public Response getGame(@Auth(required = false) Player player, @PathParam("gameId") String pbfId) {
         if (Strings.isNullOrEmpty(pbfId)) {
             log.error("GameId is missing");
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
         GameAction gameAction = new GameAction(db);
         PBF pbf = gameAction.findPBFById(pbfId);

@@ -20,11 +20,10 @@
     var revealItem = function (gameId, item) {
       var url = baseUrl + gameId + "/item/reveal";
 
-      var sheetName = angular.lowercase(Object.keys(item)[0]);
       var itemDTO = {
         "name": nextElement(item).name,
         "ownerId": nextElement(item).ownerId,
-        "sheetName": sheetName,
+        "sheetName": nextElement(item).sheetName,
         "pbfId": gameId
       };
 
@@ -70,11 +69,10 @@
     var discardItem = function (gameId, item) {
       var url = baseUrl + gameId + "/item/discard";
 
-      var sheetName = angular.lowercase(Object.keys(item)[0]);
       var itemDTO = {
         "name": nextElement(item).name,
         "ownerId": nextElement(item).ownerId,
-        "sheetName": sheetName,
+        "sheetName": nextElement(item).sheetName,
         "pbfId": gameId
       };
 

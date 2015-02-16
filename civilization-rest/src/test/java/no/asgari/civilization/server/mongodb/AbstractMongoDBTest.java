@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.cache.CacheBuilder;
@@ -24,10 +27,12 @@ import io.dropwizard.auth.basic.BasicCredentials;
 import io.dropwizard.java8.auth.CachingAuthenticator;
 import io.dropwizard.java8.auth.basic.BasicAuthProvider;
 import io.dropwizard.jersey.DropwizardResourceConfig;
+import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.PBFTestAction;
 import no.asgari.civilization.server.application.CivAuthenticator;
 import no.asgari.civilization.server.application.CivilizationConfiguration;
 import no.asgari.civilization.server.application.CivSingleton;
+import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
@@ -45,6 +50,7 @@ import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
 
+@Log4j
 public abstract class AbstractMongoDBTest extends JerseyTest {
     protected static JacksonDBCollection<PBF, String> pbfCollection;
     protected static JacksonDBCollection<Player, String> playerCollection;
