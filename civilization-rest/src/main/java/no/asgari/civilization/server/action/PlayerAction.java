@@ -111,6 +111,10 @@ public class PlayerAction extends BaseAction {
         chosenTech.setOwnerId(playerId);
 
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+        if(playerhand.getTechsChosen().contains(chosenTech)) {
+            log.warn("Player with id " + playerId + " tried to add same tech as they had");
+            return null;
+        }
         playerhand.getTechsChosen().add(chosenTech);
 
         pbfCollection.updateById(pbf.getId(), pbf);

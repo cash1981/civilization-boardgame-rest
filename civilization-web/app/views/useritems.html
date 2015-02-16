@@ -329,16 +329,26 @@
 
     </div>
     <div class="well well-lg">
-      Choose tech here, put data in select box
-      <p>Selected Tech: {{selectedTech}}</p>
-      <ol class="nya-bs-select" ng-model="selectedTech" data-live-search="true">
-        <li nya-bs-option="tech in userCtrl.allAvailableTechs group by tech.tech.level">
-          <span class="dropdown-header">Level {{$group}}</span>
-          <a>
-            <span>{{tech.tech.name}}</span>
-          </a>
-        </li>
-      </ol>
+      <div class="form-group input-group btn-group">
+        Choose tech here, put data in select box
+        <ol class="nya-bs-select" ng-model="selectedTech" data-live-search="true">
+          <li nya-bs-option="tech in userCtrl.allAvailableTechs group by tech.tech.level">
+            <span class="dropdown-header">Level {{$group}}</span>
+            <a>
+              <span>{{tech.tech.name}}</span>
+            </a>
+          </li>
+        </ol>
+        <div class="form-group">
+          <input type="button"
+                 ng-really-message="Are you sure you want to select tech?"
+                 ng-really-click="userCtrl.selectTech()"
+                 class="btn btn-danger"
+                 ng-disabled="selectedTech == null"
+                 value="Select Tech"
+            />
+        </div>
+      </div>
     </div>
   </div>
 </div>

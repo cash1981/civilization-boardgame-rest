@@ -61,7 +61,6 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
                 .queryParam("name", "Agriculture")
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-
                 .put(ClientResponse.class);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT_204);

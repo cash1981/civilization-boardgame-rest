@@ -47,7 +47,7 @@
         });
     };
 
-    var drawItem = function(gameId, sheetName) {
+    var drawItem = function (gameId, sheetName) {
       var url = baseUrl + gameId + "/draw/" + sheetName;
       return $http.post(url)
         .success(function (response) {
@@ -58,7 +58,7 @@
           return response;
         })
         .error(function (data, status) {
-          if(status == 410) {
+          if (status == 410) {
             growl.error("There are no more " + sheetName + " to draw!");
           } else {
             growl.error("Item could not be drawn");
@@ -125,11 +125,32 @@
         });
     };
 
+    var selectTech = function (gameId, selectedTech) {
+      var url = baseUrl + gameId + "/tech/choose";
+
+      return $http({
+        url: url,
+        method: "PUT",
+        params: {name: selectedTech.tech.name}
+      })
+      .success(function (response) {
+        growl.success("Tech chosen successfully");
+        return response;
+      }).success(function (response) {
+        GameService.fetchGameByIdFromServer(gameId);
+        return response;
+      }).error(function (data) {
+          growl.error("Could not choose tech");
+          return data;
+        });
+    };
+
     return {
       revealItem: revealItem,
       drawItem: drawItem,
       discardItem: discardItem,
       endTurn: endTurn,
+      selectTech: selectTech,
       getChosenTechs: getChosenTechs
     };
 

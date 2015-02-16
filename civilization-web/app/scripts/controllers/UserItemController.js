@@ -111,6 +111,18 @@
       }
     };
 
+    model.selectTech = function() {
+      if($scope.selectedTech) {
+        PlayerService.selectTech($routeParams.id, $scope.selectedTech)
+          .then(function(response) {
+            GameService.getAvailableTechs($routeParams.id)
+              .then(function(techs) {
+                model.allAvailableTechs = techs;
+              });
+          });
+      }
+    };
+
     GameService.getAvailableTechs($routeParams.id)
       .then(function(techs) {
         model.allAvailableTechs = techs;
