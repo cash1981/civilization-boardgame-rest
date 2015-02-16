@@ -10,11 +10,11 @@
     'ngSanitize',
     'ngMessages',
     'ui.bootstrap',
-    'ui.select',
     'ngTouch',
     'ab-base64',
     'angular-growl',
-    'ngTable'
+    'ngTable',
+    'nya.bootstrap.select'
   ]);
 
   application.config(function ($routeProvider) {
