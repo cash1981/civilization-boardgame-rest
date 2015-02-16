@@ -37,8 +37,16 @@ public enum SheetName {
 
     public static Optional<SheetName> find(String name) {
         String spacesRemovedName = name.replaceAll("\\s", "");
-        return SHEETS.stream()
+        Optional<SheetName> found = SHEETS.stream()
                 .filter(sheet -> sheet.label.replaceAll("\\s", "").equalsIgnoreCase(spacesRemovedName))
                 .findFirst();
+        if (!found.isPresent()) {
+            try {
+                return Optional.of(SheetName.valueOf(name));
+            } catch (Exception ex) {
+                return Optional.empty();
+            }
+        }
+        return found;
     }
 }
