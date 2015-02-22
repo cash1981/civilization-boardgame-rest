@@ -14,7 +14,7 @@
     $scope.privateLogCollapse = false;
     $scope.itemCollapse = false;
     $scope.gpCollapse = false;
-    $scope.unitCollapse = true;
+    $scope.unitCollapse = false;
     $scope.cultureCardsCollapse = false;
     $scope.civCollapse = false;
     $scope.hutsCollapse = false;

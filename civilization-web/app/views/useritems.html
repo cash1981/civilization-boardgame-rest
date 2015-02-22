@@ -2,67 +2,81 @@
   <div class="row padd-top-7">
 
     <div class="col-lg-7">
-      <button class="btn btn-info" ng-click="privateLogCollapse = !privateLogCollapse">Toggle Private log</button>
-      <hr>
-      <div collapse="privateLogCollapse">
-        <table ng-table="userCtrl.tablePrivateLog" ng-show="$data.length > 0"
-               class="table table-bordered table-hover table-condensed text-center table-responsive">
-        <tr ng-repeat="log in $data" class="active" ng-class-even="'row-even'" ng-class-odd="'row-odd'">
-          <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
-          <td data-title="'Log'" sortable="'log'">{{log.log}}</td>
-          <td data-title="'Action'">
-            <button ng-if="canInitiateUndo(log)"
-                    ng-really-message="This will initiate vote for Undo. Are you sure?"
-                    ng-really-click="initiateUndo(log.id)"
-                    class="btn btn-sm btn-warning" tooltip="Press undo button to request a vote for undo. All players must vote yes for undo to be made.
-                  Once all players have voted yes, the item will be put back in the deck and reshuffled">
-              Undo
-            </button>
-          </td>
-        </tr>
-        </table>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title panel-primary">
+            <button class="btn btn-info" ng-click="privateLogCollapse = !privateLogCollapse">Toggle Private log</button>
+          </h3>
+        </div>
+        <div class="panel-body" collapse="privateLogCollapse">
+          <table ng-table="userCtrl.tablePrivateLog" ng-show="$data.length > 0"
+                 class="table table-bordered table-hover table-condensed text-center table-responsive">
+            <tr ng-repeat="log in $data" class="active" ng-class-even="'row-even'" ng-class-odd="'row-odd'">
+              <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+              <td data-title="'Log'" sortable="'log'">{{log.log}}</td>
+              <td data-title="'Action'">
+                <button ng-if="canInitiateUndo(log)"
+                        ng-really-message="This will initiate vote for Undo. Are you sure?"
+                        ng-really-click="initiateUndo(log.id)"
+                        class="btn btn-sm btn-warning" tooltip="Press undo button to request a vote for undo. All players must vote yes for undo to be made.
+                    Once all players have voted yes, the item will be put back in the deck and reshuffled">
+                  Undo
+                </button>
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
     </div>
     <div class="col-lg-5" ng-if="gameCtrl.yourTurn">
-      <div class="form-group input-group btn-group" dropdown>
-        <button type="button" class="btn btn-danger dropdown-toggle form-control" dropdown-toggle>
-          Choose Item to Draw <span class="caret"></span>
-        </button>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Draw items</h3>
+        </div>
+        <div class="panel-body">
+          <div class="form-group input-group btn-group" dropdown>
+            <button type="button" class="btn btn-danger dropdown-toggle form-control" dropdown-toggle>
+              Choose Item to Draw <span class="caret"></span>
+            </button>
 
-        <ul class="dropdown-menu" role="menu">
-          <li><a ng-click="itemToDraw = 'CIV'" tooltip="Draw a civilization, for instance America">Civs</a></li>
-          <li class="divider"></li>
-          <li><a ng-click="itemToDraw = 'Culture I'">Culture I</a></li>
-          <li><a ng-click="itemToDraw = 'Culture II'">Culture II</a></li>
-          <li><a ng-click="itemToDraw = 'Culture III'">Culture III</a></li>
-          <li class="divider"></li>
-          <li><a ng-click="itemToDraw = 'Infantry'">Infantry</a></li>
-          <li><a ng-click="itemToDraw = 'Artillery'">Artillery</a></li>
-          <li><a ng-click="itemToDraw = 'Mounted'">Mounted</a></li>
-          <li><a ng-click="itemToDraw = 'Aircraft'">Aircraft</a></li>
-          <li class="divider"></li>
-          <li><a ng-click="itemToDraw = 'Huts'">Hut</a></li>
-          <li><a ng-click="itemToDraw = 'Villages'">Village</a></li>
-          <li class="divider"></li>
-          <li><a ng-click="itemToDraw = 'Great Person'">Great Person</a></li>
-          <li><a ng-click="itemToDraw = 'Tiles'">Tile</a></li>
-          <li><a ng-click="itemToDraw = 'Wonders'">Wonder</a></li>
-          <li><a ng-click="itemToDraw = 'City-States'">City-State</a></li>
-        </ul>
-      </div>
+            <ul class="dropdown-menu" role="menu">
+              <li><a ng-click="itemToDraw = 'CIV'" tooltip="Draw a civilization, for instance America">Civs</a></li>
+              <li class="divider"></li>
+              <li><a ng-click="itemToDraw = 'Culture I'">Culture I</a></li>
+              <li><a ng-click="itemToDraw = 'Culture II'">Culture II</a></li>
+              <li><a ng-click="itemToDraw = 'Culture III'">Culture III</a></li>
+              <li class="divider"></li>
+              <li><a ng-click="itemToDraw = 'Infantry'">Infantry</a></li>
+              <li><a ng-click="itemToDraw = 'Artillery'">Artillery</a></li>
+              <li><a ng-click="itemToDraw = 'Mounted'">Mounted</a></li>
+              <li><a ng-click="itemToDraw = 'Aircraft'">Aircraft</a></li>
+              <li class="divider"></li>
+              <li><a ng-click="itemToDraw = 'Huts'">Hut</a></li>
+              <li><a ng-click="itemToDraw = 'Villages'">Village</a></li>
+              <li class="divider"></li>
+              <li><a ng-click="itemToDraw = 'Great Person'">Great Person</a></li>
+              <li><a ng-click="itemToDraw = 'Tiles'">Tile</a></li>
+              <li><a ng-click="itemToDraw = 'Wonders'">Wonder</a></li>
+              <li><a ng-click="itemToDraw = 'City-States'">City-State</a></li>
+            </ul>
+          </div>
 
-      <div class="form-group">
-        <input type="text" disabled ng-model="itemToDraw" placeholder="Item to draw"/>
-        <input type="button"
-               ng-really-message="Are you sure you want to make a draw?"
-               ng-really-click="userCtrl.drawItem(itemToDraw)"
-               class="btn btn-danger"
-               ng-disabled="itemToDraw == null"
-               value="Draw Item"
-          />
+          <div class="form-group">
+            <input type="text" disabled ng-model="itemToDraw" placeholder="Item to draw"/>
+            <input type="button"
+                   ng-really-message="Are you sure you want to make a draw?"
+                   ng-really-click="userCtrl.drawItem(itemToDraw)"
+                   class="btn btn-danger"
+                   ng-disabled="itemToDraw == null"
+                   value="Draw Item"
+              />
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+
   <div class="row">
     <div class="padd-top-7">
       <div class="col-sm-4">
@@ -84,7 +98,7 @@
                           tooltip="Discard your item. This will make an entry in the game log">
                     Discard Item
                   </button>
-                  <button ng-really-message="This will reveal your unit. Are you sure?"
+                  <button ng-really-message="This will reveal your item. Are you sure?"
                           ng-really-click="userCtrl.revealItem(item)"
                           ng-disabled="userCtrl.nextElement(item).hidden == false"
                           class="btn btn-sm btn-warning"
@@ -134,7 +148,8 @@
       <div class="col-sm-4">
         <button class="btn btn-info" ng-click="unitCollapse = !unitCollapse">Toggle All Units</button>
         <hr>
-        <carousel interval="0">
+        <!-- TODO Doesn't quite work -->
+        <!--<carousel interval="0">
           <slide ng-repeat="item in userCtrl.units">
             <img ng-src="/images/useritems/{{userCtrl.nextElement(item).image}}"
                  tooltip="{{userCtrl.nextElement(item).name}}"/>
@@ -160,7 +175,7 @@
               </p>
             </div>
           </slide>
-        </carousel>
+        </carousel>-->
         <div collapse="unitCollapse" class="padd-top-7">
           <div ng-repeat="item in userCtrl.units" class="thumbnail" ng-show="userCtrl.units">
             <img ng-src="/images/useritems/{{userCtrl.nextElement(item).image}}"
@@ -198,7 +213,7 @@
       <div collapse="cultureCardsCollapse">
         <div ng-repeat="item in userCtrl.cultureCards" class="thumbnail" ng-show="userCtrl.cultureCards">
           <img ng-src="/images/useritems/{{userCtrl.nextElement(item).image}}"
-               tooltip="{{userCtrl.nextElement(item).description}}"/>
+               tooltip="{{userCtrl.nextElement(item).name}}"/>
 
           <div class="caption">
             <h3 class="text-center">{{userCtrl.nextElement(item).name}}</h3>
@@ -328,28 +343,35 @@
       </ul>
 
     </div>
-    <div class="well well-lg">
-      <div class="form-group input-group btn-group">
-        Choose tech here, put data in select box
-        <ol class="nya-bs-select" ng-model="selectedTech" data-live-search="true">
-          <li nya-bs-option="tech in userCtrl.allAvailableTechs group by tech.tech.level">
-            <span class="dropdown-header">Level {{$group}}</span>
-            <a>
-              <span>{{tech.tech.name}}</span>
-            </a>
-          </li>
-        </ol>
-        <div class="form-group">
-          <input type="button"
-                 ng-really-message="Are you sure you want to select tech?"
-                 ng-really-click="userCtrl.selectTech()"
-                 class="btn btn-danger"
-                 ng-disabled="selectedTech == null"
-                 value="Select Tech"
-            />
+    <div class="col-lg-4">
+      <div class="input-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title panel-primary">
+              Choose tech
+            </h3>
+          </div>
+          <div class="panel-body">
+            <ol class="nya-bs-select" ng-model="selectedTech" data-live-search="true">
+              <li nya-bs-option="tech in userCtrl.allAvailableTechs group by tech.tech.level">
+                <span class="dropdown-header">Level {{$group}}</span>
+                <a>
+                  <span>{{tech.tech.name}}</span>
+                </a>
+              </li>
+            </ol>
+            <div class="form-group">
+              <input type="button"
+                     ng-really-message="Are you sure you want to select tech?"
+                     ng-really-click="userCtrl.selectTech()"
+                     class="btn btn-danger form-control"
+                     ng-disabled="selectedTech == null"
+                     value="Select Tech"
+                />
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 </div>
