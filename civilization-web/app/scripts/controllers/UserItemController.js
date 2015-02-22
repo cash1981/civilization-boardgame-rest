@@ -72,6 +72,7 @@
       var game = newVal;
       model.game = game;
       model.techsChosen = game.player.techsChosen;
+      putTechsInScope(model.techsChosen);
       model.cultureCards = [];
       model.greatPersons = [];
       model.huts = [];
@@ -105,6 +106,34 @@
       });
     }
 
+    function putTechsInScope(techs) {
+      model.chosenTechs1 = [];
+      model.chosenTechs2 = [];
+      model.chosenTechs3 = [];
+      model.chosenTechs4 = [];
+      model.chosenTechs5 = [];
+
+      techs.forEach(function (tech) {
+        var chosenTech = tech.tech || tech;
+        if(!chosenTech) {
+          return;
+        }
+
+        if(chosenTech.level == 1) {
+          model.chosenTechs1.push(chosenTech);
+        } else if(chosenTech.level == 2) {
+          model.chosenTechs2.push(chosenTech);
+        } else if(chosenTech.level == 3) {
+          model.chosenTechs3.push(chosenTech);
+        } else if(chosenTech.level == 4) {
+          model.chosenTechs4.push(chosenTech);
+        } else if(chosenTech.level == 5) {
+          model.chosenTechs5.push(chosenTech);
+        }
+      });
+
+    }
+
     model.drawItem = function(itemToDraw) {
       if(itemToDraw) {
         PlayerService.drawItem($routeParams.id, itemToDraw)
@@ -131,8 +160,7 @@
     PlayerService.getChosenTechs($routeParams.id)
       .then(function(techs) {
         model.chosenTechs = techs;
-        //TODO Sort by level, and add in corresponding var
-        //if(level == 1) model.chosenTechs().put(techs)
+        putTechsInScope(model.chosenTechs);
       });
 
     model.tablePrivateLog = new ngTableParams({

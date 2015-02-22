@@ -313,36 +313,58 @@
 
   <!-- allAvailableTechs -->
   <div class="row">
-    <hr/>
-    <h2>Your Techs</h2>
+    <div class="col-lg-8">
+        <table class="tech-pyramid red">
+          <tbody>
+          <tr>
+            <td class="spacer" colspan="4"></td>
+            <td class="" colspan="2" title="Space Flight">Space Flight</td>
+            <td class="spacer"></td>
+          </tr>
+          <tr>
+            <td class="spacer" colspan="3"></td>
+            <td class="" colspan="2">&nbsp;</td>
+            <td class="" colspan="2">&nbsp;</td>
+            <td class="spacer"></td>
+          </tr>
+          <tr>
+            <td class="spacer" colspan="2"></td>
+            <td class="" colspan="2">&nbsp;</td>
+            <td class="" colspan="2">&nbsp;</td>
+            <td class="" colspan="2">&nbsp;</td>
+            <td class="spacer"></td>
+          </tr>
+          <tr>
+            <td class="spacer" colspan="1"></td>
+            <td class="researched" colspan="2" title="Printing Press">Printing Press
+            </td>
+            <td class="available" colspan="2" title="11 trade needed to discover an Age II tech">11
+            </td>
+            <td class="" colspan="2">&nbsp;</td>
+            <td class="" colspan="2">&nbsp;</td>
+            <td class="spacer"></td>
+          </tr>
+          <tr>
 
-    <div class="well well-lg col-lg-8">
-      List of all the techs chosen
-      <ul>
-        <li ng-repeat="tech in userCtrl.chosenTechs | filter: tech.tech.level == 1">
-          Name {{tech.tech.name}}
-        </li>
-      </ul>
-
-      <ul>
-        <li ng-repeat="tech in userCtrl.chosenTechs | filter: tech.tech.level == 2">
-          Name {{tech.tech.name}}
-        </li>
-      </ul>
-
-      <ul>
-        <li ng-repeat="tech in userCtrl.chosenTechs | filter: tech.tech.level == 3">
-          Name {{tech.tech.name}}
-        </li>
-      </ul>
-
-      <ul>
-        <li ng-repeat="tech in userCtrl.chosenTechs | filter: tech.tech.level == 5">
-          Name {{tech.tech.name}}
-        </li>
-      </ul>
-
+<!--
+            <td class="researched" colspan="2" title="Writing">Writing</td>
+            <td class="researched" colspan="2" title="Code of Laws">Code of Laws</td>
+            <td class="researched" colspan="2" title="Animal Husbandry">Animal Husbandry</td>
+            <td class="researched" colspan="2" title="Code of Laws">Code of Laws</td>
+            <td class="researched" colspan="2" title="Animal Husbandry">Animal Husbandry</td>
+            <td class="available" colspan="2" title="6 trade needed to discover an Age I tech">6</td>
+            <td class="" colspan="2">&nbsp;</td>
+-->
+            <td class="researched" colspan="2" ng-repeat="tech in userCtrl.chosenTechs1" title="{{tech.name}}">{{tech.name}}</td>
+            <td class="available" colspan="2" title="6 trade needed to learn level 1 tech" ng-repeat="5 > userCtrl.chosenTechs1.length">6</td>
+          </tr>
+          </tbody>
+        </table>
     </div>
+    <!--<li ng-repeat="tech in userCtrl.chosenTechs | filter: tech.tech.level == 1">
+      Name {{tech.tech.name}}
+    </li>
+-->
     <div class="col-lg-4">
       <div class="input-group">
         <div class="panel panel-default">

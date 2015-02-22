@@ -117,7 +117,7 @@
       var url = baseUrl + gameId + "/tech/" + currentUser.profile.id;
       return $http.get(url)
         .then(function (response) {
-          return response;
+          return response.data;
         }, function (data) {
           $log.error(data);
           growl.error("Could not get chosen techs");
