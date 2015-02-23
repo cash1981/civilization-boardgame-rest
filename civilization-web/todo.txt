@@ -50,5 +50,7 @@ Nice to have: (Will be implemented in later versions)
 
 check ngmodules.org to find modules
 
+- space flight logs as level 1 tech
+
 #Spørsmål
 - Why can't I get log.item.name to appear in voting modal

@@ -318,45 +318,31 @@
           <tbody>
           <tr>
             <td class="spacer" colspan="4"></td>
-            <td class="" colspan="2" title="Space Flight">Space Flight</td>
+            <td class="researched" colspan="2" title="Space Flight" ng-if="userCtrl.chosenTechs5.length > 0" >Space Flight</td>
+            <td class="available" colspan="2" title="Space Flight" ng-if="userCtrl.chosenTechs5.length == 0">Space Flight</td>
             <td class="spacer"></td>
           </tr>
           <tr>
             <td class="spacer" colspan="3"></td>
-            <td class="" colspan="2">&nbsp;</td>
-            <td class="" colspan="2">&nbsp;</td>
+            <td class="researched" colspan="2" ng-repeat="tech in userCtrl.chosenTechs4" title="{{tech.name}}">{{tech.name}}</td>
+            <td class="available" colspan="2" title="21 trade needed to learn level 4 tech" ng-repeat="lvl3 in userCtrl.availableTech4">21</td>
             <td class="spacer"></td>
           </tr>
           <tr>
             <td class="spacer" colspan="2"></td>
-            <td class="" colspan="2">&nbsp;</td>
-            <td class="" colspan="2">&nbsp;</td>
-            <td class="" colspan="2">&nbsp;</td>
+            <td class="researched" colspan="2" ng-repeat="tech in userCtrl.chosenTechs3" title="{{tech.name}}">{{tech.name}}</td>
+            <td class="available" colspan="2" title="16 trade needed to learn level 3 tech" ng-repeat="lvl3 in userCtrl.availableTech3">16</td>
             <td class="spacer"></td>
           </tr>
           <tr>
             <td class="spacer" colspan="1"></td>
-            <td class="researched" colspan="2" title="Printing Press">Printing Press
-            </td>
-            <td class="available" colspan="2" title="11 trade needed to discover an Age II tech">11
-            </td>
-            <td class="" colspan="2">&nbsp;</td>
-            <td class="" colspan="2">&nbsp;</td>
+            <td class="researched" colspan="2" ng-repeat="tech in userCtrl.chosenTechs2" title="{{tech.name}}">{{tech.name}}</td>
+            <td class="available" colspan="2" title="11 trade needed to learn level 2 tech" ng-repeat="lvl2 in userCtrl.availableTech2">11</td>
             <td class="spacer"></td>
           </tr>
           <tr>
-
-<!--
-            <td class="researched" colspan="2" title="Writing">Writing</td>
-            <td class="researched" colspan="2" title="Code of Laws">Code of Laws</td>
-            <td class="researched" colspan="2" title="Animal Husbandry">Animal Husbandry</td>
-            <td class="researched" colspan="2" title="Code of Laws">Code of Laws</td>
-            <td class="researched" colspan="2" title="Animal Husbandry">Animal Husbandry</td>
-            <td class="available" colspan="2" title="6 trade needed to discover an Age I tech">6</td>
-            <td class="" colspan="2">&nbsp;</td>
--->
             <td class="researched" colspan="2" ng-repeat="tech in userCtrl.chosenTechs1" title="{{tech.name}}">{{tech.name}}</td>
-            <td class="available" colspan="2" title="6 trade needed to learn level 1 tech" ng-repeat="5 > userCtrl.chosenTechs1.length">6</td>
+            <td class="available" colspan="2" title="6 trade needed to learn level 1 tech" ng-repeat="lvl1 in userCtrl.availableTech1">6</td>
           </tr>
           </tbody>
         </table>

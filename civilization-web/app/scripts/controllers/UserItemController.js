@@ -5,12 +5,20 @@
 
     model.user = currentUser.profile;
     model.allAvailableTechs = [];
+/*
     model.chosenTechs = [];
     model.chosenTechs1 = [];
     model.chosenTechs2 = [];
     model.chosenTechs3 = [];
     model.chosenTechs4 = [];
     model.chosenTechs5 = [];
+    model.availableTech1 = [];
+    model.availableTech2 = [];
+    model.availableTech3 = [];
+    model.availableTech4 = [];
+    model.availableTech5 = [];
+
+*/
     $scope.privateLogCollapse = false;
     $scope.itemCollapse = false;
     $scope.gpCollapse = false;
@@ -112,6 +120,10 @@
       model.chosenTechs3 = [];
       model.chosenTechs4 = [];
       model.chosenTechs5 = [];
+      model.availableTech1 = [];
+      model.availableTech2 = [];
+      model.availableTech3 = [];
+      model.availableTech4 = [];
 
       techs.forEach(function (tech) {
         var chosenTech = tech.tech || tech;
@@ -132,6 +144,20 @@
         }
       });
 
+      var val = "available";
+      //Find out how many techs are available for each level
+      for(var i = 0; i < (5-model.chosenTechs1.length); i++) {
+        model.availableTech1.push(i + val);
+      }
+      for(var j = 0; j < (4-model.chosenTechs2.length); j++) {
+        model.availableTech2.push(j + val);
+      }
+      for(var k = 0; k < (3-model.chosenTechs3.length); k++) {
+        model.availableTech3.push(k + val);
+      }
+      for(var l = 0; l < (2-model.chosenTechs4.length); l++) {
+        model.availableTech4.push(l + val);
+      }
     }
 
     model.drawItem = function(itemToDraw) {
