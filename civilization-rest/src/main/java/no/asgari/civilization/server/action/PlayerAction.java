@@ -8,6 +8,7 @@ import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.exception.PlayerExistException;
+import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
@@ -31,11 +32,13 @@ public class PlayerAction extends BaseAction {
 
     private final JacksonDBCollection<Player, String> playerCollection;
     private final JacksonDBCollection<PBF, String> pbfCollection;
+    private final JacksonDBCollection<GameLog, String> gameLogCollection;
 
     public PlayerAction(DB db) {
         super(db);
         this.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
         this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
+        this.gameLogCollection = JacksonDBCollection.wrap(db.getCollection(GameLog.COL_NAME), GameLog.class, String.class);
     }
 
     /**
@@ -122,6 +125,34 @@ public class PlayerAction extends BaseAction {
         return super.createLog(chosenTech, pbfId, GameLog.LogType.TECH);
     }
 
+    public boolean removeTech(String pbfId, String techName, String playerId) {
+        Preconditions.checkNotNull(techName);
+        Preconditions.checkNotNull(pbfId);
+        Preconditions.checkNotNull(playerId);
+
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        if (!SecurityCheck.hasUserAccess(pbf, playerId)) {
+            log.error("User with id " + playerId + " has no access to pbf " + pbf.getName());
+            throw new WebApplicationException(Response.Status.FORBIDDEN);
+        }
+
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+        Tech techToRemove = playerhand.getTechsChosen().stream()
+                .filter(tech -> tech.getName().equals(techName))
+                .findFirst().orElseThrow(PlayerAction::cannotFindItem);
+        boolean removed = playerhand.getTechsChosen().remove(techToRemove);
+        if(!removed) {
+            log.error("Could not remove tech " + techName + " from player with id " + playerId + " in pbf " + pbf.getName());
+            return false;
+        }
+
+        pbfCollection.updateById(pbf.getId(), pbf);
+
+        //No point in creating game log, the techs are for your own information
+        log.debug("Removed tech " + techName + " from player with id " + playerId + " in pbf " + pbf.getName());
+        return true;
+    }
+
     public boolean endTurn(String pbfId, String username) {
         Preconditions.checkNotNull(pbfId);
         Preconditions.checkNotNull(username);
@@ -172,6 +203,11 @@ public class PlayerAction extends BaseAction {
                 .findFirst()
                 .orElseThrow(PlayerAction::cannotFindPlayer);
 
+        if (!SecurityCheck.hasUserAccess(pbf, playerId)) {
+            log.error("User with id " + playerId + " has no access to pbf " + pbf.getName());
+            throw new WebApplicationException(Response.Status.FORBIDDEN);
+        }
+
         List<Item> items = playerhand.getItems();
 
         Optional<SheetName> sheetName = SheetName.find(itemDTO.getSheetName());
@@ -200,6 +236,39 @@ public class PlayerAction extends BaseAction {
         //Create a new log entry
         logAction.createGameLog(itemToReveal, pbf.getId(), GameLog.LogType.REVEAL);
         log.debug("item to be reveal " + itemToReveal);
+    }
+
+    /**
+     * Revealing of techs are really just saving a public log with the hidden content information
+     * @param gameLog
+     * @param pbfId
+     * @param playerId
+     */
+    public void revealTech(GameLog gameLog, String pbfId, String playerId) {
+        Preconditions.checkNotNull(gameLog);
+        Preconditions.checkNotNull(pbfId);
+        Preconditions.checkNotNull(playerId);
+
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        
+        if (!SecurityCheck.hasUserAccess(pbf, playerId)) {
+            log.error("User with id " + playerId + " has no access to pbf " + pbf.getName());
+            throw new WebApplicationException(Response.Status.FORBIDDEN);
+        }
+
+        Draw<Tech> draw = gameLog.getDraw();
+        if(draw == null || draw.getItem() == null || (draw.getItem() instanceof Tech == false)) {
+            log.error("Couldn't find tech to reveal");
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+
+        Item item = draw.getItem();
+        item.setHidden(false);
+        draw.setHidden(false);
+
+        gameLogCollection.updateById(gameLog.getId(), gameLog);
+
+        createLog(item, pbf.getId(), GameLog.LogType.REVEAL, playerId);
     }
 
     /**

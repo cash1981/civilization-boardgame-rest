@@ -10,7 +10,7 @@ public enum SheetName {
     CIV("Civ"), CULTURE_1("Culture I"), CULTURE_2("Culture II"),
     CULTURE_3("Culture III"), GREAT_PERSON("Great Person"), INFANTRY("Infantry"), ARTILLERY("Artillery"), MOUNTED("Mounted"),
     AIRCRAFT("Aircraft"), VILLAGES("Villages"), HUTS("Huts"), WONDERS("Wonders"), TILES("Tiles"), CITY_STATES("City-states"),
-    LEVEL_1_TECH("Level 1 Tech"), LEVEL_2_TECH("Level 2 Tech"), LEVEL_3_TECH("Level 3 Tech"), LEVEL_4_TECH("Level 4 Tech");
+    LEVEL_1_TECH("Level 1 Tech"), LEVEL_2_TECH("Level 2 Tech"), LEVEL_3_TECH("Level 3 Tech"), LEVEL_4_TECH("Level 4 Tech"), LEVEL_5_TECH("Level 5 Tech");
 
     private String label;
 

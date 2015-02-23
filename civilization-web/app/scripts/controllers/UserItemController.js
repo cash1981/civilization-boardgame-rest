@@ -5,20 +5,6 @@
 
     model.user = currentUser.profile;
     model.allAvailableTechs = [];
-/*
-    model.chosenTechs = [];
-    model.chosenTechs1 = [];
-    model.chosenTechs2 = [];
-    model.chosenTechs3 = [];
-    model.chosenTechs4 = [];
-    model.chosenTechs5 = [];
-    model.availableTech1 = [];
-    model.availableTech2 = [];
-    model.availableTech3 = [];
-    model.availableTech4 = [];
-    model.availableTech5 = [];
-
-*/
     $scope.privateLogCollapse = false;
     $scope.itemCollapse = false;
     $scope.gpCollapse = false;
@@ -144,19 +130,18 @@
         }
       });
 
-      var val = "available";
       //Find out how many techs are available for each level
       for(var i = 0; i < (5-model.chosenTechs1.length); i++) {
-        model.availableTech1.push(i + val);
+        model.availableTech1.push(i);
       }
       for(var j = 0; j < (4-model.chosenTechs2.length); j++) {
-        model.availableTech2.push(j + val);
+        model.availableTech2.push(j);
       }
       for(var k = 0; k < (3-model.chosenTechs3.length); k++) {
-        model.availableTech3.push(k + val);
+        model.availableTech3.push(k);
       }
       for(var l = 0; l < (2-model.chosenTechs4.length); l++) {
-        model.availableTech4.push(l + val);
+        model.availableTech4.push(l);
       }
     }
 
@@ -176,6 +161,25 @@
               });
           });
       }
+    };
+
+    model.removeTech = function(techname) {
+      $log.info("Removing tech " + techname);
+      PlayerService.removeTech($routeParams.id, techname)
+        .then(function(response) {
+          GameService.getAvailableTechs($routeParams.id)
+            .then(function(techs) {
+              model.allAvailableTechs = techs;
+            });
+        });
+    };
+
+    model.canRevealTech = function(log) {
+      return $scope.userHasAccess && log && log.draw && log.draw.item && model.nextElement(log.draw.item).hidden && log.log.indexOf("researched") > -1;
+    };
+
+    model.revealTechFromLog = function(logid) {
+      PlayerService.revealTech($routeParams.id, logid);
     };
 
     GameService.getAvailableTechs($routeParams.id)

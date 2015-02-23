@@ -34,17 +34,11 @@ public class Draw<T extends Item> {
     @NotNull
     private T item;
 
-    /**
-     * Used to hidden draw, which will make it public if set to false
-     */
-    private boolean hidden = true;
-
     public Draw(String pbfId, String playerId) {
         this.pbfId = pbfId;
         this.playerId = playerId;
 
         created = LocalDateTime.now();
-        hidden = false;
     }
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)

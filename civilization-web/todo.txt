@@ -35,6 +35,9 @@ Inside a game
 
 #DONE - Fix the baseurl stuff
 
+- Trade
+- Battle (draw x units)
+
 Nice to have: (Will be implemented in later versions)
 - Implement email verification on register?
 - Upload of the map after you powerpoint it

@@ -47,6 +47,22 @@
         });
     };
 
+    var revealTech = function(gameid, logid) {
+      var url = baseUrl + gameid + "/tech/reveal/" + logid;
+      $http.put(url)
+        .success(function (response) {
+          growl.success("Research revealed!");
+          return response;
+        }).success(function (response) {
+          GameService.fetchGameByIdFromServer(gameid);
+          return response;
+        })
+        .error(function (data) {
+          growl.error("Could not reveal tech");
+          return data;
+        });
+    };
+
     var drawItem = function (gameId, sheetName) {
       var url = baseUrl + gameId + "/draw/" + sheetName;
       return $http.post(url)
@@ -145,13 +161,35 @@
         });
     };
 
+    var removeTech  = function (gameId, techName) {
+      var url = baseUrl + gameId + "/tech/remove";
+
+      return $http({
+        url: url,
+        method: "DELETE",
+        params: {name: techName}
+      })
+        .success(function (response) {
+          growl.success("Tech removed successfully");
+          return response;
+        }).success(function (response) {
+          GameService.fetchGameByIdFromServer(gameId);
+          return response;
+        }).error(function (data) {
+          growl.error("Could not remove tech");
+          return data;
+        });
+    };
+
     return {
       revealItem: revealItem,
+      revealTech: revealTech,
       drawItem: drawItem,
       discardItem: discardItem,
       endTurn: endTurn,
       selectTech: selectTech,
-      getChosenTechs: getChosenTechs
+      getChosenTechs: getChosenTechs,
+      removeTech: removeTech
     };
 
   });

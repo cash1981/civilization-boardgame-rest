@@ -1,12 +1,14 @@
 package no.asgari.civilization.server.resource;
 
 import com.codahale.metrics.annotation.Timed;
+import com.google.common.base.Strings;
 import com.mongodb.DB;
 import io.dropwizard.auth.Auth;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.action.BattleAction;
 import no.asgari.civilization.server.action.DrawAction;
+import no.asgari.civilization.server.action.GameLogAction;
 import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.action.UndoAction;
 import no.asgari.civilization.server.dto.ItemDTO;
@@ -18,6 +20,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -71,6 +74,23 @@ public class PlayerResource {
     }
 
     /**
+     * Will remove the tech from the playerhand. Will not update the gamelog since the tech is only for private view 
+     * @param player
+     * @param pbfId
+     * @param techName
+     * @return - 200 OK
+     */
+    @DELETE
+    @Path("/tech/remove")
+    @Timed
+    public Response removeTech(@Auth Player player, @PathParam("pbfId") String pbfId, @NotEmpty @QueryParam("name") String techName) {
+        boolean removedTech = !Strings.isNullOrEmpty(techName) && playerAction.removeTech(pbfId, techName, player.getId());
+        if(removedTech)
+            return Response.ok().build();
+        
+        return Response.status(Response.Status.BAD_REQUEST).build();
+    }
+    /**
      * If logged in playerId is specified we will use that, otherwise we will use logged in player.
      * This because a logged in player, might go into someone elses game
      *
@@ -100,7 +120,6 @@ public class PlayerResource {
     @PUT
     @Path("/endturn")
     @Timed
-    //TODO test
     public Response endTurn(@Auth Player player, @PathParam("pbfId") String pbfId) {
         boolean success = playerAction.endTurn(pbfId, player.getUsername());
 
@@ -128,6 +147,26 @@ public class PlayerResource {
     @Timed
     public Response revealItem(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
         playerAction.revealItem(pbfId, player.getId(), item);
+        return Response.ok().build();
+    }
+
+    /**
+     * Reveals a tech
+     * <p/>
+     * Will throw BAD_REQUEST if undo has already been performed
+     *
+     * @param player
+     * @param pbfId
+     * @param gameLogId
+     * @return 200 ok
+     */
+    @PUT
+    @Path("/tech/reveal/{gameLogId}")
+    @Timed
+    public Response revealTech(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @PathParam("gameLogId") String gameLogId) {
+        GameLogAction gameLogAction = new GameLogAction(db);
+        GameLog gameLog = gameLogAction.findGameLogById(gameLogId);
+        playerAction.revealTech(gameLog, pbfId, player.getId());
         return Response.ok().build();
     }
 
