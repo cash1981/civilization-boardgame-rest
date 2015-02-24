@@ -104,6 +104,20 @@ public class GameLogAction {
         return pl;
     }
 
+    public GameLog createCommonPrivateLog(String privateMessage, String pbfId, String playerId) {
+        GameLog pl = new GameLog();
+        pl.setPbfId(pbfId);
+        pl.setPrivateLog(privateMessage);
+        try {
+            pl.setUsername(CivSingleton.instance().playerCache().get(playerId));
+        } catch (ExecutionException e) {
+            log.error("Couldn't retrieve username from cache");
+            pl.setUsername(getUsernameFromPlayerId(playerId));
+        }
+        pl.setId(save(pl));
+        return pl;
+    }
+
     public GameLog findGameLogById(String id) {
         return gameLogCollection.findOneById(id);
     }
@@ -134,4 +148,5 @@ public class GameLogAction {
         }
         return gamelogs;
     }
+
 }

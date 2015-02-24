@@ -141,7 +141,7 @@ public class PlayerAction extends BaseAction {
                 .filter(tech -> tech.getName().equals(techName))
                 .findFirst().orElseThrow(PlayerAction::cannotFindItem);
         boolean removed = playerhand.getTechsChosen().remove(techToRemove);
-        if(!removed) {
+        if (!removed) {
             log.error("Could not remove tech " + techName + " from player with id " + playerId + " in pbf " + pbf.getName());
             return false;
         }
@@ -240,6 +240,7 @@ public class PlayerAction extends BaseAction {
 
     /**
      * Revealing of techs are really just saving a public log with the hidden content information
+     *
      * @param gameLog
      * @param pbfId
      * @param playerId
@@ -250,21 +251,20 @@ public class PlayerAction extends BaseAction {
         Preconditions.checkNotNull(playerId);
 
         PBF pbf = pbfCollection.findOneById(pbfId);
-        
+
         if (!SecurityCheck.hasUserAccess(pbf, playerId)) {
             log.error("User with id " + playerId + " has no access to pbf " + pbf.getName());
             throw new WebApplicationException(Response.Status.FORBIDDEN);
         }
 
         Draw<Tech> draw = gameLog.getDraw();
-        if(draw == null || draw.getItem() == null || (draw.getItem() instanceof Tech == false)) {
+        if (draw == null || draw.getItem() == null || (draw.getItem() instanceof Tech == false)) {
             log.error("Couldn't find tech to reveal");
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 
         Item item = draw.getItem();
         item.setHidden(false);
-        draw.setHidden(false);
 
         gameLogCollection.updateById(gameLog.getId(), gameLog);
 

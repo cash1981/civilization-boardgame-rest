@@ -209,6 +209,7 @@ public class GameResource {
         List<GameLogDTO> gameLogDTOs = new ArrayList<>();
         if (!allPrivateLogs.isEmpty()) {
             gameLogDTOs = allPrivateLogs.stream()
+                    .filter(log -> log.getPrivateLog() != null && log.getPrivateLog().trim().isEmpty())
                     .map(gl -> new GameLogDTO(gl.getId(), gl.getPrivateLog(), gl.getCreatedInMillis(), gl.getDraw()))
                     .collect(Collectors.toList());
         }

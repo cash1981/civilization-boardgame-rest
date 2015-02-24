@@ -289,7 +289,7 @@ public class GameAction extends BaseAction {
             Playerhand playerhand = iterator.next();
             if (playerhand.getPlayerId().equals(playerId)) {
                 iterator.remove();
-                gameLogAction.createCommonPublicLog("Withdrew from join", pbfId, playerId);
+                gameLogAction.createCommonPublicLog("Withdrew from game", pbfId, playerId);
                 pbfCollection.updateById(pbf.getId(), pbf);
                 return true;
             }

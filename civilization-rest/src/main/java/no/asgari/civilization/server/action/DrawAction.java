@@ -13,6 +13,7 @@ import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
+import no.asgari.civilization.server.model.Unit;
 import org.mongojack.JacksonDBCollection;
 
 import javax.ws.rs.WebApplicationException;
@@ -136,6 +137,61 @@ public class DrawAction extends BaseAction {
         return draw(pbfId, playerId, sheetName, GameType.WAW);
     }
 
+    public List<Unit> drawUnitsFromHandForBattle(String pbfId, String playerId, int numberOfDraws) {
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbfId);
+
+        List<Unit> unitsInHand = playerhand.getItems().stream()
+                .filter(p -> SheetName.UNITS.contains(p.getSheetName()))
+                .map(p -> (Unit) p)
+                .collect(Collectors.toList());
+
+        if (unitsInHand.isEmpty()) {
+            return unitsInHand;
+        }
+
+        //Check if already units in battle
+        /*long inBattle = unitsInHand.stream()
+                .filter(Unit::isInBattle)
+                .count();
+        if (inBattle > 0L) {
+            throw new WebApplicationException(Response.status(Response.Status.PRECONDITION_FAILED)
+                    .entity("Some of your units are still in battle. You need to end the battle first")
+                    .build());
+        }*/
+
+        if (unitsInHand.size() <= numberOfDraws) {
+            //username has drawn X units for battle from his battlehand
+            createCommonPublicLog("has drawn " + unitsInHand.size() + " units for battle from his battlehand", pbfId, playerId);
+            return unitsInHand;
+        }
+
+        Collections.shuffle(unitsInHand);
+        createCommonPublicLog("has drawn " + numberOfDraws + " units for battle from his battlehand", pbfId, playerId);
+        return unitsInHand.stream().limit(numberOfDraws)
+                .peek(item -> createCommonPrivateLog("has drawn " + item.getName() + " for battle from your battlehand", pbfId, playerId))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Sets playerhands units to isBattle = false
+     *
+     * @param pbfId
+     * @param playerId
+     */
+    public void endBattle(String pbfId, String playerId) {
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+
+        playerhand.getItems().stream()
+                .filter(item -> SheetName.UNITS.contains(item.getSheetName()))
+                .forEach(item -> {
+                    Unit unit = (Unit) item;
+                    unit.setInBattle(false);
+                });
+
+        pbfCollection.updateById(pbfId, pbf);
+    }
+
     private void logShuffle(SheetName sheetName, PBF pbf) {
         GameLog log = new GameLog();
         log.setUsername("System");
@@ -151,7 +207,7 @@ public class DrawAction extends BaseAction {
 
     private static Draw<Item> createDraw(String pbfId, String playerId, Item item) {
         Draw<Item> draw = new Draw<>(pbfId, playerId);
-        draw.setHidden(true);
+        item.setHidden(true);
         draw.setItem(item);
         return draw;
     }

@@ -6,7 +6,6 @@ import com.mongodb.DB;
 import io.dropwizard.auth.Auth;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.SheetName;
-import no.asgari.civilization.server.action.BattleAction;
 import no.asgari.civilization.server.action.DrawAction;
 import no.asgari.civilization.server.action.GameLogAction;
 import no.asgari.civilization.server.action.PlayerAction;
@@ -74,7 +73,8 @@ public class PlayerResource {
     }
 
     /**
-     * Will remove the tech from the playerhand. Will not update the gamelog since the tech is only for private view 
+     * Will remove the tech from the playerhand. Will not update the gamelog since the tech is only for private view
+     *
      * @param player
      * @param pbfId
      * @param techName
@@ -85,11 +85,12 @@ public class PlayerResource {
     @Timed
     public Response removeTech(@Auth Player player, @PathParam("pbfId") String pbfId, @NotEmpty @QueryParam("name") String techName) {
         boolean removedTech = !Strings.isNullOrEmpty(techName) && playerAction.removeTech(pbfId, techName, player.getId());
-        if(removedTech)
+        if (removedTech)
             return Response.ok().build();
-        
+
         return Response.status(Response.Status.BAD_REQUEST).build();
     }
+
     /**
      * If logged in playerId is specified we will use that, otherwise we will use logged in player.
      * This because a logged in player, might go into someone elses game
@@ -225,9 +226,8 @@ public class PlayerResource {
     @Path("/battle/draw")
     @Timed
     public Response drawUnits(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @QueryParam("numOfUnits") int numberOfunits) {
-        BattleAction battleAction = new BattleAction(db);
-
-        List<Unit> units = battleAction.drawUnitsFromHand(pbfId, player.getId(), numberOfunits);
+        DrawAction drawAction = new DrawAction(db);
+        List<Unit> units = drawAction.drawUnitsFromHandForBattle(pbfId, player.getId(), numberOfunits);
         return Response.ok().entity(units).build();
     }
 
@@ -246,9 +246,9 @@ public class PlayerResource {
     @Path("/battle/end")
     @Timed
     public Response endBattle(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @QueryParam("numOfUnits") int numberOfunits) {
-        BattleAction battleAction = new BattleAction(db);
+        DrawAction drawAction = new DrawAction(db);
 
-        battleAction.endBattle(pbfId, player.getId());
+        drawAction.endBattle(pbfId, player.getId());
         return Response.ok().build();
     }
 

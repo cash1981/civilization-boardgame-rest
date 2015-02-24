@@ -53,6 +53,14 @@ public abstract class BaseAction {
         return logAction.createGameLog(draw, pbfId, username, vote);
     }
 
+    protected GameLog createCommonPrivateLog(String privateMessage, String pbfId, String playerId) {
+        return logAction.createCommonPrivateLog(privateMessage, pbfId, playerId);
+    }
+
+    protected GameLog createCommonPublicLog(String message, String pbfId, String playerId) {
+        return logAction.createCommonPublicLog(message, pbfId, playerId);
+    }
+
     protected void createInfoLog(String pbfId, String message) {
         Preconditions.checkNotNull(message);
         GameLog log = new GameLog();
