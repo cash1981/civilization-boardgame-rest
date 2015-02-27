@@ -1,6 +1,6 @@
 'use strict';
 (function (module) {
-  var UserItemController = function ($log, $routeParams, GameService, currentUser, $filter, ngTableParams, $scope, PlayerService) {
+  var UserItemController = function ($log, $routeParams, GameService, currentUser, Util, $filter, ngTableParams, $scope, PlayerService) {
     var model = this;
 
     model.user = currentUser.profile;
@@ -24,19 +24,8 @@
     model.tiles = [];
     model.units = [];
 
-    /**
-     * Returns the next element in the object
-     * @param obj
-     * @returns obj.next
-     */
     model.nextElement = function(obj) {
-      if(obj) {
-        var keys = Object.keys(obj);
-        if(keys && keys.length > 0) {
-          return obj[keys[0]];
-        }
-      }
-      return obj;
+      return Util.nextElement(obj);
     };
 
     model.itemName = function(item) {
@@ -175,7 +164,7 @@
     };
 
     model.canRevealTech = function(log) {
-      return $scope.userHasAccess && log && log.draw && log.draw.item && model.nextElement(log.draw.item).hidden && log.log.indexOf("researched") > -1;
+      return $scope.userHasAccess && log && log.draw && log.draw.item && Util.nextElement(log.draw.item).hidden && log.log.indexOf("researched") > -1;
     };
 
     model.revealTechFromLog = function(logid) {
@@ -218,6 +207,6 @@
   };
 
   module.controller("UserItemController",
-    ["$log", "$routeParams", "GameService", "currentUser", "$filter", "ngTableParams", "$scope", "PlayerService", UserItemController]);
+    ["$log", "$routeParams", "GameService", "currentUser", "Util", "$filter", "ngTableParams", "$scope", "PlayerService", UserItemController]);
 
 }(angular.module("civApp")));

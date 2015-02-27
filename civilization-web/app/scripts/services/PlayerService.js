@@ -1,29 +1,16 @@
 'use strict';
 (function (civApp) {
 
-  civApp.factory('PlayerService', function ($http, $q, $log, growl, currentUser, BASE_URL, GameService) {
+  civApp.factory('PlayerService', function ($http, $q, $log, growl, currentUser, BASE_URL, GameService, Util) {
     var baseUrl = BASE_URL + "/player/";
-
-    /**
-     * Returns next element in the object
-     */
-    function nextElement(obj) {
-      if (obj) {
-        var keys = Object.keys(obj);
-        if (keys && keys.length > 0) {
-          return obj[keys[0]];
-        }
-      }
-      return obj;
-    }
 
     var revealItem = function (gameId, item) {
       var url = baseUrl + gameId + "/item/reveal";
 
       var itemDTO = {
-        "name": nextElement(item).name,
-        "ownerId": nextElement(item).ownerId,
-        "sheetName": nextElement(item).sheetName,
+        "name": Util.nextElement(item).name,
+        "ownerId": Util.nextElement(item).ownerId,
+        "sheetName": Util.nextElement(item).sheetName,
         "pbfId": gameId
       };
 
@@ -86,9 +73,9 @@
       var url = baseUrl + gameId + "/item/discard";
 
       var itemDTO = {
-        "name": nextElement(item).name,
-        "ownerId": nextElement(item).ownerId,
-        "sheetName": nextElement(item).sheetName,
+        "name": Util.nextElement(item).name,
+        "ownerId": Util.nextElement(item).ownerId,
+        "sheetName": Util.nextElement(item).sheetName,
         "pbfId": gameId
       };
 

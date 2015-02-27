@@ -1,6 +1,6 @@
 'use strict';
 (function (module) {
-var GameController = function ($log, $routeParams, GameService, PlayerService, currentUser, $filter, ngTableParams, $scope, growl, $modal) {
+var GameController = function ($log, $routeParams, GameService, PlayerService, currentUser, Util, $filter, ngTableParams, $scope, growl, $modal) {
   var model = this;
   model.user = currentUser.profile;
   $scope.userHasAccess = false;
@@ -117,18 +117,12 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
    * @returns obj.next
    */
   model.nextElement = function(obj) {
-    if(obj) {
-      var keys = Object.keys(obj);
-      if(keys && keys.length > 0) {
-        return obj[keys[0]];
-      }
-    }
-    return obj;
+    return Util.nextElement(obj);
   };
 
 };
 
   module.controller("GameController",
-    ["$log", "$routeParams", "GameService", "PlayerService", "currentUser", "$filter", "ngTableParams", "$scope", "growl", "$modal", GameController]);
+    ["$log", "$routeParams", "GameService", "PlayerService", "currentUser", "Util", "$filter", "ngTableParams", "$scope", "growl", "$modal", GameController]);
 
 }(angular.module("civApp")));

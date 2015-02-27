@@ -32,7 +32,7 @@
   <div class="row"></div>
 
   <tabset justified="false">
-    <tab heading="Gamelog" class="col-md-3">
+    <tab heading="Gamelog" class="col-md-4">
       <table ng-table="gameCtrl.tableParams" ng-show="$data.length > 0"
              class="table table-bordered table-hover table-condensed text-center table-responsive">
 
@@ -70,14 +70,23 @@
         </tr>
       </table>
     </tab>
-    <tab heading="Map" class="col-md-3">
+    <tab ng-if="userHasAccess" heading="Map" class="col-md-2">
       <h1>For now, we will use the forum to upload maps</h1>
     </tab>
-    <tab heading="Chat" class="col-md-3">
+    <tab ng-if="!userHasAccess" heading="Map" class="col-md-4">
+      <h1>For now, we will use the forum to upload maps</h1>
+    </tab>
+    <tab ng-if="userHasAccess" heading="Chat" class="col-md-2">
       <h1>For now, we will use the forum for table talk</h1>
     </tab>
-    <tab ng-if="userHasAccess" heading="My Items" class="col-md-3">
-      <ng-include src="'views/useritems.html'"></ng-include>
+    <tab ng-if="!userHasAccess"  heading="Chat" class="col-md-4">
+      <h1>For now, we will use the forum for table talk</h1>
+    </tab>
+    <tab ng-if="userHasAccess" heading="My Items" class="col-md-2">
+      <ng-include src="'views/partials/useritems.html'"></ng-include>
+    </tab>
+    <tab ng-if="userHasAccess" heading="Battle" class="col-md-2">
+      <ng-include src="'views/partials/battle.html'"></ng-include>
     </tab>
   </tabset>
 
