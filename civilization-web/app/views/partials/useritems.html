@@ -82,14 +82,14 @@
     </div>
   </div>
 
-  <div class="row" ng-show="userCtrl.items">
+  <div class="row" ng-show="userCtrl.items.length > 0">
     <div class="col-xs-12">
       <button class="btn btn-info" ng-click="itemCollapse = !itemCollapse">Toggle Items</button>
       <hr>
     </div>
   </div>
 
-  <div class="row" ng-show="userCtrl.items">
+  <div class="row" ng-show="userCtrl.items.length > 0">
     <div collapse="itemCollapse">
       <div ng-repeat="item in userCtrl.items" class="col-md-2">
         <div class="well well-sm">
@@ -122,14 +122,14 @@
     </div>
   </div>
 
-  <div class="row" ng-show="userCtrl.greatPersons">
+  <div class="row" ng-show="userCtrl.greatPersons.length > 0">
     <div class="col-xs-12">
       <button class="btn btn-info" ng-click="gpCollapse = !gpCollapse ">Toggle Great Persons</button>
       <hr>
     </div>
   </div>
 
-  <div class="row" ng-show="userCtrl.greatPersons">
+  <div class="row" ng-show="userCtrl.greatPersons.length > 0">
     <div collapse="gpCollapse">
       <div ng-repeat="item in userCtrl.greatPersons" class="thumbnail col-md-3">
         <img ng-src="/images/useritems/{{item.greatperson.image}}" tooltip="{{item.greatperson.name}}"/>
@@ -161,14 +161,14 @@
     </div>
   </div>
 
-  <div class="row" ng-show="userCtrl.units">
+  <div class="row" ng-show="userCtrl.units.length > 0">
     <div class="col-xs-12">
       <button class="btn btn-info" ng-click="unitCollapse = !unitCollapse ">Toggle Units</button>
       <hr>
     </div>
   </div>
 
-  <div class="row" ng-show="userCtrl.units">
+  <div class="row" ng-show="userCtrl.units.length > 0">
     <div collapse="unitCollapse">
 
       <!-- TODO Doesn't quite work -->
@@ -199,7 +199,7 @@
           </div>
         </slide>
       </carousel>-->
-      <div ng-repeat="item in userCtrl.units" class="thumbnail col-md-2" ng-show="userCtrl.units">
+      <div ng-repeat="item in userCtrl.units" class="thumbnail col-md-2">
         <img ng-src="/images/useritems/{{userCtrl.nextElement(item).image}}"
              tooltip="{{userCtrl.nextElement(item).name}}"/>
 
@@ -226,16 +226,16 @@
     </div>
   </div>
 
-  <div class="row" ng-show="userCtrl.cultureCards">
+  <div class="row" ng-show="userCtrl.cultureCards.length > 0">
     <div class="col-xs-12">
       <button class="btn btn-info" ng-click="cultureCardsCollapse = !cultureCardsCollapse">Toggle Culture Cards</button>
       <hr>
     </div>
   </div>
 
-  <div class="row" ng-show="userCtrl.cultureCards">
+  <div class="row" ng-show="userCtrl.cultureCards.length > 0">
     <div collapse="cultureCardsCollapse">
-      <div ng-repeat="item in userCtrl.cultureCards" class="thumbnail col-md-3" ng-show="userCtrl.cultureCards">
+      <div ng-repeat="item in userCtrl.cultureCards" class="thumbnail col-md-3">
         <img ng-src="/images/useritems/{{userCtrl.nextElement(item).image}}"
              tooltip="{{userCtrl.nextElement(item).name}}"/>
 
@@ -269,14 +269,14 @@
     </div>
   </div>
 
-  <div class="row" ng-show="userCtrl.huts">
+  <div class="row" ng-show="userCtrl.huts.length > 0">
     <div class="col-xs-12">
       <button class="btn btn-info" ng-click="hutsCollapse = !hutsCollapse">Toggle Huts</button>
       <hr>
     </div>
   </div>
 
-  <div class="row" ng-show="userCtrl.huts">
+  <div class="row" ng-show="userCtrl.huts.length > 0">
     <div collapse="hutsCollapse">
       <div ng-repeat="item in userCtrl.huts" class="thumbnail col-md-3">
         <img ng-src="/images/useritems/{{item.hut.image}}" tooltip="{{item.hut.name}}"/>
@@ -307,14 +307,14 @@
     </div>
   </div>
 
-  <div class="row" ng-show="userCtrl.villages">
+  <div class="row" ng-show="userCtrl.villages.length > 0">
     <div class="col-xs-12">
       <button class="btn btn-info" ng-click="villagesCollapse = !villagesCollapse">Toggle Villages</button>
       <hr>
     </div>
   </div>
 
-  <div class="row" ng-show="userCtrl.villages">
+  <div class="row" ng-show="userCtrl.villages.length > 0">
     <div collapse="villagesCollapse">
       <div ng-repeat="item in userCtrl.villages" class="thumbnail col-md-3">
         <img ng-src="/images/useritems/{{item.village.image}}"

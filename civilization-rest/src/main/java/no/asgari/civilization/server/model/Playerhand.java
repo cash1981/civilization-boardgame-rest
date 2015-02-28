@@ -2,15 +2,15 @@ package no.asgari.civilization.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Each PBF has a playerhand consisting of the player and its items
@@ -35,9 +35,10 @@ public class Playerhand {
      */
     private boolean yourTurn = false;
 
-    private List<Item> items = Lists.newArrayList();
-    private Set<Tech> techsChosen = Sets.newTreeSet();
-
+    private List<Item> items = new ArrayList<>();
+    private Set<Tech> techsChosen = new TreeSet<>();
+    private List<Unit> barbarians = new ArrayList<>(3);
+    
     @JsonIgnore
     public String green() {
         return "Green";

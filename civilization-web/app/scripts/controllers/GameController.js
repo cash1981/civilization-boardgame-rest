@@ -2,13 +2,9 @@
 (function (module) {
 var GameController = function ($log, $routeParams, GameService, PlayerService, currentUser, Util, $filter, ngTableParams, $scope, growl, $modal) {
   var model = this;
-  model.user = currentUser.profile;
-  $scope.userHasAccess = false;
-  model.yourTurn = false;
-  var gameId = $routeParams.id;
 
   $scope.$watch(function () {
-    return GameService.getGameById(gameId);
+    return GameService.getGameById(model.gameId);
   }, function (newVal) {
     if (!newVal) {
       return;
@@ -27,7 +23,7 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
 
   model.endTurn = function () {
     $log.info("Ending turn");
-    PlayerService.endTurn(gameId);
+    PlayerService.endTurn(model.gameId);
   };
 
   //In scope so that we can use it from another view which is included
@@ -79,9 +75,9 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
     modalInstance.result.then(function(vote) {
       $log.info('Vote was ' + vote.vote + ' and logid is ' + vote.id);
       if(vote.vote) {
-        GameService.voteYes(gameId, vote.id);
+        GameService.voteYes(model.gameId, vote.id);
       } else {
-        GameService.voteNo(gameId, vote.id);
+        GameService.voteNo(model.gameId, vote.id);
       }
     }, function () {
       $log.info('Modal dismissed at: ' + new Date());
@@ -119,6 +115,15 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
   model.nextElement = function(obj) {
     return Util.nextElement(obj);
   };
+
+  var initialize = function() {
+    model.user = currentUser.profile;
+    $scope.userHasAccess = false;
+    model.yourTurn = false;
+    model.gameId = $routeParams.id;
+  };
+
+  initialize();
 
 };
 

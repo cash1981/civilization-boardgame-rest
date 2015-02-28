@@ -1,6 +1,7 @@
 package no.asgari.civilization.server.action;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.SheetName;
@@ -9,7 +10,6 @@ import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.exception.NoMoreItemsException;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
-import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
@@ -40,11 +40,10 @@ public class DrawAction extends BaseAction {
         gameLogAction = new GameLogAction(db);
     }
 
-    public Optional<GameLog> draw(String pbfId, String playerId, SheetName sheetName, GameType gameType) {
+    public Optional<GameLog> draw(String pbfId, String playerId, SheetName sheetName) {
         Preconditions.checkNotNull(pbfId);
         Preconditions.checkNotNull(playerId);
         Preconditions.checkNotNull(sheetName);
-        Preconditions.checkNotNull(gameType);
 
         checkYourTurn(pbfId, playerId);
         PBF pbf = pbfCollection.findOneById(pbfId);
@@ -72,19 +71,19 @@ public class DrawAction extends BaseAction {
 
         log.warn("No more " + sheetName.getName() + " to draw. Possibly no more items left to draw in the deck. Will try to reshuffle");
 
-        reshuffleItems(gameType, sheetName, pbf);
+        reshuffleItems(sheetName, pbf);
         //Recursion call (should only be called once, because shuffle is made)
-        return draw(pbfId, playerId, sheetName, gameType);
+        return draw(pbfId, playerId, sheetName);
     }
 
-    private void reshuffleItems(GameType gameType, SheetName sheetName, PBF pbf) {
+    private void reshuffleItems(SheetName sheetName, PBF pbf) {
         if (!SheetName.SHUFFLABLE_ITEMS.contains(sheetName)) {
             log.warn("Tried to reshuffle " + sheetName.getName() + " but not a shufflable type");
             throw new NoMoreItemsException(sheetName.getName());
         }
         ItemReader itemReader;
         try {
-            itemReader = CivSingleton.instance().itemsCache().get(gameType);
+            itemReader = CivSingleton.instance().itemsCache().get(pbf.getType());
         } catch (ExecutionException e) {
             log.error("Couldnt get itemReader from cache " + e.getMessage(), e);
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
@@ -123,20 +122,6 @@ public class DrawAction extends BaseAction {
         logShuffle(sheetName, pbf);
     }
 
-    /**
-     * Finds the item or unit from the PBF matching the SheetName.
-     * Then it removes the first item it finds
-     * Draws item and units and puts the draw in the gamelog
-     *
-     * @param pbfId     - PBF id
-     * @param playerId  - Player id
-     * @param sheetName - SheetName
-     * @return
-     */
-    public Optional<GameLog> draw(String pbfId, String playerId, SheetName sheetName) {
-        return draw(pbfId, playerId, sheetName, GameType.WAW);
-    }
-
     public List<Unit> drawUnitsFromHandForBattle(String pbfId, String playerId, int numberOfDraws) {
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbfId);
 
@@ -155,7 +140,6 @@ public class DrawAction extends BaseAction {
                 .count();
         if (inBattle > 0L) {
             throw new WebApplicationException(Response.status(Response.Status.PRECONDITION_FAILED)
-                    .entity("Some of your units are still in battle. You need to end the battle first")
                     .build());
         }*/
 
@@ -170,6 +154,76 @@ public class DrawAction extends BaseAction {
         return unitsInHand.stream().limit(numberOfDraws)
                 .peek(item -> createCommonPrivateLog("has drawn " + item.getName() + " for battle from your battlehand", pbfId, playerId))
                 .collect(Collectors.toList());
+    }
+
+    public List<Unit> drawBarbarians(String pbfId, String playerId) {
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+        if(!playerhand.getBarbarians().isEmpty()) {
+            log.warn("Cannot draw more barbarians until they are discarded");
+            throw new WebApplicationException(Response.Status.PRECONDITION_FAILED);
+        }
+        //Check first and reshuffle
+        //TODO If either barbarian units are empty, then no barbs are drawn. Perhaps, draw something else
+        if(!pbf.getItems().stream().anyMatch(p -> p.getSheetName() == SheetName.INFANTRY)) {
+            reshuffleItems(SheetName.INFANTRY, pbf);
+            drawBarbarians(pbfId, playerId);
+        }
+
+        if(!pbf.getItems().stream().anyMatch(p -> p.getSheetName() == SheetName.MOUNTED)) {
+            reshuffleItems(SheetName.MOUNTED, pbf);
+            drawBarbarians(pbfId, playerId);
+        }
+
+        if(!pbf.getItems().stream().anyMatch(p -> p.getSheetName() == SheetName.ARTILLERY)) {
+            reshuffleItems(SheetName.ARTILLERY, pbf);
+            drawBarbarians(pbfId, playerId);
+        }
+
+        Iterator<Item> iterator = pbf.getItems().iterator();
+        boolean foundInfantry = false, foundArtillery = false, foundMounted = false;
+        while (iterator.hasNext()) {
+            Item item = iterator.next();
+            if (!foundInfantry && item.getSheetName() == SheetName.INFANTRY) {
+                foundInfantry = true;
+                addBarbarian(playerId, playerhand, iterator, item);
+            } else if(!foundArtillery && item.getSheetName() == SheetName.ARTILLERY) {
+                foundArtillery = true;
+                addBarbarian(playerId, playerhand, iterator, item);
+            } else if(!foundMounted && item.getSheetName() == SheetName.MOUNTED) {
+                foundMounted = true;
+                addBarbarian(playerId, playerhand, iterator, item);
+            }
+        }
+
+        if(playerhand.getBarbarians().size() != 3) {
+            log.error("Couldn't get one barbarian of each type, but instead list is " + playerhand.getBarbarians());
+            throw new WebApplicationException();
+        }
+        
+        createCommonPublicLog("has drawn barbarian units", pbfId, playerId);
+        pbfCollection.updateById(pbf.getId(), pbf);
+        log.debug("Drew barbarian unit updated pbf");
+        return playerhand.getBarbarians();
+    }
+
+    private void addBarbarian(String playerId, Playerhand playerhand, Iterator<Item> iterator, Item item) {
+        playerhand.getBarbarians().add((Unit) item);
+        iterator.remove();
+        item.setOwnerId(playerId);
+    }
+
+    public void discardBarbarians(String pbfId, String playerId) {
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+        if(playerhand.getBarbarians().isEmpty()) {
+            return;
+        }
+            
+        pbf.getDiscardedItems().addAll(playerhand.getBarbarians());
+        playerhand.getBarbarians().clear();
+        pbfCollection.updateById(pbf.getId(), pbf);
+        log.debug("Barbarians discarded");
     }
 
     /**

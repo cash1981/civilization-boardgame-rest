@@ -1,3 +1,56 @@
-<div ng-controller="UserItemController as userCtrl">
+<div ng-controller="BattleController as battleCtrl" class="battle">
+
+  <div class="row">
+    <div class="col-md-3 padd-top-7">
+      <form name="form">
+        <div ng-show="form.$invalid" class="alert alert-danger" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          You cannot draw less than 3 units or more than 99 units. If you have less than 3 units, you still must choose 3.
+        </div>
+        <div class="input-group">
+          <input type="number"
+                 class="form-control"
+                 min="3"
+                 max="99"
+                 required
+                 placeholder="Number of units to draw"
+                 ng-model="battleCtrl.number"
+                 ng-value="battleCtrl.number">
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-default"
+                ng-disabled="form.$invalid"
+                ng-really-message="Are you sure you want to make a draw?"
+                ng-really-click="battleCtrl.drawUnits()">
+          Draw units from battlehand
+        </button>
+      </span>
+        </div>
+        <!-- /input-group -->
+
+      </form>
+    </div>
+    <!-- /col-md-6 -->
+
+    <div class="col-md-3">&nbsp;</div>
+
+    <div class="col-md-6 padd-top-7">
+      <button type="button" class="btn btn-default">
+        Draw barbarian units <span class="badge">3</span>
+      </button>
+    </div>
+  </div>
+  <!-- /row -->
+
+  <div class="row">
+    <div class="col-md-6">
+      list of all the units drawn from battlehand
+    </div>
+
+    <div class="col-md-6">
+      list of all barbs (Only visible for player drawing them)
+    </div>
+
+  </div>
 
 </div>

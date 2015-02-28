@@ -7,6 +7,7 @@ import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.fest.assertions.api.Assertions.assertThat;
@@ -261,7 +262,7 @@ public class DrawTest extends AbstractMongoDBTest {
                 .count();
 
         for (int i = 0; i < aircrafts; i++) {
-            Optional<GameLog> draw = drawAction.draw(pbfId, playerId, SheetName.AIRCRAFT, GameType.WAW);
+            Optional<GameLog> draw = drawAction.draw(pbfId, playerId, SheetName.AIRCRAFT);
             assertThat(draw.isPresent());
         }
 
@@ -272,7 +273,7 @@ public class DrawTest extends AbstractMongoDBTest {
         assertThat(newCount).isEqualTo(0L);
 
         //Now if draw again, then it should throw exception since all units are in play
-        drawAction.draw(pbfId, playerId, SheetName.AIRCRAFT, GameType.WAW);
+        drawAction.draw(pbfId, playerId, SheetName.AIRCRAFT);
     }
 
     @Test
@@ -285,7 +286,7 @@ public class DrawTest extends AbstractMongoDBTest {
                 .count();
 
         for (int i = 0; i < aircrafts; i++) {
-            Optional<GameLog> draw = drawAction.draw(pbfId, playerId, SheetName.AIRCRAFT, GameType.WAW);
+            Optional<GameLog> draw = drawAction.draw(pbfId, playerId, SheetName.AIRCRAFT);
             assertThat(draw.isPresent());
         }
 
@@ -302,12 +303,35 @@ public class DrawTest extends AbstractMongoDBTest {
         pbfCollection.updateById(pbf.getId(), pbf);
 
         //Now if draw again, then it should throw exception since all units are in play
-        drawAction.draw(pbfId, playerId, SheetName.AIRCRAFT, GameType.WAW);
+        drawAction.draw(pbfId, playerId, SheetName.AIRCRAFT);
 
         newCount = pbfCollection.findOneById(pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.AIRCRAFT)
                 .count();
 
         assertThat(newCount).isGreaterThan(1);
+    }
+    
+    @Test
+    public void drawAndDiscardBarbarians() throws Exception {
+        DrawAction drawAction = new DrawAction(db);
+
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        Playerhand playerhand = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(playerId)).findFirst().get();
+        assertThat(playerhand.getBarbarians().isEmpty());
+
+        List<Unit> units = drawAction.drawBarbarians(pbfId, playerId);
+        assertThat(units).hasSize(3);
+
+        pbf = pbfCollection.findOneById(pbfId);
+        playerhand = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(playerId)).findFirst().get();
+        assertThat(playerhand.getBarbarians()).hasSize(3);
+
+        //Finally discard the barbs
+        drawAction.discardBarbarians(pbfId, playerId);
+
+        pbf = pbfCollection.findOneById(pbfId);
+        playerhand = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(playerId)).findFirst().get();
+        assertThat(playerhand.getBarbarians()).isEmpty();
     }
 }

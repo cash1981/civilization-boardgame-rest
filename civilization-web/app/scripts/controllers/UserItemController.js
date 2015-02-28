@@ -3,27 +3,6 @@
   var UserItemController = function ($log, $routeParams, GameService, currentUser, Util, $filter, ngTableParams, $scope, PlayerService) {
     var model = this;
 
-    model.user = currentUser.profile;
-    model.allAvailableTechs = [];
-    $scope.privateLogCollapse = false;
-    $scope.itemCollapse = false;
-    $scope.gpCollapse = false;
-    $scope.unitCollapse = false;
-    $scope.cultureCardsCollapse = false;
-    $scope.civCollapse = false;
-    $scope.hutsCollapse = false;
-    $scope.villagesCollapse = false;
-    model.yourTurn = false;
-    model.items = [];
-    model.techsChosen = [];
-    model.civs = [];
-    model.cultureCards = [];
-    model.greatPersons = [];
-    model.huts = [];
-    model.villages = [];
-    model.tiles = [];
-    model.units = [];
-
     model.nextElement = function(obj) {
       return Util.nextElement(obj);
     };
@@ -171,12 +150,12 @@
       PlayerService.revealTech($routeParams.id, logid);
     };
 
-    GameService.getAvailableTechs($routeParams.id)
+    var getAvailableTechs = GameService.getAvailableTechs($routeParams.id)
       .then(function(techs) {
         model.allAvailableTechs = techs;
       });
 
-    PlayerService.getChosenTechs($routeParams.id)
+    var getChosenTechs = PlayerService.getChosenTechs($routeParams.id)
       .then(function(techs) {
         model.chosenTechs = techs;
         putTechsInScope(model.chosenTechs);
@@ -204,6 +183,34 @@
       },
       $scope: { $data: {}, $emit: function () {}}
     });
+
+    var initialize = function() {
+      model.user = currentUser.profile;
+      model.allAvailableTechs = [];
+      $scope.privateLogCollapse = false;
+      $scope.itemCollapse = false;
+      $scope.gpCollapse = false;
+      $scope.unitCollapse = false;
+      $scope.cultureCardsCollapse = false;
+      $scope.civCollapse = false;
+      $scope.hutsCollapse = false;
+      $scope.villagesCollapse = false;
+      model.yourTurn = false;
+      model.items = [];
+      model.techsChosen = [];
+      model.civs = [];
+      model.cultureCards = [];
+      model.greatPersons = [];
+      model.huts = [];
+      model.villages = [];
+      model.tiles = [];
+      model.units = [];
+
+      getAvailableTechs;
+      getChosenTechs;
+    };
+
+    initialize();
   };
 
   module.controller("UserItemController",

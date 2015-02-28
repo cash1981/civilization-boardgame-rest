@@ -61,7 +61,7 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         CivilizationConfiguration configuration = new CivilizationConfiguration();
 
         mongo = new MongoClient(configuration.mongohost, configuration.mongoport);
-        db = mongo.getDB(configuration.mongodb);
+        db = mongo.getDB(CivilizationConfiguration.CIVILIZATION_TEST);
 
         AbstractMongoDBTest.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
         AbstractMongoDBTest.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);

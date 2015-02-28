@@ -2,7 +2,6 @@
 (function (module) {
   var GameListController = function (games, $log, GameService, currentUser) {
     var model = this;
-    model.user = currentUser.profile;
 
     model.isUserPlaying = function(players) {
       if(players) {
@@ -31,6 +30,7 @@
     };
 
     var initialize = function () {
+      model.user = currentUser.profile;
       model.games = games;
       $log.info("Got games");
     };

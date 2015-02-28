@@ -23,17 +23,17 @@ public enum SheetName {
     }
 
     public static final EnumSet<SheetName> SHEETS =
-            EnumSet.of(SheetName.CIV, SheetName.CULTURE_1, SheetName.CULTURE_2, SheetName.CULTURE_3,
-                    SheetName.GREAT_PERSON, SheetName.INFANTRY, SheetName.ARTILLERY, SheetName.MOUNTED, SheetName.AIRCRAFT,
-                    SheetName.VILLAGES, SheetName.HUTS, SheetName.WONDERS, SheetName.TILES, SheetName.CITY_STATES,
-                    SheetName.LEVEL_1_TECH, SheetName.LEVEL_2_TECH, SheetName.LEVEL_3_TECH, SheetName.LEVEL_4_TECH);
+            EnumSet.of(CIV, CULTURE_1, CULTURE_2, CULTURE_3,
+                    GREAT_PERSON, INFANTRY, ARTILLERY, MOUNTED, AIRCRAFT,
+                    VILLAGES, HUTS, WONDERS, TILES, CITY_STATES,
+                    LEVEL_1_TECH, LEVEL_2_TECH, LEVEL_3_TECH, LEVEL_4_TECH, LEVEL_5_TECH);
 
-    public static final EnumSet<SheetName> TECHS = EnumSet.of(SheetName.LEVEL_1_TECH, SheetName.LEVEL_2_TECH, SheetName.LEVEL_3_TECH, SheetName.LEVEL_4_TECH);
+    public static final EnumSet<SheetName> TECHS = EnumSet.of(LEVEL_1_TECH, LEVEL_2_TECH, LEVEL_3_TECH, LEVEL_4_TECH, LEVEL_5_TECH);
 
-    public static final EnumSet<SheetName> UNITS = EnumSet.of(SheetName.AIRCRAFT, SheetName.ARTILLERY, SheetName.INFANTRY, SheetName.MOUNTED);
+    public static final EnumSet<SheetName> UNITS = EnumSet.of(AIRCRAFT, ARTILLERY, INFANTRY, MOUNTED);
 
-    public static final EnumSet<SheetName> SHUFFLABLE_ITEMS = EnumSet.of(SheetName.AIRCRAFT, SheetName.ARTILLERY, SheetName.INFANTRY, SheetName.MOUNTED,
-            SheetName.GREAT_PERSON, SheetName.CULTURE_1, SheetName.CULTURE_2, SheetName.CULTURE_3);
+    public static final EnumSet<SheetName> SHUFFLABLE_ITEMS = EnumSet.of(AIRCRAFT, ARTILLERY, INFANTRY, MOUNTED,
+            GREAT_PERSON, CULTURE_1, CULTURE_2, CULTURE_3);
 
     public static Optional<SheetName> find(String name) {
         String spacesRemovedName = name.replaceAll("\\s", "");
@@ -42,7 +42,7 @@ public enum SheetName {
                 .findFirst();
         if (!found.isPresent()) {
             try {
-                return Optional.of(SheetName.valueOf(name));
+                return Optional.of(valueOf(name));
             } catch (Exception ex) {
                 return Optional.empty();
             }

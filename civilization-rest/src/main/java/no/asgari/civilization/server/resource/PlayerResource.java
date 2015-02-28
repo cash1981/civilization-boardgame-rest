@@ -232,6 +232,38 @@ public class PlayerResource {
     }
 
     /**
+     * Draws barbarians
+     *
+     * @param player
+     * @param pbfId
+     * @return 200 ok
+     */
+    @PUT
+    @Path("/battle/barbarians/draw")
+    @Timed
+    public Response drawBarbarians(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId) {
+        DrawAction drawAction = new DrawAction(db);
+        List<Unit> units = drawAction.drawBarbarians(pbfId, player.getId());
+        return Response.ok().entity(units).build();
+    }
+
+    /**
+     * Discard barbarians
+     *
+     * @param player
+     * @param pbfId
+     * @return 201 no content
+     */
+    @DELETE
+    @Path("/battle/barbarians/discard")
+    @Timed
+    public Response discardBarbarians(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId) {
+        DrawAction drawAction = new DrawAction(db);
+        drawAction.discardBarbarians(pbfId, player.getId());
+        return Response.noContent().build();
+    }
+
+    /**
      * Will end a battle for one player
      * Will set the isBattle = false
      * <p/>
