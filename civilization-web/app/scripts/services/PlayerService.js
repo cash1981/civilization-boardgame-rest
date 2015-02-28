@@ -124,7 +124,7 @@
         }, function (data) {
           $log.error(data);
           growl.error("Could not get chosen techs");
-          $q.reject();
+          return $q.reject();
         });
     };
 
@@ -163,9 +163,66 @@
           GameService.fetchGameByIdFromServer(gameId);
           return response;
         }).error(function (data) {
+          $log.error(data);
           growl.error("Could not remove tech");
           return data;
         });
+    };
+
+    var drawUnitsForBattle = function(gameId) {
+
+
+    };
+
+    var discardUnitsFromBattle  = function (gameId) {
+
+    };
+
+    var drawBarbarians = function (gameId) {
+      var url = baseUrl + gameId + "/battle/barbarians/draw";
+
+      return $http.put(url)
+        .then(function (response) {
+          return response.data;
+        }, function (data) {
+          $log.error(data);
+          if(data.status == 412) {
+            growl.error("Cannot draw more barbarians until the others are discarded");
+          } else {
+            growl.error("Unable to draw barbarian units");
+          }
+          return $q.reject();
+        });
+
+
+        /*.then(function (response) {
+          growl.success("Barbarian units drawn");
+          return response.data;
+        }, function (data, status) {
+          if(status == 412) {
+            growl.error("Cannot draw more barbarians until the others are discarded");
+          } else {
+            growl.error("Unable to draw barbarian units");
+          }
+          $log.error(data);
+          return $q.reject();
+        })*/
+    };
+
+    var discardBarbarians = function(gameId) {
+      var url = baseUrl + gameId + "/battle/barbarians/discard";
+
+      return $http({
+        url: url,
+        method: "DELETE"
+      }).then(function (response) {
+        growl.success("Barbarians discarded");
+        return response;
+      }, function (data) {
+        $log.error(data);
+        growl.error("Could not discard barbarians for unknown reason");
+        return $q.reject();
+      })
     };
 
     return {
@@ -176,7 +233,11 @@
       endTurn: endTurn,
       selectTech: selectTech,
       getChosenTechs: getChosenTechs,
-      removeTech: removeTech
+      removeTech: removeTech,
+      drawUnitsForBattle: drawUnitsForBattle,
+      discardUnitsFromBattle: discardUnitsFromBattle,
+      drawBarbarians: drawBarbarians,
+      discardBarbarians: discardBarbarians
     };
 
   });

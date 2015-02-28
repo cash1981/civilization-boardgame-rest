@@ -311,7 +311,7 @@ public class DrawTest extends AbstractMongoDBTest {
 
         assertThat(newCount).isGreaterThan(1);
     }
-    
+
     @Test
     public void drawAndDiscardBarbarians() throws Exception {
         DrawAction drawAction = new DrawAction(db);
@@ -333,5 +333,24 @@ public class DrawTest extends AbstractMongoDBTest {
         pbf = pbfCollection.findOneById(pbfId);
         playerhand = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(playerId)).findFirst().get();
         assertThat(playerhand.getBarbarians()).isEmpty();
+    }
+
+    @Test
+    public void drawUnitForBattle() throws Exception {
+        DrawAction drawAction = new DrawAction(db);
+
+        drawAction.draw(pbfId, playerId, SheetName.INFANTRY);
+        drawAction.draw(pbfId, playerId, SheetName.ARTILLERY);
+        drawAction.draw(pbfId, playerId, SheetName.ARTILLERY);
+        drawAction.draw(pbfId, playerId, SheetName.MOUNTED);
+        drawAction.draw(pbfId, playerId, SheetName.MOUNTED);
+
+        assertThat(drawAction.drawUnitsFromHandForBattle(pbfId, playerId, 5)).hasSize(5);
+        assertThat(drawAction.drawUnitsFromHandForBattle(pbfId, playerId, 99)).hasSize(5);
+        assertThat(drawAction.drawUnitsFromHandForBattle(pbfId, playerId, 3)).hasSize(3);
+
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        Playerhand playerhand = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(playerId)).findFirst().get();
+        assertThat(playerhand.getDrawnUnits()).hasSize(3);
     }
 }

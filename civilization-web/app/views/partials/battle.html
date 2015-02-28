@@ -6,7 +6,8 @@
         <div ng-show="form.$invalid" class="alert alert-danger" role="alert">
           <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
           <span class="sr-only">Error:</span>
-          You cannot draw less than 3 units or more than 99 units. If you have less than 3 units, you still must choose 3.
+          You cannot draw less than 3 units or more than 99 units. If you have less than 3 units, you still must choose
+          3.
         </div>
         <div class="input-group">
           <input type="number"
@@ -35,7 +36,9 @@
     <div class="col-md-3">&nbsp;</div>
 
     <div class="col-md-6 padd-top-7">
-      <button type="button" class="btn btn-default">
+      <button type="button" class="btn btn-default"
+              ng-really-message="This will draw 3 barbarian units. Are you sure?"
+              ng-really-click="battleCtrl.drawBarbarians()">
         Draw barbarian units <span class="badge">3</span>
       </button>
     </div>
@@ -48,7 +51,23 @@
     </div>
 
     <div class="col-md-6">
-      list of all barbs (Only visible for player drawing them)
+      <div ng-show="battleCtrl.barbarians.length > 0">
+        <h3>Barbarians</h3>
+
+        <div ng-repeat="unit in battleCtrl.barbarians" class="col-md-2">
+          <img ng-src="/images/useritems/{{userCtrl.nextElement(unit).image}}"
+               tooltip="{{userCtrl.nextElement(item).name}}"/>
+        </div>
+
+        <div class="text-center" ng-show="battleCtrl.barbarians.length > 0">
+          <button ng-really-message="This will discard the barbarian units. Are you sure?"
+                  ng-really-click="battleCtrl.discardBarbarians()"
+                  class="btn btn-sm btn-warning"
+                  tooltip="Discard the barbarian units. This will make an entry in the game log">
+            Discard Barbarians
+          </button>
+        </div>
+      </div>
     </div>
 
   </div>

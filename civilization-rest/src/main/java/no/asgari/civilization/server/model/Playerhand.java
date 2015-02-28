@@ -38,6 +38,7 @@ public class Playerhand {
     private List<Item> items = new ArrayList<>();
     private Set<Tech> techsChosen = new TreeSet<>();
     private List<Unit> barbarians = new ArrayList<>(3);
+    private List<Unit> drawnUnits = new ArrayList<>();
     
     @JsonIgnore
     public String green() {

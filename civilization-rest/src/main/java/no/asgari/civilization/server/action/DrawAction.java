@@ -123,8 +123,9 @@ public class DrawAction extends BaseAction {
     }
 
     public List<Unit> drawUnitsFromHandForBattle(String pbfId, String playerId, int numberOfDraws) {
-        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbfId);
-
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+        playerhand.getDrawnUnits().clear();
         List<Unit> unitsInHand = playerhand.getItems().stream()
                 .filter(p -> SheetName.UNITS.contains(p.getSheetName()))
                 .map(p -> (Unit) p)
@@ -145,15 +146,21 @@ public class DrawAction extends BaseAction {
 
         if (unitsInHand.size() <= numberOfDraws) {
             //username has drawn X units for battle from his battlehand
+            playerhand.setDrawnUnits(unitsInHand);
+            pbfCollection.updateById(pbfId, pbf);
             createCommonPublicLog("has drawn " + unitsInHand.size() + " units for battle from his battlehand", pbfId, playerId);
             return unitsInHand;
         }
 
         Collections.shuffle(unitsInHand);
-        createCommonPublicLog("has drawn " + numberOfDraws + " units for battle from his battlehand", pbfId, playerId);
-        return unitsInHand.stream().limit(numberOfDraws)
+        List<Unit> drawnUnitsList = unitsInHand.stream().limit(numberOfDraws)
                 .peek(item -> createCommonPrivateLog("has drawn " + item.getName() + " for battle from your battlehand", pbfId, playerId))
                 .collect(Collectors.toList());
+
+        playerhand.setDrawnUnits(drawnUnitsList);
+        pbfCollection.updateById(pbfId, pbf);
+        createCommonPublicLog("has drawn " + drawnUnitsList.size() + " units for battle from his battlehand", pbfId, playerId);
+        return drawnUnitsList;
     }
 
     public List<Unit> drawBarbarians(String pbfId, String playerId) {
