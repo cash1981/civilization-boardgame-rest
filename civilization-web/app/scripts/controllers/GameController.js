@@ -10,12 +10,12 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
       return;
     }
     var game = newVal;
-    model.game = game;
+    $scope.currentGame = game;
     $scope.userHasAccess = game.player && game.player.username === model.user.username;
     model.yourTurn = game.player && game.player.yourTurn;
 
     if(model.yourTurn) {
-      growl.success("<strong>It's your turn! Press end turn when you are done!</strong>");
+      growl.info("<strong>It's your turn! Press end turn when you are done!</strong>");
     }
     model.tableParams.reload();
     return game;
@@ -95,11 +95,11 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
     getData: function ($defer, params) {
       // use build-in angular filter
       // update table params
-      if (!model.game) {
+      if (!$scope.currentGame) {
         $defer.reject("No game yet");
         return;
       }
-      var game = model.game;
+      var game = $scope.currentGame;
       var orderedData = params.sorting() ? $filter('orderBy')(game.publicLogs, params.orderBy()) : game.publicLogs;
       params.total(game.publicLogs.length);
       $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));

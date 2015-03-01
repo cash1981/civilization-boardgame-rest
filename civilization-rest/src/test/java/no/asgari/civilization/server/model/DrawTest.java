@@ -345,12 +345,12 @@ public class DrawTest extends AbstractMongoDBTest {
         drawAction.draw(pbfId, playerId, SheetName.MOUNTED);
         drawAction.draw(pbfId, playerId, SheetName.MOUNTED);
 
-        assertThat(drawAction.drawUnitsFromHandForBattle(pbfId, playerId, 5)).hasSize(5);
-        assertThat(drawAction.drawUnitsFromHandForBattle(pbfId, playerId, 99)).hasSize(5);
-        assertThat(drawAction.drawUnitsFromHandForBattle(pbfId, playerId, 3)).hasSize(3);
+        assertThat(drawAction.drawUnitsFromForBattle(pbfId, playerId, 5)).hasSize(5);
+        assertThat(drawAction.drawUnitsFromForBattle(pbfId, playerId, 99)).hasSize(5);
+        assertThat(drawAction.drawUnitsFromForBattle(pbfId, playerId, 3)).hasSize(3);
 
         PBF pbf = pbfCollection.findOneById(pbfId);
         Playerhand playerhand = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(playerId)).findFirst().get();
-        assertThat(playerhand.getDrawnUnits()).hasSize(3);
+        assertThat(playerhand.getBattlehand()).hasSize(3);
     }
 }

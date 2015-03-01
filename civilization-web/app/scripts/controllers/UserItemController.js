@@ -32,7 +32,7 @@
         return;
       }
       var game = newVal;
-      model.game = game;
+      $scope.currentGame = game;
       model.techsChosen = game.player.techsChosen;
       putTechsInScope(model.techsChosen);
       model.cultureCards = [];
@@ -172,11 +172,11 @@
       getData: function ($defer, params) {
         // use build-in angular filter
         // update table params
-        if (!model.game) {
+        if (!$scope.currentGame) {
           $defer.reject("No game yet");
           return;
         }
-        var game = model.game;
+        var game = $scope.currentGame;
         var orderedData = params.sorting() ? $filter('orderBy')(game.privateLogs, params.orderBy()) : game.privateLogs;
         params.total(game.privateLogs.length);
         $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));

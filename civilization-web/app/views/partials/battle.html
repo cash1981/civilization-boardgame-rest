@@ -1,7 +1,7 @@
 <div ng-controller="BattleController as battleCtrl" class="battle">
 
   <div class="row">
-    <div class="col-md-3 padd-top-7">
+    <div class="col-md-2 col-xs-12 padd-top-7">
       <form name="form">
         <div ng-show="form.$invalid" class="alert alert-danger" role="alert">
           <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -18,58 +18,53 @@
                  placeholder="Number of units to draw"
                  ng-model="battleCtrl.number"
                  ng-value="battleCtrl.number">
-      <span class="input-group-btn">
-        <button type="button" class="btn btn-default"
-                ng-disabled="form.$invalid"
-                ng-really-message="Are you sure you want to make a draw?"
-                ng-really-click="battleCtrl.drawUnits()">
-          Draw units from battlehand
-        </button>
-      </span>
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default"
+                      ng-disabled="form.$invalid"
+                      ng-really-message="Are you sure you want to make a draw?"
+                      ng-really-click="battleCtrl.drawUnits()">
+                Draw units from battlehand
+              </button>
+            </span>
         </div>
-        <!-- /input-group -->
-
       </form>
     </div>
-    <!-- /col-md-6 -->
+  </div> <!-- row -->
 
-    <div class="col-md-3">&nbsp;</div>
+  <div class="row padd-top-7">
+    <div ng-repeat="unit in battleCtrl.battlehand" class="col-md-2 col-xs-12 padd-top-7">
+      <img ng-src="/images/useritems/{{battleCtrl.nextElement(unit).image}}"
+           tooltip="{{battleCtrl.nextElement(unit).name}}"/>
+    </div>
+  </div>
 
-    <div class="col-md-6 padd-top-7">
+  <div class="row" style="padding-top: 25px;">
+    <div class="col-md-2 col-xs-12">
       <button type="button" class="btn btn-default"
               ng-really-message="This will draw 3 barbarian units. Are you sure?"
-              ng-really-click="battleCtrl.drawBarbarians()">
+              ng-really-click="battleCtrl.drawBarbarians()"
+              tooltip="This will draw 3 barbarian units">
         Draw barbarian units <span class="badge">3</span>
       </button>
     </div>
   </div>
-  <!-- /row -->
 
-  <div class="row">
-    <div class="col-md-6">
-      list of all the units drawn from battlehand
+  <div class="row padd-top-7">
+    <div ng-repeat="unit in battleCtrl.barbarians" class="col-md-2 col-xs-12">
+      <img ng-src="/images/useritems/{{battleCtrl.nextElement(unit).image}}"
+           tooltip="{{battleCtrl.nextElement(unit).name}}"/>
     </div>
+  </div>
 
-    <div class="col-md-6">
-      <div ng-show="battleCtrl.barbarians.length > 0">
-        <h3>Barbarians</h3>
-
-        <div ng-repeat="unit in battleCtrl.barbarians" class="col-md-2">
-          <img ng-src="/images/useritems/{{userCtrl.nextElement(unit).image}}"
-               tooltip="{{userCtrl.nextElement(item).name}}"/>
-        </div>
-
-        <div class="text-center" ng-show="battleCtrl.barbarians.length > 0">
-          <button ng-really-message="This will discard the barbarian units. Are you sure?"
-                  ng-really-click="battleCtrl.discardBarbarians()"
-                  class="btn btn-sm btn-warning"
-                  tooltip="Discard the barbarian units. This will make an entry in the game log">
-            Discard Barbarians
-          </button>
-        </div>
-      </div>
+  <div class="row padd-top-7" ng-show="battleCtrl.barbarians.length > 0">
+    <div class="col-md-2 col-xs-12">
+      <button ng-really-message="This will discard the barbarian units. Are you sure?"
+              ng-really-click="battleCtrl.discardBarbarians()"
+              class="btn btn-info"
+              tooltip="Discard the barbarian units. This will make an entry in the game log">
+        Discard Barbarians
+      </button>
     </div>
-
   </div>
 
 </div>

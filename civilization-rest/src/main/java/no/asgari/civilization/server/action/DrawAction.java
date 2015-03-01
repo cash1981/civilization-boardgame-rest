@@ -1,7 +1,6 @@
 package no.asgari.civilization.server.action;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.SheetName;
@@ -122,10 +121,10 @@ public class DrawAction extends BaseAction {
         logShuffle(sheetName, pbf);
     }
 
-    public List<Unit> drawUnitsFromHandForBattle(String pbfId, String playerId, int numberOfDraws) {
+    public List<Unit> drawUnitsFromForBattle(String pbfId, String playerId, int numberOfDraws) {
         PBF pbf = pbfCollection.findOneById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        playerhand.getDrawnUnits().clear();
+        playerhand.getBattlehand().clear();
         List<Unit> unitsInHand = playerhand.getItems().stream()
                 .filter(p -> SheetName.UNITS.contains(p.getSheetName()))
                 .map(p -> (Unit) p)
@@ -146,7 +145,7 @@ public class DrawAction extends BaseAction {
 
         if (unitsInHand.size() <= numberOfDraws) {
             //username has drawn X units for battle from his battlehand
-            playerhand.setDrawnUnits(unitsInHand);
+            playerhand.setBattlehand(unitsInHand);
             pbfCollection.updateById(pbfId, pbf);
             createCommonPublicLog("has drawn " + unitsInHand.size() + " units for battle from his battlehand", pbfId, playerId);
             return unitsInHand;
@@ -154,13 +153,22 @@ public class DrawAction extends BaseAction {
 
         Collections.shuffle(unitsInHand);
         List<Unit> drawnUnitsList = unitsInHand.stream().limit(numberOfDraws)
-                .peek(item -> createCommonPrivateLog("has drawn " + item.getName() + " for battle from your battlehand", pbfId, playerId))
+                //.peek(item -> createCommonPrivateLog("has drawn " + item.getName() + " for battle from your battlehand", pbfId, playerId))
                 .collect(Collectors.toList());
 
-        playerhand.setDrawnUnits(drawnUnitsList);
+        playerhand.setBattlehand(drawnUnitsList);
         pbfCollection.updateById(pbfId, pbf);
         createCommonPublicLog("has drawn " + drawnUnitsList.size() + " units for battle from his battlehand", pbfId, playerId);
         return drawnUnitsList;
+    }
+
+    //Not sure yet if I want this since they can just make a new draw
+    public void discardUnitsFromBattlehand(String pbfId, String playerId) {
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+        playerhand.getBattlehand().clear();
+        pbfCollection.updateById(pbf.getId(), pbf);
+        gameLogAction.createCommonPrivatePublicLog("has cleared their battlehand", pbfId, playerId);
     }
 
     public List<Unit> drawBarbarians(String pbfId, String playerId) {
@@ -207,17 +215,10 @@ public class DrawAction extends BaseAction {
             log.error("Couldn't get one barbarian of each type, but instead list is " + playerhand.getBarbarians());
             throw new WebApplicationException();
         }
-        
-        createCommonPublicLog("has drawn barbarian units", pbfId, playerId);
-        pbfCollection.updateById(pbf.getId(), pbf);
-        log.debug("Drew barbarian unit updated pbf");
-        return playerhand.getBarbarians();
-    }
 
-    private void addBarbarian(String playerId, Playerhand playerhand, Iterator<Item> iterator, Item item) {
-        playerhand.getBarbarians().add((Unit) item);
-        iterator.remove();
-        item.setOwnerId(playerId);
+        gameLogAction.createCommonPrivatePublicLog("drew 3 barbarian units", pbfId, playerId);
+        pbfCollection.updateById(pbf.getId(), pbf);
+        return playerhand.getBarbarians();
     }
 
     public void discardBarbarians(String pbfId, String playerId) {
@@ -226,11 +227,11 @@ public class DrawAction extends BaseAction {
         if(playerhand.getBarbarians().isEmpty()) {
             return;
         }
-            
+
         pbf.getDiscardedItems().addAll(playerhand.getBarbarians());
         playerhand.getBarbarians().clear();
         pbfCollection.updateById(pbf.getId(), pbf);
-        log.debug("Barbarians discarded");
+        gameLogAction.createCommonPrivatePublicLog("has discarded 3 barbarian units", pbfId, playerId);
     }
 
     /**
@@ -251,6 +252,12 @@ public class DrawAction extends BaseAction {
                 });
 
         pbfCollection.updateById(pbfId, pbf);
+    }
+
+    private void addBarbarian(String playerId, Playerhand playerhand, Iterator<Item> iterator, Item item) {
+        playerhand.getBarbarians().add((Unit) item);
+        iterator.remove();
+        item.setOwnerId(playerId);
     }
 
     private void logShuffle(SheetName sheetName, PBF pbf) {

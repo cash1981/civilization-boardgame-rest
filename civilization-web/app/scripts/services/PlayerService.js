@@ -169,60 +169,68 @@
         });
     };
 
-    var drawUnitsForBattle = function(gameId) {
+    var drawUnitsForBattle = function(gameId, numOfUnits) {
+      var url = baseUrl + gameId + "/battle/draw";
 
-
-    };
-
-    var discardUnitsFromBattle  = function (gameId) {
-
+      return $http({
+        url: url,
+        method: "PUT",
+        params: {numOfUnits: numOfUnits}
+      })
+        .success(function (response) {
+          if(response.length > 0) {
+            growl.success("Units added to battlehand");
+          } else {
+            growl.warning("You have no units to draw");
+          }
+          return response;
+        })
+        .success(function (response) {
+          GameService.fetchGameByIdFromServer(gameId);
+          return response;
+        })
+        .error(function (data) {
+          $log.error(data);
+          growl.error("Could not add units to battlehand for unknown reason");
+          return data;
+        });
     };
 
     var drawBarbarians = function (gameId) {
-      var url = baseUrl + gameId + "/battle/barbarians/draw";
+      var url = baseUrl + gameId + "/battle/draw/barbarians";
 
       return $http.put(url)
-        .then(function (response) {
-          return response.data;
-        }, function (data) {
+        .success(function (response) {
+          growl.success("Barbarians have been drawn");
+          return response;
+        })
+        .success(function (response) {
+          GameService.fetchGameByIdFromServer(gameId);
+          return response;
+        })
+        .error(function (data) {
           $log.error(data);
           if(data.status == 412) {
             growl.error("Cannot draw more barbarians until the others are discarded");
           } else {
             growl.error("Unable to draw barbarian units");
           }
-          return $q.reject();
+          return data;
         });
-
-
-        /*.then(function (response) {
-          growl.success("Barbarian units drawn");
-          return response.data;
-        }, function (data, status) {
-          if(status == 412) {
-            growl.error("Cannot draw more barbarians until the others are discarded");
-          } else {
-            growl.error("Unable to draw barbarian units");
-          }
-          $log.error(data);
-          return $q.reject();
-        })*/
     };
 
     var discardBarbarians = function(gameId) {
-      var url = baseUrl + gameId + "/battle/barbarians/discard";
+      var url = baseUrl + gameId + "/battle/discard/barbarians";
 
-      return $http({
-        url: url,
-        method: "DELETE"
-      }).then(function (response) {
-        growl.success("Barbarians discarded");
-        return response;
-      }, function (data) {
-        $log.error(data);
-        growl.error("Could not discard barbarians for unknown reason");
-        return $q.reject();
-      })
+      return $http.delete(url)
+        .then(function (response) {
+          growl.success("Barbarians discarded");
+          return response;
+        }, function (data) {
+          $log.error(data);
+          growl.error("Could not discard barbarians for unknown reason");
+          return $q.reject();
+        })
     };
 
     return {
@@ -235,7 +243,6 @@
       getChosenTechs: getChosenTechs,
       removeTech: removeTech,
       drawUnitsForBattle: drawUnitsForBattle,
-      discardUnitsFromBattle: discardUnitsFromBattle,
       drawBarbarians: drawBarbarians,
       discardBarbarians: discardBarbarians
     };

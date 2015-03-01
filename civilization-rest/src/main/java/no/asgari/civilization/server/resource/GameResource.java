@@ -193,6 +193,7 @@ public class GameResource {
         List<GameLogDTO> gameLogDTOs = new ArrayList<>();
         if (!allPublicLogs.isEmpty()) {
             gameLogDTOs = allPublicLogs.stream()
+                    .filter(log -> !Strings.isNullOrEmpty(log.getPublicLog()))
                     .map(gl -> new GameLogDTO(gl.getId(), gl.getPublicLog(), gl.getCreatedInMillis(), gl.getDraw()))
                     .collect(Collectors.toList());
         }

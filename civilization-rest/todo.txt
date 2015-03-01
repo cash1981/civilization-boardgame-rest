@@ -53,7 +53,12 @@
 - Created filter/interceptor for userHasAccess
 - Choose color
 
+- Security hole:
+    -- hide the drawn item in the public log, 
+    -- Perhaps refactor to add the logid on an item instead
+
 Nice to have
+- Hide the draw.item in public log. It
 - Chat with scrolling capabilites.
 	-- Websocket?
 - Each item can have path to a picture so that client can show it
@@ -63,19 +68,13 @@ Nice to have
 - Option to leave a game
 	-- Haven't thought of all the details about this
 	-- This is probably not that difficult. Just put all playerhand info in another playerhand
-- Possibility to request undo of end of turn?
-    -- For now, this can only be done if all players just push end of turn until it goes back to the correct player
-- Perhaps when players choose tech it should be intersection between pbf.getTech() and player.getTech() so that only distinct techs shows
+#DONE - Perhaps when players choose tech it should be intersection between pbf.getTech() and player.getTech() so that only distinct techs shows
 - Instead of Basic authentication, it would be nice to support OAUTH
-- Would be nice to get eventbus for private and public logging so that their will be loose coupling
 - For now sending public items (resources) doesnt need sending in the system, but for fully playable version we need support for it
 - Support for more game types
 	-- Change all sheetnames in parameters to combination of GameType and Sheetname
 
-- Reveal Item
-    -- Fikse OK eller ERROR melding når ting er revealed
-    -- Gjøre nytt kall til getGameById
-        -- Redirecte til riktig tab
+#DONE - Reveal Item
 
 Future roadmap
 - Replace MongoJack with Morphia as MongoJack is no longer maintained it seems

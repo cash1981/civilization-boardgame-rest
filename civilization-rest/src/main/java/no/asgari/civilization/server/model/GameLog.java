@@ -50,7 +50,6 @@ public class GameLog {
 
     private String privateLog;
 
-    @NotEmpty
     private String publicLog;
 
     /**

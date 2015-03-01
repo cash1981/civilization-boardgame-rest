@@ -227,7 +227,7 @@ public class PlayerResource {
     @Timed
     public Response drawUnits(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @QueryParam("numOfUnits") int numberOfunits) {
         DrawAction drawAction = new DrawAction(db);
-        List<Unit> units = drawAction.drawUnitsFromHandForBattle(pbfId, player.getId(), numberOfunits);
+        List<Unit> units = drawAction.drawUnitsFromForBattle(pbfId, player.getId(), numberOfunits);
         return Response.ok().entity(units).build();
     }
 
@@ -239,7 +239,7 @@ public class PlayerResource {
      * @return 200 ok
      */
     @PUT
-    @Path("/battle/barbarians/draw")
+    @Path("/battle/draw/barbarians")
     @Timed
     public Response drawBarbarians(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId) {
         DrawAction drawAction = new DrawAction(db);
@@ -255,7 +255,7 @@ public class PlayerResource {
      * @return 201 no content
      */
     @DELETE
-    @Path("/battle/barbarians/discard")
+    @Path("/battle/discard/barbarians")
     @Timed
     public Response discardBarbarians(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId) {
         DrawAction drawAction = new DrawAction(db);

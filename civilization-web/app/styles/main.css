@@ -153,6 +153,5 @@ input.ng-touched.ng-invalid {
 
 div.battle {
   background: url('/images/useritems/Battlefield_gross.png') no-repeat center center;
-  height: 595px;
-  background-size: 100% 100%;
+  background-size: cover;
 }

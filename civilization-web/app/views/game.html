@@ -2,11 +2,11 @@
   <div class="row">
     <div ng-class="userHasAccess ? 'col-md-6' : 'col-md-12'">
       <div class="jumbotron">
-        <h1>{{gameCtrl.game.name}}</h1>
+        <h1>{{currentGame.name}}</h1>
 
-        <p class="lead">{{gameCtrl.game.type}} - Created: {{gameCtrl.game.created | date:'dd-MM-yyyy'}}</p>
+        <p class="lead">{{currentGame.type}} - Created: {{currentGame.created | date:'dd-MM-yyyy'}}</p>
 
-        <p><a ng-href class="btn btn-primary btn-lg" role="button">{{gameCtrl.game.whosTurnIsIt}}</a> to play</p>
+        <p><a ng-href class="btn btn-primary btn-lg" role="button">{{currentGame.whosTurnIsIt}}</a> to play</p>
       </div>
     </div>
     <div class="col-md-6" ng-if="userHasAccess">
@@ -90,6 +90,6 @@
     </tab>
   </tabset>
 
-  <div class="row">json '{{gameCtrl.game | json}}'</div>
+  <!--<div class="row">json '{{currentGame | json}}'</div>-->
 
 </div>

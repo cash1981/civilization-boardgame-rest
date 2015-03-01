@@ -100,6 +100,7 @@ public class GameLogAction {
             pl.setUsername(getUsernameFromPlayerId(playerId));
         }
         pl.setPublicLog(pl.getUsername() + " " + publicMessage);
+        pl.setPrivateLog(null);
         pl.setId(save(pl));
         return pl;
     }
@@ -114,6 +115,22 @@ public class GameLogAction {
             pl.setUsername(getUsernameFromPlayerId(playerId));
         }
         pl.setPrivateLog(pl.getUsername() + " " + privateMessage);
+        pl.setPublicLog(null);
+        pl.setId(save(pl));
+        return pl;
+    }
+
+    public GameLog createCommonPrivatePublicLog(String message, String pbfId, String playerId) {
+        GameLog pl = new GameLog();
+        pl.setPbfId(pbfId);
+        try {
+            pl.setUsername(CivSingleton.instance().playerCache().get(playerId));
+        } catch (Exception e) {
+            log.error("Couldn't retrieve username from cache");
+            pl.setUsername(getUsernameFromPlayerId(playerId));
+        }
+        pl.setPrivateLog(pl.getUsername() + " " + message);
+        pl.setPublicLog(pl.getUsername() + " " + message);
         pl.setId(save(pl));
         return pl;
     }
