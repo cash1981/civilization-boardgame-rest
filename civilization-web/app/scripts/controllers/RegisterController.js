@@ -1,7 +1,15 @@
 'use strict';
-angular.module('civApp').controller('RegisterController', function ($scope, $modalInstance, $log) {
-  var model = this;
+angular.module('civApp').controller('RegisterController', function ($scope, $modalInstance, $log, register) {
   $log.info("Reg instansiert");
+
+  $scope.registerOk = function() {
+    $log.info(register.registerEmail);
+    $log.info(register.registerUsername);
+    $log.info(register.registerPassword);
+    $log.info(register.registerVerification);
+    $modalInstance.close(register);
+  };
+
   /*$scope.voteOk = function () {
     var vote = {
       id: logToUndo.id,
@@ -19,15 +27,6 @@ angular.module('civApp').controller('RegisterController', function ($scope, $mod
   };
    */
   $scope.registerCancel = function () {
-    $log.info(model.username);
-    $log.info(model.email);
-    $log.info(model.password);
-    $log.info(model.verification);
-
-    if(model.password == model.verification) {
-      $log.info("Password matches");
-    }
-
     $modalInstance.dismiss('cancel');
   };
 });

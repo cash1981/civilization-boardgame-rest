@@ -9,6 +9,11 @@
     model.password = "";
     model.user = currentUser.profile;
 
+    model.registerUsername = null;
+    model.registerEmail = null;
+    model.registerPassword = null;
+    model.registerVerification = null;
+
     model.login = function (form) {
       if (form.$valid) {
         basicauth.login(model.username, model.password)
@@ -22,13 +27,36 @@
     };
 
     model.openSignup = function(size) {
+      $log.info("registerUsername " + model.registerUsername);
+      $log.info("registerEmail " + model.registerEmail);
+      $log.info("registerPassword " + model.registerPassword);
+      $log.info("verification " + model.verification);
+
+      var register = {
+        'username' : model.registerUsername,
+        'email' : model.registerEmail,
+        'password' : model.registerPassword,
+        'verification' : model.verification
+      };
+
       var modalInstance = $modal.open({
         templateUrl: 'signup.html',
         controller: 'RegisterController',
-        size: size
+        size: size,
+        //To inject stuff in the modal you need to add resolve
+        resolve: {
+          register : function() {
+            return register;
+          }
+        }
       });
 
-      modalInstance.result.then(function(user) {
+      modalInstance.result.then(function(register) {
+        $log.info("back to login controller");
+        $log.info(register.registerEmail);
+        $log.info(register.registerUsername);
+        $log.info(register.registerPassword);
+        $log.info(register.registerVerification);
 
       }, function () {
         $log.info('Modal dismissed at: ' + new Date());
@@ -37,6 +65,6 @@
 
   };
 
-  module.controller("LoginController", ['basicauth', 'currentUser', 'growl', 'loginRedirect', '$modal', $log, LoginController]);
+  module.controller("LoginController", ['basicauth', 'currentUser', 'growl', 'loginRedirect', '$modal', '$log', LoginController]);
 
 }(angular.module("civApp")));
