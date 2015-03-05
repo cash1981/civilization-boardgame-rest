@@ -1,7 +1,7 @@
 ﻿'use strict';
 (function (module) {
 
-  var LoginController = function (basicauth, currentUser, growl, loginRedirect) {
+  var LoginController = function (basicauth, currentUser, growl, loginRedirect, $modal, $log) {
     var model = this;
     model.user = currentUser.profile;
 
@@ -20,8 +20,23 @@
     model.signOut = function () {
       basicauth.logout();
     };
+
+    model.openSignup = function(size) {
+      var modalInstance = $modal.open({
+        templateUrl: 'signup.html',
+        controller: 'RegisterController',
+        size: size
+      });
+
+      modalInstance.result.then(function(user) {
+
+      }, function () {
+        $log.info('Modal dismissed at: ' + new Date());
+      });
+    };
+
   };
 
-  module.controller("LoginController", ['basicauth', 'currentUser', 'growl', 'loginRedirect', LoginController]);
+  module.controller("LoginController", ['basicauth', 'currentUser', 'growl', 'loginRedirect', '$modal', $log, LoginController]);
 
 }(angular.module("civApp")));

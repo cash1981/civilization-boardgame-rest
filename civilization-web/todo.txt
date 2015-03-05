@@ -6,7 +6,6 @@
 #DONE    -- Link goes to read only
 #DONE        -- join button (if logged in && isnt started yet)
 
-
 Inside a game
 #DONE	-- Display public log
 #DONE Footer on all pages
@@ -36,7 +35,10 @@ Inside a game
 #DONE - Fix the baseurl stuff
 
 - Trade
-- Battle (draw x units)
+- Create game
+- Register new user
+#DONE - Battle (draw x units)
+
 
 Nice to have: (Will be implemented in later versions)
 - Implement email verification on register?
@@ -50,6 +52,7 @@ Nice to have: (Will be implemented in later versions)
 #DONE  -- Only players playing the game can undo
 #DONE Reveal from useritem
 #DONE  -- To do this I need to send the item info and use the gamelog to find the item and reveal it.
+- Add a different theme from http://bootswatch.com/
 
 check ngmodules.org to find modules
 
