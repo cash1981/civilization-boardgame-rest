@@ -1,24 +1,26 @@
 package no.asgari.civilization.server.resource;
 
 import com.google.common.base.Preconditions;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import io.dropwizard.auth.basic.BasicCredentials;
+import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.application.CivAuthenticator;
 import no.asgari.civilization.server.dto.PlayerDTO;
+import no.asgari.civilization.server.dto.RegisterDTO;
 import no.asgari.civilization.server.model.Player;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.mongojack.DBCursor;
+import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
-import org.mongojack.WriteResult;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
@@ -48,7 +50,7 @@ public class LoginResource {
     @POST
     @Consumes(value = MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(value = MediaType.APPLICATION_JSON)
-    public Response ogin(@FormParam("username") @NotEmpty String username, @FormParam("password") @NotEmpty String password) {
+    public Response login(@FormParam("username") @NotEmpty String username, @FormParam("password") @NotEmpty String password) {
         Preconditions.checkNotNull(username);
         Preconditions.checkNotNull(password);
 
@@ -93,19 +95,19 @@ public class LoginResource {
         }
     }
 
-    //TODO Perhaps delete should only be made to disable, and not actually delete
-    @DELETE
-    @Path("{id}")
-    public Response deleteAccount(@PathParam("id") @NotEmpty String playerId) {
-        //Throws IllegalArgumentException if id not found, so NOT_FOUND is never returned, but 500 servlet error instead
-        try {
-            WriteResult<Player, String> result = playerCollection.removeById(playerId);
-            if (result.getError() == null)
-                return Response.status(Response.Status.NO_CONTENT).build();
-        } catch (Exception ex) {
-            log.error("Unknown error when deleting user: " + ex.getMessage(), ex);
+    @POST
+    @Path("/check/username")
+    public Response checkUsername(RegisterDTO register) {
+        Preconditions.checkNotNull(register);
+        @Cleanup DBCursor<Player> dbPlayer = playerCollection.find(
+                DBQuery.is("username", register.getUsername().trim()), new BasicDBObject());
+
+
+        if (dbPlayer != null && dbPlayer.hasNext()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"isTaken\":\"true\"}").build();
         }
-        return Response.status(Response.Status.FORBIDDEN).build();
+
+        return Response.ok().build();
     }
 
 }

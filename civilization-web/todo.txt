@@ -38,7 +38,7 @@ Inside a game
 - Create game
 - Register new user
 #DONE - Battle (draw x units)
-
+- Upgrade to Dropwizard 0.8
 
 Nice to have: (Will be implemented in later versions)
 - Implement email verification on register?
@@ -60,3 +60,4 @@ check ngmodules.org to find modules
 #Spørsmål
 - Why can't I get log.item.name to appear in voting modal
 - Why is the GetGameById watch being called twice, and everything is duplicated for a second before it is removed
+- Why isn't publiclog and privatelogs get updated when I draw unit and barbarian for battle? Do I need to call reload()? In that case, how?

@@ -29,7 +29,7 @@
         <div class="modal-header">
           <h3 class="modal-title">Sign up</h3>
         </div>
-        <form name="form" method="post" novalidate="novalidate">
+        <form name="registerForm" method="post" novalidate="novalidate">
           <div class="modal-body">
             <div class="form-group">
               <label for="username" class="control-label">Username</label>
@@ -49,7 +49,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <input type="submit" ng-click="registerOk()" value="Sign up" ng-disabled="form.$invalid" class="btn btn-primary"/>
+            <input type="submit" ng-click="registerOk()" value="Sign up" ng-disabled="registerForm.$invalid" class="btn btn-primary"/>
             <button ng-click="registerCancel()" class="btn btn-warning">Cancel</button>
           </div>
         </form>
