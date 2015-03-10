@@ -33,19 +33,19 @@
           <div class="modal-body">
             <div class="form-group">
               <label for="username" class="control-label">Username</label>
-              <input type="text" name="username" id="username" placeholder="Username" unique-username="unique-username" required="required" ng-model="login.registerUsername" autofocus="autofocus" class="form-control"/><i ng-show="busy" class="halflings-icon refresh rotating"></i><span ng-show="form.username.$dirty &amp;&amp; form.username.$error.required" class="help-block">Please choose a username</span><span ng-show="form.username.$dirty &amp;&amp; form.username.$error.isTaken" class="help-block">Username already taken</span><span ng-show="form.username.$dirty &amp;&amp; form.username.$error.invalidChars" class="help-block">Username may not contain any non-url-safe characters</span>
+              <input type="text" name="username" id="username" placeholder="Username" unique-username="unique-username" required="required" ng-model="registerCtrl.registerUsername" autofocus="autofocus" class="form-control"/><i ng-show="busy" class="halflings-icon refresh rotating"></i><span ng-show="form.username.$dirty &amp;&amp; form.username.$error.required" class="help-block">Please choose a username</span><span ng-show="form.username.$dirty &amp;&amp; form.username.$error.isTaken" class="help-block">Username already taken</span><span ng-show="form.username.$dirty &amp;&amp; form.username.$error.invalidChars" class="help-block">Username may not contain any non-url-safe characters</span>
             </div>
             <div class="form-group">
               <label for="email" class="control-label">Email</label>
-              <input type="email" ng-model="login.registerEmail" name="email" id="email" placeholder="Email" required="required" class="form-control"/><span ng-show="form.email.$dirty &amp;&amp; form.email.$error.email" class="help-block">Email is invalid</span>
+              <input type="email" ng-model="registerCtrl.registerEmail" name="email" id="email" placeholder="Email" required="required" class="form-control"/><span ng-show="form.email.$dirty &amp;&amp; form.email.$error.email" class="help-block">Email is invalid</span>
             </div>
             <div class="form-group">
               <label for="password" class="control-label">Password</label>
-              <input type="password" name="password" id="password" ng-model="login.registerPassword" required="required" match="verification" class="form-control"/><span ng-show="form.password.$dirty &amp;&amp; form.password.$error.required" class="help-block">Please enter a password</span>
+              <input type="password" name="password" id="password" ng-model="registerCtrl.registerPassword" required="required" match="verification" class="form-control"/><span ng-show="form.password.$dirty &amp;&amp; form.password.$error.required" class="help-block">Please enter a password</span>
             </div>
             <div class="form-group">
               <label for="verification" class="control-label">Repeat password</label>
-              <input type="password" name="verification" id="verification" ng-model="login.registerVerification" required="required" match="password" class="form-control"/><span ng-show="form.verification.$dirty &amp;&amp; form.verification.$error.required" class="help-block">Please repeat your password</span><span ng-show="form.verification.$dirty &amp;&amp; form.verification.$error.match &amp;&amp; !form.verification.$error.required" class="help-block">Passwords don't match</span>
+              <input type="password" name="verification" id="verification" ng-model="registerCtrl.registerVerification" required="required" match="password" class="form-control"/><span ng-show="form.verification.$dirty &amp;&amp; form.verification.$error.required" class="help-block">Please repeat your password</span><span ng-show="form.verification.$dirty &amp;&amp; form.verification.$error.match &amp;&amp; !form.verification.$error.required" class="help-block">Passwords don't match</span>
             </div>
           </div>
           <div class="modal-footer">

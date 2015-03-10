@@ -27,6 +27,7 @@
     };
 
     model.openSignup = function(size) {
+/*
       $log.info("registerUsername " + model.registerUsername);
       $log.info("registerEmail " + model.registerEmail);
       $log.info("registerPassword " + model.registerPassword);
@@ -38,25 +39,31 @@
         'password' : model.registerPassword,
         'verification' : model.verification
       };
+*/
 
       var modalInstance = $modal.open({
         templateUrl: 'signup.html',
-        controller: 'RegisterController',
-        size: size,
+        controller: 'RegisterController as registerCtrl',
+        size: size
         //To inject stuff in the modal you need to add resolve
-        resolve: {
+        /*resolve: {
           register : function() {
             return register;
           }
-        }
+        }*/
       });
 
       modalInstance.result.then(function(register) {
         $log.info("back to login controller");
-        $log.info(register.registerEmail);
-        $log.info(register.registerUsername);
-        $log.info(register.registerPassword);
-        $log.info(register.registerVerification);
+
+        if(register && register.password === register.verification) {
+          $log.info(register.username);
+          $log.info(register.email);
+          $log.info(register.password);
+          $log.info(register.verification);
+        } else {
+          growl.error("Passwords did not match");
+        }
 
       }, function () {
         $log.info('Modal dismissed at: ' + new Date());
