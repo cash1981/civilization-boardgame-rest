@@ -1,6 +1,7 @@
 package no.asgari.civilization.server.resource;
 
 import com.google.common.base.Preconditions;
+import com.google.common.html.HtmlEscapers;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import io.dropwizard.auth.basic.BasicCredentials;
@@ -99,12 +100,18 @@ public class LoginResource {
     @Path("/check/username")
     public Response checkUsername(RegisterDTO register) {
         Preconditions.checkNotNull(register);
+
+        //If these doesn't match, then the username is unsafe
+        if(!register.getUsername().equals(HtmlEscapers.htmlEscaper().escape(register.getUsername()))) {
+            log.warn("Unsafe username " + register.getUsername());
+            return Response.status(Response.Status.FORBIDDEN).entity("{\"invalidChars\":\"true\"}").build();
+        }
+
         @Cleanup DBCursor<Player> dbPlayer = playerCollection.find(
                 DBQuery.is("username", register.getUsername().trim()), new BasicDBObject());
 
-
         if (dbPlayer != null && dbPlayer.hasNext()) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("{\"isTaken\":\"true\"}").build();
+            return Response.status(Response.Status.FORBIDDEN).entity("{\"isTaken\":\"true\"}").build();
         }
 
         return Response.ok().build();

@@ -39,6 +39,7 @@ Inside a game
 - Register new user
 #DONE - Battle (draw x units)
 - Upgrade to Dropwizard 0.8
+- Add the glyphon on the username register
 
 Nice to have: (Will be implemented in later versions)
 - Implement email verification on register?

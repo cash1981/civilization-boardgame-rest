@@ -155,3 +155,15 @@ div.battle {
   background: url('/images/useritems/Battlefield_gross.png') no-repeat center center;
   background-size: cover;
 }
+
+.rotating {
+  float: right;
+  position: relative;
+  top: -24px;
+  right: 10px;
+  -webkit-animation: rotating 1s linear infinite;
+}
+
+.halflings-icon.refresh {
+  background-position: -239px -24px;
+}
