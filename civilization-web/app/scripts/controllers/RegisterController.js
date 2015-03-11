@@ -4,13 +4,7 @@ angular.module('civApp').controller('RegisterController', function ($scope, $mod
   $log.info("Reg instansiert");
 
   $scope.registerOk = function() {
-    $log.info("Inside Register controller");
-    $log.info(model.registerEmail);
-    $log.info(model.registerUsername);
-    $log.info(model.registerPassword);
-    $log.info(model.registerVerification);
-
-    if(model.registerPassword !== model.registerVerification) {
+    if(model.password !== model.verification) {
       growl.error("Passwords did not match");
       return;
     }
@@ -18,8 +12,7 @@ angular.module('civApp').controller('RegisterController', function ($scope, $mod
     var register = {
       'username' : model.registerUsername,
       'email' : model.registerEmail,
-      'password' : model.registerPassword,
-      'verification' : model.registerVerification
+      'password' : $scope.password
     };
 
     $modalInstance.close(register);

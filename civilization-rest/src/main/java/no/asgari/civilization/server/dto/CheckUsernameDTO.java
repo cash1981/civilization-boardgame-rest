@@ -6,11 +6,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Even simple json needs a class
  */
-public class RegisterDTO {
+public class CheckUsernameDTO {
     private final String username;
 
     @JsonCreator
-    public RegisterDTO(@JsonProperty("username") String username) {
+    public CheckUsernameDTO(@JsonProperty("username") String username) {
         this.username = username;
     }
 

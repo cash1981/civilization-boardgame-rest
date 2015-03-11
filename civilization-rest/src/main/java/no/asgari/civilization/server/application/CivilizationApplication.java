@@ -19,7 +19,7 @@ import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.resource.GameResource;
-import no.asgari.civilization.server.resource.LoginResource;
+import no.asgari.civilization.server.resource.AuthResource;
 import no.asgari.civilization.server.resource.PlayerResource;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.mongojack.JacksonDBCollection;
@@ -63,7 +63,7 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
 
         //Resources
         environment.jersey().register(new GameResource(db));
-        environment.jersey().register(new LoginResource(db));
+        environment.jersey().register(new AuthResource(db));
         environment.jersey().register(new PlayerResource(db));
 
         //Authentication

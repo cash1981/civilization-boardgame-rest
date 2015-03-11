@@ -77,10 +77,10 @@
   }
 }
 
-/* Kan legge denne effekten pÃ¥ forskjellige ting ved Ã¥ kombinere class */
-/* view.ng-enter f.eks */
+/* Can add this to combine different effects */
+/* view.ng-enter ie */
 
-/* TODO add vendor specific
+/*
 .ng-enter {
   -webkit-animation: fadeIn 1s;
   -moz-animation: fadeIn 1s;

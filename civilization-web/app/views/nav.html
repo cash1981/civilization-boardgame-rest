@@ -28,7 +28,6 @@
 </nav>
 
 
-
 <!-- Modal for vote -->
 <script type="text/ng-template" id="signup.html">
   <div class="modal-header">
@@ -43,41 +42,40 @@
                unique-username="unique-username" required="required" ng-model="registerCtrl.registerUsername"
                autofocus="autofocus" class="form-control" minlength="3" ng-minlength="3"/>
         <span ng-show="busy" class="glyphicon glyphicon-refresh rotateIn form-control-feedback" aria-hidden="true"></span>
-        <span id="registerUsernameStatus" ng-show="form.registerUsername.$dirty &amp;&amp; form.registerUsername.$error.required" class="help-block">
-            Please choose a username
-        </span>
-        <span ng-show="form.registerUsername.$dirty &amp;&amp; form.registerUsername.$error.isTaken" class="help-block has-error">
-          Username already taken
-        </span>
-        <span ng-show="form.registerUsername.$dirty &amp;&amp; form.registerUsername.$error.invalidChars" class="help-block has-error">
-          Username may not contain any non-url-safe characters
-        </span>
-         <span ng-show="form.registerUsername.$error.minlength" class="help-block has-error">
-          Username must be 3 or more characters
-        </span>
+        <div ng-if="form.registerUsername.$dirty" id="registerUsernameStatus" ng-messages="form.registerUsername.$error">
+          <div ng-message="required" class="help-block has-error">Username is required</div>
+          <div ng-message="isTaken" class="help-block has-error">Username already taken</div>
+          <div ng-message="invalidChars" class="help-block has-error">Username may not contain any non-url-safe characters</div>
+          <div ng-message="minlength" class="help-block has-error">Username must be 3 or more characters</div>
+        </div>
       </div>
 
-      <div class="form-group has-feedback" ng-class="form.registerEmail.$invalid ? 'has-error' : ''">
+      <div class="form-group has-feedback" ng-class="form.email.$invalid ? 'has-error' : ''">
         <label for="email" class="control-label">Email</label>
         <input type="email" ng-model="registerCtrl.registerEmail" name="email" id="email" placeholder="Email"
-               aria-describedby="registerEmailStatus" aria-hidden="true"
+               aria-describedby="registerEmailStatus" aria-hidden="true" ng-pattern="/\S+@\S+\.\S+/" pattern="/\S+@\S+\.\S+/"
                required="required" class="form-control"/>
-        <span id="registerEmailStatus" ng-show="form.email.$dirty &amp;&amp; form.email.$invalid" class="help-block">Email is invalid</span>
+        <span ng-if="form.email.$valid" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+        <span id="registerEmailStatus" ng-if="form.email.$dirty &amp;&amp; form.email.$invalid" class="help-block has-error">Email is invalid</span>
       </div>
-      <!--<div class="form-group">
-        <label for="password" class="control-label">Password</label>
-        <input type="password" name="password" id="password" ng-model="registerCtrl.registerPassword"
+
+      <div class="form-group" ng-class="form.registerPassword.$invalid ? 'has-error' : ''">
+        <label for="registerPassword" class="control-label">Password</label>
+        <input type="password" name="registerPassword" id="registerPassword" ng-model="password"
                required="required" match="verification" class="form-control"/><span
-        ng-show="form.password.$dirty &amp;&amp; form.password.$error.required" class="help-block">Please enter a password</span>
+        ng-if="form.password.$dirty &amp;&amp; form.password.$error.required" class="help-block has-error">Please enter a password</span>
       </div>
-      <div class="form-group">
+
+      <div class="form-group" ng-class="form.verification.$invalid ? 'has-error' : ''">
         <label for="verification" class="control-label">Repeat password</label>
-        <input type="password" name="verification" id="verification" ng-model="registerCtrl.registerVerification"
-               required="required" match="password" class="form-control"/>
-        <span ng-show="form.verification.$dirty &amp;&amp; form.verification.$error.required" class="help-block">Please repeat your password</span>
-            <span ng-show="form.verification.$dirty &amp;&amp; form.verification.$error.match &amp;&amp; !form.verification.$error.required"
-                  class="help-block">Passwords don't match</span>
-      </div>-->
+        <input type="password" name="verification" id="verification" ng-model="verification"
+               required="required" match="password" class="form-control" aria-describedby="registerVerificationStatus" />
+
+        <div ng-if="form.verification.$dirty" id="registerVerificationStatus" ng-messages="form.verification.$error">
+          <div ng-message="required" class="help-block has-error">Please repeat your password</div>
+          <div ng-message="match" class="help-block has-error">Password don't match</div>
+        </div>
+      </div>
     </div>
     <div class="modal-footer">
       <input type="submit" ng-click="registerOk()" value="Sign up" ng-disabled="form.$invalid"

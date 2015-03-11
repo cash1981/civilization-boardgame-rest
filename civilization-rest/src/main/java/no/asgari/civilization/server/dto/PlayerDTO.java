@@ -27,10 +27,6 @@ public class PlayerDTO {
     @NotNull
     private String password;
 
-    @NotBlank
-    @NotNull
-    private String passwordCopy;
-
     private String pbfId;
 
 }

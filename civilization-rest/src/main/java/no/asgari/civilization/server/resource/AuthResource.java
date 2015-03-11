@@ -10,7 +10,7 @@ import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.application.CivAuthenticator;
 import no.asgari.civilization.server.dto.PlayerDTO;
-import no.asgari.civilization.server.dto.RegisterDTO;
+import no.asgari.civilization.server.dto.CheckUsernameDTO;
 import no.asgari.civilization.server.model.Player;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.mongojack.DBCursor;
@@ -35,7 +35,7 @@ import java.util.Optional;
 @Log4j
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class LoginResource {
+public class AuthResource {
 
     private final DB db;
     private final JacksonDBCollection<Player, String> playerCollection;
@@ -43,7 +43,7 @@ public class LoginResource {
     @Context
     private UriInfo uriInfo;
 
-    public LoginResource(DB db) {
+    public AuthResource(DB db) {
         this.db = db;
         this.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
     }
@@ -100,7 +100,7 @@ public class LoginResource {
 
     @POST
     @Path("/register/check/username")
-    public Response checkUsername(RegisterDTO register) {
+    public Response checkUsername(CheckUsernameDTO register) {
         Preconditions.checkNotNull(register);
 
         //If these doesn't match, then the username is unsafe

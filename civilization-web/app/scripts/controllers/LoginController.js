@@ -56,13 +56,10 @@
       modalInstance.result.then(function(register) {
         $log.info("back to login controller");
 
-        if(register && register.password === register.verification) {
+        if(register) {
           $log.info(register.username);
           $log.info(register.email);
           $log.info(register.password);
-          $log.info(register.verification);
-        } else {
-          growl.error("Passwords did not match");
         }
 
       }, function () {

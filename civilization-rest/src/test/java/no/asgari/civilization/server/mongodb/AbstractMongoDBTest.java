@@ -26,7 +26,7 @@ import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.resource.GameResource;
-import no.asgari.civilization.server.resource.LoginResource;
+import no.asgari.civilization.server.resource.AuthResource;
 import no.asgari.civilization.server.resource.PlayerResource;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.jetty.util.B64Code;
@@ -94,7 +94,7 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
                         new CivAuthenticator(db),
                         CacheBuilderSpec.parse("maximumSize=1"));
         config.getSingletons().add(new BasicAuthProvider<>(authenticator, "civilization"));
-        config.getSingletons().add(new LoginResource(db));
+        config.getSingletons().add(new AuthResource(db));
         config.getSingletons().add(new PlayerResource(db));
         config.getSingletons().add(new GameResource(db));
 
