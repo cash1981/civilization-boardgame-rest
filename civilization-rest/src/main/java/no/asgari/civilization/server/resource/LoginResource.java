@@ -31,7 +31,7 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Optional;
 
-@Path("login")
+@Path("auth")
 @Log4j
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -51,6 +51,7 @@ public class LoginResource {
     @POST
     @Consumes(value = MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(value = MediaType.APPLICATION_JSON)
+    @Path("/login")
     public Response login(@FormParam("username") @NotEmpty String username, @FormParam("password") @NotEmpty String password) {
         Preconditions.checkNotNull(username);
         Preconditions.checkNotNull(password);
@@ -78,6 +79,7 @@ public class LoginResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/register")
     public Response register(@Valid PlayerDTO playerDTO) {
         Preconditions.checkNotNull(playerDTO);
         log.debug("Entering create player");
@@ -97,7 +99,7 @@ public class LoginResource {
     }
 
     @POST
-    @Path("/check/username")
+    @Path("/register/check/username")
     public Response checkUsername(RegisterDTO register) {
         Preconditions.checkNotNull(register);
 
@@ -110,7 +112,7 @@ public class LoginResource {
         @Cleanup DBCursor<Player> dbPlayer = playerCollection.find(
                 DBQuery.is("username", register.getUsername().trim()), new BasicDBObject());
 
-        if (dbPlayer != null && dbPlayer.hasNext()) {
+        if (dbPlayer.hasNext()) {
             return Response.status(Response.Status.FORBIDDEN).entity("{\"isTaken\":\"true\"}").build();
         }
 

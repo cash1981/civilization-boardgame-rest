@@ -13,12 +13,7 @@ angular.module('civApp').directive('uniqueUsername', ['$http', 'BASE_URL', funct
         ctrl.$setValidity('isTaken', true);
         ctrl.$setValidity('invalidChars', true);
 
-        if (!value) {
-          // don't send undefined to the server during dirty check
-          // empty username is caught by required directive
-          return;
-        }
-        var url = BASE_URL + '/login/check/username';
+        var url = BASE_URL + '/auth/check/username';
         scope.busy = true;
         $http.post(url, {username: value})
           .success(function(data) {
@@ -26,14 +21,12 @@ angular.module('civApp').directive('uniqueUsername', ['$http', 'BASE_URL', funct
             scope.busy = false;
           })
           .error(function(data) {
-
             // display new error message
             if (data.isTaken) {
               ctrl.$setValidity('isTaken', false);
             } else if (data.invalidChars) {
               ctrl.$setValidity('invalidChars', false);
             }
-
             scope.busy = false;
           });
       })
