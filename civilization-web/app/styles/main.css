@@ -154,38 +154,3 @@ div.battle {
   background: url('/images/useritems/Battlefield_gross.png') no-repeat center center;
   background-size: cover;
 }
-
-@keyframes rotateThis {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@-webkit-keyframes rotateThis {
-  from {
-    -webkit-transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
-.rotating {
-  animation-name: rotateThis;
-  animation-duration: 1s;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
-  -moz-animation: rotateThis 1s infinite linear;
-  -webkit-animation: rotateThis 1s infinite linear;
-}
-/*
-.floating {
-  float: right;
-  position: relative;
-  top: -24px;
-  right: 10px;
-}
-*/

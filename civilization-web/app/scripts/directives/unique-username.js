@@ -12,8 +12,11 @@ angular.module('civApp').directive('uniqueUsername', ['$http', 'BASE_URL', funct
         // hide old error messages
         ctrl.$setValidity('isTaken', true);
         ctrl.$setValidity('invalidChars', true);
+        if(!value) {
+          return;
+        }
 
-        var url = BASE_URL + '/auth/check/username';
+        var url = BASE_URL + '/auth/register/check/username';
         scope.busy = true;
         $http.post(url, {username: value})
           .success(function(data) {
