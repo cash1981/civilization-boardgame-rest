@@ -154,3 +154,8 @@ div.battle {
   background: url('/images/useritems/Battlefield_gross.png') no-repeat center center;
   background-size: cover;
 }
+
+/* Remove the stupid yellow color in chrome when it wants to remember a input text field for you */
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px white inset;
+}

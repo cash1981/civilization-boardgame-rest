@@ -35,7 +35,7 @@
   </div>
   <form name="form" method="post" novalidate="novalidate">
     <div class="modal-body">
-      <div class="form-group has-feedback" ng-class="form.registerUsername.$invalid ? 'has-error' : ''">
+      <div class="form-group has-feedback" ng-class="form.registerUsername.$invalid && form.registerUsername.$dirty ? 'has-error' : ''">
         <label for="registerUsername" class="control-label">Username</label>
         <input type="text" name="registerUsername" id="registerUsername" placeholder="Username"
                aria-describedby="registerUsernameStatus" aria-hidden="true"
@@ -50,27 +50,25 @@
         </div>
       </div>
 
-      <div class="form-group has-feedback" ng-class="form.email.$invalid ? 'has-error' : ''">
+      <div class="form-group has-feedback" ng-class="form.email.$invalid && form.email.$dirty  ? 'has-error' : ''">
         <label for="email" class="control-label">Email</label>
         <input type="email" ng-model="registerCtrl.registerEmail" name="email" id="email" placeholder="Email"
                aria-describedby="registerEmailStatus" aria-hidden="true" ng-pattern="/\S+@\S+\.\S+/" pattern="/\S+@\S+\.\S+/"
                required="required" class="form-control"/>
-        <span ng-if="form.email.$valid" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
         <span id="registerEmailStatus" ng-if="form.email.$dirty &amp;&amp; form.email.$invalid" class="help-block has-error">Email is invalid</span>
       </div>
 
-      <div class="form-group" ng-class="form.registerPassword.$invalid ? 'has-error' : ''">
+      <div class="form-group" ng-class="form.registerPassword.$invalid && form.registerPassword.$dirty ? 'has-error' : ''">
         <label for="registerPassword" class="control-label">Password</label>
         <input type="password" name="registerPassword" id="registerPassword" ng-model="password"
-               required="required" match="verification" class="form-control"/><span
-        ng-if="form.password.$dirty &amp;&amp; form.password.$error.required" class="help-block has-error">Please enter a password</span>
+               required="required" match="verification" class="form-control"/>
+        <span ng-if="form.registerPassword.$dirty &amp;&amp; form.registerPassword.$error.required" class="help-block has-error">Please enter a password</span>
       </div>
 
-      <div class="form-group" ng-class="form.verification.$invalid ? 'has-error' : ''">
+      <div class="form-group" ng-class="form.verification.$invalid  && form.verification.$dirty ? 'has-error' : ''">
         <label for="verification" class="control-label">Repeat password</label>
         <input type="password" name="verification" id="verification" ng-model="verification"
                required="required" match="password" class="form-control" aria-describedby="registerVerificationStatus" />
-
         <div ng-if="form.verification.$dirty" id="registerVerificationStatus" ng-messages="form.verification.$error">
           <div ng-message="required" class="help-block has-error">Please repeat your password</div>
           <div ng-message="match" class="help-block has-error">Password don't match</div>
