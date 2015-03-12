@@ -11,7 +11,7 @@ import com.mongodb.MongoClient;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.java8.auth.CachingAuthenticator;
-import io.dropwizard.java8.auth.basic.BasicAuthProvider;
+import io.dropwizard.java8.auth.basic.BasicAuthFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import lombok.extern.log4j.Log4j;
@@ -68,7 +68,7 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
 
         //Authentication
 
-        environment.jersey().register(new BasicAuthProvider<>(new CachingAuthenticator<>(new MetricRegistry(), new CivAuthenticator(db),
+        environment.jersey().register(new BasicAuthFactory<>(new CachingAuthenticator<>(new MetricRegistry(), new CivAuthenticator(db),
                 CacheBuilderSpec.parse("expireAfterWrite=120m")), "civilization"));
 
         // Enable CORS headers
