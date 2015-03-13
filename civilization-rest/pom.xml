@@ -158,6 +158,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <workingDirectory>${project.basedir}</workingDirectory>
                     <mainClass>no.asgari.civilization.server.application.CivilizationApplication</mainClass>
                 </configuration>
             </plugin>

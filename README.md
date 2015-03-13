@@ -1,6 +1,9 @@
 Civlization boardgame (Fantasy Flight Games)
 =================================
 
+[![Build Status](https://travis-ci.org/dropwizard/dropwizard-java8.svg?branch=master)](https://travis-ci.org/cash1981/civilization-boardgame)
+[![Coverage Status](https://coveralls.io/repos/cash1981/civilization-boardgame/badge.svg)](https://coveralls.io/r/cash1981/civilization-boardgame)
+
 ##First version
 
 This will hopefully be a web application where you can use to randomize items for the Civilization boardgame. The first version is targeted for Play By Forums.
