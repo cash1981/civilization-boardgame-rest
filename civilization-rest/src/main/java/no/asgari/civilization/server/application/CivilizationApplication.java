@@ -1,6 +1,8 @@
 package no.asgari.civilization.server.application;
 
 import com.codahale.metrics.MetricRegistry;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheBuilderSpec;
 import com.google.common.cache.CacheLoader;
@@ -57,6 +59,9 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         createIndexForPlayer(playerCollection);
         createUsernameCache(playerCollection);
         createItemCache();
+
+        //JSR310
+        initJSR310();
 
         //healtcheck
         environment.healthChecks().register("MongoHealthCheck", new MongoHealthCheck(mongo));
@@ -122,6 +127,11 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
     private void createIndexForPlayer(JacksonDBCollection<Player, String> playerCollection) {
         playerCollection.createIndex(new BasicDBObject(Player.USERNAME, 1), new BasicDBObject("unique", true));
         playerCollection.createIndex(new BasicDBObject(Player.EMAIL, 1), new BasicDBObject("unique", true));
+    }
+
+    private void initJSR310() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JSR310Module());
     }
 
 }
