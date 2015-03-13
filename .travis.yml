@@ -3,5 +3,6 @@ jdk:
   - oraclejdk8
 services:
   - mongodb
+after_success: mvn clean cobertura:cobertura coveralls:report
 #This fails for some reason, cannot find angular-1.3.8
 #script: "cd civilization-web && npm install -g bower grunt-cli && bower install"
