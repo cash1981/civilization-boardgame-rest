@@ -45,7 +45,7 @@ public class LoginResourceTest extends AbstractMongoDBTest {
 
     @ClassRule
     public static final DropwizardAppRule<CivilizationConfiguration> RULE =
-            new DropwizardAppRule<>(CivilizationApplication.class, "src/main/resources/config.yml");
+            new DropwizardAppRule<>(CivilizationApplication.class, "civilization-rest/src/main/resources/config.yml");
     private static final String BASE_URL = "http://localhost:%d";
 
     @Path("/test/")

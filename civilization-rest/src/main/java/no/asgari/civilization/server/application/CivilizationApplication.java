@@ -37,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 public class CivilizationApplication extends Application<CivilizationConfiguration> {
 
     public static void main(String[] args) throws Exception {
-        new CivilizationApplication().run(new String[]{"server", "src/main/resources/config.yml"});
+        new CivilizationApplication().run(new String[]{"server", "civilization-rest/src/main/resources/config.yml"});
     }
 
     @Override
