@@ -36,7 +36,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
 
     @ClassRule
     public static final DropwizardAppRule<CivilizationConfiguration> RULE =
-            new DropwizardAppRule<CivilizationConfiguration>(CivilizationApplication.class, "src/main/resources/config.yml");
+            new DropwizardAppRule<CivilizationConfiguration>(CivilizationApplication.class, "civilization-rest/src/main/resources/config.yml");
     private static final String BASE_URL = "http://localhost:%d";
 
     @Before
@@ -303,9 +303,6 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         assertEquals(HttpStatus.OK_200, response.getStatus());
         List list = response.getEntity(List.class);
         assertThat(list).hasSize(3);
-
-        gameLogs = gameLogCollection.find(DBQuery.is("pbfId", pbfId));
-        assertThat(gameLogs.count()).isEqualTo(count + 3);
 
         //finally end battle
         endBattle();
