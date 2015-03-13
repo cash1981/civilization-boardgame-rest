@@ -131,7 +131,7 @@ public class GameResource {
         String id = gameAction.createNewGame(dto, player.getId());
         return Response.status(Response.Status.CREATED)
                 .location(uriInfo.getAbsolutePathBuilder().path(id).build())
-                .entity(id)
+                .entity("{\"id\": " + id + "\"}")
                 .build();
     }
 

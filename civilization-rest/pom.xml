@@ -50,6 +50,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <dropwizard.version>0.8.0</dropwizard.version>
         <jackson.version>2.5.1</jackson.version>
+        <jersey.version>2.16</jersey.version>
         <apache-poi.version>3.11-beta2</apache-poi.version>
         <mongo-driver.version>2.12.3</mongo-driver.version>
         <dropwizard-java8.version>0.8.0-2</dropwizard-java8.version>
@@ -85,14 +86,6 @@
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-core</artifactId>
             <version>${dropwizard.version}</version>
-<!--
-            <exclusions>
-                <exclusion>
-                    <groupId>-com.fasterxml.jackson.core</groupId>
-                    <artifactId>jackson-annotations</artifactId>
-                </exclusion>
-            </exclusions>
--->
         </dependency>
         <dependency>
             <groupId>io.dropwizard</groupId>
@@ -155,6 +148,12 @@
             <version>${dropwizard.version}</version>
             <scope>test</scope>
         </dependency>
+        <!--<dependency>
+            <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+            <artifactId>jersey-test-framework-provider-grizzly2</artifactId>
+            <version>${jersey.version}</version>
+            <scope>test</scope>
+        </dependency>-->
 
     </dependencies>
 

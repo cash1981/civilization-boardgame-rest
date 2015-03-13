@@ -1,45 +1,18 @@
 package no.asgari.civilization.server.resource;
 
-import com.codahale.metrics.MetricRegistry;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.cache.CacheBuilderSpec;
-import com.mongodb.BasicDBObject;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.representation.Form;
-import com.sun.jersey.test.framework.AppDescriptor;
-import com.sun.jersey.test.framework.LowLevelAppDescriptor;
-import io.dropwizard.auth.Auth;
-import io.dropwizard.auth.basic.BasicCredentials;
-import io.dropwizard.java8.auth.CachingAuthenticator;
-import io.dropwizard.java8.auth.basic.BasicAuthProvider;
-import io.dropwizard.jersey.DropwizardResourceConfig;
-import io.dropwizard.testing.junit.DropwizardAppRule;
-import lombok.Cleanup;
-import no.asgari.civilization.server.application.CivAuthenticator;
-import no.asgari.civilization.server.application.CivilizationApplication;
-import no.asgari.civilization.server.application.CivilizationConfiguration;
-import no.asgari.civilization.server.dto.PlayerDTO;
-import no.asgari.civilization.server.model.Player;
-import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
-import org.eclipse.jetty.http.HttpStatus;
-import org.junit.Assert;
-import org.junit.ClassRule;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.mongojack.DBCursor;
-import org.mongojack.DBQuery;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
-import java.net.URI;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import io.dropwizard.auth.Auth;
+import io.dropwizard.testing.junit.DropwizardAppRule;
+import no.asgari.civilization.server.application.CivilizationApplication;
+import no.asgari.civilization.server.application.CivilizationConfiguration;
+import no.asgari.civilization.server.model.Player;
+import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
+import org.junit.ClassRule;
 
 public class LoginResourceTest extends AbstractMongoDBTest {
 
@@ -57,7 +30,7 @@ public class LoginResourceTest extends AbstractMongoDBTest {
             return "ack";
         }
     }
-
+/*
     @Override
     protected AppDescriptor configure() {
         final DropwizardResourceConfig config = DropwizardResourceConfig.forTesting(new MetricRegistry());
@@ -117,9 +90,10 @@ public class LoginResourceTest extends AbstractMongoDBTest {
                 .post(ClientResponse.class, form);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
-        assertThat(response.getLocation().toASCIIString().matches(".*/player/.*/game.*"));
+
     }
 
+    /*
     @Test
     public void createExistingPlayer() throws JsonProcessingException {
         Player one = playerCollection.findOne();
@@ -241,5 +215,6 @@ public class LoginResourceTest extends AbstractMongoDBTest {
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY_422);
     }
+    */
 
 }

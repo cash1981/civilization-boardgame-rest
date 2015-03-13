@@ -1,5 +1,12 @@
 package no.asgari.civilization.server.model;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+import java.util.Optional;
+
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.action.DrawAction;
 import no.asgari.civilization.server.action.PlayerAction;
@@ -8,13 +15,6 @@ import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.mongojack.DBQuery;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("unchecked")
 public class UndoTest extends AbstractMongoDBTest {

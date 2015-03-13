@@ -1,24 +1,27 @@
 package no.asgari.civilization.server.mongodb;
 
+import static org.junit.Assert.assertNotNull;
+
+import java.io.IOException;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheBuilderSpec;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
-import com.sun.jersey.test.framework.AppDescriptor;
-import com.sun.jersey.test.framework.JerseyTest;
-import com.sun.jersey.test.framework.LowLevelAppDescriptor;
 import io.dropwizard.auth.basic.BasicCredentials;
-import io.dropwizard.java8.auth.CachingAuthenticator;
-import io.dropwizard.java8.auth.basic.BasicAuthProvider;
+import io.dropwizard.java8.auth.AuthFactory;
+import io.dropwizard.java8.auth.Authenticator;
+import io.dropwizard.java8.auth.basic.BasicAuthFactory;
 import io.dropwizard.jersey.DropwizardResourceConfig;
+import io.dropwizard.logging.LoggingFactory;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.PBFTestAction;
-import no.asgari.civilization.server.application.CivAuthenticator;
 import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.application.CivilizationConfiguration;
 import no.asgari.civilization.server.model.GameLog;
@@ -31,17 +34,20 @@ import no.asgari.civilization.server.resource.PlayerResource;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.jetty.util.B64Code;
 import org.eclipse.jetty.util.StringUtil;
+import org.glassfish.jersey.servlet.ServletProperties;
+import org.glassfish.jersey.test.DeploymentContext;
+import org.glassfish.jersey.test.JerseyTest;
+import org.glassfish.jersey.test.ServletDeploymentContext;
+import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
+import org.glassfish.jersey.test.spi.TestContainerException;
+import org.glassfish.jersey.test.spi.TestContainerFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.mongojack.DBCursor;
+import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
 
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.assertNotNull;
-
-@Log4j
 public abstract class AbstractMongoDBTest extends JerseyTest {
     protected static JacksonDBCollection<PBF, String> pbfCollection;
     protected static JacksonDBCollection<Player, String> playerCollection;
@@ -55,6 +61,10 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
     protected static DB db;
 
     private static MongoClient mongo;
+
+    static {
+        LoggingFactory.bootstrap();
+    }
 
     @BeforeClass
     public static void setup() throws Exception {
@@ -86,20 +96,18 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         playerCollection.createIndex(new BasicDBObject(Player.EMAIL, 1), new BasicDBObject("unique", true));
     }
 
-    @Override
-    protected AppDescriptor configure() {
-        final DropwizardResourceConfig config = DropwizardResourceConfig.forTesting(new MetricRegistry());
-        final CachingAuthenticator<BasicCredentials, Player> authenticator =
-                new CachingAuthenticator<>(new MetricRegistry(),
-                        new CivAuthenticator(db),
-                        CacheBuilderSpec.parse("maximumSize=1"));
-        config.getSingletons().add(new BasicAuthProvider<>(authenticator, "civilization"));
-        config.getSingletons().add(new LoginResource(db));
-        config.getSingletons().add(new PlayerResource(db));
-        config.getSingletons().add(new GameResource(db));
+    /*@Override
+    protected TestContainerFactory getTestContainerFactory() throws TestContainerException {
+        return new GrizzlyWebTestContainerFactory();
+    }*/
 
-        return new LowLevelAppDescriptor.Builder(config).build();
-    }
+    /*@Override
+    protected DeploymentContext configureDeployment() {
+        return ServletDeploymentContext.builder(new BasicAuthTestResourceConfig())
+                .initParam(ServletProperties.JAXRS_APPLICATION_CLASS, BasicAuthTestResourceConfig.class.getName())
+                .build();
+    }*/
+
 
     @AfterClass
     public static void cleanup() {
@@ -176,8 +184,8 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
 
     private static void createUsernameCache(final JacksonDBCollection<Player, String> playerCollection) {
         LoadingCache<String, String> usernameCache = CacheBuilder.newBuilder()
-                .expireAfterWrite(2, TimeUnit.HOURS)
-                .maximumSize(100)
+                .expireAfterWrite(10, TimeUnit.MINUTES)
+                .maximumSize(10)
                 .build(new CacheLoader<String, String>() {
                     public String load(String playerId) {
                         return playerCollection.findOneById(playerId).getUsername();
@@ -187,4 +195,22 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         CivSingleton.instance().setPlayerCache(usernameCache);
     }
 
+    public static class BasicAuthTestResourceConfig extends DropwizardResourceConfig {
+        public BasicAuthTestResourceConfig() {
+            super(true, new MetricRegistry());
+
+            final Authenticator<BasicCredentials, Player> authenticator = credentials -> {
+                DBCursor<Player> playerDBCursor = playerCollection.find(DBQuery.is("username", credentials.getUsername()));
+                if (playerDBCursor.hasNext()) {
+                    return Optional.of(playerDBCursor.next());
+                }
+                return Optional.empty();
+            };
+            register(AuthFactory.binder(new BasicAuthFactory<>(authenticator, "civilization", Player.class)));
+            register(new LoginResource(db));
+            register(new PlayerResource(db));
+            register(new GameResource(db));
+
+        }
+    }
 }

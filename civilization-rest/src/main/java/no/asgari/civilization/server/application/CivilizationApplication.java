@@ -1,6 +1,8 @@
 package no.asgari.civilization.server.application;
 
 import com.codahale.metrics.MetricRegistry;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheBuilderSpec;
 import com.google.common.cache.CacheLoader;
@@ -10,6 +12,9 @@ import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.auth.basic.BasicCredentials;
+import io.dropwizard.java8.Java8Bundle;
+import io.dropwizard.java8.auth.AuthFactory;
 import io.dropwizard.java8.auth.CachingAuthenticator;
 import io.dropwizard.java8.auth.basic.BasicAuthFactory;
 import io.dropwizard.setup.Bootstrap;
@@ -22,12 +27,14 @@ import no.asgari.civilization.server.resource.GameResource;
 import no.asgari.civilization.server.resource.LoginResource;
 import no.asgari.civilization.server.resource.PlayerResource;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.glassfish.hk2.utilities.Binder;
 import org.mongojack.JacksonDBCollection;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+
 import java.io.IOException;
 import java.util.EnumSet;
 import java.util.concurrent.TimeUnit;
@@ -37,11 +44,12 @@ import java.util.concurrent.TimeUnit;
 public class CivilizationApplication extends Application<CivilizationConfiguration> {
 
     public static void main(String[] args) throws Exception {
-        new CivilizationApplication().run(new String[]{"server", "src/main/resources/config.yml"});
+        new CivilizationApplication().run(new String[] { "server", "src/main/resources/config.yml" });
     }
 
     @Override
     public void initialize(Bootstrap<CivilizationConfiguration> bootstrap) {
+        bootstrap.addBundle(new Java8Bundle());
         bootstrap.addBundle(new AssetsBundle());
     }
 
@@ -58,6 +66,9 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         createUsernameCache(playerCollection);
         createItemCache();
 
+        //JSR310
+        initJSR310();
+
         //healtcheck
         environment.healthChecks().register("MongoHealthCheck", new MongoHealthCheck(mongo));
 
@@ -66,10 +77,18 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         environment.jersey().register(new LoginResource(db));
         environment.jersey().register(new PlayerResource(db));
 
-        //Authentication
+        //Authenticator
+        CachingAuthenticator<BasicCredentials, Player> cachingAuthenticator = new CachingAuthenticator<>(
+                new MetricRegistry(),
+                new CivAuthenticator(db),
+                CacheBuilderSpec.parse("expireAfterWrite=120m")
+        );
 
-        environment.jersey().register(new BasicAuthFactory<>(new CachingAuthenticator<>(new MetricRegistry(), new CivAuthenticator(db),
-                CacheBuilderSpec.parse("expireAfterWrite=120m")), "civilization"));
+        //Authentication binder
+        Binder authBinder = AuthFactory.binder(new BasicAuthFactory<>(cachingAuthenticator,"civilization", Player.class));
+
+        //Authentication
+        environment.jersey().register(authBinder);
 
         // Enable CORS headers
         FilterRegistration.Dynamic cors = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
@@ -124,4 +143,8 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         playerCollection.createIndex(new BasicDBObject(Player.EMAIL, 1), new BasicDBObject("unique", true));
     }
 
+    private void initJSR310() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JSR310Module());
+    }
 }

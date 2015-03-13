@@ -1,13 +1,13 @@
 package no.asgari.civilization.server.excel;
 
-import no.asgari.civilization.server.model.GameType;
-import no.asgari.civilization.server.model.Tech;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
 
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.assertNull;
+import no.asgari.civilization.server.model.GameType;
+import no.asgari.civilization.server.model.Tech;
+import org.junit.Test;
 
 public class ItemReaderTest {
 
