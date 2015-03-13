@@ -12,6 +12,7 @@ import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.java8.Java8Bundle;
 import io.dropwizard.java8.auth.CachingAuthenticator;
 import io.dropwizard.java8.auth.basic.BasicAuthProvider;
 import io.dropwizard.setup.Bootstrap;
@@ -45,6 +46,7 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
     @Override
     public void initialize(Bootstrap<CivilizationConfiguration> bootstrap) {
         bootstrap.addBundle(new AssetsBundle());
+        bootstrap.addBundle(new Java8Bundle());
     }
 
     @Override
@@ -59,9 +61,6 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         createIndexForPlayer(playerCollection);
         createUsernameCache(playerCollection);
         createItemCache();
-
-        //JSR310
-        initJSR310();
 
         //healtcheck
         environment.healthChecks().register("MongoHealthCheck", new MongoHealthCheck(mongo));
@@ -128,10 +127,4 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         playerCollection.createIndex(new BasicDBObject(Player.USERNAME, 1), new BasicDBObject("unique", true));
         playerCollection.createIndex(new BasicDBObject(Player.EMAIL, 1), new BasicDBObject("unique", true));
     }
-
-    private void initJSR310() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JSR310Module());
-    }
-
 }
