@@ -16,4 +16,4 @@ and that there are no active games up and running. I think accessing inactive ga
 
 
 GOTCHA
-$http.delete funker ikke med content-type
+$http.delete doesn't work with content-type
