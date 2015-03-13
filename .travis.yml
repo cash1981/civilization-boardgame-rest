@@ -7,4 +7,4 @@ services:
   - mongodb
 
 script:
-cd civilization-web && npm install -g bower grunt-cli && bower install
+'cd civilization-web && npm install -g bower grunt-cli && bower install'
