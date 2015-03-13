@@ -23,8 +23,8 @@
         };
 
         var data = formEncode({
-          username: username,
-          password: password,
+          username: encodeURIComponent(username),
+          password: encodeURIComponent(password),
           grant_type: 'password'
         });
 
@@ -45,9 +45,36 @@
         currentUser.remove();
       };
 
+      var register = function (register) {
+        var configuration = {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        };
+
+        var data = formEncode({
+          username: encodeURIComponent(register.username),
+          password: encodeURIComponent(base64.encode(register.password)),
+          email: encodeURIComponent(register.email)
+        });
+
+        return $http.post(url + '/register', data, configuration)
+          .success(function (response) {
+            growl.success('User created');
+            return response;
+          }).success(function (response) {
+            login(register.username, register.password);
+            return response;
+          }).error(function (data) {
+            growl.error('Could not register');
+            return data;
+          });
+      };
+
       return {
         login: login,
-        logout: logout
+        logout: logout,
+        register: register
       };
     };
   };

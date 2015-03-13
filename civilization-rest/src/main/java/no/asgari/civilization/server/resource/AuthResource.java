@@ -17,6 +17,8 @@ import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 
+import javax.swing.text.html.HTML;
+import javax.swing.text.html.HTMLEditorKit;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -77,18 +79,19 @@ public class AuthResource {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Path("/register")
-    public Response register(@Valid PlayerDTO playerDTO) {
-        Preconditions.checkNotNull(playerDTO);
-        log.debug("Entering create player");
+    public Response register(@FormParam("username") @NotEmpty String username, @FormParam("password") @NotEmpty String password, @FormParam("email") @NotEmpty String email) {
+        Preconditions.checkNotNull(username);
+        Preconditions.checkNotNull(password);
+        Preconditions.checkNotNull(email);
 
         PlayerAction playerAction = new PlayerAction(db);
         try {
-            String playerId = playerAction.createPlayer(playerDTO);
+            String playerId = playerAction.createPlayer(username, password, email);
             return Response.status(Response.Status.CREATED)
                     .location(uriInfo.getAbsolutePathBuilder().path(playerId).build())
+                    .entity("{\"id\": \"" + playerId + "\"}")
                     .build();
         } catch (WebApplicationException ex) {
             return ex.getResponse();

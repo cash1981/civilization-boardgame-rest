@@ -27,20 +27,6 @@
     };
 
     model.openSignup = function(size) {
-/*
-      $log.info("registerUsername " + model.registerUsername);
-      $log.info("registerEmail " + model.registerEmail);
-      $log.info("registerPassword " + model.registerPassword);
-      $log.info("verification " + model.verification);
-
-      var register = {
-        'username' : model.registerUsername,
-        'email' : model.registerEmail,
-        'password' : model.registerPassword,
-        'verification' : model.verification
-      };
-*/
-
       var modalInstance = $modal.open({
         templateUrl: 'signup.html',
         controller: 'RegisterController as registerCtrl',
@@ -54,16 +40,14 @@
       });
 
       modalInstance.result.then(function(register) {
-        $log.info("back to login controller");
-
         if(register) {
           $log.info(register.username);
           $log.info(register.email);
           $log.info(register.password);
+          basicauth.register(register);
         }
-
       }, function () {
-        $log.info('Modal dismissed at: ' + new Date());
+        //Cancel callback here
       });
     };
 
