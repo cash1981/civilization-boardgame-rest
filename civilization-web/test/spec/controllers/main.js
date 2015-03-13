@@ -1,22 +1,22 @@
-'use strict';
+/*'use strict';
 
-describe('Controller: MainCtrl', function () {
+describe('Controller: GameListController', function () {
 
   // load the controller's module
-  beforeEach(module('civilizationWebApp'));
+  beforeEach(module('civApp'));
 
-  var MainCtrl,
-    scope;
+  var GameListController, scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    MainCtrl = $controller('MainCtrl', {
+    GameListController = $controller('GameListController', {
       $scope: scope
     });
   }));
 
   it('should attach a list of awesomeThings to the scope', function () {
-    expect(scope.awesomeThings.length).toBe(3);
+    expect(GameListController.game.length).toBe(3);
   });
 });
+*/

@@ -36,7 +36,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
 
     @ClassRule
     public static final DropwizardAppRule<CivilizationConfiguration> RULE =
-            new DropwizardAppRule<CivilizationConfiguration>(CivilizationApplication.class, "civilization-rest/src/main/resources/config.yml");
+            new DropwizardAppRule<CivilizationConfiguration>(CivilizationApplication.class, "src/main/resources/config.yml");
     private static final String BASE_URL = "http://localhost:%d";
 
     @Before

@@ -1,6 +1,10 @@
 language: java
+
 jdk:
   - oraclejdk8
+
 services:
   - mongodb
-  
+
+script:
+cd civilization-web && npm install -g bower grunt-cli && bower install
