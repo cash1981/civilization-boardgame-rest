@@ -23,9 +23,7 @@ import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
 import org.eclipse.jetty.http.HttpStatus;
-import org.junit.Assert;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
@@ -41,7 +39,7 @@ import java.net.URI;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-public class LoginResourceTest extends AbstractMongoDBTest {
+public class AuthResourceTest extends AbstractMongoDBTest {
 
     @ClassRule
     public static final DropwizardAppRule<CivilizationConfiguration> RULE =
@@ -68,7 +66,7 @@ public class LoginResourceTest extends AbstractMongoDBTest {
 
         config.getSingletons().add(new BasicAuthProvider<>(authenticator, "civilization"));
         config.getSingletons().add(new ExampleResource());
-        config.getSingletons().add(new LoginResource(db));
+        config.getSingletons().add(new AuthResource(db));
 
         return new LowLevelAppDescriptor.Builder(config).build();
     }
@@ -94,7 +92,7 @@ public class LoginResourceTest extends AbstractMongoDBTest {
         form.add("password", "fifafoo");
 
         ClientResponse response = client().resource(
-                UriBuilder.fromPath(String.format(BASE_URL + "/login", RULE.getLocalPort()))
+                UriBuilder.fromPath(String.format(BASE_URL + "/auth/login", RULE.getLocalPort()))
                         .build()
         )
                 .type(MediaType.APPLICATION_FORM_URLENCODED)
@@ -110,7 +108,7 @@ public class LoginResourceTest extends AbstractMongoDBTest {
         form.add("password", "foo");
 
         ClientResponse response = client().resource(
-                UriBuilder.fromPath(String.format(BASE_URL + "/login", RULE.getLocalPort()))
+                UriBuilder.fromPath(String.format(BASE_URL + "/auth/login", RULE.getLocalPort()))
                         .build()
         )
                 .type(MediaType.APPLICATION_FORM_URLENCODED)
@@ -126,14 +124,13 @@ public class LoginResourceTest extends AbstractMongoDBTest {
         PlayerDTO playerDTO = new PlayerDTO();
         playerDTO.setUsername(one.getUsername());
         playerDTO.setPassword(one.getPassword());
-        playerDTO.setPasswordCopy(one.getPassword());
         playerDTO.setEmail(one.getEmail());
 
         ObjectMapper mapper = new ObjectMapper();
         String playerDtoJson = mapper.writeValueAsString(playerDTO);
 
         ClientResponse response = client().resource(
-                UriBuilder.fromPath(String.format(BASE_URL + "/login", RULE.getLocalPort()))
+                UriBuilder.fromPath(String.format(BASE_URL + "/auth/register", RULE.getLocalPort()))
                         .build()
         )
                 .type(MediaType.APPLICATION_JSON)
@@ -156,13 +153,12 @@ public class LoginResourceTest extends AbstractMongoDBTest {
         PlayerDTO playerDTO = new PlayerDTO();
         playerDTO.setUsername("foobar");
         playerDTO.setPassword("foobar");
-        playerDTO.setPasswordCopy("foobar");
         playerDTO.setEmail("foobar@mailinator.com");
 
         ObjectMapper mapper = new ObjectMapper();
         String playerDtoJson = mapper.writeValueAsString(playerDTO);
 
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/login", RULE.getLocalPort())).build();
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/auth/register", RULE.getLocalPort())).build();
         ClientResponse response = client().resource(uri)
                 .type(MediaType.APPLICATION_JSON)
                 .entity(playerDtoJson)
@@ -171,75 +167,4 @@ public class LoginResourceTest extends AbstractMongoDBTest {
         assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED_201);
         assertThat(response.getLocation().getPath()).contains(uri.getPath());
     }
-
-    @Test
-    public void deletePlayer() throws Exception {
-        DBCursor<Player> foobar = playerCollection.find(DBQuery.is("username", "foobar"));
-        if (!foobar.hasNext()) {
-            createPlayer();
-        }
-
-        foobar = playerCollection.find(DBQuery.is("username", "foobar"));
-        if (!foobar.hasNext()) {
-            Assert.fail("Should have created foobar");
-        }
-
-        String pId = foobar.next().getId();
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/login/%s", RULE.getLocalPort(), pId)).build();
-        ClientResponse response = client().resource(uri)
-                .delete(ClientResponse.class);
-
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT_204);
-    }
-
-    @Test
-    public void deleteUserThatDoesntExist() throws Exception {
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/login/%s", RULE.getLocalPort(), "abc1234")).build();
-        ClientResponse response = client().resource(uri)
-                .delete(ClientResponse.class);
-
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.FORBIDDEN_403);
-    }
-
-    @Test
-    public void checkWrongPasswordMatch() throws Exception {
-        PlayerDTO playerDTO = new PlayerDTO();
-        playerDTO.setUsername("foobar2");
-        playerDTO.setPassword("foobar2");
-        playerDTO.setPasswordCopy("foobar");
-        playerDTO.setEmail("foobar@mailinator.com");
-
-        ObjectMapper mapper = new ObjectMapper();
-        String playerDtoJson = mapper.writeValueAsString(playerDTO);
-
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/login", RULE.getLocalPort())).build();
-        ClientResponse response = client().resource(uri)
-                .type(MediaType.APPLICATION_JSON)
-                .entity(playerDtoJson)
-                .post(ClientResponse.class);
-
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST_400);
-    }
-
-    @Test
-    @Ignore("This will work in integration test, but not using JerseyTest")
-    public void checkMissingUsername() throws Exception {
-        PlayerDTO playerDTO = new PlayerDTO();
-        playerDTO.setPassword("foobar");
-        playerDTO.setPasswordCopy("foobar");
-        playerDTO.setEmail("foobar@mailinator.com");
-
-        ObjectMapper mapper = new ObjectMapper();
-        String playerDtoJson = mapper.writeValueAsString(playerDTO);
-
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/login", RULE.getLocalPort())).build();
-        ClientResponse response = client().resource(uri)
-                //.header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .type(MediaType.APPLICATION_JSON)
-                .entity(playerDtoJson)
-                .post(ClientResponse.class);
-
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY_422);
-    }
-
 }

@@ -53,13 +53,7 @@ public class PlayerAction extends BaseAction {
         Preconditions.checkNotNull(playerDTO.getUsername());
         Preconditions.checkNotNull(playerDTO.getEmail());
         Preconditions.checkNotNull(playerDTO.getPassword());
-        Preconditions.checkNotNull(playerDTO.getPasswordCopy());
 
-        if (!playerDTO.getPassword().equals(playerDTO.getPasswordCopy())) {
-            log.error("Passwords are not identical");
-            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-                    .build());
-        }
         if (CivSingleton.instance().playerCache().asMap().containsValue(playerDTO.getUsername())) {
             throw new PlayerExistException();
         }
