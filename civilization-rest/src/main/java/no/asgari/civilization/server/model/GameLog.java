@@ -92,11 +92,11 @@ public class GameLog {
                 publicLog = username + " has received from trade " + DELIM + draw.getItem().revealPublic();
                 break;
             case TECH:
-                privateLog = username + " has researched  " + DELIM + draw.getItem().revealAll();
+                privateLog = username + " has researched " + DELIM + draw.getItem().revealAll();
                 publicLog = username + " has researched " + DELIM + draw.getItem().revealPublic();
                 break;
             case DISCARD:
-                privateLog = username + " has discarded  " + DELIM + draw.getItem().revealAll();
+                privateLog = username + " has discarded " + DELIM + draw.getItem().revealAll();
                 publicLog = username + " has discarded " + DELIM + draw.getItem().revealAll();
                 break;
             case REVEAL:

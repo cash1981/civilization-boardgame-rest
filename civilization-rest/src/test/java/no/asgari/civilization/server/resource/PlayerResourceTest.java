@@ -14,6 +14,7 @@ import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
 import org.eclipse.jetty.http.HttpStatus;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -28,9 +29,11 @@ import java.util.List;
 import java.util.Optional;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.fail;
 import static junit.framework.TestCase.assertNotNull;
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class PlayerResourceTest extends AbstractMongoDBTest {
 
@@ -50,7 +53,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
     }
 
     @Test
-    public void chooseSpecificTechForLoggedInPlayer() throws Exception {
+    public void chooseTechThenRevealThenDelete() throws Exception {
         PBF pbf = pbfCollection.findOneById(pbfId);
         pbf.getPlayers().stream()
                 .filter(p -> p.getUsername().equals("cash1981"))
@@ -71,6 +74,32 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         assertTrue(cash1981.isPresent());
         assertThat(cash1981.get().getTechsChosen()).isNotEmpty();
         assertThat(cash1981.get().getTechsChosen().iterator().next().getName()).isEqualTo("Agriculture");
+
+        //reveal it
+        DBCursor<GameLog> gameLogs = gameLogCollection.find(DBQuery.is("pbfId", pbfId));
+        if (!gameLogs.hasNext()) {
+            Assert.fail("Should have gamelog");
+        }
+
+        while (gameLogs.hasNext()) {
+            GameLog gameLog = gameLogs.next();
+            if (gameLog.getPrivateLog().matches(".*researched Agriculture.*")) {
+                uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/tech/reveal/%s", RULE.getLocalPort(), pbfId, gameLog.getId())).build();
+                response = client().resource(uri)
+                        .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                        .put(ClientResponse.class);
+                assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
+            }
+        }
+
+        //Now remove it
+        uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/tech/remove", RULE.getLocalPort(), pbfId)).build();
+        response = client().resource(uri)
+                .queryParam("name", "Agriculture")
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .delete(ClientResponse.class);
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
+
     }
 
     @Test
