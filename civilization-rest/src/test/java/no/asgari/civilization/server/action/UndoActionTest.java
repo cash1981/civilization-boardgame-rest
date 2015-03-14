@@ -1,9 +1,17 @@
-package no.asgari.civilization.server.model;
+package no.asgari.civilization.server.action;
 
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.action.DrawAction;
 import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.action.UndoAction;
+import no.asgari.civilization.server.model.Civ;
+import no.asgari.civilization.server.model.GameLog;
+import no.asgari.civilization.server.model.Item;
+import no.asgari.civilization.server.model.PBF;
+import no.asgari.civilization.server.model.Player;
+import no.asgari.civilization.server.model.Playerhand;
+import no.asgari.civilization.server.model.Spreadsheet;
+import no.asgari.civilization.server.model.Undo;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +25,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("unchecked")
-public class UndoTest extends AbstractMongoDBTest {
+public class UndoActionTest extends AbstractMongoDBTest {
 
     private UndoAction undoAction = new UndoAction(db);
 

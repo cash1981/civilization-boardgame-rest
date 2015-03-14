@@ -88,8 +88,8 @@ public class GameLog {
                 publicLog = username + " reveals " + DELIM + draw.getItem().revealPublic();
                 break;
             case TRADE:
-                privateLog = username + " has received from trade " + DELIM + draw.getItem().revealAll();
-                publicLog = username + " has received from trade " + DELIM + draw.getItem().revealPublic();
+                privateLog = username + " has received " + DELIM + draw.getItem().revealAll();
+                publicLog = username + " has received " + DELIM + draw.getItem().revealPublic();
                 break;
             case TECH:
                 privateLog = username + " has researched " + DELIM + draw.getItem().revealAll();

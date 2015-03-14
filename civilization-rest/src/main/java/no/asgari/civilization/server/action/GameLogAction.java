@@ -100,7 +100,7 @@ public class GameLogAction {
             pl.setUsername(getUsernameFromPlayerId(playerId));
         }
         pl.setPublicLog(pl.getUsername() + " " + publicMessage);
-        pl.setPrivateLog(null);
+        pl.setPrivateLog("");
         pl.setId(save(pl));
         return pl;
     }
@@ -115,7 +115,7 @@ public class GameLogAction {
             pl.setUsername(getUsernameFromPlayerId(playerId));
         }
         pl.setPrivateLog(pl.getUsername() + " " + privateMessage);
-        pl.setPublicLog(null);
+        pl.setPublicLog("");
         pl.setId(save(pl));
         return pl;
     }

@@ -1,8 +1,26 @@
-package no.asgari.civilization.server.model;
+package no.asgari.civilization.server.action;
 
 import no.asgari.civilization.server.SheetName;
-import no.asgari.civilization.server.action.DrawAction;
 import no.asgari.civilization.server.exception.NoMoreItemsException;
+import no.asgari.civilization.server.model.Aircraft;
+import no.asgari.civilization.server.model.Artillery;
+import no.asgari.civilization.server.model.Citystate;
+import no.asgari.civilization.server.model.Civ;
+import no.asgari.civilization.server.model.CultureI;
+import no.asgari.civilization.server.model.CultureII;
+import no.asgari.civilization.server.model.CultureIII;
+import no.asgari.civilization.server.model.GameLog;
+import no.asgari.civilization.server.model.GreatPerson;
+import no.asgari.civilization.server.model.Hut;
+import no.asgari.civilization.server.model.Infantry;
+import no.asgari.civilization.server.model.Mounted;
+import no.asgari.civilization.server.model.PBF;
+import no.asgari.civilization.server.model.Player;
+import no.asgari.civilization.server.model.Playerhand;
+import no.asgari.civilization.server.model.Tile;
+import no.asgari.civilization.server.model.Unit;
+import no.asgari.civilization.server.model.Village;
+import no.asgari.civilization.server.model.Wonder;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -13,7 +31,7 @@ import java.util.Optional;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
-public class DrawTest extends AbstractMongoDBTest {
+public class DrawActionTest extends AbstractMongoDBTest {
 
     @Test
     public void drawCivAndMakeSureItsNoLongerInPBFCollection() throws Exception {
@@ -352,5 +370,42 @@ public class DrawTest extends AbstractMongoDBTest {
         PBF pbf = pbfCollection.findOneById(pbfId);
         Playerhand playerhand = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(playerId)).findFirst().get();
         assertThat(playerhand.getBattlehand()).hasSize(3);
+    }
+
+    @Test
+    public void simulateLoot() throws Exception {
+        drawVillageAndMakeSureItsNoLongerInPBFCollection();
+
+        DrawAction drawAction = new DrawAction(db);
+
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        long nrOfVillagesP1 = 0L, nrOfVIlagesP2 = 0L;
+
+        Playerhand playerTo = null;
+        for(Playerhand players : pbf.getPlayers()) {
+            if(players.getPlayerId().equals(playerId)) {
+                nrOfVillagesP1 = players.getItems().stream().filter(p -> p.getSheetName() == SheetName.VILLAGES).count();
+                continue;
+            }
+            if(playerTo == null) {
+                playerTo = players;
+                nrOfVIlagesP2 = players.getItems().stream().filter(p -> p.getSheetName() == SheetName.VILLAGES).count();
+            }
+        }
+
+        assertThat(nrOfVillagesP1).isGreaterThan(0L);
+        drawAction.drawRandomItemAndGiveToPlayer(pbfId, SheetName.VILLAGES, playerTo.getPlayerId(), playerId);
+
+        pbf = pbfCollection.findOneById(pbfId);
+        for(Playerhand players : pbf.getPlayers()) {
+            if(players.getPlayerId().equals(playerId)) {
+                long newVal = players.getItems().stream().filter(p -> p.getSheetName() == SheetName.VILLAGES).count();
+                assertThat(nrOfVillagesP1).isGreaterThan(newVal);
+            }
+            if(playerTo.getPlayerId().equals(players.getPlayerId())) {
+                long newVal = players.getItems().stream().filter(p -> p.getSheetName() == SheetName.VILLAGES).count();
+                assertThat(nrOfVIlagesP2).isLessThan(newVal);
+            }
+        }
     }
 }

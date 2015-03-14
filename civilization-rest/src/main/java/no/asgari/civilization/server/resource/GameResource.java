@@ -1,5 +1,23 @@
 package no.asgari.civilization.server.resource;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -20,23 +38,6 @@ import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Tech;
 import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.validation.Valid;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Path("game")
 @Produces(MediaType.APPLICATION_JSON)
@@ -106,15 +107,18 @@ public class GameResource {
 
     /**
      * Will return a list of all the players of this PBF.
-     * Handy for selecting players whom to trade with
+     * Handy for selecting players whom to trade with. Will remove the current user from the list
      */
     @GET
     @Path("/{pbfId}/players")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllPlayersForPBF(@NotEmpty @PathParam("pbfId") String pbfId) {
+    public Response getAllPlayersForPBF(@NotEmpty @PathParam("pbfId") String pbfId, @Auth(required = false) Player loggedInPlayer) {
         GameAction gameAction = new GameAction(db);
         List<PlayerDTO> players = gameAction.getAllPlayers(pbfId);
-
+        if (loggedInPlayer != null) {
+            return Response.ok()
+                    .entity(players.stream().filter(p -> !p.getPlayerId().equals(loggedInPlayer.getId())).collect(Collectors.toList()))
+                    .build();
+        }
         return Response.ok()
                 .entity(players)
                 .build();
@@ -173,7 +177,7 @@ public class GameResource {
     /**
      * Gets all the available techs. Will remove the techs that player already have chosen
      *
-     * @param pbfId  - The PBF
+     * @param pbfId - The PBF
      * @param player - The Authenticated player
      * @return - Response ok with a list of techs
      */

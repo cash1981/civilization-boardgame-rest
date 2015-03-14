@@ -9,6 +9,7 @@ import no.asgari.civilization.server.application.CivilizationConfiguration;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.GameDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
+import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
@@ -182,6 +183,39 @@ public class GameResourceTest extends MongoDBBaseTest {
                 .put(ClientResponse.class);
 
         assertThat(secondResponse.getStatus()).isEqualTo(200);
+    }
+
+    @Test
+    public void getListOfPlayersInGame() throws Exception {
+        PBF pbf = pbfCollection.findOne();
+
+        ClientResponse response = client().resource(
+                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/players", RULE.getLocalPort(), pbf.getId()))
+                        .build())
+                .type(MediaType.APPLICATION_JSON)
+                .get(ClientResponse.class);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
+        List players = response.getEntity(List.class);
+        assertThat(players).isNotNull();
+        assertThat(players).hasSize(4);
+    }
+
+    @Test
+    public void getListOfPlayersInGameExceptCurrentLoggedIn() throws Exception {
+        PBF pbf = pbfCollection.findOne();
+
+        ClientResponse response = client().resource(
+                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/players", RULE.getLocalPort(), pbf.getId()))
+                        .build())
+                .type(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .get(ClientResponse.class);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
+        List players = response.getEntity(List.class);
+        assertThat(players).isNotNull();
+        assertThat(players).hasSize(3);
     }
 
 }
