@@ -121,26 +121,19 @@ public class AuthResourceTest extends AbstractMongoDBTest {
     @Test
     public void createExistingPlayer() throws JsonProcessingException {
         Player one = playerCollection.findOne();
-        PlayerDTO playerDTO = new PlayerDTO();
-        playerDTO.setUsername(one.getUsername());
-        playerDTO.setPassword(one.getPassword());
-        playerDTO.setEmail(one.getEmail());
-
-        ObjectMapper mapper = new ObjectMapper();
-        String playerDtoJson = mapper.writeValueAsString(playerDTO);
+        Form form = new Form();
+        form.add("username", one.getUsername());
+        form.add("password", one.getPassword());
+        form.add("email", one.getEmail());
 
         ClientResponse response = client().resource(
                 UriBuilder.fromPath(String.format(BASE_URL + "/auth/register", RULE.getLocalPort()))
                         .build()
         )
-                .type(MediaType.APPLICATION_JSON)
-                .entity(playerDtoJson)
-                .post(ClientResponse.class);
+                .type(MediaType.APPLICATION_FORM_URLENCODED)
+                .post(ClientResponse.class, form);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST_400);
-        String message = response.getEntity(String.class);
-        assertThat(message).isNotNull();
-        assertThat(message).isEqualTo("Player already exists");
     }
 
     @Test
@@ -150,19 +143,15 @@ public class AuthResourceTest extends AbstractMongoDBTest {
             playerCollection.removeById(foobar.next().getId());
         }
 
-        PlayerDTO playerDTO = new PlayerDTO();
-        playerDTO.setUsername("foobar");
-        playerDTO.setPassword("foobar");
-        playerDTO.setEmail("foobar@mailinator.com");
-
-        ObjectMapper mapper = new ObjectMapper();
-        String playerDtoJson = mapper.writeValueAsString(playerDTO);
+        Form form = new Form();
+        form.add("username", "foobar");
+        form.add("password", "foobar");
+        form.add("email", "foobar@mailinator.com");
 
         URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/auth/register", RULE.getLocalPort())).build();
         ClientResponse response = client().resource(uri)
-                .type(MediaType.APPLICATION_JSON)
-                .entity(playerDtoJson)
-                .post(ClientResponse.class);
+                .type(MediaType.APPLICATION_FORM_URLENCODED)
+                .post(ClientResponse.class, form);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED_201);
         assertThat(response.getLocation().getPath()).contains(uri.getPath());
