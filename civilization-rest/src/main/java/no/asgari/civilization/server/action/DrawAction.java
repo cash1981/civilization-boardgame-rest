@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.WebApplicationException;
@@ -146,10 +147,10 @@ public class DrawAction extends BaseAction {
         }*/
 
         if (unitsInHand.size() <= numberOfDraws) {
-            //username has drawn X units for battle from his battlehand
+            //username has drawn X units from his battlehand
             playerhand.setBattlehand(unitsInHand);
             pbfCollection.updateById(pbfId, pbf);
-            createCommonPublicLog("has drawn " + unitsInHand.size() + " units for battle from his battlehand", pbfId, playerId);
+            createCommonPublicLog("has drawn " + unitsInHand.size() + " units his battlehand", pbfId, playerId);
             return unitsInHand;
         }
 
@@ -160,11 +161,12 @@ public class DrawAction extends BaseAction {
 
         playerhand.setBattlehand(drawnUnitsList);
         pbfCollection.updateById(pbfId, pbf);
-        createCommonPublicLog("has drawn " + drawnUnitsList.size() + " units for battle from his battlehand", pbfId, playerId);
+        createCommonPublicLog("has drawn " + drawnUnitsList.size() + " units from his battlehand", pbfId, playerId);
         return drawnUnitsList;
     }
 
     //Not sure yet if I want this since they can just make a new draw
+    //TODO Reveal instead
     public void discardUnitsFromBattlehand(String pbfId, String playerId) {
         PBF pbf = pbfCollection.findOneById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
@@ -235,6 +237,13 @@ public class DrawAction extends BaseAction {
         pbfCollection.updateById(pbf.getId(), pbf);
         gameLogAction.createCommonPrivatePublicLog("has discarded 3 barbarian units", pbfId, playerId);
     }
+
+    public void revealBattlehand(String pbfId, String playerId) {
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+    }
+
+
 
     /**
      * Sets playerhands units to isBattle = false

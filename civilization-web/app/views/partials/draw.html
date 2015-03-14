@@ -1,18 +1,17 @@
 <div ng-controller="BattleController as battleCtrl" class="battle">
-
+  <h1><small>In this view you can draw units from your battlehand, or draw barbarian units</small></h1>
   <div class="row">
     <div class="col-md-2 col-xs-12 padd-top-7">
       <form name="form">
         <div ng-show="form.$invalid" class="alert alert-danger" role="alert">
           <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
           <span class="sr-only">Error:</span>
-          You cannot draw less than 3 units or more than 99 units. If you have less than 3 units, you still must choose
-          3.
+          You cannot draw less than 1 units or more than 99 units!
         </div>
         <div class="input-group">
           <input type="number"
                  class="form-control"
-                 min="3"
+                 min="1"
                  max="99"
                  required
                  placeholder="Number of units to draw"
@@ -35,6 +34,18 @@
     <div ng-repeat="unit in battleCtrl.battlehand" class="col-md-2 col-xs-12 padd-top-7">
       <img ng-src="/images/useritems/{{battleCtrl.nextElement(unit).image}}"
            tooltip="{{battleCtrl.nextElement(unit).name}}"/>
+    </div>
+  </div>
+
+  <!-- reveal unit drawn -->
+  <div class="row" ng-if="battleCtrl.battlehand">
+    <div class="col-md-2 col-xs-12">
+      <button type="button" class="btn btn-default"
+              ng-really-message="Are you sure you want to reveal your units?"
+              ng-really-click="battleCtrl.revealBattlehand()"
+              tooltip="This will reveal your battlehand">
+        Reveal units
+      </button>
     </div>
   </div>
 

@@ -59,4 +59,15 @@ public class DrawResource {
         drawAction.drawRandomItemAndGiveToPlayer(pbfId, sheetNameOptional.get(), targetPlayerId, player.getId());
         return Response.ok().build();
     }
+
+    @PUT
+    @Timed
+    @Path("/battlehand/reveal")
+    public Response revealBattlehand(@PathParam("pbfId") String pbfId, @Auth Player player) {
+        DrawAction drawAction = new DrawAction(db);
+        //TODO
+
+        return Response.ok().build();
+    }
+
 }
