@@ -54,6 +54,8 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
 
     @Test
     public void chooseTechThenRevealThenDelete() throws Exception {
+        final String techToReseach = "Pottery";
+        
         PBF pbf = pbfCollection.findOneById(pbfId);
         pbf.getPlayers().stream()
                 .filter(p -> p.getUsername().equals("cash1981"))
@@ -61,7 +63,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
 
         URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/tech/choose", RULE.getLocalPort(), pbfId)).build();
         ClientResponse response = client().resource(uri)
-                .queryParam("name", "Agriculture")
+                .queryParam("name",techToReseach)
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .put(ClientResponse.class);
@@ -73,7 +75,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
                 .findFirst();
         assertTrue(cash1981.isPresent());
         assertThat(cash1981.get().getTechsChosen()).isNotEmpty();
-        assertThat(cash1981.get().getTechsChosen().iterator().next().getName()).isEqualTo("Agriculture");
+        assertThat(cash1981.get().getTechsChosen().iterator().next().getName()).isEqualTo("Pottery");
 
         //reveal it
         DBCursor<GameLog> gameLogs = gameLogCollection.find(DBQuery.is("pbfId", pbfId));
@@ -83,7 +85,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
 
         while (gameLogs.hasNext()) {
             GameLog gameLog = gameLogs.next();
-            if (gameLog.getPrivateLog().matches(".*researched Agriculture.*")) {
+            if (gameLog.getPrivateLog() != null && gameLog.getPrivateLog().matches(".*researched Pottery.*")) {
                 uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/tech/reveal/%s", RULE.getLocalPort(), pbfId, gameLog.getId())).build();
                 response = client().resource(uri)
                         .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
@@ -95,7 +97,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
         //Now remove it
         uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/tech/remove", RULE.getLocalPort(), pbfId)).build();
         response = client().resource(uri)
-                .queryParam("name", "Agriculture")
+                .queryParam("name",techToReseach)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .delete(ClientResponse.class);
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
