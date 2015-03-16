@@ -20,6 +20,7 @@ import io.dropwizard.setup.Environment;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.model.GameType;
+import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.resource.DrawResource;
 import no.asgari.civilization.server.resource.GameResource;
@@ -59,8 +60,10 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         environment.lifecycle().manage(mongoManaged);
 
         JacksonDBCollection<Player, String> playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
+        JacksonDBCollection<PBF, String> pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
         createIndexForPlayer(playerCollection);
         createUsernameCache(playerCollection);
+        createIndexForPBF(pbfCollection);
         createItemCache();
 
         //healtcheck
@@ -128,5 +131,9 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
     private void createIndexForPlayer(JacksonDBCollection<Player, String> playerCollection) {
         playerCollection.createIndex(new BasicDBObject(Player.USERNAME, 1), new BasicDBObject("unique", true));
         playerCollection.createIndex(new BasicDBObject(Player.EMAIL, 1), new BasicDBObject("unique", true));
+    }
+
+    private void createIndexForPBF(JacksonDBCollection<PBF, String> pbfCollection) {
+        pbfCollection.createIndex(new BasicDBObject(PBF.NAME, 1), new BasicDBObject("unique", true));
     }
 }

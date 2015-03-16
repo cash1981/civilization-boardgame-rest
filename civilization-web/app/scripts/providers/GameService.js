@@ -5,27 +5,48 @@
     $provide.provider("GameService", function (BASE_URL) {
       var games = {};
       var loading = {};
-      var baseUrl = BASE_URL + "/game/";
+      var baseUrl = BASE_URL + "/game";
 
       this.$get = function ($http, $log, growl) {
         $log.info("Creating game data service");
 
         var createGame = function (game) {
-          return $http.post(baseUrl, game)
-            .then(function (response) {
+
+          var newGameDTO = {
+            "name": game.name,
+            "type": game.type,
+            "numOfPlayers": game.numOfPlayers,
+            "color": game.color
+          };
+
+          $log.info("Before calling post, json is ", angular.toJson(newGameDTO));
+
+          var configuration = {
+            headers: {
+              "Content-Type": "application/json"
+            }
+          };
+
+          return $http.post(baseUrl, newGameDTO, configuration)
+            .success(function (response) {
+              growl.success("Game created!");
               return response.data;
+            })
+            .error(function (data) {
+              growl.error("Could not create game");
+              return data;
             });
         };
 
         var joinGame = function (game) {
-          return $http.put(baseUrl + game.id + "/join")
+          return $http.put(baseUrl + "/" + game.id + "/join")
             .then(function (response) {
               return response.data;
             });
         };
 
         var fetchGameByIdFromServer = function (id) {
-          var url = baseUrl + id;
+          var url = baseUrl + "/" + id;
           loading[id] = true;
           return $http.get(url)
             .then(function (response) {

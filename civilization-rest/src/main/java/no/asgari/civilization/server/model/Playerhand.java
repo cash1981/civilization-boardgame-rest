@@ -59,4 +59,9 @@ public class Playerhand {
     public String red() {
         return "Red";
     }
+
+    @JsonIgnore
+    public String blue() {
+        return "Blue";
+    }
 }

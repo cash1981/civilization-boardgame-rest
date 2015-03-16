@@ -159,3 +159,23 @@ div.battle {
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px white inset;
 }
+
+.blue {
+  color: #0000ff;
+}
+
+.yellow {
+  color: #ffff00;
+}
+
+.green {
+  color: #008000;
+}
+
+.purple {
+  color: #800080;
+}
+
+.red {
+  color: #FF0000;
+}

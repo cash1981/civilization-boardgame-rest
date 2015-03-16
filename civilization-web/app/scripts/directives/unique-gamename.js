@@ -2,7 +2,7 @@
  * Copied and modified from ng-signup-form
  * https://github.com/zemirco/ng-signup-form
  */
-angular.module('civApp').directive('uniqueUsername', ['$http', 'BASE_URL', function($http, BASE_URL) {
+angular.module('civApp').directive('uniqueGamename', ['$http', 'BASE_URL', function($http, BASE_URL) {
   return {
     require: 'ngModel',
     link: function(scope, elem, attrs, ctrl) {
@@ -16,7 +16,7 @@ angular.module('civApp').directive('uniqueUsername', ['$http', 'BASE_URL', funct
           return;
         }
 
-        var url = BASE_URL + '/auth/register/check/username';
+        var url = BASE_URL + '/game/check/gamename';
         scope.busy = true;
         $http.post(url, {name: value})
           .success(function(data) {

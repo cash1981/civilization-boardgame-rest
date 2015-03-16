@@ -6,6 +6,7 @@ import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import no.asgari.civilization.server.application.CivilizationApplication;
 import no.asgari.civilization.server.application.CivilizationConfiguration;
+import no.asgari.civilization.server.dto.CheckNameDTO;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.GameDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
@@ -216,6 +217,50 @@ public class GameResourceTest extends MongoDBBaseTest {
         List players = response.getEntity(List.class);
         assertThat(players).isNotNull();
         assertThat(players).hasSize(3);
+    }
+
+    @Test
+    public void checkExisitingGameName() throws Exception {
+        PBF pbf = pbfCollection.findOne();
+
+        CheckNameDTO dto = new CheckNameDTO(pbf.getName());
+
+        ClientResponse response = client().resource(
+                UriBuilder.fromPath(BASE_URL + "/game/check/gamename").build())
+                .type(MediaType.APPLICATION_JSON)
+                .entity(dto)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .post(ClientResponse.class);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.FORBIDDEN_403);
+    }
+
+    @Test
+    public void checkGameName() throws Exception {
+        CheckNameDTO dto = new CheckNameDTO("Something random 123");
+
+        ClientResponse response = client().resource(
+                UriBuilder.fromPath(BASE_URL + "/game/check/gamename").build())
+                .type(MediaType.APPLICATION_JSON)
+                .entity(dto)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .post(ClientResponse.class);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
+    }
+
+    @Test
+    public void checkBadHTMLGameName() throws Exception {
+        CheckNameDTO dto = new CheckNameDTO("Something<br/>");
+
+        ClientResponse response = client().resource(
+                UriBuilder.fromPath(BASE_URL + "/game/check/gamename").build())
+                .type(MediaType.APPLICATION_JSON)
+                .entity(dto)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .post(ClientResponse.class);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.FORBIDDEN_403);
     }
 
 }

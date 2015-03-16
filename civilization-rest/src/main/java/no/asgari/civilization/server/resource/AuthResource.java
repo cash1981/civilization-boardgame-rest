@@ -9,17 +9,13 @@ import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.application.CivAuthenticator;
-import no.asgari.civilization.server.dto.PlayerDTO;
-import no.asgari.civilization.server.dto.CheckUsernameDTO;
+import no.asgari.civilization.server.dto.CheckNameDTO;
 import no.asgari.civilization.server.model.Player;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 
-import javax.swing.text.html.HTML;
-import javax.swing.text.html.HTMLEditorKit;
-import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -103,17 +99,17 @@ public class AuthResource {
 
     @POST
     @Path("/register/check/username")
-    public Response checkUsername(CheckUsernameDTO register) {
-        Preconditions.checkNotNull(register);
+    public Response checkUsername(CheckNameDTO nameDTO) {
+        Preconditions.checkNotNull(nameDTO);
 
         //If these doesn't match, then the username is unsafe
-        if(!register.getUsername().equals(HtmlEscapers.htmlEscaper().escape(register.getUsername()))) {
-            log.warn("Unsafe username " + register.getUsername());
+        if(!nameDTO.getName().equals(HtmlEscapers.htmlEscaper().escape(nameDTO.getName()))) {
+            log.warn("Unsafe username " + nameDTO.getName());
             return Response.status(Response.Status.FORBIDDEN).entity("{\"invalidChars\":\"true\"}").build();
         }
 
         @Cleanup DBCursor<Player> dbPlayer = playerCollection.find(
-                DBQuery.is("username", register.getUsername().trim()), new BasicDBObject());
+                DBQuery.is("username", nameDTO.getName().trim()), new BasicDBObject());
 
         if (dbPlayer.hasNext()) {
             return Response.status(Response.Status.FORBIDDEN).entity("{\"isTaken\":\"true\"}").build();

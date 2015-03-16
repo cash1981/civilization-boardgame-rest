@@ -21,13 +21,17 @@ import javax.ws.rs.core.UriInfo;
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
+import com.google.common.html.HtmlEscapers;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import io.dropwizard.auth.Auth;
+import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.GameAction;
 import no.asgari.civilization.server.action.GameLogAction;
 import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.action.UndoAction;
+import no.asgari.civilization.server.dto.CheckNameDTO;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.GameDTO;
 import no.asgari.civilization.server.dto.GameLogDTO;
@@ -38,6 +42,9 @@ import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Tech;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.mongojack.DBCursor;
+import org.mongojack.DBQuery;
+import org.mongojack.JacksonDBCollection;
 
 @Path("game")
 @Produces(MediaType.APPLICATION_JSON)
@@ -48,8 +55,11 @@ public class GameResource {
     @Context
     private UriInfo uriInfo;
 
+    private final JacksonDBCollection<PBF, String> pbfCollection;
+
     public GameResource(DB db) {
         this.db = db;
+        this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
     }
 
     /**
@@ -60,7 +70,6 @@ public class GameResource {
      */
     @GET
     @Timed
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getAllGames() {
         GameAction gameAction = new GameAction(db);
         List<PbfDTO> games = gameAction.getAllActiveGames();
@@ -70,18 +79,39 @@ public class GameResource {
                 .build();
     }
 
+    @POST
+    @Path("/check/gamename")
+    public Response checkExistingGamename(CheckNameDTO nameDTO) {
+        Preconditions.checkNotNull(nameDTO);
+
+        //If these doesn't match, then the username is unsafe
+        if(!nameDTO.getName().equals(HtmlEscapers.htmlEscaper().escape(nameDTO.getName()))) {
+            log.warn("Unsafe name " + nameDTO.getName());
+            return Response.status(Response.Status.FORBIDDEN).entity("{\"invalidChars\":\"true\"}").build();
+        }
+
+        @Cleanup DBCursor<PBF> pbfdbCursor = pbfCollection.find(
+                DBQuery.is("name", nameDTO.getName().trim()), new BasicDBObject());
+
+        if (pbfdbCursor.hasNext()) {
+            return Response.status(Response.Status.FORBIDDEN).entity("{\"isTaken\":\"true\"}").build();
+        }
+
+        return Response.ok().build();
+    }
+
+
     /**
      * Returns a specific game
      *
      * @return
      */
-    @Path("/{gameId}")
+    @Path("/{pbfId}")
     @GET
     @Timed
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getGame(@Auth(required = false) Player player, @PathParam("gameId") String pbfId) {
+    public Response getGame(@Auth(required = false) Player player, @PathParam("pbfId") String pbfId) {
         if (Strings.isNullOrEmpty(pbfId)) {
-            log.error("GameId is missing");
+            log.error("pbfId is missing");
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         GameAction gameAction = new GameAction(db);

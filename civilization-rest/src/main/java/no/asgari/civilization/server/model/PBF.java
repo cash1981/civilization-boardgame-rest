@@ -31,6 +31,8 @@ import java.util.Optional;
 public class PBF {
     @JsonIgnore
     public static final String COL_NAME = "pbf";
+    @JsonIgnore
+    public static final String NAME = "name";
 
     @ObjectId
     @Id
