@@ -219,12 +219,12 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
 
     @Test
     public void testDrawCultureCard() throws Exception {
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/draw/%s", RULE.getLocalPort(), pbfId, SheetName.CULTURE_1)).build();
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/draw/%s/%s", RULE.getLocalPort(), pbfId, SheetName.CULTURE_1)).build();
         ClientResponse response = client().resource(uri)
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .post(ClientResponse.class);
-        assertEquals(response.getStatus(), HttpStatus.OK_200);
+        assertEquals(HttpStatus.OK_200, response.getStatus());
     }
 
     @Test
@@ -257,42 +257,42 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
 
     @Test
     public void testDrawInfantryCard() throws Exception {
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/draw/%s", RULE.getLocalPort(), pbfId, SheetName.INFANTRY)).build();
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/draw/%s/%s", RULE.getLocalPort(), pbfId, SheetName.INFANTRY)).build();
         ClientResponse response = client().resource(uri)
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .post(ClientResponse.class);
-        assertEquals(response.getStatus(), HttpStatus.OK_200);
+        assertEquals(HttpStatus.OK_200, response.getStatus());
     }
 
     @Test
     public void testDrawArtilleryCard() throws Exception {
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/draw/%s", RULE.getLocalPort(), pbfId, SheetName.ARTILLERY)).build();
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/draw/%s/%s", RULE.getLocalPort(), pbfId, SheetName.ARTILLERY)).build();
         ClientResponse response = client().resource(uri)
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .post(ClientResponse.class);
-        assertEquals(response.getStatus(), HttpStatus.OK_200);
+        assertEquals(HttpStatus.OK_200, response.getStatus());
     }
 
     @Test
     public void testDrawGreatPersonCard() throws Exception {
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/draw/%s", RULE.getLocalPort(), pbfId, SheetName.GREAT_PERSON)).build();
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/draw/%s/%s", RULE.getLocalPort(), pbfId, SheetName.GREAT_PERSON)).build();
         ClientResponse response = client().resource(uri)
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .post(ClientResponse.class);
-        assertEquals(response.getStatus(), HttpStatus.OK_200);
+        assertEquals(HttpStatus.OK_200, response.getStatus());
     }
 
     @Test
     public void testDrawVillage() throws Exception {
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/draw/%s", RULE.getLocalPort(), pbfId, SheetName.VILLAGES)).build();
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/draw/%s/%s", RULE.getLocalPort(), pbfId, SheetName.VILLAGES)).build();
         ClientResponse response = client().resource(uri)
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .post(ClientResponse.class);
-        assertEquals(response.getStatus(), HttpStatus.OK_200);
+        assertEquals(HttpStatus.OK_200, response.getStatus());
     }
 
     @Test
@@ -307,78 +307,11 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
 
     @Test
     public void testDrawingInvalid() throws Exception {
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/draw/%s", RULE.getLocalPort(), pbfId, "foobar")).build();
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/draw/%s/%s", RULE.getLocalPort(), pbfId, "foobar")).build();
         ClientResponse response = client().resource(uri)
                 .type(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .post(ClientResponse.class);
-        assertEquals(response.getStatus(), HttpStatus.NOT_FOUND_404);
-    }
-
-    @Test
-    public void drawUnitsForBattle() throws Exception {
-        testDrawArtilleryCard();
-        testDrawInfantryCard();
-        testDrawArtilleryCard();
-
-        DBCursor<GameLog> gameLogs = gameLogCollection.find(DBQuery.is("pbfId", pbfId));
-        int count = gameLogs.count();
-
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/battle/draw", RULE.getLocalPort(), pbfId)).build();
-        ClientResponse response = client()
-                .resource(uri)
-                .queryParam("numOfUnits", "3")
-                .type(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .put(ClientResponse.class);
-        assertEquals(HttpStatus.OK_200, response.getStatus());
-        List list = response.getEntity(List.class);
-        assertThat(list).hasSize(3);
-
-        //finally end battle
-        endBattle();
-    }
-
-    private void endBattle() throws Exception {
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/battle/end", RULE.getLocalPort(), pbfId)).build();
-        ClientResponse response = client()
-                .resource(uri)
-                .type(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .put(ClientResponse.class);
-        assertEquals(response.getStatus(), HttpStatus.OK_200);
-    }
-
-    @Test
-    public void drawUnitsWithNoParam() throws Exception {
-        testDrawArtilleryCard();
-        testDrawInfantryCard();
-        testDrawArtilleryCard();
-
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/battle/draw", RULE.getLocalPort(), pbfId)).build();
-        ClientResponse response = client()
-                .resource(uri)
-                .type(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .put(ClientResponse.class);
-        assertEquals(response.getStatus(), HttpStatus.OK_200);
-        List list = response.getEntity(List.class);
-        assertThat(list).hasSize(0);
-    }
-
-    @Test
-    public void drawUnitsWithInvalidParamShouldResult404() throws Exception {
-        testDrawArtilleryCard();
-        testDrawInfantryCard();
-        testDrawArtilleryCard();
-
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/battle/draw", RULE.getLocalPort(), pbfId)).build();
-        ClientResponse response = client()
-                .resource(uri)
-                .queryParam("numOfUnits", "foobar")
-                .type(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .put(ClientResponse.class);
         assertEquals(response.getStatus(), HttpStatus.NOT_FOUND_404);
     }
 
@@ -399,7 +332,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .entity(itemDTO)
                 .post(ClientResponse.class);
-        assertEquals(response.getStatus(), HttpStatus.OK_200);
+        assertEquals(HttpStatus.OK_200, response.getStatus());
 
         pbf = pbfCollection.findOneById(pbfId);
         assertThat(pbf.getDiscardedItems()).isNotEmpty();
@@ -420,7 +353,7 @@ public class PlayerResourceTest extends AbstractMongoDBTest {
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .entity(itemDTO)
                 .post(ClientResponse.class);
-        assertEquals(response.getStatus(), HttpStatus.OK_200);
+        assertEquals(HttpStatus.OK_200, response.getStatus());
     }
 
     private ItemDTO createItemDTO(SheetName sheetName, String itemName) {

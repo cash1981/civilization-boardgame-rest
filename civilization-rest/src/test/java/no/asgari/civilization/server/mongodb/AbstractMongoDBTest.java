@@ -25,6 +25,7 @@ import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
+import no.asgari.civilization.server.resource.DrawResource;
 import no.asgari.civilization.server.resource.GameResource;
 import no.asgari.civilization.server.resource.AuthResource;
 import no.asgari.civilization.server.resource.PlayerResource;
@@ -97,6 +98,7 @@ public abstract class AbstractMongoDBTest extends JerseyTest {
         config.getSingletons().add(new AuthResource(db));
         config.getSingletons().add(new PlayerResource(db));
         config.getSingletons().add(new GameResource(db));
+        config.getSingletons().add(new DrawResource(db));
 
         return new LowLevelAppDescriptor.Builder(config).build();
     }

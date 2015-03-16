@@ -36,6 +36,9 @@ public class DrawAction extends BaseAction {
     private final JacksonDBCollection<PBF, String> pbfCollection;
     private final GameLogAction gameLogAction;
 
+    private final StringBuilder sb = new StringBuilder();
+    private final Consumer<Unit> revealUnitConsumer = unit -> sb.append(unit.revealAll()).append(", ");
+
     public DrawAction(DB db) {
         super(db);
         this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
@@ -233,17 +236,34 @@ public class DrawAction extends BaseAction {
         }
 
         pbf.getDiscardedItems().addAll(playerhand.getBarbarians());
-        playerhand.getBarbarians().clear();
+        revealAndDiscardUnits(" as barbarians", playerhand.getBarbarians(), pbfId, playerId);
         pbfCollection.updateById(pbf.getId(), pbf);
-        gameLogAction.createCommonPrivatePublicLog("has discarded 3 barbarian units", pbfId, playerId);
     }
 
-    public void revealBattlehand(String pbfId, String playerId) {
+    public void revealAndDiscardBattlehand(String pbfId, String playerId) {
         PBF pbf = pbfCollection.findOneById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+        if(playerhand.getBattlehand().isEmpty()) {
+            log.warn("Tried to reveal playerhand, but was empty");
+            return;
+        }
+
+        revealAndDiscardUnits(" from their battlehand", playerhand.getBattlehand(), pbfId, playerId);
+        pbfCollection.updateById(pbfId, pbf);
     }
 
+    private void revealAndDiscardUnits(String message, List<Unit> units, String pbfId, String playerId) {
+        //Clear just in case
+        sb.setLength(0);
+        units.forEach(revealUnitConsumer);
 
+        //Remove the last append ', '
+        if (sb.length() > 1) {
+            sb.setLength(sb.length() - 2);
+        }
+        createCommonPublicLog(" reveals " + sb.toString() + message, pbfId, playerId);
+        units.clear();
+    }
 
     /**
      * Sets playerhands units to isBattle = false
@@ -305,8 +325,8 @@ public class DrawAction extends BaseAction {
             createCommonPrivateLog(" gives " + itemToGive.revealAll() + " to " + playerTo.getUsername(), pbfId, playerFrom.getPlayerId());
             createCommonPrivateLog(" receives " + itemToGive.revealAll() + " from " + playerFrom.getUsername(), pbfId, playerTo.getPlayerId());
 
-            createCommonPrivateLog(" gives " + itemToGive.revealPublic() + " to " + playerTo.getUsername(), pbfId, playerFrom.getPlayerId());
-            createCommonPrivateLog(" receives " + itemToGive.revealPublic() + " from " + playerFrom.getUsername(), pbfId, playerTo.getPlayerId());
+            createCommonPublicLog(" gives " + itemToGive.revealPublic() + " to " + playerTo.getUsername(), pbfId, playerFrom.getPlayerId());
+            createCommonPublicLog(" receives " + itemToGive.revealPublic() + " from " + playerFrom.getUsername(), pbfId, playerTo.getPlayerId());
 
             pbfCollection.updateById(pbf.getId(), pbf);
             return;

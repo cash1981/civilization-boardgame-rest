@@ -1,6 +1,6 @@
 'use strict';
 (function (module) {
-  var DrawController = function ($log, GameService, PlayerService, currentUser, Util, growl, $routeParams, $scope) {
+  var DrawController = function ($log, GameService, DrawService, currentUser, Util, growl, $routeParams, $scope) {
     var model = this;
 
     $scope.$watch(function () {
@@ -36,15 +36,15 @@
         growl.error("You must draw at least 1 unit");
         return;
       }
-      PlayerService.drawUnitsForBattle($routeParams.id, model.number);
+      DrawService.drawUnitsFromHand($routeParams.id, model.number);
     };
 
     model.drawBarbarians = function() {
-      PlayerService.drawBarbarians($routeParams.id);
+      DrawService.drawBarbarians($routeParams.id);
     };
 
     model.discardBarbarians = function() {
-      PlayerService.discardBarbarians($routeParams.id)
+      DrawService.discardBarbarians($routeParams.id)
         .then(function() {
           model.barbarians = [];
         });
@@ -55,8 +55,8 @@
     };
 
     model.revealBattlehand = function() {
-      if(model.battlehand) {
-
+      if(model.battlehand && model.battlehand.length > 0) {
+        DrawService.revealHand($routeParams.id);
       }
     };
 
@@ -64,6 +64,6 @@
   };
 
   module.controller("DrawController",
-    ["$log", "GameService", "PlayerService", "currentUser", "Util", "growl", "$routeParams", "$scope", DrawController]);
+    ["$log", "GameService", "DrawService", "currentUser", "Util", "growl", "$routeParams", "$scope", DrawController]);
 
 }(angular.module("civApp")));

@@ -1,5 +1,13 @@
 package no.asgari.civilization.server.action;
 
+import static org.fest.assertions.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+import java.util.Optional;
+
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.exception.NoMoreItemsException;
 import no.asgari.civilization.server.model.Aircraft;
@@ -15,21 +23,13 @@ import no.asgari.civilization.server.model.Hut;
 import no.asgari.civilization.server.model.Infantry;
 import no.asgari.civilization.server.model.Mounted;
 import no.asgari.civilization.server.model.PBF;
-import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.model.Tile;
 import no.asgari.civilization.server.model.Unit;
 import no.asgari.civilization.server.model.Village;
 import no.asgari.civilization.server.model.Wonder;
 import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
-import org.junit.Ignore;
 import org.junit.Test;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 public class DrawActionTest extends AbstractMongoDBTest {
 
@@ -295,42 +295,6 @@ public class DrawActionTest extends AbstractMongoDBTest {
     }
 
     @Test
-    @Ignore("This test clear the items, and makes incosistencies")
-    public void makeSureSystemCorrectlyShuffles() throws Exception {
-        DrawAction drawAction = new DrawAction(db);
-        //Before draw
-        long aircrafts = pbfCollection.findOneById(pbfId).getItems().parallelStream()
-                .filter(p -> p.getSheetName() == SheetName.AIRCRAFT)
-                .count();
-
-        for (int i = 0; i < aircrafts; i++) {
-            Optional<GameLog> draw = drawAction.draw(pbfId, playerId, SheetName.AIRCRAFT);
-            assertThat(draw.isPresent());
-        }
-
-        long newCount = pbfCollection.findOneById(pbfId).getItems().parallelStream()
-                .filter(p -> p.getSheetName() == SheetName.AIRCRAFT)
-                .count();
-
-        assertThat(newCount).isEqualTo(0L);
-
-        //Simulate battle where all units are killed
-        PBF pbf = pbfCollection.findOneById(pbfId);
-        Playerhand playerhand = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(playerId)).findFirst().get();
-        playerhand.getItems().clear();
-        pbfCollection.updateById(pbf.getId(), pbf);
-
-        //Now if draw again, then it should throw exception since all units are in play
-        drawAction.draw(pbfId, playerId, SheetName.AIRCRAFT);
-
-        newCount = pbfCollection.findOneById(pbfId).getItems().parallelStream()
-                .filter(p -> p.getSheetName() == SheetName.AIRCRAFT)
-                .count();
-
-        assertThat(newCount).isGreaterThan(1);
-    }
-
-    @Test
     public void drawAndDiscardBarbarians() throws Exception {
         DrawAction drawAction = new DrawAction(db);
 
@@ -370,6 +334,12 @@ public class DrawActionTest extends AbstractMongoDBTest {
         PBF pbf = pbfCollection.findOneById(pbfId);
         Playerhand playerhand = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(playerId)).findFirst().get();
         assertThat(playerhand.getBattlehand()).hasSize(3);
+
+        drawAction.revealAndDiscardBattlehand(pbfId, playerId);
+
+        pbf = pbfCollection.findOneById(pbfId);
+        playerhand = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(playerId)).findFirst().get();
+        assertThat(playerhand.getBattlehand()).hasSize(0);
     }
 
     @Test
@@ -382,12 +352,12 @@ public class DrawActionTest extends AbstractMongoDBTest {
         long nrOfVillagesP1 = 0L, nrOfVIlagesP2 = 0L;
 
         Playerhand playerTo = null;
-        for(Playerhand players : pbf.getPlayers()) {
-            if(players.getPlayerId().equals(playerId)) {
+        for (Playerhand players : pbf.getPlayers()) {
+            if (players.getPlayerId().equals(playerId)) {
                 nrOfVillagesP1 = players.getItems().stream().filter(p -> p.getSheetName() == SheetName.VILLAGES).count();
                 continue;
             }
-            if(playerTo == null) {
+            if (playerTo == null) {
                 playerTo = players;
                 nrOfVIlagesP2 = players.getItems().stream().filter(p -> p.getSheetName() == SheetName.VILLAGES).count();
             }
@@ -397,12 +367,12 @@ public class DrawActionTest extends AbstractMongoDBTest {
         drawAction.drawRandomItemAndGiveToPlayer(pbfId, SheetName.VILLAGES, playerTo.getPlayerId(), playerId);
 
         pbf = pbfCollection.findOneById(pbfId);
-        for(Playerhand players : pbf.getPlayers()) {
-            if(players.getPlayerId().equals(playerId)) {
+        for (Playerhand players : pbf.getPlayers()) {
+            if (players.getPlayerId().equals(playerId)) {
                 long newVal = players.getItems().stream().filter(p -> p.getSheetName() == SheetName.VILLAGES).count();
                 assertThat(nrOfVillagesP1).isGreaterThan(newVal);
             }
-            if(playerTo.getPlayerId().equals(players.getPlayerId())) {
+            if (playerTo.getPlayerId().equals(players.getPlayerId())) {
                 long newVal = players.getItems().stream().filter(p -> p.getSheetName() == SheetName.VILLAGES).count();
                 assertThat(nrOfVIlagesP2).isLessThan(newVal);
             }

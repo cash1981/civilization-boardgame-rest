@@ -21,6 +21,7 @@ import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.Player;
+import no.asgari.civilization.server.resource.DrawResource;
 import no.asgari.civilization.server.resource.GameResource;
 import no.asgari.civilization.server.resource.AuthResource;
 import no.asgari.civilization.server.resource.PlayerResource;
@@ -69,6 +70,7 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         environment.jersey().register(new GameResource(db));
         environment.jersey().register(new AuthResource(db));
         environment.jersey().register(new PlayerResource(db));
+        environment.jersey().register(new DrawResource(db));
 
         //Authentication
 
