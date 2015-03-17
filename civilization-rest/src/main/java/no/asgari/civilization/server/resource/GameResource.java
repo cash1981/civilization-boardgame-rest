@@ -1,7 +1,9 @@
 package no.asgari.civilization.server.resource;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -163,9 +165,10 @@ public class GameResource {
         log.info("Creating game " + dto);
         GameAction gameAction = new GameAction(db);
         String id = gameAction.createNewGame(dto, player.getId());
+        URI location = URI.create("/" + id);
+        log.debug("location for new game is " + location);
         return Response.status(Response.Status.CREATED)
-                .location(uriInfo.getAbsolutePathBuilder().path(id).build())
-                .entity(id)
+                .location(location)
                 .build();
     }
 
@@ -177,7 +180,7 @@ public class GameResource {
         Preconditions.checkNotNull(player);
 
         GameAction gameAction = new GameAction(db);
-        gameAction.joinGame(pbfId, player.getId());
+        gameAction.joinGame(pbfId, player.getId(), Optional.empty());
         return Response.ok().build();
     }
 
@@ -200,7 +203,6 @@ public class GameResource {
 
         log.warn("Cannot withdraw from game. Its already started");
         return Response.status(Response.Status.NOT_ACCEPTABLE)
-                .location(uriInfo.getAbsolutePathBuilder().path(pbfId).build())
                 .build();
     }
 

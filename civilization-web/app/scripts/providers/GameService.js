@@ -5,11 +5,9 @@
     $provide.provider("GameService", function (BASE_URL) {
       var games = {};
       var loading = {};
-      var baseUrl = BASE_URL + "/game";
+      var baseUrl = BASE_URL + "/game/";
 
-      this.$get = function ($http, $log, growl) {
-        $log.info("Creating game data service");
-
+      this.$get = function ($http, $log, growl, $location) {
         var createGame = function (game) {
 
           var newGameDTO = {
@@ -19,18 +17,20 @@
             "color": game.color
           };
 
-          $log.info("Before calling post, json is ", angular.toJson(newGameDTO));
+          //$log.info("Before calling post, json is ", angular.toJson(newGameDTO));
 
-          var configuration = {
-            headers: {
-              "Content-Type": "application/json"
-            }
-          };
-
-          return $http.post(baseUrl, newGameDTO, configuration)
-            .success(function (response) {
+          return $http.post(baseUrl, newGameDTO)
+            .success(function (data, status, headers) {
               growl.success("Game created!");
-              return response.data;
+              var loc = headers('Location');
+              if(loc) {
+                var gameid = _.last(loc.split('/'));
+                if(gameid) {
+                  $location.path('/game/' + gameid);
+                }
+              }
+
+              return data;
             })
             .error(function (data) {
               growl.error("Could not create game");
@@ -39,14 +39,14 @@
         };
 
         var joinGame = function (game) {
-          return $http.put(baseUrl + "/" + game.id + "/join")
+          return $http.put(baseUrl + game.id + "/join")
             .then(function (response) {
               return response.data;
             });
         };
 
         var fetchGameByIdFromServer = function (id) {
-          var url = baseUrl + "/" + id;
+          var url = baseUrl + id;
           loading[id] = true;
           return $http.get(url)
             .then(function (response) {
