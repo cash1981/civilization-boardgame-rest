@@ -84,8 +84,6 @@ public class GameAction extends BaseAction {
         WriteResult<PBF, String> pbfInsert = pbfCollection.insert(pbf);
         pbf.setId(pbfInsert.getSavedId());
         log.info("PBF game created with id " + pbfInsert.getSavedId());
-
-        log.info("Join the game created");
         joinGame(pbf.getId(), playerId, Optional.of(dto.getColor()));
         return pbf.getId();
     }

@@ -67,6 +67,7 @@ public class GameResourceTest extends MongoDBBaseTest {
         dto.setNumOfPlayers(4);
         dto.setName("PBF WaW");
         dto.setType(GameType.WAW);
+        dto.setColor(Playerhand.blue());
 
         ObjectMapper mapper = new ObjectMapper();
         String dtoAsJSon = mapper.writeValueAsString(dto);
@@ -80,8 +81,9 @@ public class GameResourceTest extends MongoDBBaseTest {
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED_201);
         URI location = response.getLocation();
-        final String id = response.getEntity(String.class);
-        assertThat(location.getPath()).isEqualTo("/game/" + id);
+        assertThat(location.getPath()).isNotEmpty();
+        String id = location.getPath().split("/")[2];
+        assertThat(id).isNotEqualTo("game");
 
         assertThat(pbfCollection.findOneById(id).getPlayers().size()).isEqualTo(1);
     }
