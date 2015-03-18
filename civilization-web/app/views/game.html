@@ -1,30 +1,35 @@
 <div ng-controller="GameController as gameCtrl">
   <div class="row">
-    <div ng-class="userHasAccess ? 'col-md-6' : 'col-md-12'">
+    <div class="col-md-6">
       <div class="jumbotron">
         <h1>{{currentGame.name}}</h1>
 
-        <p class="lead">{{currentGame.type}} - Created: {{currentGame.created | date:'dd-MM-yyyy'}}</p>
+        <p class="lead">{{currentGame.type}} &bull; Created: {{currentGame.created | date:'dd-MM-yyyy'}}</p>
 
-        <p><a ng-href class="btn btn-primary btn-lg" role="button">{{currentGame.whosTurnIsIt}}</a> to play</p>
+        <p class="lead">
+          <span ng-if="!currentGame.whosTurnIsIt"><a ng-href class="btn btn-primary btn-lg" role="button">Game not full!</a></span>
+          <span ng-if="currentGame.whosTurnIsIt"><a ng-href class="btn btn-primary btn-lg" role="button">{{currentGame.whosTurnIsIt}}</a> to play </span>
+          <span ng-if="gameCtrl.yourTurn">
+            <button
+              role="button"
+              ng-really-message="This will end your turn. You cannot make any more draws when it is not your turn. Are you sure?"
+              ng-really-click="gameCtrl.endTurn()"
+              class="btn btn-danger btn-lg"
+              tooltip="Will end your turn">End turn</button>
+          </span>
+        </p>
       </div>
     </div>
-    <div class="col-md-6" ng-if="userHasAccess">
+    <div class="col-md-6">
       <div class="jumbotron">
-        <h1>Perhaps show the latest public log here</h1>
-
-        <p>
-          <button ng-show="gameCtrl.yourTurn"
-                  role="button"
-                  ng-really-message="This will end your turn. You cannot make any more draws when it is not your turn. Are you sure?"
-                  ng-really-click="gameCtrl.endTurn()"
-                  class="btn btn-primary btn-lg"
-                  tooltip="Will end your turn">
-            End turn
-          </button>
-        <h3>Write message/chat</h3>
-
-        <p class="lead" ng-show="gameCtrl.yourTurn">Its your turn</p>
+        <h1>{{latestLog}}</h1>
+        <span ng-if="userHasAccess">
+          <form ng-submit="gameCtrl.chat($event)" ui-keypress="{13:'gameCtrl.chat($event)'}">
+            <input type="text" ng-model="gameCtrl.chatMessage" placeholder="Write your chat message here" size="30" maxlength="250"/>
+            <!-- Hack, will put submit button out of view -->
+            <!--<input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>-->
+          </form>
+        </span>
       </div>
     </div>
   </div>
@@ -79,7 +84,7 @@
     <tab ng-if="userHasAccess" heading="Chat" class="col-md-2">
       <h1>For now, we will use the forum for table talk</h1>
     </tab>
-    <tab ng-if="!userHasAccess"  heading="Chat" class="col-md-4">
+    <tab ng-if="!userHasAccess" heading="Chat" class="col-md-4">
       <h1>For now, we will use the forum for table talk</h1>
     </tab>
     <tab ng-if="userHasAccess" heading="My Items" class="col-md-2">

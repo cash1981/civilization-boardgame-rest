@@ -31,6 +31,7 @@ import no.asgari.civilization.server.application.CivAuthenticator;
 import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.application.MongoManaged;
 import no.asgari.civilization.server.excel.ItemReader;
+import no.asgari.civilization.server.model.Chat;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.PBF;
@@ -55,6 +56,7 @@ public class CivilizationIntegrationTestApplication extends Application<Civiliza
     public JacksonDBCollection<PBF, String> pbfCollection;
     public JacksonDBCollection<GameLog, String> gameLogCollection;
     public JacksonDBCollection<Player, String> playerCollection;
+    public JacksonDBCollection<Chat, String> chatCollection;
     public String pbfId;
     public String playerId;
     public String pbfId_2;
@@ -78,10 +80,12 @@ public class CivilizationIntegrationTestApplication extends Application<Civiliza
         this.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
         this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
         this.gameLogCollection = JacksonDBCollection.wrap(db.getCollection(GameLog.COL_NAME), GameLog.class, String.class);
+        this.chatCollection = JacksonDBCollection.wrap(db.getCollection(Chat.COL_NAME), Chat.class, String.class);
 
         playerCollection.drop();
         pbfCollection.drop();
         gameLogCollection.drop();
+        chatCollection.drop();
 
         createIndexForPlayer(playerCollection);
         createUsernameCache(playerCollection);

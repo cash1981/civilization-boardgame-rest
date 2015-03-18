@@ -12,6 +12,9 @@ server:
   type: simple
   applicationContextPath: /civilization
   adminContextPath: /admin
+  gzip:
+    enabled: true
+    bufferSize: 8KiB
 
   connector:
     type: http

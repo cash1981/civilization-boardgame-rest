@@ -26,6 +26,16 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
     PlayerService.endTurn(model.gameId);
   };
 
+  model.chat = function($event) {
+    $log.info("chat");
+    if(model.chatMessage) {
+      $log.info(model.chatMessage);
+      model.chatMessage = "";
+    } else {
+      $event.preventDefault();
+    }
+  };
+
   //In scope so that we can use it from another view which is included
   $scope.canInitiateUndo = function(log) {
     return checkPermissionForVote(log) && !log.draw.undo;
@@ -100,6 +110,11 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
         return;
       }
       var game = $scope.currentGame;
+      var lastLog = _.last(game.publicLogs);
+      if(lastLog && lastLog.log) {
+        $scope.latestLog = lastLog.log;
+      }
+
       var orderedData = params.sorting() ? $filter('orderBy')(game.publicLogs, params.orderBy()) : game.publicLogs;
       params.total(game.publicLogs.length);
       $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));

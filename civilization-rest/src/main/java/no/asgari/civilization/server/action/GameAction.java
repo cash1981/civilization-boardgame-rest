@@ -5,6 +5,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
+import com.mongodb.DBObject;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.application.CivSingleton;
@@ -14,6 +15,7 @@ import no.asgari.civilization.server.dto.GameLogDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
 import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.excel.ItemReader;
+import no.asgari.civilization.server.model.Chat;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
@@ -22,12 +24,14 @@ import no.asgari.civilization.server.util.Java8Util;
 import no.asgari.civilization.server.util.SecurityCheck;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
+import org.mongojack.DBSort;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -42,11 +46,13 @@ public class GameAction extends BaseAction {
     private final JacksonDBCollection<PBF, String> pbfCollection;
     private final JacksonDBCollection<Player, String> playerCollection;
     private final GameLogAction gameLogAction;
+    private final JacksonDBCollection<Chat, String> chatCollection;
 
     public GameAction(DB db) {
         super(db);
         this.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
         this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
+        this.chatCollection = JacksonDBCollection.wrap(db.getCollection(Chat.COL_NAME), Chat.class, String.class);
         this.gameLogAction = new GameLogAction(db);
     }
 
@@ -162,9 +168,8 @@ public class GameAction extends BaseAction {
         String color = colorOpt.orElse(chooseColorForPlayer(pbf));
         Playerhand playerhand = createPlayerHand(player, color);
         if (!pbf.getPlayers().contains(playerhand)) {
-            createInfoLog(pbf.getId(), ": " + playerhand.getUsername() + " joined the game and is playing color " + playerhand.getColor());
+            createInfoLog(pbf.getId(), playerhand.getUsername() + " joined the game and is playing color " + playerhand.getColor());
             pbf.getPlayers().add(playerhand);
-
         }
         pbf = startIfAllPlayers(pbf);
         pbfCollection.updateById(pbf.getId(), pbf);
@@ -290,7 +295,22 @@ public class GameAction extends BaseAction {
             }
         }
 
-
         return false;
+    }
+
+    public Chat chat(String pbfId, String message, String username) {
+        Chat chat = new Chat();
+        chat.setPbfId(pbfId);
+        chat.setMessage(message);
+        chat.setUsername(username);
+        String id = chatCollection.insert(chat).getSavedId();
+        chat.setId(id);
+        return chat;
+    }
+
+    public List<Chat> getChat(String pbfId) {
+        Preconditions.checkNotNull(pbfId);
+        List<Chat> chats = chatCollection.find(DBQuery.is("pbfId", pbfId)).sort(DBSort.desc("created")).toArray();
+        return chats;
     }
 }

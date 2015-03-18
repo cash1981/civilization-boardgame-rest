@@ -15,7 +15,6 @@ import org.mongojack.ObjectId;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 
 /**
  * This class will be used to store all the actions performed in the game.
@@ -38,7 +37,6 @@ import java.time.format.DateTimeFormatter;
 @Data
 public class GameLog {
     public static final String COL_NAME = "gamelog";
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     public enum LogType {
         TRADE, BATTLE, ITEM, TECH, SHUFFLE, DISCARD, WITHDRAW, JOIN, REVEAL, UNDO, VOTE

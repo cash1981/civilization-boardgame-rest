@@ -12,6 +12,7 @@ import java.util.Optional;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Form;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -21,6 +22,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.asgari.civilization.server.dto.CheckNameDTO;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
+import no.asgari.civilization.server.model.Chat;
 import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
@@ -164,7 +166,7 @@ public class GameResourceTest extends AbstractCivilizationTest {
                         .build())
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .put(null);
+                .post(null);
 
         assertThat(response.getStatus()).isEqualTo(200);
 
@@ -251,5 +253,31 @@ public class GameResourceTest extends AbstractCivilizationTest {
                 .post(Entity.json(dto), Response.class);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FORBIDDEN_403);
+    }
+
+    @Test
+    public void chatTest() {
+        PBF pbf = getApp().pbfCollection.findOne();
+        Form form = new Form("message", "Chat message");
+        Response response = client().target(
+                UriBuilder.fromPath(BASE_URL + String.format("/game/%s/chat", pbf.getId())).build())
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .post(Entity.form(form), Response.class);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED_201);
+        Chat chat = response.readEntity(Chat.class);
+        assertThat(chat.getMessage()).isEqualTo("Chat message");
+        assertThat(chat.getUsername()).isEqualTo("cash1981");
+
+        response = client().target(
+                UriBuilder.fromPath(BASE_URL + String.format("/game/%s/chat", pbf.getId())).build())
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .get();
+
+        List chats = response.readEntity(List.class);
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
+        assertThat(chats).hasSize(1);
     }
 }

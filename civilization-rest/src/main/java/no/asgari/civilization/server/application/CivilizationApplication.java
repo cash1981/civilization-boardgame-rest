@@ -44,7 +44,7 @@ import org.mongojack.JacksonDBCollection;
 public class CivilizationApplication extends Application<CivilizationConfiguration> {
 
     public static void main(String[] args) throws Exception {
-        new CivilizationApplication().run(new String[] { "server", "src/main/resources/config.yml" });
+        new CivilizationApplication().run("server", "src/main/resources/config.yml");
     }
 
     @Override
@@ -63,9 +63,9 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
 
         JacksonDBCollection<Player, String> playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
         JacksonDBCollection<PBF, String> pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
-        createIndexForPlayer(playerCollection);
+        createUniqueIndexForPlayer(playerCollection);
         createUsernameCache(playerCollection);
-        createIndexForPBF(pbfCollection);
+        createUniqueIndexForPBF(pbfCollection);
         createItemCache();
 
         //healtcheck
@@ -95,10 +95,10 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
 
         // Configure CORS parameters
         cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
-        cors.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
+        cors.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,Accept-Content-Encoding");
         cors.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "OPTIONS,GET,PUT,POST,DELETE,HEAD");
         cors.setInitParameter(CrossOriginFilter.ALLOW_CREDENTIALS_PARAM, "true");
-        cors.setInitParameter(CrossOriginFilter.EXPOSED_HEADERS_PARAM, "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,Location");
+        cors.setInitParameter(CrossOriginFilter.EXPOSED_HEADERS_PARAM, "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,Location,Accept-Content-Encoding");
 
         // Add URL mapping
         cors.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
@@ -138,12 +138,12 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         CivSingleton.instance().setPlayerCache(usernameCache);
     }
 
-    private void createIndexForPlayer(JacksonDBCollection<Player, String> playerCollection) {
+    private void createUniqueIndexForPlayer(JacksonDBCollection<Player, String> playerCollection) {
         playerCollection.createIndex(new BasicDBObject(Player.USERNAME, 1), new BasicDBObject("unique", true));
         playerCollection.createIndex(new BasicDBObject(Player.EMAIL, 1), new BasicDBObject("unique", true));
     }
 
-    private void createIndexForPBF(JacksonDBCollection<PBF, String> pbfCollection) {
+    private void createUniqueIndexForPBF(JacksonDBCollection<PBF, String> pbfCollection) {
         pbfCollection.createIndex(new BasicDBObject(PBF.NAME, 1), new BasicDBObject("unique", true));
     }
 }

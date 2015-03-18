@@ -1,25 +1,5 @@
 package no.asgari.civilization.server.resource;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.validation.Valid;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -39,6 +19,7 @@ import no.asgari.civilization.server.dto.GameDTO;
 import no.asgari.civilization.server.dto.GameLogDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
 import no.asgari.civilization.server.dto.PlayerDTO;
+import no.asgari.civilization.server.model.Chat;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
@@ -47,6 +28,26 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
+
+import javax.validation.Valid;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Path("game")
 @Produces(MediaType.APPLICATION_JSON)
@@ -172,7 +173,7 @@ public class GameResource {
                 .build();
     }
 
-    @PUT
+    @POST
     @Timed
     @Path("/{pbfId}/join")
     public Response joinGame(@NotEmpty @PathParam("pbfId") String pbfId, @Auth Player player) {
@@ -209,7 +210,7 @@ public class GameResource {
     /**
      * Gets all the available techs. Will remove the techs that player already have chosen
      *
-     * @param pbfId - The PBF
+     * @param pbfId  - The PBF
      * @param player - The Authenticated player
      * @return - Response ok with a list of techs
      */
@@ -356,4 +357,26 @@ public class GameResource {
         return Response.ok().build();
     }
 
+    @POST
+    @Timed
+    @Path("/{pbfId}/chat")
+    @Consumes(value = MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response chat(@Auth Player player, @FormParam("message") String message, @PathParam("pbfId") String pbfId) {
+        Preconditions.checkNotNull(message);
+
+        GameAction gameAction = new GameAction(db);
+        Chat chat = gameAction.chat(pbfId, message, player.getUsername());
+        return Response.created(URI.create(chat.getId())).entity(chat).build();
+    }
+
+    @GET
+    @Timed
+    @Path("/{pbfId}/chat")
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response chat(@PathParam("pbfId") String pbfId) {
+        GameAction gameAction = new GameAction(db);
+        List<Chat> chatDTOs = gameAction.getChat(pbfId);
+        return Response.ok().entity(chatDTOs).build();
+    }
 }

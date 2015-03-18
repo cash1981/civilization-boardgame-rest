@@ -148,22 +148,11 @@ public class GameLogAction {
     }
 
     public List<GameLog> getGameLogs(String pbfId) {
-        @Cleanup DBCursor<GameLog> gameLogsCursor = gameLogCollection.find(DBQuery.is("pbfId", pbfId), new BasicDBObject());
-        List<GameLog> gamelogs = new ArrayList<>(gameLogsCursor.size());
-        while (gameLogsCursor.hasNext()) {
-            gamelogs.add(gameLogsCursor.next());
-        }
-        return gamelogs;
+        return gameLogCollection.find(DBQuery.is("pbfId", pbfId)).toArray();
     }
 
-
     public List<GameLog> getGameLogsBelongingToPlayer(String pbfId, String username) {
-        @Cleanup DBCursor<GameLog> gameLogsCursor = gameLogCollection.find(DBQuery.is("pbfId", pbfId).is("username", username), new BasicDBObject());
-        List<GameLog> gamelogs = new ArrayList<>(gameLogsCursor.size());
-        while (gameLogsCursor.hasNext()) {
-            gamelogs.add(gameLogsCursor.next());
-        }
-        return gamelogs;
+        return gameLogCollection.find(DBQuery.is("pbfId", pbfId).is("username", username)).toArray();
     }
 
 }
