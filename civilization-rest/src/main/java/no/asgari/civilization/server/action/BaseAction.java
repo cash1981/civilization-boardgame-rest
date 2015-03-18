@@ -64,7 +64,7 @@ public abstract class BaseAction {
     protected void createInfoLog(String pbfId, String message) {
         Preconditions.checkNotNull(message);
         GameLog log = new GameLog();
-        log.setPublicLog("System " + message);
+        log.setPublicLog("System: " + message);
         log.setUsername("System");
         log.setPbfId(pbfId);
         logAction.save(log);

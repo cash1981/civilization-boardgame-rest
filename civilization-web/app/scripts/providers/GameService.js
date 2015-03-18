@@ -7,18 +7,39 @@
       var loading = {};
       var baseUrl = BASE_URL + "/game/";
 
-      this.$get = function ($http, $log, growl) {
-        $log.info("Creating game data service");
-
+      this.$get = function ($http, $log, growl, $location) {
         var createGame = function (game) {
-          return $http.post(baseUrl, game)
-            .then(function (response) {
-              return response.data;
+
+          var newGameDTO = {
+            "name": game.name,
+            "type": game.type,
+            "numOfPlayers": game.numOfPlayers,
+            "color": game.color
+          };
+
+          //$log.info("Before calling post, json is ", angular.toJson(newGameDTO));
+
+          return $http.post(baseUrl, newGameDTO)
+            .success(function (data, status, headers) {
+              growl.success("Game created!");
+              var loc = headers('Location');
+              if(loc) {
+                var gameid = _.last(loc.split('/'));
+                if(gameid) {
+                  $location.path('/game/' + gameid);
+                }
+              }
+
+              return data;
+            })
+            .error(function (data) {
+              growl.error("Could not create game");
+              return data;
             });
         };
 
         var joinGame = function (game) {
-          return $http.put(baseUrl + game.id + "/join")
+          return $http.post(baseUrl + game.id + "/join")
             .then(function (response) {
               return response.data;
             });

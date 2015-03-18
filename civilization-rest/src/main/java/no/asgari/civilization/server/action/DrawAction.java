@@ -1,5 +1,16 @@
 package no.asgari.civilization.server.action;
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
 import com.google.common.base.Preconditions;
 import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
@@ -11,18 +22,10 @@ import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
+import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.model.Unit;
 import org.mongojack.JacksonDBCollection;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 /**
  * Class that will perform draws and log them.
@@ -32,6 +35,9 @@ import java.util.stream.Collectors;
 public class DrawAction extends BaseAction {
     private final JacksonDBCollection<PBF, String> pbfCollection;
     private final GameLogAction gameLogAction;
+
+    private final StringBuilder sb = new StringBuilder();
+    private final Consumer<Unit> revealUnitConsumer = unit -> sb.append(unit.revealAll()).append(", ");
 
     public DrawAction(DB db) {
         super(db);
@@ -144,10 +150,10 @@ public class DrawAction extends BaseAction {
         }*/
 
         if (unitsInHand.size() <= numberOfDraws) {
-            //username has drawn X units for battle from his battlehand
+            //username has drawn X units from his battlehand
             playerhand.setBattlehand(unitsInHand);
             pbfCollection.updateById(pbfId, pbf);
-            createCommonPublicLog("has drawn " + unitsInHand.size() + " units for battle from his battlehand", pbfId, playerId);
+            createCommonPublicLog("has drawn " + unitsInHand.size() + " units his battlehand", pbfId, playerId);
             return unitsInHand;
         }
 
@@ -158,11 +164,12 @@ public class DrawAction extends BaseAction {
 
         playerhand.setBattlehand(drawnUnitsList);
         pbfCollection.updateById(pbfId, pbf);
-        createCommonPublicLog("has drawn " + drawnUnitsList.size() + " units for battle from his battlehand", pbfId, playerId);
+        createCommonPublicLog("has drawn " + drawnUnitsList.size() + " units from his battlehand", pbfId, playerId);
         return drawnUnitsList;
     }
 
     //Not sure yet if I want this since they can just make a new draw
+    //TODO Reveal instead
     public void discardUnitsFromBattlehand(String pbfId, String playerId) {
         PBF pbf = pbfCollection.findOneById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
@@ -174,23 +181,23 @@ public class DrawAction extends BaseAction {
     public List<Unit> drawBarbarians(String pbfId, String playerId) {
         PBF pbf = pbfCollection.findOneById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        if(!playerhand.getBarbarians().isEmpty()) {
+        if (!playerhand.getBarbarians().isEmpty()) {
             log.warn("Cannot draw more barbarians until they are discarded");
             throw new WebApplicationException(Response.Status.PRECONDITION_FAILED);
         }
         //Check first and reshuffle
         //TODO If either barbarian units are empty, then no barbs are drawn. Perhaps, draw something else
-        if(!pbf.getItems().stream().anyMatch(p -> p.getSheetName() == SheetName.INFANTRY)) {
+        if (!pbf.getItems().stream().anyMatch(p -> p.getSheetName() == SheetName.INFANTRY)) {
             reshuffleItems(SheetName.INFANTRY, pbf);
             drawBarbarians(pbfId, playerId);
         }
 
-        if(!pbf.getItems().stream().anyMatch(p -> p.getSheetName() == SheetName.MOUNTED)) {
+        if (!pbf.getItems().stream().anyMatch(p -> p.getSheetName() == SheetName.MOUNTED)) {
             reshuffleItems(SheetName.MOUNTED, pbf);
             drawBarbarians(pbfId, playerId);
         }
 
-        if(!pbf.getItems().stream().anyMatch(p -> p.getSheetName() == SheetName.ARTILLERY)) {
+        if (!pbf.getItems().stream().anyMatch(p -> p.getSheetName() == SheetName.ARTILLERY)) {
             reshuffleItems(SheetName.ARTILLERY, pbf);
             drawBarbarians(pbfId, playerId);
         }
@@ -202,16 +209,16 @@ public class DrawAction extends BaseAction {
             if (!foundInfantry && item.getSheetName() == SheetName.INFANTRY) {
                 foundInfantry = true;
                 addBarbarian(playerId, playerhand, iterator, item);
-            } else if(!foundArtillery && item.getSheetName() == SheetName.ARTILLERY) {
+            } else if (!foundArtillery && item.getSheetName() == SheetName.ARTILLERY) {
                 foundArtillery = true;
                 addBarbarian(playerId, playerhand, iterator, item);
-            } else if(!foundMounted && item.getSheetName() == SheetName.MOUNTED) {
+            } else if (!foundMounted && item.getSheetName() == SheetName.MOUNTED) {
                 foundMounted = true;
                 addBarbarian(playerId, playerhand, iterator, item);
             }
         }
 
-        if(playerhand.getBarbarians().size() != 3) {
+        if (playerhand.getBarbarians().size() != 3) {
             log.error("Couldn't get one barbarian of each type, but instead list is " + playerhand.getBarbarians());
             throw new WebApplicationException();
         }
@@ -224,14 +231,38 @@ public class DrawAction extends BaseAction {
     public void discardBarbarians(String pbfId, String playerId) {
         PBF pbf = pbfCollection.findOneById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        if(playerhand.getBarbarians().isEmpty()) {
+        if (playerhand.getBarbarians().isEmpty()) {
             return;
         }
 
         pbf.getDiscardedItems().addAll(playerhand.getBarbarians());
-        playerhand.getBarbarians().clear();
+        revealAndDiscardUnits(" as barbarians", playerhand.getBarbarians(), pbfId, playerId);
         pbfCollection.updateById(pbf.getId(), pbf);
-        gameLogAction.createCommonPrivatePublicLog("has discarded 3 barbarian units", pbfId, playerId);
+    }
+
+    public void revealAndDiscardBattlehand(String pbfId, String playerId) {
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+        if(playerhand.getBattlehand().isEmpty()) {
+            log.warn("Tried to reveal playerhand, but was empty");
+            return;
+        }
+
+        revealAndDiscardUnits(" from their battlehand", playerhand.getBattlehand(), pbfId, playerId);
+        pbfCollection.updateById(pbfId, pbf);
+    }
+
+    private void revealAndDiscardUnits(String message, List<Unit> units, String pbfId, String playerId) {
+        //Clear just in case
+        sb.setLength(0);
+        units.forEach(revealUnitConsumer);
+
+        //Remove the last append ', '
+        if (sb.length() > 1) {
+            sb.setLength(sb.length() - 2);
+        }
+        createCommonPublicLog(" reveals " + sb.toString() + message, pbfId, playerId);
+        units.clear();
     }
 
     /**
@@ -252,6 +283,57 @@ public class DrawAction extends BaseAction {
                 });
 
         pbfCollection.updateById(pbfId, pbf);
+    }
+
+    /**
+     * draws a random item from playerhand and gives to another player
+     *
+     * @param pbfId - The pbf id
+     * @param targetPlayerId - The targeted player which will recieve the item
+     * @param sheetName - the item to be automatically drawn from playerhand and given to another player
+     * @param playerId - The logged in player that we will take the item from
+     */
+    public void drawRandomItemAndGiveToPlayer(String pbfId, SheetName sheetName, String targetPlayerId, String playerId) {
+        Preconditions.checkNotNull(pbfId);
+        Preconditions.checkNotNull(sheetName);
+        Preconditions.checkNotNull(targetPlayerId);
+        Preconditions.checkNotNull(playerId);
+
+        PBF pbf = findPBFById(pbfId);
+        Playerhand playerFrom = getPlayerhandByPlayerId(playerId, pbf);
+        Playerhand playerTo = getPlayerhandByPlayerId(targetPlayerId, pbf);
+
+        //Locate the item from player
+        List<Item> itemToShuffle = playerFrom.getItems().stream()
+                .filter(it -> it.getSheetName() == sheetName)
+                .collect(Collectors.toList());
+        if (itemToShuffle.isEmpty()) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("You have no " + sheetName.getName() + " to draw")
+                            .build()
+            );
+        }
+
+        Collections.shuffle(itemToShuffle);
+        Item itemToGive = itemToShuffle.get(0);
+        log.debug(playerFrom.getUsername() + " gives " + itemToGive + " to " + playerTo.getUsername());
+        boolean removed = playerFrom.getItems().remove(itemToGive);
+        if (removed) {
+            //Give to the other player
+            playerTo.getItems().add(itemToGive);
+            createCommonPrivateLog(" gives " + itemToGive.revealAll() + " to " + playerTo.getUsername(), pbfId, playerFrom.getPlayerId());
+            createCommonPrivateLog(" receives " + itemToGive.revealAll() + " from " + playerFrom.getUsername(), pbfId, playerTo.getPlayerId());
+
+            createCommonPublicLog(" gives " + itemToGive.revealPublic() + " to " + playerTo.getUsername(), pbfId, playerFrom.getPlayerId());
+            createCommonPublicLog(" receives " + itemToGive.revealPublic() + " from " + playerFrom.getUsername(), pbfId, playerTo.getPlayerId());
+
+            pbfCollection.updateById(pbf.getId(), pbf);
+            return;
+        } else {
+            cannotFindItem();
+        }
+
     }
 
     private void addBarbarian(String playerId, Playerhand playerhand, Iterator<Item> iterator, Item item) {

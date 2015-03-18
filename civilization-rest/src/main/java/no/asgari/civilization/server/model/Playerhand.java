@@ -41,22 +41,27 @@ public class Playerhand {
     private List<Unit> battlehand = new ArrayList<>();
     
     @JsonIgnore
-    public String green() {
+    public static String green() {
         return "Green";
     }
 
     @JsonIgnore
-    public String yellow() {
+    public static String yellow() {
         return "Yellow";
     }
 
     @JsonIgnore
-    public String purple() {
+    public static String purple() {
         return "Purple";
     }
 
     @JsonIgnore
-    public String red() {
+    public static String red() {
         return "Red";
+    }
+
+    @JsonIgnore
+    public static String blue() {
+        return "Blue";
     }
 }

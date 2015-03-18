@@ -84,9 +84,7 @@ public class GameAction extends BaseAction {
         WriteResult<PBF, String> pbfInsert = pbfCollection.insert(pbf);
         pbf.setId(pbfInsert.getSavedId());
         log.info("PBF game created with id " + pbfInsert.getSavedId());
-
-        log.info("Join the game created");
-        joinGame(pbf.getId(), playerId);
+        joinGame(pbf.getId(), playerId, Optional.of(dto.getColor()));
         return pbf.getId();
     }
 
@@ -138,7 +136,7 @@ public class GameAction extends BaseAction {
     /**
      * Joins a game. If it is full it will throw exception
      */
-    public void joinGame(String pbfId, String playerId) {
+    public void joinGame(String pbfId, String playerId, Optional<String> colorOpt) {
         PBF pbf = pbfCollection.findOneById(pbfId);
         if (pbf.getNumOfPlayers() == pbf.getPlayers().size()) {
             log.warn("Cannot join the game. Its full");
@@ -161,11 +159,10 @@ public class GameAction extends BaseAction {
         player.getGameIds().add(pbfId);
         playerCollection.updateById(player.getId(), player);
 
-        String color = chooseColorForPlayer(pbf, playerId);
-
+        String color = colorOpt.orElse(chooseColorForPlayer(pbf));
         Playerhand playerhand = createPlayerHand(player, color);
         if (!pbf.getPlayers().contains(playerhand)) {
-            createInfoLog(pbf.getId(), playerhand.getUsername() + " joined the game and is playing color " + playerhand.getColor());
+            createInfoLog(pbf.getId(), ": " + playerhand.getUsername() + " joined the game and is playing color " + playerhand.getColor());
             pbf.getPlayers().add(playerhand);
 
         }
@@ -173,16 +170,12 @@ public class GameAction extends BaseAction {
         pbfCollection.updateById(pbf.getId(), pbf);
     }
 
-    private String chooseColorForPlayer(PBF pbf, String playerId) {
+    private String chooseColorForPlayer(PBF pbf) {
         if (pbf.getPlayers().isEmpty()) {
-            return "Yellow";
+            return Playerhand.green();
         }
 
-        Set<String> allColors = new HashSet<>();
-        allColors.add("Yellow");
-        allColors.add("Red");
-        allColors.add("Purple");
-        allColors.add("Green");
+        Set<String> allColors = Sets.newHashSet(Playerhand.green(), Playerhand.purple(), Playerhand.blue(), Playerhand.yellow(), Playerhand.red());
 
         Set<String> colors = pbf.getPlayers().stream()
                 .map(Playerhand::getColor)

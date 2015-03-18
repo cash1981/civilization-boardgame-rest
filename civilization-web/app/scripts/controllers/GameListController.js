@@ -1,7 +1,8 @@
 'use strict';
 (function (module) {
-  var GameListController = function (games, $log, GameService, currentUser) {
+  var GameListController = function (games, $log, GameService, currentUser, $modal) {
     var model = this;
+    model.user = currentUser.profile;
 
     model.isUserPlaying = function(players) {
       if(players) {
@@ -14,7 +15,6 @@
       }
       return false;
     };
-
 
     model.joinGame = function (game) {
       var joinPromise = GameService.joinGame(game)
@@ -29,6 +29,32 @@
       return joinPromise;
     };
 
+    model.openCreateNewGame = function(size) {
+      var modalInstance = $modal.open({
+        templateUrl: 'createNewGame.html',
+        controller: 'RegisterController as registerCtrl',
+        size: size
+        //To inject stuff in the modal you need to add resolve
+        /*resolve: {
+         register : function() {
+         return register;
+         }
+         }*/
+      });
+
+      modalInstance.result.then(function(game) {
+        if(game) {
+          $log.info(game.name);
+          $log.info(game.type);
+          $log.info(game.numOfPlayers);
+          $log.info(game.color);
+          GameService.createGame(game);
+        }
+      }, function () {
+        //Cancel callback here
+      });
+    };
+
     var initialize = function () {
       model.user = currentUser.profile;
       model.games = games;
@@ -39,6 +65,6 @@
   };
 
   module.controller("GameListController",
-    ["games", "$log", "GameService", "currentUser", GameListController]);
+    ["games", "$log", "GameService", "currentUser", "$modal", GameListController]);
 
 }(angular.module("civApp")));

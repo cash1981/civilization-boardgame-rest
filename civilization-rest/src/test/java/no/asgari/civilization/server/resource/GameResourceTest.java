@@ -1,21 +1,13 @@
 package no.asgari.civilization.server.resource;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.dropwizard.testing.junit.DropwizardAppRule;
-import io.dropwizard.testing.junit.ResourceTestRule;
-import no.asgari.civilization.server.application.CivilizationApplication;
-import no.asgari.civilization.server.application.CivilizationConfiguration;
-import no.asgari.civilization.server.dto.CreateNewGameDTO;
-import no.asgari.civilization.server.dto.GameDTO;
-import no.asgari.civilization.server.dto.PbfDTO;
-import no.asgari.civilization.server.model.GameType;
-import no.asgari.civilization.server.model.PBF;
-import no.asgari.civilization.server.model.Playerhand;
-import no.asgari.civilization.server.mongodb.MongoDBBaseTest;
-import org.eclipse.jetty.http.HttpStatus;
-import org.junit.ClassRule;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -24,43 +16,40 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import no.asgari.civilization.server.dto.CheckNameDTO;
+import no.asgari.civilization.server.dto.CreateNewGameDTO;
+import no.asgari.civilization.server.model.GameType;
+import no.asgari.civilization.server.model.PBF;
+import no.asgari.civilization.server.model.Playerhand;
+import no.asgari.civilization.server.mongodb.AbstractCivilizationTest;
+import org.eclipse.jetty.http.HttpStatus;
+import org.junit.Test;
 
-public class GameResourceTest {
-
-    @ClassRule
-    public static final DropwizardAppRule<CivilizationConfiguration> RULE =
-            new DropwizardAppRule<>(CivilizationApplication.class, "src/main/resources/config.yml");
-    private static final String BASE_URL = "http://localhost:%d/civilization";
-
-    private final Client client = ClientBuilder.newClient();
+public class GameResourceTest extends AbstractCivilizationTest {
+    protected static String BASE_URL = String.format("http://localhost:%d/civilization", RULE.getLocalPort());
 
     @Test
     public void shouldGetActiveGames() {
         //Response response =
-
-        List list = client.target(String.format(BASE_URL + "/game", RULE.getLocalPort()))
+        Client client = ClientBuilder.newClient();
+        List list = client.target(BASE_URL + "/game")
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .get(List.class);
         //By default Jackson creates List<LinkedHashMap<String,String>> with the values
         assertThat(list).isNotEmpty();
     }
-/*
+
     @Test
     public void getAllActiveGamesForPlayer() throws Exception {
-        Response response = client.target(String.format(BASE_URL + "/game/player", RULE.getLocalPort()))
-                .request(MediaType.APPLICATION_JSON_TYPE)
+        URI uri = UriBuilder.fromPath(BASE_URL + "/game/player").build();
+        Response response = client().target(uri)
+                .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .get();
-
-        assertEquals(HttpStatus.OK_200, response.getStatus());
+                .get(Response.class);
+        assertEquals(response.getStatus(), HttpStatus.OK_200);
     }
 
     @Test
@@ -69,38 +58,40 @@ public class GameResourceTest {
         dto.setNumOfPlayers(4);
         dto.setName("PBF WaW");
         dto.setType(GameType.WAW);
+        dto.setColor(Playerhand.blue());
 
         ObjectMapper mapper = new ObjectMapper();
         String dtoAsJSon = mapper.writeValueAsString(dto);
 
-        Response response = client.target(String.format(BASE_URL + "/game", RULE.getLocalPort()))
-                .request(MediaType.APPLICATION_JSON_TYPE)
+        URI uri = UriBuilder.fromPath(BASE_URL + "/game").build();
+        Response response = client().target(uri)
+                .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .accept(MediaType.APPLICATION_JSON_TYPE)
                 .post(Entity.json(dtoAsJSon));
 
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED_201);
         URI location = response.getLocation();
-        String id = response.readEntity(String.class);
-        assertThat(location.getPath()).isEqualTo("/game/" + id);
+        assertThat(location.getPath()).isNotEmpty();
+        String id = location.getPath().split(BASE_URL)[0];
+        assertThat(id.charAt(0)).isEqualTo('/');
 
-        assertThat(pbfCollection.findOneById(id).getPlayers().size()).isEqualTo(1);
+        assertThat(getApp().pbfCollection.findOneById(id.substring(1)).getPlayers().size()).isEqualTo(1);
     }
-/*
+
     @Test
     public void shouldGetAllAvailableTechs() throws Exception {
         chooseTechForPlayer();
 
-        final ArrayList list = client().resource(
-                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/techs", RULE.getLocalPort(), pbfId))
+        final ArrayList list = client().target(
+                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/techs", getApp().pbfId))
                         .build())
+                .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .type(MediaType.APPLICATION_JSON)
                 .get(ArrayList.class);
 
         assertThat(list).isNotEmpty();
-        PBF pbf = pbfCollection.findOneById(pbfId);
+        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
         assertThat(list.size()).isEqualTo(pbf.getTechs().size() - 1);
     }
 
@@ -108,10 +99,10 @@ public class GameResourceTest {
     public void getAllPublicGameLogs() throws Exception {
         chooseTechForPlayer();
 
-        final ArrayList list = client().resource(
-                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/publiclog", RULE.getLocalPort(), pbfId))
+        final ArrayList list = client().target(
+                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/publiclog", getApp().pbfId))
                         .build())
-                .type(MediaType.APPLICATION_JSON)
+                .request(MediaType.APPLICATION_JSON)
                 .get(ArrayList.class);
         assertThat(list).isNotEmpty();
     }
@@ -120,25 +111,25 @@ public class GameResourceTest {
     public void getAllPrivateGameLogs() throws Exception {
         chooseTechForPlayer();
 
-        final ArrayList list = client().resource(
-                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/privatelog", RULE.getLocalPort(), pbfId))
+        final ArrayList list = client().target(
+                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/privatelog", getApp().pbfId))
                         .build())
+                .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .type(MediaType.APPLICATION_JSON)
                 .get(ArrayList.class);
         assertThat(list).isNotEmpty();
     }
 
     private void chooseTechForPlayer() throws JsonProcessingException {
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/tech/choose", RULE.getLocalPort(), pbfId)).build();
-        ClientResponse response = client().resource(uri)
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/tech/choose", getApp().pbfId)).build();
+        Response response = client().target(uri)
                 .queryParam("name", "Agriculture")
-                .type(MediaType.APPLICATION_JSON)
+                .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .put(ClientResponse.class);
+                .post(null);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT_204);
-        PBF pbf = pbfCollection.findOneById(pbfId);
+        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
         Optional<Playerhand> cash1981 = pbf.getPlayers().stream()
                 .filter(p -> p.getUsername().equals("cash1981"))
                 .findFirst();
@@ -155,41 +146,110 @@ public class GameResourceTest {
 
     @Test
     public void getGameAsPublicUser() throws Exception {
-        PBF pbf = pbfCollection.findOne();
+        PBF pbf = getApp().pbfCollection.findOne();
 
-        ClientResponse response = client().resource(
-                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s", RULE.getLocalPort(), pbf.getId()))
+        Response response = client().target(
+                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s", pbf.getId()))
                         .build())
-                .type(MediaType.APPLICATION_JSON)
-                .get(ClientResponse.class);
+                .request(MediaType.APPLICATION_JSON)
+                .get(Response.class);
 
-        GameDTO game = response.getEntity(GameDTO.class);
-        assertThat(game).isNotNull();
+        assertThat(response.getEntity()).isNotNull();
     }
 
     @Test
     public void joinGameAndThenWithdraw() throws Exception {
-        ClientResponse response = client().resource(
-                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/join", RULE.getLocalPort(), pbfId_3))
+        Response response = client().target(
+                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/join", getApp().pbfId_3))
                         .build())
+                .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .type(MediaType.APPLICATION_JSON)
-                .put(ClientResponse.class);
+                .put(null);
 
         assertThat(response.getStatus()).isEqualTo(200);
 
-        ClientResponse secondResponse = client().resource(
-                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/withdraw", RULE.getLocalPort(), pbfId_3))
+        Response secondResponse = client().target(
+                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/withdraw", getApp().pbfId_3))
                         .build())
+                .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .type(MediaType.APPLICATION_JSON)
-                .put(ClientResponse.class);
+                .put(null);
 
         assertThat(secondResponse.getStatus()).isEqualTo(200);
     }
-*/
 
-    private Client client() {
-        return client;
+    @Test
+    public void getListOfPlayersInGame() throws Exception {
+        PBF pbf = getApp().pbfCollection.findOne();
+
+        Response response = client().target(
+                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/players", pbf.getId()))
+                        .build())
+                .request(MediaType.APPLICATION_JSON)
+                .get(Response.class);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
+        List players = response.readEntity(List.class);
+        assertThat(players).isNotNull();
+        assertThat(players).hasSize(4);
+    }
+
+    @Test
+    public void getListOfPlayersInGameExceptCurrentLoggedIn() throws Exception {
+        PBF pbf = getApp().pbfCollection.findOne();
+
+        Response response = client().target(
+                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/players", pbf.getId()))
+                        .build())
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .get(Response.class);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
+        List players = response.readEntity(List.class);
+        assertThat(players).isNotNull();
+        assertThat(players).hasSize(3);
+    }
+
+    @Test
+    public void checkExisitingGameName() throws Exception {
+        PBF pbf = getApp().pbfCollection.findOne();
+
+        CheckNameDTO dto = new CheckNameDTO(pbf.getName());
+
+
+        Response response = client().target(
+                UriBuilder.fromPath(BASE_URL + "/game/check/gamename").build())
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .post(Entity.json(dto), Response.class);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.FORBIDDEN_403);
+    }
+
+    @Test
+    public void checkGameName() throws Exception {
+        CheckNameDTO dto = new CheckNameDTO("Something random 123");
+
+        Response response = client().target(
+                UriBuilder.fromPath(BASE_URL + "/game/check/gamename").build())
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .post(Entity.json(dto), Response.class);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
+    }
+
+    @Test
+    public void checkBadHTMLGameName() throws Exception {
+        CheckNameDTO dto = new CheckNameDTO("Something<br/>");
+
+        Response response = client().target(
+                UriBuilder.fromPath(BASE_URL + "/game/check/gamename").build())
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .post(Entity.json(dto), Response.class);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.FORBIDDEN_403);
     }
 }

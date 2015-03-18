@@ -11,7 +11,7 @@
     </div>
     <div class="col-md-6" ng-if="userHasAccess">
       <div class="jumbotron">
-        <h1>Perhaps something here??</h1>
+        <h1>Perhaps show the latest public log here</h1>
 
         <p>
           <button ng-show="gameCtrl.yourTurn"
@@ -85,8 +85,8 @@
     <tab ng-if="userHasAccess" heading="My Items" class="col-md-2">
       <ng-include src="'views/partials/useritems.html'"></ng-include>
     </tab>
-    <tab ng-if="userHasAccess" heading="Battle" class="col-md-2">
-      <ng-include src="'views/partials/battle.html'"></ng-include>
+    <tab ng-if="userHasAccess" heading="Draw" class="col-md-2">
+      <ng-include src="'views/partials/draw.html'"></ng-include>
     </tab>
   </tabset>
 

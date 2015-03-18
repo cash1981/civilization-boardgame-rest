@@ -7,9 +7,8 @@ import javax.ws.rs.core.Response;
 public class PlayerExistException extends WebApplicationException {
     public PlayerExistException() {
         super(Response.status(Response.Status.BAD_REQUEST)
-                .entity("Player already exists")
+                .entity("{\"error:\" \"Player already exists!\"}")
                 .type(MediaType.APPLICATION_JSON)
                 .build());
     }
-
 }

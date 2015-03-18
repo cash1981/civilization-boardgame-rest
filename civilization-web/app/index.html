@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>Civilization Boardgame Randomizer</title>
   <meta name="description" content="">
-  <meta name="viewport" content="width=device-width">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
   <link rel="stylesheet" href="bower_components/ng-table/ng-table.css"/>
@@ -13,7 +13,6 @@
   <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="styles/animate.css">
   <link rel="stylesheet" href="styles/techtree.css">
-
 </head>
 <body ng-app="civApp" ng-cloak>
 <!--[if lt IE 7]>
@@ -99,6 +98,7 @@
 
 <script src="scripts/app.js"></script>
 <script src="scripts/providers/GameService.js"></script>
+<script src="scripts/services/DrawService.js"></script>
 <script src="scripts/services/PlayerService.js"></script>
 <script src="scripts/services/requestCounter.js"></script>
 <script src="scripts/services/localStorage.js"></script>
@@ -110,11 +110,15 @@
 <script src="scripts/services/Util.js"></script>
 <script src="scripts/directives/workSpinner.js"></script>
 <script src="scripts/directives/ng-really.js"></script>
+<script src="scripts/directives/unique-username.js"></script>
+<script src="scripts/directives/unique-gamename.js"></script>
+<script src="scripts/directives/match.js"></script>
 <script src="scripts/controllers/GameListController.js"></script>
 <script src="scripts/controllers/GameController.js"></script>
 <script src="scripts/controllers/LoginController.js"></script>
+<script src="scripts/controllers/DrawController.js"></script>
 <script src="scripts/controllers/UserItemController.js"></script>
 <script src="scripts/controllers/VoteController.js"></script>
-<script src="scripts/controllers/BattleController.js"></script>
+<script src="scripts/controllers/RegisterController.js"></script>
 </body>
 </html>

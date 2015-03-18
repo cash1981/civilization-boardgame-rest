@@ -6,7 +6,6 @@
 #DONE    -- Link goes to read only
 #DONE        -- join button (if logged in && isnt started yet)
 
-
 Inside a game
 #DONE	-- Display public log
 #DONE Footer on all pages
@@ -36,7 +35,11 @@ Inside a game
 #DONE - Fix the baseurl stuff
 
 - Trade
-- Battle (draw x units)
+- Create game
+# DONE - Register new user
+#DONE - Battle (draw x units)
+- Upgrade to Dropwizard 0.8
+#DONE - Add the glyphon on the username register
 
 Nice to have: (Will be implemented in later versions)
 - Implement email verification on register?
@@ -50,10 +53,25 @@ Nice to have: (Will be implemented in later versions)
 #DONE  -- Only players playing the game can undo
 #DONE Reveal from useritem
 #DONE  -- To do this I need to send the item info and use the gamelog to find the item and reveal it.
+- Add a different theme from http://bootswatch.com/
+
+- Some starting techs should be displayed as level 1. For instance Democracy for Greece, Irrigation for Aztecs and so on.
+  -- I guess only way to solve this is to let the user select chosen civ, then I can input starting tech
+  -- Another option is to let the user type in level for the tech they choose
+
+- Game list
+  -- Need a way to end a game so that active is set to false and it doesn't show on the game list
+  -- Need a way to show the finished games (Perhaps active/finished tab)
+  -- A way to show "My games" (Perhaps a checkbox filter)
+  -- Pagination on the list would be nice, otherwise that page might become pretty long
+  -- Sort newest first? Or eldest first?
+  -- When creating a game, then going back to the view, it gives you the cache
+    -- Must disable the cache or invalidate it when you create a game, or join
 
 check ngmodules.org to find modules
 
 
 #Spørsmål
-- Why can't I get log.item.name to appear in voting modal
+#FIXED - Why can't I get log.item.name to appear in voting modal
 - Why is the GetGameById watch being called twice, and everything is duplicated for a second before it is removed
+#FIXED - Why isn't publiclog and privatelogs get updated when I draw unit and barbarian for battle? Do I need to call reload()? In that case, how?

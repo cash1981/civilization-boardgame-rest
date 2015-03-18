@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-
   var application = angular.module('civApp', [
     'ngAnimate',
     'ngCookies',

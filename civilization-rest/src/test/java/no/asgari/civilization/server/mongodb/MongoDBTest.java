@@ -1,10 +1,14 @@
 package no.asgari.civilization.server.mongodb;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.dropwizard.testing.junit.DropwizardAppRule;
 import lombok.Cleanup;
+import no.asgari.civilization.server.CivilizationIntegrationTestApplication;
+import no.asgari.civilization.server.CivilizationTestConfiguration;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.mongojack.DBCursor;
 import org.mongojack.WriteResult;
@@ -13,7 +17,8 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertNotNull;
 
-public class MongoDBBaseTest extends AbstractMongoDBTest {
+public class MongoDBTest extends AbstractCivilizationTest {
+
     private static Player createPlayer(String username, String pbfId) throws JsonProcessingException {
         //The Player object should be cached and retrieved from cache
         Player player = new Player();
@@ -21,7 +26,7 @@ public class MongoDBBaseTest extends AbstractMongoDBTest {
         player.setPassword(DigestUtils.sha1Hex("foo"));
         player.getGameIds().add(pbfId);
 
-        WriteResult<Player, String> writeResult = playerCollection.insert(player);
+        WriteResult<Player, String> writeResult = getApp().playerCollection.insert(player);
         System.out.println("Saved player " + writeResult.toString());
         assertNotNull(writeResult.getSavedId());
         return player;
@@ -29,7 +34,7 @@ public class MongoDBBaseTest extends AbstractMongoDBTest {
 
     @Test
     public void printAllPBFGames() throws IOException {
-        @Cleanup DBCursor<PBF> cursor = pbfCollection.find();
+        @Cleanup DBCursor<PBF> cursor = getApp().pbfCollection.find();
         while (cursor.hasNext()) {
             PBF pbf = cursor.next();
             assertNotNull(pbf);
@@ -39,7 +44,7 @@ public class MongoDBBaseTest extends AbstractMongoDBTest {
 
     @Test(expected = com.mongodb.MongoException.class)
     public void testThatCreatingSameUserThrowsException() throws JsonProcessingException {
-        createPlayer("cash1981", pbfId);
+        createPlayer("cash1981", getApp().pbfId);
     }
 
 }

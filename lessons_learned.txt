@@ -16,4 +16,7 @@ and that there are no active games up and running. I think accessing inactive ga
 
 
 GOTCHA
-$http.delete funker ikke med content-type
+$http.delete doesn't work with content-type
+
+- Travis for continous integration
+- Ikke legg å ha parent pom og intellij. Finner ikke config fil. Maven klarer fint, men ikke intellij

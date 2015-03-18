@@ -2,11 +2,11 @@ package no.asgari.civilization.server.action;
 
 import com.google.common.base.Preconditions;
 import com.mongodb.DB;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.dto.ItemDTO;
-import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.exception.PlayerExistException;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
@@ -23,6 +23,8 @@ import org.mongojack.WriteResult;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -39,40 +41,6 @@ public class PlayerAction extends BaseAction {
         this.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
         this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
         this.gameLogCollection = JacksonDBCollection.wrap(db.getCollection(GameLog.COL_NAME), GameLog.class, String.class);
-    }
-
-    /**
-     * Returns the id to the player created
-     *
-     * @param playerDTO - The DTO object
-     * @return the id of the newly created player
-     * @throws PlayerExistException - Throws this exception if username already exists
-     */
-    public String createPlayer(PlayerDTO playerDTO) throws PlayerExistException {
-        Preconditions.checkNotNull(playerDTO);
-        Preconditions.checkNotNull(playerDTO.getUsername());
-        Preconditions.checkNotNull(playerDTO.getEmail());
-        Preconditions.checkNotNull(playerDTO.getPassword());
-        Preconditions.checkNotNull(playerDTO.getPasswordCopy());
-
-        if (!playerDTO.getPassword().equals(playerDTO.getPasswordCopy())) {
-            log.error("Passwords are not identical");
-            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-                    .build());
-        }
-        if (CivSingleton.instance().playerCache().asMap().containsValue(playerDTO.getUsername())) {
-            throw new PlayerExistException();
-        }
-
-        Player player = new Player();
-        player.setUsername(playerDTO.getUsername());
-        player.setPassword(DigestUtils.sha1Hex(playerDTO.getPassword()));
-        player.setEmail(playerDTO.getEmail());
-        WriteResult<Player, String> insert = playerCollection.insert(player);
-
-        log.info(String.format("Saving player with id %s", insert.getSavedId()));
-
-        return insert.getSavedId();
     }
 
     /**
@@ -392,5 +360,33 @@ public class PlayerAction extends BaseAction {
                 .findFirst().orElseThrow(PlayerAction::cannotFindPlayer)
                 .getTechsChosen();
 
+    }
+
+    /**
+     * Returns the id to the player created
+     *
+     * @return the id of the newly created player
+     * @throws PlayerExistException - Throws this exception if username already exists
+     */
+    @SneakyThrows
+    public String createPlayer(String username, String passwordEncoded, String email) throws PlayerExistException {
+        Preconditions.checkNotNull(username);
+        Preconditions.checkNotNull(passwordEncoded);
+        Preconditions.checkNotNull(email);
+
+        if (CivSingleton.instance().playerCache().asMap().containsValue(username)) {
+            throw new PlayerExistException();
+        }
+
+        Player player = new Player();
+        player.setUsername(username);
+        String decodedPassword = new String(Base64.getDecoder().decode(passwordEncoded), "UTF-8");
+        log.debug("Password decoded as " + decodedPassword);
+
+        player.setPassword(DigestUtils.sha1Hex(decodedPassword));
+        player.setEmail(email);
+        WriteResult<Player, String> insert = playerCollection.insert(player);
+        log.info(String.format("Saving player with id %s", insert.getSavedId()));
+        return insert.getSavedId();
     }
 }

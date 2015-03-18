@@ -1,21 +1,6 @@
 package no.asgari.civilization.server.resource;
 
-import com.codahale.metrics.annotation.Timed;
-import com.google.common.base.Strings;
-import com.mongodb.DB;
-import io.dropwizard.auth.Auth;
-import lombok.extern.log4j.Log4j;
-import no.asgari.civilization.server.SheetName;
-import no.asgari.civilization.server.action.DrawAction;
-import no.asgari.civilization.server.action.GameLogAction;
-import no.asgari.civilization.server.action.PlayerAction;
-import no.asgari.civilization.server.action.UndoAction;
-import no.asgari.civilization.server.dto.ItemDTO;
-import no.asgari.civilization.server.model.GameLog;
-import no.asgari.civilization.server.model.Player;
-import no.asgari.civilization.server.model.Tech;
-import no.asgari.civilization.server.model.Unit;
-import org.hibernate.validator.constraints.NotEmpty;
+import java.util.Set;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -31,9 +16,21 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+
+import com.codahale.metrics.annotation.Timed;
+import com.google.common.base.Strings;
+import com.mongodb.DB;
+import io.dropwizard.auth.Auth;
+import lombok.extern.log4j.Log4j;
+import no.asgari.civilization.server.action.DrawAction;
+import no.asgari.civilization.server.action.GameLogAction;
+import no.asgari.civilization.server.action.PlayerAction;
+import no.asgari.civilization.server.action.UndoAction;
+import no.asgari.civilization.server.dto.ItemDTO;
+import no.asgari.civilization.server.model.GameLog;
+import no.asgari.civilization.server.model.Player;
+import no.asgari.civilization.server.model.Tech;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * Contains player specific resources
@@ -64,7 +61,7 @@ public class PlayerResource {
      * @param techName
      * @return
      */
-    @PUT
+    @POST
     @Path("/tech/choose")
     @Timed
     public Response chooseTech(@Auth Player player, @PathParam("pbfId") String pbfId, @NotEmpty @QueryParam("name") String techName) {
@@ -118,7 +115,7 @@ public class PlayerResource {
      * @param pbfId
      * @return
      */
-    @PUT
+    @POST
     @Path("/endturn")
     @Timed
     public Response endTurn(@Auth Player player, @PathParam("pbfId") String pbfId) {
@@ -194,73 +191,6 @@ public class PlayerResource {
             return Response.ok().build();
         }
         return Response.status(Response.Status.NOT_MODIFIED).build();
-    }
-
-    @POST
-    @Path("/draw/{sheetName}")
-    @Timed
-    public Response drawItem(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @PathParam("sheetName") String sheetNameString) {
-        DrawAction drawAction = new DrawAction(db);
-
-        Optional<SheetName> sheetNameOptional = SheetName.find(sheetNameString);
-        if (!sheetNameOptional.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-        Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, player.getId(), sheetNameOptional.get());
-        if (gameLogOptional.isPresent())
-            return Response.ok().build();
-
-        return Response.status(Response.Status.NOT_FOUND).build();
-    }
-
-    /**
-     * Draws units from playerhand for battle purposes
-     *
-     * @param player
-     * @param pbfId
-     * @param numberOfunits
-     * @return
-     */
-    @PUT
-    @Path("/battle/draw")
-    @Timed
-    public Response drawUnits(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @QueryParam("numOfUnits") int numberOfunits) {
-        DrawAction drawAction = new DrawAction(db);
-        List<Unit> units = drawAction.drawUnitsFromForBattle(pbfId, player.getId(), numberOfunits);
-        return Response.ok().entity(units).build();
-    }
-
-    /**
-     * Draws barbarians
-     *
-     * @param player
-     * @param pbfId
-     * @return 200 ok
-     */
-    @PUT
-    @Path("/battle/draw/barbarians")
-    @Timed
-    public Response drawBarbarians(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId) {
-        DrawAction drawAction = new DrawAction(db);
-        List<Unit> units = drawAction.drawBarbarians(pbfId, player.getId());
-        return Response.ok().entity(units).build();
-    }
-
-    /**
-     * Discard barbarians
-     *
-     * @param player
-     * @param pbfId
-     * @return 201 no content
-     */
-    @DELETE
-    @Path("/battle/discard/barbarians")
-    @Timed
-    public Response discardBarbarians(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId) {
-        DrawAction drawAction = new DrawAction(db);
-        drawAction.discardBarbarians(pbfId, player.getId());
-        return Response.noContent().build();
     }
 
     /**

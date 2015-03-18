@@ -1,7 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>no.asgari.civilization</groupId>
+        <artifactId>civilization-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
 
     <groupId>no.asgari.civilization</groupId>
     <artifactId>civilization-rest</artifactId>
@@ -9,41 +15,6 @@
     <version>1.0-SNAPSHOT</version>
     <name>civilization-rest</name>
     <description>Rest server that creates PBF games and shuffles and gives out items</description>
-
-    <licenses>
-        <license>
-            <name>Apache 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <scm>
-        <developerConnection>scm:git:git@github.com:cash1981/civilization-boardgame.git</developerConnection>
-        <connection>scm:git:https://github.com/cash1981/civilization-boardgame.git</connection>
-        <url>https://github.com/cash1981/civilization-boardgame</url>
-    </scm>
-
-    <issueManagement>
-        <system>GitHub Issues</system>
-        <url>https://github.com/cash1981/civilization-boardgame/issues</url>
-    </issueManagement>
-
-    <developers>
-        <developer>
-            <id>cash1981</id>
-            <name>Shervin Asgari</name>
-            <email>shervin@asgari.no</email>
-        </developer>
-    </developers>
-
-    <repositories>
-        <repository>
-            <id>sonatype-nexus-snapshots</id>
-            <name>Sonatype Nexus Snapshots</name>
-            <url>http://oss.sonatype.org/content/repositories/snapshots</url>
-        </repository>
-    </repositories>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -178,7 +149,7 @@
                         <id>enforce</id>
                         <configuration>
                             <rules>
-                                <DependencyConvergence />
+                                <DependencyConvergence/>
                             </rules>
                         </configuration>
                         <goals>
@@ -199,6 +170,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <workingDirectory>${project.basedir}</workingDirectory>
                     <mainClass>no.asgari.civilization.server.application.CivilizationApplication</mainClass>
                 </configuration>
             </plugin>

@@ -1,6 +1,6 @@
 'use strict';
 (function (module) {
-  var UserItemController = function ($log, $routeParams, GameService, currentUser, Util, $filter, ngTableParams, $scope, PlayerService) {
+  var UserItemController = function ($log, $routeParams, GameService, DrawService, currentUser, Util, $filter, ngTableParams, $scope, PlayerService) {
     var model = this;
 
     model.nextElement = function(obj) {
@@ -48,6 +48,7 @@
     });
 
     function readKeysFromItems(items) {
+      //TODO refactor to lodash _forEach
       items.forEach(function (item) {
         var itemKey = Object.keys(item)[0];
         if ("cultureI" == itemKey || "cultureII" == itemKey || "cultureIII" == itemKey) {
@@ -79,6 +80,7 @@
       model.availableTech3 = [];
       model.availableTech4 = [];
 
+      //TODO refactor to lodash _forEach
       techs.forEach(function (tech) {
         var chosenTech = tech.tech || tech;
         if(!chosenTech) {
@@ -115,7 +117,7 @@
 
     model.drawItem = function(itemToDraw) {
       if(itemToDraw) {
-        PlayerService.drawItem($routeParams.id, itemToDraw)
+        DrawService.drawItem($routeParams.id, itemToDraw)
       }
     };
 
@@ -214,6 +216,6 @@
   };
 
   module.controller("UserItemController",
-    ["$log", "$routeParams", "GameService", "currentUser", "Util", "$filter", "ngTableParams", "$scope", "PlayerService", UserItemController]);
+    ["$log", "$routeParams", "GameService", "DrawService", "currentUser", "Util", "$filter", "ngTableParams", "$scope", "PlayerService", UserItemController]);
 
 }(angular.module("civApp")));

@@ -5,11 +5,12 @@ import lombok.Data;
 import no.asgari.civilization.server.model.GameType;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Data
-@JsonRootName(value = "CreateNewGame")
+@JsonRootName(value = "createNewGame")
 public class CreateNewGameDTO {
     @NotEmpty
     public String name;
@@ -19,7 +20,9 @@ public class CreateNewGameDTO {
 
     @NotNull
     @Min(1)
+    @Max(5)
     private Integer numOfPlayers;
 
+    @NotNull
     private String color;
 }

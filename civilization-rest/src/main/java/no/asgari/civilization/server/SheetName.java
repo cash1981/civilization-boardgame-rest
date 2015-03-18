@@ -42,7 +42,7 @@ public enum SheetName {
                 .findFirst();
         if (!found.isPresent()) {
             try {
-                return Optional.of(valueOf(name));
+                return Optional.of(valueOf(name.toUpperCase()));
             } catch (Exception ex) {
                 return Optional.empty();
             }

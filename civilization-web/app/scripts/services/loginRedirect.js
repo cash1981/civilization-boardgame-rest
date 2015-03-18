@@ -3,12 +3,8 @@
 
   var loginRedirect = function () {
 
-    var loginUrl = "/login";
+    var loginUrl = "/auth";
     var lastPath = "";
-
-    this.setLoginUrl = function (value) {
-      loginUrl = value;
-    };
 
     this.$get = function ($q, $location) {
 

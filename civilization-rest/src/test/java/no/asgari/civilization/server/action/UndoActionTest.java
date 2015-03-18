@@ -1,4 +1,4 @@
-package no.asgari.civilization.server.model;
+package no.asgari.civilization.server.action;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
@@ -8,57 +8,62 @@ import java.util.List;
 import java.util.Optional;
 
 import no.asgari.civilization.server.SheetName;
-import no.asgari.civilization.server.action.DrawAction;
-import no.asgari.civilization.server.action.PlayerAction;
-import no.asgari.civilization.server.action.UndoAction;
-import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
+import no.asgari.civilization.server.model.Civ;
+import no.asgari.civilization.server.model.GameLog;
+import no.asgari.civilization.server.model.Item;
+import no.asgari.civilization.server.model.PBF;
+import no.asgari.civilization.server.model.Player;
+import no.asgari.civilization.server.model.Playerhand;
+import no.asgari.civilization.server.model.Spreadsheet;
+import no.asgari.civilization.server.model.Undo;
+import no.asgari.civilization.server.mongodb.AbstractCivilizationTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.mongojack.DBQuery;
 
 @SuppressWarnings("unchecked")
-public class UndoTest extends AbstractMongoDBTest {
+public class UndoActionTest extends AbstractCivilizationTest {
 
-    private UndoAction undoAction = new UndoAction(db);
+    private UndoAction undoAction = new UndoAction(getApp().db);
 
     @Before
-    public void before() throws Exception {
-        if (gameLogCollection.findOne() == null || gameLogCollection.findOne().getDraw() == null) {
+    public void before() {
+        if (getApp().gameLogCollection.findOne() == null || getApp().gameLogCollection.findOne().getDraw() == null) {
             createADrawAndInitiateAVoteForUndo();
         }
     }
 
-    private String createADrawAndInitiateAVoteForUndo() throws Exception {
+    private String createADrawAndInitiateAVoteForUndo() {
         //First create one UndoAction
 
         //Pick one item
-        PBF pbf = pbfCollection.findOneById(pbfId);
+        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
         assertThat(pbf).isNotNull();
         assertThat(pbf.getItems()).isNotEmpty();
 
-        DrawAction drawAction = new DrawAction(db);
-        Optional<GameLog> gameLogOptional = drawAction.draw(pbfId, playerId, SheetName.CIV);
+        DrawAction drawAction = new DrawAction(getApp().db);
+        Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.CIV);
         assertTrue(gameLogOptional.isPresent());
-        undoAction.initiateUndo(gameLogOptional.get(), playerId);
+        undoAction.initiateUndo(gameLogOptional.get(), getApp().playerId);
 
-        assertThat(gameLogCollection.findOneById(gameLogOptional.get().getId()).getDraw().getUndo().getVotes().size()).isEqualTo(1);
+        assertThat(getApp().gameLogCollection.findOneById(gameLogOptional.get().getId()).getDraw().getUndo().getVotes().size()).isEqualTo(1);
         return gameLogOptional.get().getId();
     }
 
     @Test
     public void performAVoteAndCheckIt() throws Exception {
-        String gamelogId = gameLogCollection.findOne().getId();
-        if (gameLogCollection.findOne().getDraw().getUndo() == null || gameLogCollection.findOne().getDraw().getUndo().isDone()) {
+        String gamelogId = getApp().gameLogCollection.findOne().getId();
+        if (getApp().gameLogCollection.findOne().getDraw().getUndo() == null || getApp().gameLogCollection.findOne().getDraw().getUndo().isDone()) {
             gamelogId = createADrawAndInitiateAVoteForUndo();
         }
 
-        final GameLog gameLog = gameLogCollection.findOneById(gamelogId);
+        final GameLog gameLog = getApp().gameLogCollection.findOneById(gamelogId);
         assertThat(gameLog.getDraw().getUndo()).isNotNull();
 
         int votes = gameLog.getDraw().getUndo().getVotes().size();
         assertThat(gameLog.getDraw().getUndo().isDone()).isFalse();
 
-        List<Playerhand> players = pbfCollection.findOneById(gameLog.getDraw().getPbfId()).getPlayers();
+        List<Playerhand> players = getApp().pbfCollection.findOneById(gameLog.getDraw().getPbfId()).getPlayers();
 
         Optional<Playerhand> anotherPlayer = players.stream()
                 .filter(p -> !gameLog.getDraw().getUndo().getVotes().keySet().contains(p.getPlayerId()))
@@ -70,22 +75,22 @@ public class UndoTest extends AbstractMongoDBTest {
         assertThat(anotherPlayer.isPresent()).isTrue();
         GameLog vote = undoAction.vote(gameLog, anotherPlayer.get().getPlayerId(), Boolean.TRUE);
         assertThat(vote.getDraw().getUndo().getVotes().size()).isEqualTo(votes);
-        assertThat(gameLogCollection.findOneById(gameLog.getId()).getDraw().getUndo().getVotes().size()).isEqualTo(votes);
+        assertThat(getApp().gameLogCollection.findOneById(gameLog.getId()).getDraw().getUndo().getVotes().size()).isEqualTo(votes);
     }
 
     @Test
     public void allPlayersVoteYesThenPerformUndo() throws Exception {
-        GameLog gameLog = gameLogCollection.findOne();
+        GameLog gameLog = getApp().gameLogCollection.findOne();
         if (gameLog.getDraw().getUndo() == null || gameLog.getDraw().getUndo().isDone()) {
             String gamelogId = createADrawAndInitiateAVoteForUndo();
-            gameLog = gameLogCollection.findOneById(gamelogId);
+            gameLog = getApp().gameLogCollection.findOneById(gamelogId);
         }
 
-        PBF pbf = pbfCollection.findOneById(gameLog.getPbfId());
+        PBF pbf = getApp().pbfCollection.findOneById(gameLog.getPbfId());
         assertFalse(pbf.getItems().contains(gameLog.getDraw().getItem()));
-        pbf = pbfCollection.findOneById(gameLog.getPbfId());
+        pbf = getApp().pbfCollection.findOneById(gameLog.getPbfId());
 
-        List<Item> items = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(playerId)).findFirst().get().getItems();
+        List<Item> items = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(getApp().playerId)).findFirst().get().getItems();
         assertTrue(items.contains(gameLog.getDraw().getItem()));
 
         final GameLog finalGameLog = gameLog;
@@ -93,7 +98,7 @@ public class UndoTest extends AbstractMongoDBTest {
                 .filter(p -> !finalGameLog.getDraw().getUndo().getVotes().keySet().contains(p.getUsername()))
                 .forEach(p -> undoAction.vote(finalGameLog, p.getPlayerId(), Boolean.TRUE));
 
-        Undo undo = gameLogCollection.findOneById(gameLog.getId()).getDraw().getUndo();
+        Undo undo = getApp().gameLogCollection.findOneById(gameLog.getId()).getDraw().getUndo();
         assertThat(undo.getVotes()).doesNotContainValue(Boolean.FALSE);
         assertThat(undo.getResultOfVotes().get()).isTrue();
 
@@ -102,28 +107,28 @@ public class UndoTest extends AbstractMongoDBTest {
         assertThat(item).isInstanceOf(Civ.class);
 
         //check that its in the pbf
-        assertTrue(pbfCollection.findOneById(gameLog.getPbfId()).getItems().contains(item));
+        assertTrue(getApp().pbfCollection.findOneById(gameLog.getPbfId()).getItems().contains(item));
     }
 
     @Test
     public void checkThatYouCanUndoTech() throws Exception {
         //Pick one item
-        PBF pbf = pbfCollection.findOneById(pbfId);
+        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
         assertThat(pbf).isNotNull();
         assertThat(pbf.getItems()).isNotEmpty();
 
-        PlayerAction playerAction = new PlayerAction(db);
-        GameLog gameLog = playerAction.chooseTech(pbfId, "Navy", playerId);
+        PlayerAction playerAction = new PlayerAction(getApp().db);
+        GameLog gameLog = playerAction.chooseTech(getApp().pbfId, "Navy", getApp().playerId);
 
         assertThat(gameLog.getDraw().getUndo()).isNull();
-        undoAction.initiateUndo(gameLog, playerId);
-        gameLog = gameLogCollection.findOneById(gameLog.getId());
+        undoAction.initiateUndo(gameLog, getApp().playerId);
+        gameLog = getApp().gameLogCollection.findOneById(gameLog.getId());
         assertThat(gameLog.getDraw().getUndo()).isNotNull();
     }
 
     @Test
     public void voteAndCountRemaingVotes() throws Exception {
-        GameLog gameLog = gameLogCollection.findOne();
+        GameLog gameLog = getApp().gameLogCollection.findOne();
         //make another vote
 
         assertThat(gameLog.getDraw().getUndo()).isNotNull();
@@ -134,22 +139,23 @@ public class UndoTest extends AbstractMongoDBTest {
     @Test
     public void getAllActiveUndos() throws Exception {
         createADrawAndInitiateAVoteForUndo();
-        List<GameLog> allActiveUndos = undoAction.getAllActiveUndos(pbfId);
+        List<GameLog> allActiveUndos = undoAction.getAllActiveUndos(getApp().pbfId);
         assertThat(allActiveUndos).isNotEmpty();
     }
 
     @Test
     public void getAllFinishedUndos() throws Exception {
         allPlayersVoteYesThenPerformUndo();
-        List<GameLog> allFinishedUndos = undoAction.getAllFinishedUndos(pbfId);
+        List<GameLog> allFinishedUndos = undoAction.getAllFinishedUndos(getApp().pbfId);
         assertThat(allFinishedUndos).isNotEmpty();
     }
 
     private String getAnotherPlayerId() {
-        Player anotherPlayer = playerCollection.findOne(DBQuery.notEquals("_id", playerId));
+        Player anotherPlayer = getApp().playerCollection.findOne(DBQuery.notEquals("_id", getApp().playerId));
         assertThat(anotherPlayer).isNotNull();
-        assertThat(anotherPlayer.getId()).isNotEqualTo(playerId);
+        assertThat(anotherPlayer.getId()).isNotEqualTo(getApp().playerId);
         return anotherPlayer.getId();
 
     }
+
 }

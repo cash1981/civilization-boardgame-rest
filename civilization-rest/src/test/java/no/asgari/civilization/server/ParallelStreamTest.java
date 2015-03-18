@@ -9,18 +9,18 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.base.Stopwatch;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
-import no.asgari.civilization.server.mongodb.AbstractMongoDBTest;
+import no.asgari.civilization.server.mongodb.AbstractCivilizationTest;
 import org.junit.Ignore;
 import org.junit.Test;
 
 @Ignore("No need to run this test on each build")
-public class ParallelStreamTest extends AbstractMongoDBTest {
+public class ParallelStreamTest extends AbstractCivilizationTest {
 
     private static final int NR_OF_LOOPS = 100_000;
-
+/*
     @Test
     public void testNormalStream() throws Exception {
-        PBF pbf = pbfCollection.findOneById(pbfId);
+        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
 
         List<Item> list = new ArrayList<>();
 
@@ -41,7 +41,7 @@ public class ParallelStreamTest extends AbstractMongoDBTest {
 
     @Test
     public void testNormalParallelStream() throws Exception {
-        PBF pbf = pbfCollection.findOneById(pbfId);
+        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
 
         List<Item> list = new ArrayList<>();
 
@@ -58,5 +58,5 @@ public class ParallelStreamTest extends AbstractMongoDBTest {
 
         System.out.println("Parallel stream used " + started.elapsed(TimeUnit.MILLISECONDS) + " milli seconds");
     }
-
+*/
 }

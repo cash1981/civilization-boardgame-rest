@@ -2,10 +2,10 @@
     #DONE -- Either let players when fighting do it as now, and then after battle hidden all units
 - Battle
     #DONE -- A dropdown with number of units to draw
-    -- Must support undo in-case wrong number of units is drawn
+    #DONE -- Must support undo in-case wrong number of units is drawn
     -- After battle, perhaps have a end battle button, it will show all the draws that where made and set all units to isBattle = false
-        -- For now a battle is just revealing units that where drawn by the system
-        -- Perhaps a end battle button both players will need to push, which will hidden all units that where drawn
+    #DONE     -- For now a battle is just revealing units that where drawn by the system
+      #DONE   -- Perhaps a end battle button both players will need to push, which will hidden all units that where drawn
     #DONE -- Must be able to kill/delete units/item, they will be put back in pbf
 #DONE - Choose Techs
 	*MAYBE* -- Techs will not be revealed until all players have pushed submit/hidden button (Same functionality as voting)
@@ -49,8 +49,12 @@
 	#DONE -- When deleting it should log it.
 	#DONE -- Consider putting items back in the deck, although this is already taken care of by reshuffling when draw is made
 
-- Change basic authentication to OAUTH
-- Created filter/interceptor for userHasAccess
+- MISC
+- Loot
+    -- Automatically send hut/village to user
+    - Change the battle system so that you can draw 1 unit, in case of Monarchy killing random unit
+
+- Created annotation/filter/interceptor for userHasAccess
 - Choose color
 
 - Security hole:
@@ -58,6 +62,7 @@
     -- Perhaps refactor to add the logid on an item instead
 
 Nice to have
+- Change basic authentication to OAUTH
 - Hide the draw.item in public log. It
 - Chat with scrolling capabilites.
 	-- Websocket?

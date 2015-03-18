@@ -1,15 +1,13 @@
-package no.asgari.civilization.server.application;
+package no.asgari.civilization.server;
 
 import java.io.IOException;
-import java.util.EnumSet;
 import java.util.concurrent.TimeUnit;
 
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import com.codahale.metrics.MetricRegistry;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheBuilderSpec;
 import com.google.common.cache.CacheLoader;
@@ -26,50 +24,69 @@ import io.dropwizard.java8.auth.CachingAuthenticator;
 import io.dropwizard.java8.auth.basic.BasicAuthFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j;
+import no.asgari.civilization.server.action.PBFTestAction;
+import no.asgari.civilization.server.application.CivAuthenticator;
+import no.asgari.civilization.server.application.CivSingleton;
+import no.asgari.civilization.server.application.MongoManaged;
 import no.asgari.civilization.server.excel.ItemReader;
+import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
+import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.resource.AuthResource;
 import no.asgari.civilization.server.resource.DrawResource;
 import no.asgari.civilization.server.resource.GameResource;
 import no.asgari.civilization.server.resource.PlayerResource;
-import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.eclipse.jetty.util.B64Code;
+import org.eclipse.jetty.util.StringUtil;
 import org.glassfish.hk2.utilities.Binder;
 import org.mongojack.JacksonDBCollection;
+import org.mongojack.WriteResult;
 
 @Log4j
 @SuppressWarnings("unchecked")
-public class CivilizationApplication extends Application<CivilizationConfiguration> {
+public class CivilizationIntegrationTestApplication extends Application<CivilizationTestConfiguration> {
 
-    public static void main(String[] args) throws Exception {
-        new CivilizationApplication().run(new String[] { "server", "src/main/resources/config.yml" });
-    }
+    public DB db;
+    public JacksonDBCollection<PBF, String> pbfCollection;
+    public JacksonDBCollection<GameLog, String> gameLogCollection;
+    public JacksonDBCollection<Player, String> playerCollection;
+    public String pbfId;
+    public String playerId;
+    public String pbfId_2;
+    public String pbfId_3;
 
     @Override
-    public void initialize(Bootstrap<CivilizationConfiguration> bootstrap) {
+    public void initialize(Bootstrap<CivilizationTestConfiguration> bootstrap) {
         bootstrap.addBundle(new Java8Bundle());
         bootstrap.addBundle(new AssetsBundle());
     }
 
     @Override
-    public void run(CivilizationConfiguration configuration, Environment environment) throws Exception {
+    public void run(CivilizationTestConfiguration configuration, Environment environment) throws Exception {
         MongoClient mongo = new MongoClient(configuration.mongohost, configuration.mongoport);
-        DB db = mongo.getDB(configuration.mongodb);
+        this.db = mongo.getDB(configuration.mongodb);
+
         MongoManaged mongoManaged = new MongoManaged(mongo);
         //Database
         environment.lifecycle().manage(mongoManaged);
 
-        JacksonDBCollection<Player, String> playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
-        JacksonDBCollection<PBF, String> pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
+        this.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
+        this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
+        this.gameLogCollection = JacksonDBCollection.wrap(db.getCollection(GameLog.COL_NAME), GameLog.class, String.class);
+
+        playerCollection.drop();
+        pbfCollection.drop();
+        gameLogCollection.drop();
+
         createIndexForPlayer(playerCollection);
         createUsernameCache(playerCollection);
         createIndexForPBF(pbfCollection);
         createItemCache();
-
-        //healtcheck
-        environment.healthChecks().register("MongoHealthCheck", new MongoHealthCheck(mongo));
 
         //Resources
         environment.jersey().register(new GameResource(db));
@@ -90,18 +107,11 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         //Authentication
         environment.jersey().register(authBinder);
 
-        // Enable CORS headers
-        FilterRegistration.Dynamic cors = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
+        createNewPBFGame();
+        createAnotherPBF();
+        createEmptyPBF();
+        playerId = playerCollection.findOne().getId();
 
-        // Configure CORS parameters
-        cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
-        cors.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
-        cors.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "OPTIONS,GET,PUT,POST,DELETE,HEAD");
-        cors.setInitParameter(CrossOriginFilter.ALLOW_CREDENTIALS_PARAM, "true");
-        cors.setInitParameter(CrossOriginFilter.EXPOSED_HEADERS_PARAM, "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,Location");
-
-        // Add URL mapping
-        cors.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
     }
 
     private void createItemCache() {
@@ -146,4 +156,68 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
     private void createIndexForPBF(JacksonDBCollection<PBF, String> pbfCollection) {
         pbfCollection.createIndex(new BasicDBObject(PBF.NAME, 1), new BasicDBObject("unique", true));
     }
+
+    protected String getUsernameAndPassEncoded() {
+        return "Basic " + B64Code.encode("cash1981" + ":" + "foo", StringUtil.__ISO_8859_1);
+    }
+
+    private void createNewPBFGame() throws IOException {
+        PBFTestAction pbfTestAction = new PBFTestAction();
+        PBF pbf = pbfTestAction.createNewGame("First civ game");
+        WriteResult<PBF, String> writeResult = pbfCollection.insert(pbf);
+        pbfId = writeResult.getSavedId();
+
+        PBF oneById = pbfCollection.findOneById(pbfId);
+        oneById.getPlayers().add(createPlayerhand(createPlayer("cash1981", pbfId)));
+        oneById.getPlayers().add(createPlayerhand(createPlayer("Karandras1", pbfId)));
+        oneById.getPlayers().add(createPlayerhand(createPlayer("Itchi", pbfId)));
+        oneById.getPlayers().add(createPlayerhand(createPlayer("Chul", pbfId)));
+        pbfCollection.updateById(pbfId, oneById);
+    }
+
+    private void createAnotherPBF() throws IOException {
+        PBFTestAction pbfTestAction = new PBFTestAction();
+        PBF pbf = pbfTestAction.createNewGame("Second civ game");
+        WriteResult<PBF, String> writeResult = pbfCollection.insert(pbf);
+        pbfId_2 = writeResult.getSavedId();
+
+        PBF oneById = pbfCollection.findOneById(pbfId_2);
+        oneById.getPlayers().add(createPlayerhand(createPlayer("Morthai", pbfId_2)));
+        oneById.getPlayers().add(createPlayerhand(createPlayer("CJWF", pbfId_2)));
+        oneById.getPlayers().add(createPlayerhand(createPlayer("DaveLuca", pbfId_2)));
+        oneById.getPlayers().add(createPlayerhand(createPlayer("Foobar", pbfId_2)));
+        pbfCollection.updateById(pbfId_2, oneById);
+    }
+
+    private void createEmptyPBF() throws IOException {
+        PBFTestAction pbfTestAction = new PBFTestAction();
+        PBF pbf = pbfTestAction.createNewGame("Third civ game");
+        WriteResult<PBF, String> writeResult = pbfCollection.insert(pbf);
+        pbfId_3 = writeResult.getSavedId();
+    }
+
+    private Playerhand createPlayerhand(Player player) {
+        Playerhand playerhand = new Playerhand();
+        playerhand.setUsername(player.getUsername());
+        playerhand.setPlayerId(player.getId());
+        if (player.getUsername().equals("cash1981")) {
+            playerhand.setYourTurn(true);
+        }
+        return playerhand;
+    }
+
+    private Player createPlayer(String username, String pbfId) throws JsonProcessingException {
+        //The Player object should be cached and retrieved from cache
+        Player player = new Player();
+        player.setUsername(username);
+        player.getGameIds().add(pbfId);
+        player.setEmail(username + "@mailinator.com");
+        player.setPassword(DigestUtils.sha1Hex("foo"));
+
+        WriteResult<Player, String> writeResult = playerCollection.insert(player);
+        System.out.println("Saved player " + writeResult.toString());
+        player.setId(writeResult.getSavedId());
+        return player;
+    }
+
 }
