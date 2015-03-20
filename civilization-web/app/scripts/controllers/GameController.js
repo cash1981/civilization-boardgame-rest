@@ -26,16 +26,6 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
     PlayerService.endTurn(model.gameId);
   };
 
-  model.chat = function($event) {
-    $log.info("chat");
-    if(model.chatMessage) {
-      $log.info(model.chatMessage);
-      model.chatMessage = "";
-    } else {
-      $event.preventDefault();
-    }
-  };
-
   //In scope so that we can use it from another view which is included
   $scope.canInitiateUndo = function(log) {
     return checkPermissionForVote(log) && !log.draw.undo;
