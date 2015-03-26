@@ -12,7 +12,7 @@ import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.model.Tech;
 import no.asgari.civilization.server.model.Undo;
-import no.asgari.civilization.server.util.Java8Util;
+import no.asgari.civilization.server.misc.Java8Util;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;

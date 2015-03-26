@@ -13,6 +13,7 @@ import no.asgari.civilization.server.action.GameAction;
 import no.asgari.civilization.server.action.GameLogAction;
 import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.action.UndoAction;
+import no.asgari.civilization.server.dto.ChatDTO;
 import no.asgari.civilization.server.dto.CheckNameDTO;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.GameDTO;
@@ -24,6 +25,7 @@ import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Tech;
+import no.asgari.civilization.server.misc.Java8Util;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
@@ -42,8 +44,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -367,16 +373,30 @@ public class GameResource {
 
         GameAction gameAction = new GameAction(db);
         Chat chat = gameAction.chat(pbfId, message, player.getUsername());
-        return Response.created(URI.create(chat.getId())).entity(chat).build();
+        return Response.created(URI.create(chat.getId())).entity(new ChatDTO(chat)).build();
     }
 
     @GET
     @Timed
     @Path("/{pbfId}/chat")
     @Produces(value = MediaType.APPLICATION_JSON)
-    public Response chat(@PathParam("pbfId") String pbfId) {
+    public Response getChatList(@PathParam("pbfId") String pbfId) throws UnsupportedEncodingException {
         GameAction gameAction = new GameAction(db);
-        List<Chat> chatDTOs = gameAction.getChat(pbfId);
+        List<Chat> chats = gameAction.getChat(pbfId);
+
+        List<ChatDTO> chatDTOs = new ArrayList<>(chats.size());
+        for(Chat c : chats) {
+            chatDTOs.add(new ChatDTO(c.getId(), c.getPbfId(), c.getUsername(), URLDecoder.decode(c.getMessage(), "UTF-8"), c.getCreatedInMillis()));
+        }
+
+        //Sort newest date first
+        Collections.sort(chatDTOs, new Comparator<ChatDTO>() {
+            @Override
+            public int compare(ChatDTO o1, ChatDTO o2) {
+                return -Long.valueOf(o1.getCreated()).compareTo(o2.getCreated());
+            }
+        });
+
         return Response.ok().entity(chatDTOs).build();
     }
 }

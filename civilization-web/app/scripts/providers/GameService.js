@@ -7,7 +7,7 @@
       var loading = {};
       var baseUrl = BASE_URL + "/game/";
 
-      this.$get = function ($http, $log, growl, $location) {
+      this.$get = function ($http, $log, growl, $location, $q, formEncode, $routeParams) {
         var createGame = function (game) {
 
           var newGameDTO = {
@@ -145,6 +145,36 @@
             });
         };
 
+        var getChatList = function (gameid) {
+          var url = baseUrl + gameid + "/chat/";
+          return $http.get(url, {cache: true})
+            .then(function (response) {
+              return response.data;
+            });
+        };
+
+        var chat = function (gameid, message) {
+          if(!gameid || !message) {
+            return $q.reject('No chat message');
+          }
+
+          var url = baseUrl + gameid + "/chat/";
+
+          var configuration = {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          };
+
+          var data = formEncode({
+            message: encodeURIComponent(message)
+          });
+
+          return $http.post(url, data, configuration)
+            .then(function(response) {
+              return response.data;
+            });
+        };
 
         return {
           getAllGames: getAllGames,
@@ -155,7 +185,9 @@
           undoDraw: undoDraw,
           getAvailableTechs: getAvailableTechs,
           voteYes: voteYes,
-          voteNo: voteNo
+          voteNo: voteNo,
+          getChatList: getChatList,
+          chat: chat
         };
       };
 

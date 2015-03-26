@@ -1,4 +1,4 @@
-package no.asgari.civilization.server.util;
+package no.asgari.civilization.server.misc;
 
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -12,4 +12,5 @@ public class Java8Util {
     public static <T> Stream<T> parallelStreamFromIterable(Iterable<T> in) {
         return StreamSupport.stream(in.spliterator(), true);
     }
+
 }

@@ -16,7 +16,7 @@ import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.model.Tech;
 import no.asgari.civilization.server.model.Tradable;
-import no.asgari.civilization.server.util.SecurityCheck;
+import no.asgari.civilization.server.misc.SecurityCheck;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;

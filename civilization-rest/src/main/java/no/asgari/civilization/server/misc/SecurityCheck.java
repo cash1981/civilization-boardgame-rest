@@ -1,4 +1,4 @@
-package no.asgari.civilization.server.util;
+package no.asgari.civilization.server.misc;
 
 import no.asgari.civilization.server.model.PBF;
 

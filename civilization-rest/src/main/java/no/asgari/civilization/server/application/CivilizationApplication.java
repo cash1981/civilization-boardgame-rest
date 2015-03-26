@@ -28,6 +28,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.excel.ItemReader;
+import no.asgari.civilization.server.model.Chat;
 import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
@@ -37,6 +38,7 @@ import no.asgari.civilization.server.resource.GameResource;
 import no.asgari.civilization.server.resource.PlayerResource;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.glassfish.hk2.utilities.Binder;
+import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 
 @Log4j
@@ -63,9 +65,11 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
 
         JacksonDBCollection<Player, String> playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
         JacksonDBCollection<PBF, String> pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
+        JacksonDBCollection<Chat, String> chatCollection = JacksonDBCollection.wrap(db.getCollection(Chat.COL_NAME), Chat.class, String.class);
         createUniqueIndexForPlayer(playerCollection);
         createUsernameCache(playerCollection);
         createUniqueIndexForPBF(pbfCollection);
+        createIndexForChat(chatCollection);
         createItemCache();
 
         //healtcheck
@@ -145,5 +149,9 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
 
     private void createUniqueIndexForPBF(JacksonDBCollection<PBF, String> pbfCollection) {
         pbfCollection.createIndex(new BasicDBObject(PBF.NAME, 1), new BasicDBObject("unique", true));
+    }
+
+    private void createIndexForChat(JacksonDBCollection<Chat, String> chatCollection) {
+        chatCollection.createIndex(new BasicDBObject(Chat.PBFID, 1));
     }
 }

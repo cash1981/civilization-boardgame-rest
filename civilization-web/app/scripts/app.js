@@ -28,7 +28,14 @@
         }
       })
       .when('/game/:id', {
-        templateUrl: 'views/game.html'
+        templateUrl: 'views/game.html',
+        controller: "ChatController as chatCtrl",
+        resolve: {
+          chatList: ["GameService", "$route", function(m, r) {
+            //return m.getChatList(r.$$url.split('/')[2]);
+            return m.getChatList(r.current.params.id);
+          }]
+        }
         //Use resolve when you want the data to appear before going to the page
         /*
          ,resolve: {

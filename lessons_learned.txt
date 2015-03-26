@@ -2,7 +2,7 @@ I wanted a clean setup to work with. I found three promising options. The angula
 
 The reason I didn't continue with the seed project is that I couldn't get bower and nodejs to correctly work.
 
-I had lots of problems with nodejs and bower to correctly work in Ubuntu. This resultet in not getting yeoman or cleverstack to work.
+I had lots of problems with nodejs and bower to correctly work in Ubuntu. This resulted in not getting yeoman or cleverstack to work.
 Cleverstack looked pretty promising.
 
 I tried installing nodejs from apt-get, and updating to the latest nodejs and bower versions, but still I got some issues.
@@ -12,11 +12,12 @@ Now I could finally get yeoman to generate a angular app for me. However clevers
 
 - Huge downside when your API is set, and you decide to change your API. You can't remove items unless you know there are no one that uses your API
 and that there are no active games up and running. I think accessing inactive games for readability later is problematic!
--- Its exactly like the serilization issues we had with Java that made us go away from that
+-- Its exactly like the serialization issues we had with Java that made us go away from that
 
 
 GOTCHA
 $http.delete doesn't work with content-type
 
 - Travis for continous integration
-- Ikke legg å ha parent pom og intellij. Finner ikke config fil. Maven klarer fint, men ikke intellij
+- Ikke lett å ha parent pom og intellij. Finner ikke config fil. Maven klarer fint, men ikke intellij
+- Java 8 and checked exception in lambdas doesn't play well

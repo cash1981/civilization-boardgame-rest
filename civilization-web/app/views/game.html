@@ -22,12 +22,12 @@
     </div>
     <div class="col-md-6">
       <div class="jumbotron">
-        <h1>{{latestLog}}</h1>
+        <h1 ng-bind-html="latestLog"></h1>
         <span ng-if="userHasAccess">
-          <form ng-submit="chatCtrl.chat($event)" ui-keypress="{13:'gameCtrl.chat($event)'}" ng-controller="ChatController as chatCtrl">
-            <input type="text" ng-model="chatCtrl.chatMessage" placeholder="Write your chat message here" size="30" maxlength="250"/>
+          <form ng-submit="chatCtrl.chat()">
+            <input type="text" ng-model="chatCtrl.chatMessage" placeholder="Write your chat message here" maxlength="250"/>
             <!-- Hack, will put submit button out of view -->
-            <!--<input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>-->
+            <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
           </form>
         </span>
       </div>
@@ -85,7 +85,7 @@
       <ng-include src="'views/partials/chat.html'"></ng-include>
     </tab>
     <tab ng-if="!userHasAccess" heading="Chat" class="col-md-4">
-      <h1>For now, we will use the forum for table talk</h1>
+      <ng-include src="'views/partials/chat.html'"></ng-include>
     </tab>
     <tab ng-if="userHasAccess" heading="My Items" class="col-md-2">
       <ng-include src="'views/partials/useritems.html'"></ng-include>
