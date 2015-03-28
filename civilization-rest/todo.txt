@@ -49,13 +49,12 @@
 	#DONE -- When deleting it should log it.
 	#DONE -- Consider putting items back in the deck, although this is already taken care of by reshuffling when draw is made
 
-- MISC
 - Loot
     -- Automatically send hut/village to user
-    - Change the battle system so that you can draw 1 unit, in case of Monarchy killing random unit
+    #DONE - Change the battle system so that you can draw 1 unit, in case of Monarchy killing random unit
 
 - Created annotation/filter/interceptor for userHasAccess
-- Choose color
+#DONE - Choose color
 
 - Security hole:
     -- hide the drawn item in the public log, 
@@ -63,8 +62,8 @@
 
 Nice to have
 - Change basic authentication to OAUTH
-- Hide the draw.item in public log. It
-- Chat with scrolling capabilites.
+- Hide the draw.item in public log.
+#DONE - Chat with scrolling capabilites.
 	-- Websocket?
 - Each item can have path to a picture so that client can show it
 - Create a filter that is for /civilization/pbf/{pbfId}* which takes the pbfId and the logged in player, and check if that player has access to the game, and proceeds if they do
@@ -75,7 +74,6 @@ Nice to have
 	-- This is probably not that difficult. Just put all playerhand info in another playerhand
 #DONE - Perhaps when players choose tech it should be intersection between pbf.getTech() and player.getTech() so that only distinct techs shows
 - Instead of Basic authentication, it would be nice to support OAUTH
-- For now sending public items (resources) doesnt need sending in the system, but for fully playable version we need support for it
 - Support for more game types
 	-- Change all sheetnames in parameters to combination of GameType and Sheetname
 

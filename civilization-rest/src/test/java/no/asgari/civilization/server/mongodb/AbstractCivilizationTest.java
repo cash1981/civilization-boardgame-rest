@@ -1,8 +1,5 @@
 package no.asgari.civilization.server.mongodb;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-
 import io.dropwizard.logging.LoggingFactory;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import no.asgari.civilization.server.CivilizationIntegrationTestApplication;
@@ -11,6 +8,9 @@ import org.eclipse.jetty.util.B64Code;
 import org.eclipse.jetty.util.StringUtil;
 import org.glassfish.jersey.client.ClientProperties;
 import org.junit.ClassRule;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 
 public abstract class AbstractCivilizationTest {
 

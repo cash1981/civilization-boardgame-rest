@@ -1,16 +1,19 @@
+/*
+ * Copyright (c) 2015 Shervin Asgari
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package no.asgari.civilization.server.action;
-
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Response;
 
 import com.google.common.base.Preconditions;
 import com.mongodb.DB;
@@ -24,10 +27,20 @@ import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
-import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.model.Unit;
 import org.mongojack.JacksonDBCollection;
+
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Response;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Class that will perform draws and log them.
@@ -247,7 +260,7 @@ public class DrawAction extends BaseAction {
     public void revealAndDiscardBattlehand(String pbfId, String playerId) {
         PBF pbf = pbfCollection.findOneById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        if(playerhand.getBattlehand().isEmpty()) {
+        if (playerhand.getBattlehand().isEmpty()) {
             log.warn("Tried to reveal playerhand, but was empty");
             return;
         }
@@ -292,10 +305,10 @@ public class DrawAction extends BaseAction {
     /**
      * draws a random item from playerhand and gives to another player
      *
-     * @param pbfId - The pbf id
+     * @param pbfId          - The pbf id
      * @param targetPlayerId - The targeted player which will recieve the item
-     * @param sheetName - the item to be automatically drawn from playerhand and given to another player
-     * @param playerId - The logged in player that we will take the item from
+     * @param sheetName      - the item to be automatically drawn from playerhand and given to another player
+     * @param playerId       - The logged in player that we will take the item from
      */
     public void drawRandomItemAndGiveToPlayer(String pbfId, SheetName sheetName, String targetPlayerId, String playerId) {
         Preconditions.checkNotNull(pbfId);

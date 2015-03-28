@@ -54,7 +54,7 @@
         redirectTo: '/'
       })
       .otherwise({
-        redirectTo: '404.html'
+        templateUrl: '404.html'
       });
   });
 

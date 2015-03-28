@@ -1,7 +1,30 @@
+/*
+ * Copyright (c) 2015 Shervin Asgari
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package no.asgari.civilization.server.resource;
 
-import java.util.List;
-import java.util.Optional;
+import com.codahale.metrics.annotation.Timed;
+import com.mongodb.DB;
+import io.dropwizard.auth.Auth;
+import lombok.extern.log4j.Log4j;
+import no.asgari.civilization.server.SheetName;
+import no.asgari.civilization.server.action.DrawAction;
+import no.asgari.civilization.server.model.GameLog;
+import no.asgari.civilization.server.model.Player;
+import no.asgari.civilization.server.model.Unit;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -15,17 +38,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-
-import com.codahale.metrics.annotation.Timed;
-import com.mongodb.DB;
-import io.dropwizard.auth.Auth;
-import lombok.extern.log4j.Log4j;
-import no.asgari.civilization.server.SheetName;
-import no.asgari.civilization.server.action.DrawAction;
-import no.asgari.civilization.server.model.GameLog;
-import no.asgari.civilization.server.model.Player;
-import no.asgari.civilization.server.model.Unit;
-import org.hibernate.validator.constraints.NotEmpty;
+import java.util.List;
+import java.util.Optional;
 
 @Path("draw/{pbfId}")
 @Produces(MediaType.APPLICATION_JSON)
@@ -44,10 +58,10 @@ public class DrawResource {
     /**
      * Rest endpoint that draws a random item from playerhand and gives to another player
      *
-     * @param pbfId - The pbf id
+     * @param pbfId          - The pbf id
      * @param targetPlayerId - The targeted player which will recieve the item
-     * @param sheetName - the item to be automatically drawn from playerhand and given to another player
-     * @param player - The logged in player that we will take the item from
+     * @param sheetName      - the item to be automatically drawn from playerhand and given to another player
+     * @param player         - The logged in player that we will take the item from
      */
     @PUT
     @Timed
@@ -72,7 +86,7 @@ public class DrawResource {
     @Path("/battlehand/reveal")
     public Response revealAndDiscardBattlehand(@PathParam("pbfId") String pbfId, @Auth Player player) {
         DrawAction drawAction = new DrawAction(db);
-        drawAction.revealAndDiscardBattlehand(pbfId,player.getId());
+        drawAction.revealAndDiscardBattlehand(pbfId, player.getId());
         return Response.ok().build();
     }
 

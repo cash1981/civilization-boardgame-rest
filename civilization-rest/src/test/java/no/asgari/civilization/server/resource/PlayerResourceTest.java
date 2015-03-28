@@ -1,21 +1,5 @@
 package no.asgari.civilization.server.resource;
 
-import static junit.framework.TestCase.assertNotNull;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.net.URI;
-import java.util.Optional;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.action.DrawAction;
 import no.asgari.civilization.server.dto.ItemDTO;
@@ -30,6 +14,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import java.net.URI;
+import java.util.Optional;
+
+import static junit.framework.TestCase.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
 
 public class PlayerResourceTest extends AbstractCivilizationTest {
     protected static String BASE_URL = String.format("http://localhost:%d/civilization", RULE.getLocalPort());
@@ -144,7 +140,7 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
         assertNotNull(anotherPlayerId);
 
         Optional<Item> item = getItemFromPlayerhand(pbf, SheetName.VILLAGES);
-        if(!item.isPresent()) {
+        if (!item.isPresent()) {
             testDrawVillage();
             item = getItemFromPlayerhand(pbf, SheetName.VILLAGES);
         }

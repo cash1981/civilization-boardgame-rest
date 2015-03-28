@@ -1,11 +1,5 @@
 package no.asgari.civilization.server;
 
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.cache.CacheBuilder;
@@ -24,7 +18,6 @@ import io.dropwizard.java8.auth.CachingAuthenticator;
 import io.dropwizard.java8.auth.basic.BasicAuthFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.PBFTestAction;
 import no.asgari.civilization.server.application.CivAuthenticator;
@@ -47,6 +40,11 @@ import org.eclipse.jetty.util.StringUtil;
 import org.glassfish.hk2.utilities.Binder;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
+
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 @Log4j
 @SuppressWarnings("unchecked")

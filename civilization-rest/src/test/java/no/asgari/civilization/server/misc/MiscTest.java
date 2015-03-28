@@ -3,7 +3,6 @@ package no.asgari.civilization.server.misc;
 import no.asgari.civilization.server.dto.MessageDTO;
 import org.junit.Test;
 
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import java.net.URLDecoder;
 
@@ -28,7 +27,7 @@ public class MiscTest {
                 .entity(new MessageDTO("foobar"))
                 .build();
 
-        assertThat(((MessageDTO)badReq.getEntity()).getMessage()).isEqualTo("foobar");
+        assertThat(((MessageDTO) badReq.getEntity()).getMessage()).isEqualTo("foobar");
     }
 
 }

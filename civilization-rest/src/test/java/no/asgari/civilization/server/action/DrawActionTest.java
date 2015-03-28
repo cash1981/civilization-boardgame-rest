@@ -1,20 +1,7 @@
 package no.asgari.civilization.server.action;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-import java.util.Optional;
 
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.exception.NoMoreItemsException;
-import no.asgari.civilization.server.mongodb.AbstractCivilizationTest;
-import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import no.asgari.civilization.server.model.Aircraft;
 import no.asgari.civilization.server.model.Artillery;
 import no.asgari.civilization.server.model.Citystate;
@@ -33,6 +20,14 @@ import no.asgari.civilization.server.model.Tile;
 import no.asgari.civilization.server.model.Unit;
 import no.asgari.civilization.server.model.Village;
 import no.asgari.civilization.server.model.Wonder;
+import no.asgari.civilization.server.mongodb.AbstractCivilizationTest;
+import org.junit.Test;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
 
 public class DrawActionTest extends AbstractCivilizationTest {
 
@@ -381,5 +376,5 @@ public class DrawActionTest extends AbstractCivilizationTest {
             }
         }
     }
-    
+
 }

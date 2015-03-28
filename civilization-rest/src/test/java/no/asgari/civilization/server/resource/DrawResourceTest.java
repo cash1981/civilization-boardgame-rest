@@ -1,12 +1,6 @@
 package no.asgari.civilization.server.resource;
 
-import static junit.framework.Assert.assertEquals;
-
-import io.dropwizard.testing.junit.DropwizardAppRule;
-import no.asgari.civilization.server.application.CivilizationApplication;
-import no.asgari.civilization.server.application.CivilizationConfiguration;
 import no.asgari.civilization.server.mongodb.MongoDBTest;
-import org.junit.ClassRule;
 import org.junit.Ignore;
 
 @Ignore

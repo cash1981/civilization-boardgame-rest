@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2015 Shervin Asgari
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package no.asgari.civilization.server.action;
 
 import com.google.common.base.Preconditions;
@@ -8,6 +23,7 @@ import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.exception.PlayerExistException;
+import no.asgari.civilization.server.misc.SecurityCheck;
 import no.asgari.civilization.server.model.Civ;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
@@ -17,7 +33,6 @@ import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.model.Tech;
 import no.asgari.civilization.server.model.Tradable;
-import no.asgari.civilization.server.misc.SecurityCheck;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
@@ -25,7 +40,6 @@ import org.mongojack.WriteResult;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
-
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -202,7 +216,7 @@ public class PlayerAction extends BaseAction {
 
         Item itemToReveal = itemToRevealOptional.get();
         itemToReveal.setHidden(false);
-        if(isCiv) {
+        if (isCiv) {
             Civ civ = (Civ) itemToReveal;
             playerhand.setCivilization(civ);
             Tech startingTech = civ.getStartingTech();
@@ -219,8 +233,8 @@ public class PlayerAction extends BaseAction {
     }
 
     private boolean isCivilization(Playerhand playerhand, Optional<SheetName> sheetName) {
-        if(sheetName.get() == SheetName.CIV) {
-            if(playerhand.getCivilization() != null) {
+        if (sheetName.get() == SheetName.CIV) {
+            if (playerhand.getCivilization() != null) {
                 log.warn("Cannot choose civilization again");
                 throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
                         .entity(Entity.json("{\"msg\": \"Civilization already chosen\"}"))
@@ -283,7 +297,7 @@ public class PlayerAction extends BaseAction {
 
         Playerhand playerhand = playerhandOptional.get();
 
-        if(playerhand.getCivilization() != null && playerhand.getCivilization().getStartingTech() != null) {
+        if (playerhand.getCivilization() != null && playerhand.getCivilization().getStartingTech() != null) {
             techsChosen.add(playerhandOptional.get().getCivilization().getStartingTech());
         }
         pbf.getTechs().removeAll(techsChosen);

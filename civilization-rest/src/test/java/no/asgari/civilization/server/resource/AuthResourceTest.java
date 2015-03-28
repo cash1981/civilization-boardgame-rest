@@ -1,14 +1,5 @@
 package no.asgari.civilization.server.resource;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.net.URI;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Form;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.Cleanup;
 import no.asgari.civilization.server.model.Player;
@@ -17,6 +8,14 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Test;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Form;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import java.net.URI;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AuthResourceTest extends AbstractCivilizationTest {
     protected static String BASE_URL = String.format("http://localhost:%d/civilization", RULE.getLocalPort());

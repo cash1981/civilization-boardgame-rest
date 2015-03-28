@@ -1,17 +1,7 @@
 package no.asgari.civilization.server;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import com.google.common.base.Stopwatch;
-import no.asgari.civilization.server.model.Item;
-import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.mongodb.AbstractCivilizationTest;
 import org.junit.Ignore;
-import org.junit.Test;
 
 @Ignore("No need to run this test on each build")
 public class ParallelStreamTest extends AbstractCivilizationTest {

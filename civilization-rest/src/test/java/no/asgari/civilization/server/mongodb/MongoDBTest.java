@@ -1,14 +1,10 @@
 package no.asgari.civilization.server.mongodb;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.dropwizard.testing.junit.DropwizardAppRule;
 import lombok.Cleanup;
-import no.asgari.civilization.server.CivilizationIntegrationTestApplication;
-import no.asgari.civilization.server.CivilizationTestConfiguration;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.junit.ClassRule;
 import org.junit.Test;
 import org.mongojack.DBCursor;
 import org.mongojack.WriteResult;
