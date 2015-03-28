@@ -1,4 +1,4 @@
-<div ng-controller="UserItemController as userCtrl">
+<div ng-controller="UserItemController as userCtrl" ng-cloak>
   <div class="row">
     <div class="col-md-7">
       <div class="panel panel-default">
@@ -11,7 +11,7 @@
           <table ng-table="userCtrl.tablePrivateLog" ng-show="$data.length > 0"
                  class="table table-bordered table-hover table-condensed text-center table-responsive">
             <tr ng-repeat="log in $data" class="active" ng-class-even="'row-even'" ng-class-odd="'row-odd'">
-              <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+              <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy - HH:mm:ss'}}</td>
               <td data-title="'Log'" sortable="'log'">{{log.log}}</td>
               <td data-title="'Action'">
                 <button ng-if="canInitiateUndo(log)"
@@ -77,6 +77,46 @@
                    value="Draw Item"
               />
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" ng-show="userCtrl.civs.length > 0">
+    <div class="col-xs-12">
+      <button class="btn btn-info" ng-click="civCollapse = !civCollapse">Toggle Civilizations</button>
+      <hr>
+    </div>
+  </div>
+
+  <div class="row" ng-show="userCtrl.civs.length > 0">
+    <div collapse="civCollapse">
+      <div ng-repeat="item in userCtrl.civs" class="col-md-2">
+        <div class="well well-sm">
+          <ul class="list-unstyled">
+            <li>
+              <p class="text-justify">
+                <span><strong>{{userCtrl.nextElement(item).sheetName}}:</strong></span><br/>
+                <span><i>{{userCtrl.nextElement(item).name}}</i></span>
+              </p>
+
+              <p class="text-center">
+                <button ng-really-message="This will discard your civilization. Are you sure?"
+                        ng-really-click="userCtrl.discardItem(item)"
+                        class="btn btn-sm btn-warning"
+                        tooltip="Discard your civilization. This will make an entry in the game log">
+                  Discard Civilization
+                </button>
+                <button ng-really-message="This will choose your civilization. Are you sure?"
+                        ng-really-click="userCtrl.revealItem(item)"
+                        ng-disabled="userCtrl.nextElement(item).hidden == false"
+                        class="btn btn-sm btn-warning"
+                        tooltip="This will choose your civilzation and make an entry in the game log. Appropriate tech will also be chosen. Once civilization is chosen, you cannot rechoose">
+                  Choose civilization
+                </button>
+              </p>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -226,6 +266,39 @@
     </div>
   </div>
 
+  <div class="row" ng-show="userCtrl.tiles.length > 0">
+    <div class="col-xs-12">
+      <button class="btn btn-info" ng-click="tilesCollapse = !tilesCollapse">Toggle Tiles</button>
+      <hr>
+    </div>
+  </div>
+
+  <div class="row" ng-show="userCtrl.tiles.length > 0">
+    <div collapse="tilesCollapse">
+      <div ng-repeat="item in userCtrl.tiles" class="thumbnail col-md-3">
+        <img ng-src="/images/useritems/{{userCtrl.nextElement(item).image}}" width="200px" height="200px"
+             tooltip="{{userCtrl.nextElement(item).name}}"/>
+
+        <div class="caption">
+          <h3 class="text-center">Tile {{userCtrl.nextElement(item).name}}</h3>
+
+          <p class="text-justify">
+            {{userCtrl.nextElement(item).description}}
+          </p>
+
+          <p class="text-center">
+            <button ng-really-message="This will discard your item. Are you sure?"
+                    ng-really-click="userCtrl.discardItem(item)"
+                    class="btn btn-sm btn-warning"
+                    tooltip="Discard your item. This will make an entry in the game log">
+              Discard Item
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="row" ng-show="userCtrl.cultureCards.length > 0">
     <div class="col-xs-12">
       <button class="btn btn-info" ng-click="cultureCardsCollapse = !cultureCardsCollapse">Toggle Culture Cards</button>
@@ -260,7 +333,7 @@
                     tooltip="Reveal your item. This will make an entry in the game log and display hidden information">
               Reveal Item
             </button>
-            <button tooltip="TODO" class="btn btn-sm btn-warning" disabled>
+            <button tooltip="Send item to a player" class="btn btn-sm btn-warning" ng-click="userCtrl.openModalTrade('md', userCtrl.nextElement(item))">
               Send to Player
             </button>
           </p>
@@ -298,7 +371,7 @@
                     tooltip="Reveal your item. This will make an entry in the game log and display hidden information">
               Reveal Item
             </button>
-            <button tooltip="TODO" class="btn btn-sm btn-warning" disabled>
+            <button tooltip="Send item to a player" class="btn btn-sm btn-warning" ng-click="userCtrl.openModalTrade('md', userCtrl.nextElement(item))">
               Send to Player
             </button>
           </p>
@@ -337,7 +410,7 @@
                     tooltip="Reveal your item. This will make an entry in the game log and display hidden information">
               Reveal Item
             </button>
-            <button tooltip="TODO" class="btn btn-sm btn-warning" disabled>
+            <button tooltip="Send item to a player" class="btn btn-sm btn-warning" ng-click="userCtrl.openModalTrade('md', userCtrl.nextElement(item))">
               Send to Player
             </button>
           </p>
@@ -464,3 +537,24 @@
     </div>
   </div>
 </div>
+
+
+<!-- Modal for trading -->
+<script type="text/ng-template" id="modalTrade.html">
+  <div class="modal-header">
+    <h3 class="modal-title">Choose player to send <span><i>{{tradeCtrl.item.name}}</i></span> too!</h3>
+  </div>
+  <div class="modal-body">
+    <ul class="nav nav-pills nav-stacked">
+      <li ng-repeat="player in tradeCtrl.players" ng-class="tradeCtrl.playerTradeChosen === player ? 'active' : ''" role="presentation"><a ng-href="" ng-click="tradeCtrl.playerTradeChosen = player">{{player.username}}</a></li>
+    </ul>
+    <p>
+      <h4>Player chosen: <span class="label label-default" style="font-size: 1.2em;">{{tradeCtrl.playerTradeChosen.username}}</span></h4>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-disabled="!tradeCtrl.playerTradeChosen" ng-click="tradeCtrl.ok()">Ok</button>
+    <button class="btn btn-warning" ng-click="tradeCtrl.cancel()">Cancel</button>
+  </div>
+</script>
+

@@ -22,43 +22,47 @@ Inside a game
 #DONE Proper login/authentication, restrict pages
 
 #DONE - Should not be able to draw items unless your turn
-- My Items
+#DONE - My Items
 #DONE    -- List of your current items
-    -- Selection with what you want to draw
-        -- confirmation
+#DONE    -- Selection with what you want to draw
+#DONE        -- confirmation
 #DONE    -- Discard your item
 #DONE      -- confirmation
 - Option to withdraw from a game after they have joined, before it is started
-- Chat system, so that players can do table talk and negotiations etc
+#DONE - Chat system, so that players can do table talk and negotiations etc
   -- Websocket?
 
 #DONE - Fix the baseurl stuff
 
-- Trade
-- Create game
-# DONE - Register new user
+#DONE - Create game
+#DONE - Register new user
 #DONE - Battle (draw x units)
-- Upgrade to Dropwizard 0.8
+#DONE - Upgrade to Dropwizard 0.8
 #DONE - Add the glyphon on the username register
+#DONE - Can draw barbs before game started
+
+#DONE - Trade
+#DONE - Show tiles also in the useritems
 
 Nice to have: (Will be implemented in later versions)
+- each image onclick with enlarge 200%
 - Implement email verification on register?
 - Upload of the map after you powerpoint it
   -- Must have forward/back buttons so that you can review history of the maps
   -- Will send the jpg/png to the server, and save it in mongodb
 - Probably need to implement turns, so that you can filter on turns and see what orders where from what turns etc
   -- Same with maps. Should perhaps be connected with the turns
-- Register new players
+#DONE - Register new players
 #DONE - Undo
 #DONE  -- Only players playing the game can undo
 #DONE Reveal from useritem
 #DONE  -- To do this I need to send the item info and use the gamelog to find the item and reveal it.
 - Add a different theme from http://bootswatch.com/
 
-- Some starting techs should be displayed as level 1. For instance Democracy for Greece, Irrigation for Aztecs and so on.
-  -- I guess only way to solve this is to let the user select chosen civ, then I can input starting tech
-  -- Another option is to let the user type in level for the tech they choose
+#DONE - Choose civ
+#DONE  - Some starting techs should be displayed as level 1. For instance Democracy for Greece, Irrigation for Aztecs and so on.
 
+- Resolve entire game controller before showing anything
 - Game list
   -- Need a way to end a game so that active is set to false and it doesn't show on the game list
   -- Need a way to show the finished games (Perhaps active/finished tab)
@@ -69,7 +73,6 @@ Nice to have: (Will be implemented in later versions)
     -- Must disable the cache or invalidate it when you create a game, or join
 
 check ngmodules.org to find modules
-
 
 #Spørsmål
 #FIXED - Why can't I get log.item.name to appear in voting modal

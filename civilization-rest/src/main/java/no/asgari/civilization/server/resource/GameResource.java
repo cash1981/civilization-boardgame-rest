@@ -25,7 +25,6 @@ import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Tech;
-import no.asgari.civilization.server.misc.Java8Util;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
@@ -150,12 +149,12 @@ public class GameResource {
      */
     @GET
     @Path("/{pbfId}/players")
-    public Response getAllPlayersForPBF(@NotEmpty @PathParam("pbfId") String pbfId, @Auth(required = false) Player loggedInPlayer) {
+    public Response getAllPlayersForPBF(@NotEmpty @PathParam("pbfId") String pbfId, @Auth(required = false) Player player) {
         GameAction gameAction = new GameAction(db);
         List<PlayerDTO> players = gameAction.getAllPlayers(pbfId);
-        if (loggedInPlayer != null) {
+        if (player != null) {
             return Response.ok()
-                    .entity(players.stream().filter(p -> !p.getPlayerId().equals(loggedInPlayer.getId())).collect(Collectors.toList()))
+                    .entity(players.stream().filter(p -> !p.getPlayerId().equals(player.getId())).collect(Collectors.toList()))
                     .build();
         }
         return Response.ok()

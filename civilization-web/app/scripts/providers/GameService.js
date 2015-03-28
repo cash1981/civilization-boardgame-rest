@@ -176,6 +176,17 @@
             });
         };
 
+        var players = function(gameid) {
+          if(!gameid) {
+            return $q.reject("No gameid");
+          }
+          var url = baseUrl + gameid + "/players";
+          return $http.get(url, {cache: true})
+            .then(function (response) {
+              return response.data;
+            });
+        };
+
         return {
           getAllGames: getAllGames,
           getGameById: getGameById,
@@ -187,7 +198,8 @@
           voteYes: voteYes,
           voteNo: voteNo,
           getChatList: getChatList,
-          chat: chat
+          chat: chat,
+          players: players
         };
       };
 

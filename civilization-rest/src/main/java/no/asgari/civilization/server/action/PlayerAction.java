@@ -8,6 +8,7 @@ import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.exception.PlayerExistException;
+import no.asgari.civilization.server.model.Civ;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Item;
@@ -22,6 +23,7 @@ import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 
 import java.util.Base64;
@@ -62,9 +64,6 @@ public class PlayerAction extends BaseAction {
     public GameLog chooseTech(String pbfId, String techName, String playerId) {
         Preconditions.checkNotNull(pbfId);
         Preconditions.checkNotNull(techName);
-
-        //This can be done out of turn, because of EOI played in SOT
-        //checkYourTurn(pbfId, playerId);
 
         PBF pbf = pbfCollection.findOneById(pbfId);
         if (!SecurityCheck.hasUserAccess(pbf, playerId)) {
@@ -182,6 +181,7 @@ public class PlayerAction extends BaseAction {
         if (!sheetName.isPresent()) {
             log.error("Cannot find Sheetname " + itemDTO.getSheetName());
             throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+                    .entity(Entity.json("{\"msg\": \"Cannot find Sheetname " + itemDTO.getSheetName() + "\"}"))
                     .build());
         }
 
@@ -194,16 +194,41 @@ public class PlayerAction extends BaseAction {
         if (!itemToRevealOptional.isPresent()) {
             log.warn("Item " + itemDTO.getName() + " already revealed");
             throw new WebApplicationException(Response.status(Response.Status.NOT_MODIFIED)
+                    .entity(Entity.json("{\"msg\": \"Item already revealed\"}"))
                     .build());
         }
+
+        boolean isCiv = isCivilization(playerhand, sheetName);
+
         Item itemToReveal = itemToRevealOptional.get();
         itemToReveal.setHidden(false);
+        if(isCiv) {
+            Civ civ = (Civ) itemToReveal;
+            playerhand.setCivilization(civ);
+            Tech startingTech = civ.getStartingTech();
+            startingTech.setHidden(false);
+            startingTech.setOwnerId(playerId);
+            playerhand.getTechsChosen().add(startingTech);
+        }
 
         pbfCollection.updateById(pbf.getId(), pbf);
 
         //Create a new log entry
         logAction.createGameLog(itemToReveal, pbf.getId(), GameLog.LogType.REVEAL);
         log.debug("item to be reveal " + itemToReveal);
+    }
+
+    private boolean isCivilization(Playerhand playerhand, Optional<SheetName> sheetName) {
+        if(sheetName.get() == SheetName.CIV) {
+            if(playerhand.getCivilization() != null) {
+                log.warn("Cannot choose civilization again");
+                throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+                        .entity(Entity.json("{\"msg\": \"Civilization already chosen\"}"))
+                        .build());
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -249,12 +274,18 @@ public class PlayerAction extends BaseAction {
     public List<Tech> getRemaingTechsForPlayer(String playerId, String pbfId) {
         PBF pbf = pbfCollection.findOneById(pbfId);
 
-        Set<Tech> techsChosen = pbf.getPlayers().stream()
+        Optional<Playerhand> playerhandOptional = pbf.getPlayers().stream()
                 .filter(p -> p.getPlayerId().equals(playerId))
-                .findFirst()
-                .orElseThrow(PlayerAction::cannotFindPlayer)
+                .findFirst();
+
+        Set<Tech> techsChosen = playerhandOptional.orElseThrow(PlayerAction::cannotFindPlayer)
                 .getTechsChosen();
 
+        Playerhand playerhand = playerhandOptional.get();
+
+        if(playerhand.getCivilization() != null && playerhand.getCivilization().getStartingTech() != null) {
+            techsChosen.add(playerhandOptional.get().getCivilization().getStartingTech());
+        }
         pbf.getTechs().removeAll(techsChosen);
         return pbf.getTechs();
     }
@@ -308,10 +339,10 @@ public class PlayerAction extends BaseAction {
             return false;
         }
         toPlayer.getItems().add(itemToTrade);
+
         itemToTrade.setOwnerId(toPlayer.getPlayerId());
         pbfCollection.updateById(pbf.getId(), pbf);
-
-        logAction.createGameLog(itemToTrade, pbf.getId(), GameLog.LogType.TRADE);
+        logAction.createTradeGameLog(itemToTrade, pbf.getId(), GameLog.LogType.TRADE, fromPlayer.getUsername());
         return true;
     }
 

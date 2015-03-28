@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 
 import com.google.common.base.Preconditions;
@@ -16,6 +17,7 @@ import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.application.CivSingleton;
+import no.asgari.civilization.server.dto.MessageDTO;
 import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.exception.NoMoreItemsException;
 import no.asgari.civilization.server.model.Draw;
@@ -183,7 +185,8 @@ public class DrawAction extends BaseAction {
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         if (!playerhand.getBarbarians().isEmpty()) {
             log.warn("Cannot draw more barbarians until they are discarded");
-            throw new WebApplicationException(Response.Status.PRECONDITION_FAILED);
+            throw new WebApplicationException(Response.status(Response.Status.PRECONDITION_FAILED)
+                    .entity(Entity.json(new MessageDTO("Cannot draw more barbarians until they are discarded"))).build());
         }
         //Check first and reshuffle
         //TODO If either barbarian units are empty, then no barbs are drawn. Perhaps, draw something else
@@ -220,7 +223,8 @@ public class DrawAction extends BaseAction {
 
         if (playerhand.getBarbarians().size() != 3) {
             log.error("Couldn't get one barbarian of each type, but instead list is " + playerhand.getBarbarians());
-            throw new WebApplicationException();
+            throw new WebApplicationException(Response.status(Response.Status.EXPECTATION_FAILED)
+                    .entity(Entity.json(new MessageDTO("Couldn't get one barbarian of each type"))).build());
         }
 
         gameLogAction.createCommonPrivatePublicLog("drew 3 barbarian units", pbfId, playerId);
@@ -310,7 +314,7 @@ public class DrawAction extends BaseAction {
         if (itemToShuffle.isEmpty()) {
             throw new WebApplicationException(
                     Response.status(Response.Status.NOT_FOUND)
-                            .entity("You have no " + sheetName.getName() + " to draw")
+                            .entity(new MessageDTO("You have no " + sheetName.getName() + " to draw"))
                             .build()
             );
         }

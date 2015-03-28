@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @JsonRootName("tech")
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"name", "level"})
+@EqualsAndHashCode(of = {"name"})
 public class Tech implements Item, Level, Image {
     @JsonIgnore
     public static final int LEVEL_1 = 1;

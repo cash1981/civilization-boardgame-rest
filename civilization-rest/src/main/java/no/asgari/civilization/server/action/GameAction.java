@@ -11,6 +11,7 @@ import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.GameDTO;
 import no.asgari.civilization.server.dto.GameLogDTO;
+import no.asgari.civilization.server.dto.MessageDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
 import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.excel.ItemReader;
@@ -144,6 +145,7 @@ public class GameAction extends BaseAction {
         if (pbf.getNumOfPlayers() == pbf.getPlayers().size()) {
             log.warn("Cannot join the game. Its full");
             Response badReq = Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new MessageDTO("Cannot join the game. Its full!"))
                     .build();
             throw new WebApplicationException(badReq);
         }
@@ -155,6 +157,7 @@ public class GameAction extends BaseAction {
         if (playerAlreadyJoined) {
             log.warn("Cannot join the game. Player has already joined it");
             Response badReq = Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new MessageDTO("Cannot join the game. You have already joined!"))
                     .build();
             throw new WebApplicationException(badReq);
         }
@@ -275,8 +278,9 @@ public class GameAction extends BaseAction {
         }
 
         if (!SecurityCheck.hasUserAccess(pbf, playerId)) {
-            log.warn("User with id " + playerId + " is not player this game, and cannot withdraw");
+            log.warn("User with id " + playerId + " is not player of this game, and cannot withdraw");
             Response badReq = Response.status(Response.Status.FORBIDDEN)
+                    .entity(new MessageDTO("User is not player of this game, and cannot withdraw"))
                     .build();
             throw new WebApplicationException(badReq);
         }

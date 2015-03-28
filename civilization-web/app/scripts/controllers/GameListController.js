@@ -34,12 +34,6 @@
         templateUrl: 'createNewGame.html',
         controller: 'RegisterController as registerCtrl',
         size: size
-        //To inject stuff in the modal you need to add resolve
-        /*resolve: {
-         register : function() {
-         return register;
-         }
-         }*/
       });
 
       modalInstance.result.then(function(game) {

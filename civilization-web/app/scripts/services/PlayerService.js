@@ -150,6 +150,40 @@
         });
     };
 
+    var trade = function (gameId, item) {
+      if(!gameId || !item) {
+        return $q.reject("Couldn't get gameid or item");
+      }
+      var url = baseUrl + gameId + "/trade/";
+
+      var itemDTO = {
+        "name": item.name,
+        "sheetName": item.sheetName,
+        "pbfId": gameId,
+        "ownerId": item.ownerId
+      };
+
+      $log.info("Before calling post, json is ", angular.toJson(itemDTO));
+
+      var configuration = {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      };
+
+      $http.post(url, itemDTO, configuration)
+        .success(function (response) {
+          growl.success("Item sent to another player");
+          return response;
+        }).success(function (response) {
+          GameService.fetchGameByIdFromServer(gameId);
+          return response;
+        }).error(function (data) {
+          growl.error("Item could not be sent to another player");
+          return data;
+        });
+    };
+
     return {
       revealItem: revealItem,
       revealTech: revealTech,
@@ -157,7 +191,8 @@
       endTurn: endTurn,
       selectTech: selectTech,
       getChosenTechs: getChosenTechs,
-      removeTech: removeTech
+      removeTech: removeTech,
+      trade: trade
     };
 
   });

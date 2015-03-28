@@ -1,0 +1,97 @@
+<!-- TODO entire file -->
+<div class="row padd-top-7" ng-controller="TechController as techCtrl">
+  <div class="col-md-12" ng-repeat="player in techCtrl.players">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title panel-primary">
+          {{player.civilization ? player.civilization.name : player.username}}'s Tech tree
+        </h3>
+      </div>
+      <div class="panel-body">
+        <table class="tech-pyramid red">
+          <tbody>
+          <tr>
+            <td class="spacer" colspan="4"></td>
+            <td class="researched" colspan="2" title="Space Flight" ng-if="player.chosenTechs5.length > 0">
+              Space Flight
+              <span
+                class="glyphicon glyphicon-remove remove"
+                aria-hidden="true"
+                tooltip="This will remove your tech"
+                ng-really-message="Are you sure you want to remove the tech?"
+                ng-really-click="userCtrl.removeTech('Space Flight')">&nbsp;</span>
+            </td>
+            <td class="available" colspan="2" title="Space Flight" ng-if="userCtrl.chosenTechs5.length == 0">Space
+              Flight
+            </td>
+            <td class="spacer"></td>
+          </tr>
+          <tr>
+            <td class="spacer" colspan="3"></td>
+            <td class="researched" colspan="2" ng-repeat="tech in userCtrl.chosenTechs4" title="{{tech.name}}">
+              {{tech.name}}
+              <span
+                class="glyphicon glyphicon-remove remove"
+                aria-hidden="true"
+                tooltip="This will remove your tech"
+                ng-really-message="Are you sure you want to remove the tech?"
+                ng-really-click="userCtrl.removeTech(tech.name)">&nbsp;</span>
+            </td>
+            <td class="available" colspan="2" title="21 trade needed to learn level 4 tech"
+                ng-repeat="lvl3 in userCtrl.availableTech4">21
+            </td>
+            <td class="spacer"></td>
+          </tr>
+          <tr>
+            <td class="spacer" colspan="2"></td>
+            <td class="researched" colspan="2" ng-repeat="tech in userCtrl.chosenTechs3" title="{{tech.name}}">
+              {{tech.name}}
+              <span
+                class="glyphicon glyphicon-remove remove"
+                aria-hidden="true"
+                tooltip="This will remove your tech"
+                ng-really-message="Are you sure you want to remove the tech?"
+                ng-really-click="userCtrl.removeTech(tech.name)">&nbsp;</span>
+            </td>
+            <td class="available" colspan="2" title="16 trade needed to learn level 3 tech"
+                ng-repeat="lvl3 in userCtrl.availableTech3">16
+            </td>
+            <td class="spacer"></td>
+          </tr>
+          <tr>
+            <td class="spacer" colspan="1"></td>
+            <td class="researched" colspan="2" ng-repeat="tech in userCtrl.chosenTechs2" title="{{tech.name}}">
+              {{tech.name}}
+              <span
+                class="glyphicon glyphicon-remove remove"
+                aria-hidden="true"
+                tooltip="This will remove your tech"
+                ng-really-message="Are you sure you want to remove the tech?"
+                ng-really-click="userCtrl.removeTech(tech.name)">&nbsp;</span>
+            </td>
+            <td class="available" colspan="2" title="11 trade needed to learn level 2 tech"
+                ng-repeat="lvl2 in userCtrl.availableTech2">11
+            </td>
+            <td class="spacer"></td>
+          </tr>
+          <tr>
+            <td class="researched" colspan="2" ng-repeat="tech in userCtrl.chosenTechs1" title="{{tech.name}}">
+              {{tech.name}}
+              <span
+                class="glyphicon glyphicon-remove remove"
+                aria-hidden="true"
+                tooltip="This will remove your tech"
+                ng-really-message="Are you sure you want to remove the tech?"
+                ng-really-click="userCtrl.removeTech(tech.name)">&nbsp;</span>
+            </td>
+            <td class="available" colspan="2" title="6 trade needed to learn level 1 tech"
+                ng-repeat="lvl1 in userCtrl.availableTech1">6
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- panel -->
+    </div>
+  </div>
+</div>

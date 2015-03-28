@@ -15,8 +15,8 @@
 	#DONE -- Should be randomly chosen, only when all players have joined
 	#DONE -- All drawing is disabled until all players have joined. (If only the starting player can draw, then in theory this should be redundant)
 	#DONE -- Should be triggered when a player joins a game
-- Undo
-    -- Consider if undo should reveal all info or just public
+#DONE - Undo
+    #DONE -- Consider if undo should reveal all info or just public
     #DONE -- Create a method that lists all undoes a player has to vote for
     #DONE -- Vote for undo
     #DONE -- List all successful votes
@@ -45,7 +45,7 @@
         needs to find out which ones is inside the playershands.
         Collect all playerhand filter by sheetname, and itemReader.getFoo().removeAll(playerhands.stuff)
 
-- Discard/Delete from playerhand
+#DONE - Discard/Delete from playerhand
 	#DONE -- When deleting it should log it.
 	#DONE -- Consider putting items back in the deck, although this is already taken care of by reshuffling when draw is made
 

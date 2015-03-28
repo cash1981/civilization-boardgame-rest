@@ -158,6 +158,20 @@ public class ItemReader {
                 .map(civname -> new Civ(civname.toString()))
                 .collect(Collectors.toList());
 
+        List<String> startingTech = unfilteredCivCells.stream()
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
+                .filter(cell -> cell.getColumnIndex() == 1)
+                .map(Object::toString)
+                .collect(Collectors.toList());
+
+        //Description should be in the same order as cultures
+        for (int i = 0; i < civs.size(); i++) {
+            Civ item = civs.get(i);
+            item.setStartingTech(new Tech(startingTech.get(i), 1));
+        }
+
         Collections.shuffle(civs);
         return new LinkedList<>(civs);
     }

@@ -26,6 +26,7 @@ public class Civ implements Item {
     private boolean hidden = true;
     private String ownerId; // id of the player which owns this item
     private SheetName sheetName;
+    private Tech startingTech;
 
     public Civ(String name) {
         this.name = name;

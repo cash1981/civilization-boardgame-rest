@@ -1,4 +1,4 @@
-<div ng-controller="GameController as gameCtrl">
+<div ng-controller="GameController as gameCtrl" ng-cloak>
   <div class="row">
     <div class="col-md-6">
       <div class="jumbotron">
@@ -25,7 +25,7 @@
         <h1 ng-bind-html="latestLog"></h1>
         <span ng-if="userHasAccess">
           <form ng-submit="chatCtrl.chat()">
-            <input type="text" ng-model="chatCtrl.chatMessage" placeholder="Write your chat message here" maxlength="250"/>
+            <input type="text" ng-model="chatCtrl.chatMessage" placeholder="Write your chat message here" size="50" maxlength="250"/>
             <!-- Hack, will put submit button out of view -->
             <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
           </form>
@@ -37,12 +37,12 @@
   <div class="row"></div>
 
   <tabset justified="false">
-    <tab heading="Gamelog" class="col-md-4">
+    <tab heading="Gamelog" class="col-md-2">
       <table ng-table="gameCtrl.tableParams" ng-show="$data.length > 0"
              class="table table-bordered table-hover table-condensed text-center table-responsive">
 
         <tr ng-repeat="log in $data" class="active" ng-class-even="'row-even'" ng-class-odd="'row-odd'">
-          <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+          <td data-title="'Date'" sortable="'created'">{{log.created | date:'dd-MM-yyyy - HH:mm:ss'}}</td>
           <td data-title="'Log'" sortable="'log'">{{log.log}}</td>
           <td data-title="'Vote for undo'" sortable="'log.draw'">
             <!-- Modal for vote -->
@@ -93,6 +93,9 @@
     <tab ng-if="userHasAccess" heading="Draw" class="col-md-2">
       <ng-include src="'views/partials/draw.html'"></ng-include>
     </tab>
+    <!--<tab heading="Tech tree" class="col-md-2">
+      <ng-include src="'views/partials/techtree.html'"></ng-include>
+    </tab>-->
   </tabset>
 
   <!--<div class="row">json '{{currentGame | json}}'</div>-->

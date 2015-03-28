@@ -123,12 +123,9 @@
         </ol>
         <span id="colorStatus" ng-if="form.color.$dirty &amp;&amp; form.color.$invalid" class="help-block has-error">Color is required</span>
       </div>
-
-
-
-    </div>
+    </div> <!-- modal body -->
     <div class="modal-footer">
-      <input type="submit" ng-click="createGameOk()" value="Sign up" ng-disabled="form.$invalid"
+      <input type="submit" ng-click="createGameOk()" value="Create new game" ng-disabled="form.$invalid"
              class="btn btn-primary"/>
       <button ng-click="registerCancel()" class="btn btn-warning">Cancel</button>
     </div>

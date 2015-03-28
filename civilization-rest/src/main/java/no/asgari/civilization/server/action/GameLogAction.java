@@ -155,4 +155,26 @@ public class GameLogAction {
         return gameLogCollection.find(DBQuery.is("pbfId", pbfId).is("username", username)).toArray();
     }
 
+    public void createTradeGameLog(Item item, String pbfId, GameLog.LogType logType, String username) {
+        GameLog gl = new GameLog();
+        Draw<Item> draw = new Draw<>(pbfId, item.getOwnerId());
+        draw.setItem(item);
+        gl.setDraw(draw);
+        gl.setPbfId(pbfId);
+        try {
+            gl.setUsername(CivSingleton.instance().playerCache().get(item.getOwnerId()));
+        } catch (ExecutionException e) {
+            log.error("Couldn't retrieve username from cache");
+            gl.setUsername(getUsernameFromPlayerId(item.getOwnerId()));
+        }
+        gl.createAndSetLog(logType);
+        gl.setId(save(gl));
+
+        GameLog gl2 = new GameLog();
+        gl2.setPbfId(pbfId);
+        gl2.setUsername(username);
+        gl2.setPrivateLog(gl.getUsername() + " has received - " + draw.getItem().revealAll());
+        gl2.setPublicLog("");
+        gl2.setId(save(gl2));
+    }
 }

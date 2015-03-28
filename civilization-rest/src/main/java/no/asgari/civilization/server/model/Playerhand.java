@@ -29,6 +29,8 @@ public class Playerhand {
 
     private String color;
 
+    private Civ civilization; //The chosen civilization
+
     //Only one starting player each turn
     /**
      * Determines whos turn it is each round *

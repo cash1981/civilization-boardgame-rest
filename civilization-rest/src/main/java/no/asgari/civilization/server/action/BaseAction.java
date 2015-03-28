@@ -3,6 +3,7 @@ package no.asgari.civilization.server.action;
 import com.google.common.base.Preconditions;
 import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
+import no.asgari.civilization.server.dto.MessageDTO;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Item;
@@ -13,6 +14,7 @@ import no.asgari.civilization.server.model.Tech;
 import org.mongojack.JacksonDBCollection;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
@@ -76,7 +78,7 @@ public abstract class BaseAction {
         } catch (Exception ex) {
             log.error("Couldn't find pbf");
             Response badReq = Response.status(Response.Status.BAD_REQUEST)
-                    .entity("Cannot find pbf")
+                    .entity(Entity.json(new MessageDTO("Could not find game by id")))
                     .build();
             throw new WebApplicationException(badReq);
         }
@@ -99,7 +101,7 @@ public abstract class BaseAction {
     void checkYourTurn(Playerhand playerhand) {
         if (!playerhand.isYourTurn()) {
             throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN)
-                    .entity("Its not your turn")
+                    .entity(Entity.json(new MessageDTO("Its not your turn!")))
                     .build());
         }
     }
@@ -118,11 +120,13 @@ public abstract class BaseAction {
 
     static WebApplicationException cannotFindItem() {
         return new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+                .entity(Entity.json(new MessageDTO("Could not find item")))
                 .build());
     }
 
     static WebApplicationException cannotFindPlayer() {
         return new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+                .entity(Entity.json(new MessageDTO("Could not find player")))
                 .build());
     }
 

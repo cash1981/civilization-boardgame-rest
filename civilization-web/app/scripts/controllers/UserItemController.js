@@ -1,6 +1,6 @@
 'use strict';
 (function (module) {
-  var UserItemController = function ($log, $routeParams, GameService, DrawService, currentUser, Util, $filter, ngTableParams, $scope, PlayerService) {
+  var UserItemController = function ($log, $routeParams, GameService, DrawService, currentUser, Util, $filter, ngTableParams, $scope, PlayerService, $modal) {
     var model = this;
 
     model.nextElement = function(obj) {
@@ -32,9 +32,9 @@
         return;
       }
       var game = newVal;
-      $scope.currentGame = game;
       model.techsChosen = game.player.techsChosen;
       putTechsInScope(model.techsChosen);
+      model.civs = [];
       model.cultureCards = [];
       model.greatPersons = [];
       model.huts = [];
@@ -61,6 +61,8 @@
           model.villages.push(item);
         } else if ("tile" == itemKey) {
           model.tiles.push(item);
+        } else if ("civ" == itemKey) {
+          model.civs.push(item);
         } else if ("aircraft" == itemKey || "mounted" == itemKey || "infantry" == itemKey || "artillery" == itemKey) {
           model.units.push(item);
         } else {
@@ -163,6 +165,35 @@
         putTechsInScope(model.chosenTechs);
       });
 
+    var getPlayers = GameService.players($routeParams.id);
+
+    model.openModalTrade = function(size, itemToTrade) {
+      if(!itemToTrade) {
+        return;
+      }
+
+      var modalInstance = $modal.open({
+        templateUrl: 'modalTrade.html',
+        controller: 'TradeController as tradeCtrl',
+        size: size,
+        resolve: {
+          players: function() {
+            return getPlayers;
+          },
+          item: function () {
+            return itemToTrade;
+          }
+
+        }
+      });
+
+      modalInstance.result.then(function(itemToTrade) {
+        PlayerService.trade($routeParams.id, itemToTrade);
+      }, function () {
+        $log.info('Modal dismissed at: ' + new Date());
+      });
+    };
+
     model.tablePrivateLog = new ngTableParams({
       page: 1,            // show first page
       count: 10,          // count per page
@@ -216,6 +247,6 @@
   };
 
   module.controller("UserItemController",
-    ["$log", "$routeParams", "GameService", "DrawService", "currentUser", "Util", "$filter", "ngTableParams", "$scope", "PlayerService", UserItemController]);
+    ["$log", "$routeParams", "GameService", "DrawService", "currentUser", "Util", "$filter", "ngTableParams", "$scope", "PlayerService", "$modal", UserItemController]);
 
 }(angular.module("civApp")));
