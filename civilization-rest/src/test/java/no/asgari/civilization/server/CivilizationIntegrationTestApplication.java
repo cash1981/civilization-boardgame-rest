@@ -188,6 +188,7 @@ public class CivilizationIntegrationTestApplication extends Application<Civiliza
         oneById.getPlayers().add(createPlayerhand(createPlayer("CJWF", pbfId_2)));
         oneById.getPlayers().add(createPlayerhand(createPlayer("DaveLuca", pbfId_2)));
         oneById.getPlayers().add(createPlayerhand(createPlayer("Foobar", pbfId_2)));
+        oneById.setActive(false);
         pbfCollection.updateById(pbfId_2, oneById);
     }
 

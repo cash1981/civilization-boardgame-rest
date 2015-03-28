@@ -47,6 +47,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.time.ZoneId;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -108,9 +109,18 @@ public class GameAction extends BaseAction {
     }
 
     public List<PbfDTO> getAllActiveGames() {
-        @Cleanup DBCursor<PBF> dbCursor = pbfCollection.find(DBQuery.is("active", true), new BasicDBObject());
+        @Cleanup DBCursor<PBF> dbCursor = pbfCollection.find();
         return Java8Util.streamFromIterable(dbCursor)
-                .map(GameAction::createPbfDTO).collect(Collectors.toList());
+                .map(GameAction::createPbfDTO)
+                .sorted(new Comparator<PbfDTO>() {
+                    @Override
+                    public int compare(PbfDTO o1, PbfDTO o2) {
+                        int v = Boolean.valueOf(o1.isActive()).compareTo(o2.isActive());
+                        if(v != 0) return v;
+                        return Long.valueOf(o1.getCreated()).compareTo(o2.getCreated());
+                    }
+                })
+                .collect(Collectors.toList());
     }
 
     /**

@@ -1,8 +1,7 @@
 'use strict';
 (function (module) {
-  var GameListController = function (games, $log, GameService, currentUser, $modal) {
+  var GameListController = function (games, $log, GameService, currentUser, $modal, $scope) {
     var model = this;
-    model.user = currentUser.profile;
 
     model.isUserPlaying = function(players) {
       if(players) {
@@ -29,6 +28,15 @@
       return joinPromise;
     };
 
+    model.showMyGames = function() {
+      //Binding with primitives can break two-way-binding in angular. Must add the a value
+      if($scope.onlyMyGames.value) {
+        $scope.filterContent = model.user.username;
+      } else {
+        $scope.filterContent = "";
+      }
+    };
+
     model.openCreateNewGame = function(size) {
       var modalInstance = $modal.open({
         templateUrl: 'createNewGame.html',
@@ -51,7 +59,16 @@
 
     var initialize = function () {
       model.user = currentUser.profile;
-      model.games = games;
+      model.games = [];
+      model.finishedGames = [];
+      $scope.onlyMyGames = {};
+      _.forEach(games, function(g) {
+        if(g.active) {
+          model.games.push(g);
+        } else {
+          model.finishedGames.push(g);
+        }
+      });
       $log.info("Got games");
     };
 
@@ -59,6 +76,6 @@
   };
 
   module.controller("GameListController",
-    ["games", "$log", "GameService", "currentUser", "$modal", GameListController]);
+    ["games", "$log", "GameService", "currentUser", "$modal", "$scope", GameListController]);
 
 }(angular.module("civApp")));
