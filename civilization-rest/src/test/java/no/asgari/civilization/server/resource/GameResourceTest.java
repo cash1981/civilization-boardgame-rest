@@ -2,6 +2,7 @@ package no.asgari.civilization.server.resource;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import no.asgari.civilization.server.dto.ChatDTO;
 import no.asgari.civilization.server.dto.CheckNameDTO;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.model.Chat;
@@ -265,7 +266,7 @@ public class GameResourceTest extends AbstractCivilizationTest {
                 .post(Entity.form(form), Response.class);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED_201);
-        Chat chat = response.readEntity(Chat.class);
+        ChatDTO chat = response.readEntity(ChatDTO.class);
         assertThat(chat.getMessage()).isEqualTo("Chat message");
         assertThat(chat.getUsername()).isEqualTo("cash1981");
 

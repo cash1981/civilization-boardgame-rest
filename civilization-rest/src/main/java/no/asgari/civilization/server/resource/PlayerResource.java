@@ -194,7 +194,7 @@ public class PlayerResource {
     @POST
     @Path("/trade")
     @Timed
-    public Response giveItemToPlayer(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
+    public Response tradeItemWithPlayer(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
         if (player.getId().equals(item.getOwnerId())) {
             log.error("You cannot trade with your self");
             return Response.status(Response.Status.FORBIDDEN).build();

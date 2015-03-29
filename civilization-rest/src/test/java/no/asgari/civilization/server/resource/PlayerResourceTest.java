@@ -147,8 +147,9 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
         assertTrue(item.isPresent());
 
         ItemDTO itemDTO = createItemDTO(SheetName.VILLAGES, item.get().getName());
+        itemDTO.setOwnerId(anotherPlayerId);
 
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/trade/%s", getApp().pbfId, anotherPlayerId)).build();
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/trade", getApp().pbfId)).build();
         Response response = client().target(uri)
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
@@ -202,7 +203,7 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
         Response response = client().target(uri)
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .put(Entity.json(itemDTO), Response.class);
+                .post(Entity.json(itemDTO), Response.class);
         assertEquals(HttpStatus.NOT_FOUND_404, response.getStatus());
     }
 

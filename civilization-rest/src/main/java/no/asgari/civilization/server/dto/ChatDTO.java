@@ -18,18 +18,19 @@ package no.asgari.civilization.server.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import no.asgari.civilization.server.model.Chat;
 
+@NoArgsConstructor
 @JsonRootName("chat")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 public class ChatDTO {
-
-    private final String id;
-    private final String pbfId;
-    private final String username;
-    private final String message;
-    private final long created;
+    private String id;
+    private String pbfId;
+    private String username;
+    private String message;
+    private long created;
 
     public ChatDTO(String id, String pbfId, String username, String message, long createdInMillis) {
         this.id = id;

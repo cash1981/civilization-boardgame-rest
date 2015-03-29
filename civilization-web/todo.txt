@@ -43,6 +43,8 @@ Inside a game
 
 #DONE - Trade
 #DONE - Show tiles also in the useritems
+- End game
+- Withdraw game
 
 Nice to have: (Will be implemented in later versions)
 - each image onclick with enlarge 200%
