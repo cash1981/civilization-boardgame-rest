@@ -145,12 +145,15 @@ public class PlayerAction extends BaseAction {
             Playerhand playerhand = pbf.getPlayers().get(i);
             if (playerhand.getUsername().equals(username)) {
                 playerhand.setYourTurn(false);
+
+                //Choose next player in line to be starting player
                 if (pbf.getPlayers().size() == (i + 1)) {
                     //We are at the end, pick the first player
                     pbf.getPlayers().get(0).setYourTurn(true);
+                } else {
+                    pbf.getPlayers().get(i + 1).setYourTurn(true);
                 }
-                //Choose next player in line to be starting player
-                pbf.getPlayers().get(i + 1).setYourTurn(true);
+
                 try {
                     pbfCollection.updateById(pbf.getId(), pbf);
                     return true;

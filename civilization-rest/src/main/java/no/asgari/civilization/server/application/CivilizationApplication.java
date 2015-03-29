@@ -22,6 +22,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -52,6 +53,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Log4j
@@ -156,15 +158,22 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
     }
 
     private void createUniqueIndexForPlayer(JacksonDBCollection<Player, String> playerCollection) {
-        playerCollection.createIndex(new BasicDBObject(Player.USERNAME, 1), new BasicDBObject("unique", true));
-        playerCollection.createIndex(new BasicDBObject(Player.EMAIL, 1), new BasicDBObject("unique", true));
+        List<DBObject> indexInfos = playerCollection.getIndexInfo();
+        if(indexInfos.isEmpty()) {
+            playerCollection.createIndex(new BasicDBObject(Player.USERNAME, 1), new BasicDBObject("unique", true));
+            playerCollection.createIndex(new BasicDBObject(Player.EMAIL, 1), new BasicDBObject("unique", true));
+        }
     }
 
     private void createUniqueIndexForPBF(JacksonDBCollection<PBF, String> pbfCollection) {
-        pbfCollection.createIndex(new BasicDBObject(PBF.NAME, 1), new BasicDBObject("unique", true));
+        if(pbfCollection.getIndexInfo().isEmpty()) {
+            pbfCollection.createIndex(new BasicDBObject(PBF.NAME, 1), new BasicDBObject("unique", true));
+        }
     }
 
     private void createIndexForChat(JacksonDBCollection<Chat, String> chatCollection) {
-        chatCollection.createIndex(new BasicDBObject(Chat.PBFID, 1));
+        if(chatCollection.getIndexInfo().isEmpty()) {
+            chatCollection.createIndex(new BasicDBObject(Chat.PBFID, 1));
+        }
     }
 }

@@ -22,7 +22,7 @@ import javax.ws.rs.core.Response;
 public class NoMoreItemsException extends WebApplicationException {
     public NoMoreItemsException(String name) {
         super(Response.status(Response.Status.GONE)
-                .entity("{\"error:\" \"No more " + name + " to draw!\"}")
+                .entity("{\"msg:\" \"No more " + name + " to draw!\"}")
                 .type(MediaType.APPLICATION_JSON)
                 .build());
     }

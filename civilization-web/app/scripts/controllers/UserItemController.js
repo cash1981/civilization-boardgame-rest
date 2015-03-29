@@ -124,8 +124,8 @@
     };
 
     model.selectTech = function() {
-      if($scope.selectedTech) {
-        PlayerService.selectTech($routeParams.id, $scope.selectedTech)
+      if($scope.selectedTech.tech) {
+        PlayerService.selectTech($routeParams.id, $scope.selectedTech.tech)
           .then(function(response) {
             GameService.getAvailableTechs($routeParams.id)
               .then(function(techs) {
@@ -228,6 +228,7 @@
       $scope.civCollapse = false;
       $scope.hutsCollapse = false;
       $scope.villagesCollapse = false;
+      $scope.selectedTech = {};
       model.yourTurn = false;
       model.items = [];
       model.techsChosen = [];

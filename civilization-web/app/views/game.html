@@ -7,7 +7,7 @@
         <p class="lead">{{currentGame.type}} &bull; Created: {{currentGame.created | date:'dd-MM-yyyy'}}</p>
 
         <p class="lead">
-          <span ng-if="!currentGame.whosTurnIsIt"><a ng-href class="btn btn-primary btn-lg" role="button">Game not full!</a></span>
+          <span ng-if="!currentGame.whosTurnIsIt"><a ng-href class="btn btn-primary btn-lg" role="button">Waiting for players!</a></span>
           <span ng-if="currentGame.whosTurnIsIt"><a ng-href class="btn btn-primary btn-lg" role="button">{{currentGame.whosTurnIsIt}}</a> to play </span>
           <span ng-if="gameCtrl.yourTurn">
             <button
@@ -87,10 +87,10 @@
     <tab ng-if="!userHasAccess" heading="Chat" class="col-md-4">
       <ng-include src="'views/partials/chat.html'"></ng-include>
     </tab>
-    <tab ng-if="userHasAccess" heading="My Items" class="col-md-2">
+    <tab ng-if="userHasAccess && currentGame.whosTurnIsIt" heading="My Items" class="col-md-2">
       <ng-include src="'views/partials/useritems.html'"></ng-include>
     </tab>
-    <tab ng-if="userHasAccess" heading="Draw" class="col-md-2">
+    <tab ng-if="userHasAccess && currentGame.whosTurnIsIt" heading="Draw" class="col-md-2">
       <ng-include src="'views/partials/draw.html'"></ng-include>
     </tab>
     <!--<tab heading="Tech tree" class="col-md-2">

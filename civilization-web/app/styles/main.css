@@ -96,6 +96,7 @@
 }
 */
 
+/* Fix for angular and bootstrap */
 .nav, .pagination, .carousel, .panel-title a {
   cursor: pointer;
 }

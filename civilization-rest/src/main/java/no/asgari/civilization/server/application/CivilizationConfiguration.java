@@ -22,11 +22,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-//TODO: Fiks env name when deploying to cloud
 public class CivilizationConfiguration extends Configuration {
-
-    //FIXME, during testing, we use another db so to not clutter prod database
-    public static final String CIVILIZATION_TEST = "civ-test";
+    public static final String CIVILIZATION = "civilization";
 
     @JsonProperty
     @NotEmpty
@@ -39,6 +36,6 @@ public class CivilizationConfiguration extends Configuration {
 
     @JsonProperty
     @NotEmpty
-    public String mongodb = System.getenv("MOGNODB_DB_NAME") == null ? CIVILIZATION_TEST : System.getenv("MOGNODB_DB_NAME");
+    public String mongodb = System.getenv("MOGNODB_DB_NAME") == null ? CIVILIZATION : System.getenv("MOGNODB_DB_NAME");
 
 }
