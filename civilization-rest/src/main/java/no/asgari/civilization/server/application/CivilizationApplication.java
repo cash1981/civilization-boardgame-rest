@@ -126,6 +126,7 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
     private void createItemCache() {
         CivSingleton.instance().setItemsCache(
                 CacheBuilder.newBuilder()
+                        .expireAfterWrite(3, TimeUnit.HOURS)
                         .maximumSize(4) //1 for each game type
                         .removalListener(lis -> log.debug("Removing " + lis.getKey() + " from the gameCache"))
                         .build(new CacheLoader<GameType, ItemReader>() {

@@ -1,6 +1,6 @@
 'use strict';
 (function (module) {
-var GameController = function ($log, $routeParams, GameService, PlayerService, currentUser, Util, $filter, ngTableParams, $scope, growl, $modal) {
+var GameController = function ($log, $routeParams, GameService, PlayerService, currentUser, Util, Option, $filter, ngTableParams, $scope, growl, $modal) {
   var model = this;
 
   $scope.$watch(function () {
@@ -11,7 +11,15 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
     }
     var game = newVal;
     $scope.currentGame = game;
-    $scope.userHasAccess = game.player && game.player.username === model.user.username;
+
+    $log.info("is user game creator: " + game.player.gameCreator);
+
+    var hasAccess = game.player && game.player.username === model.user.username && game.active;
+    $scope.userHasAccess = hasAccess;
+    Option.value = {
+      show: hasAccess
+    };
+
     model.yourTurn = game.player && game.player.yourTurn;
 
     if(model.yourTurn) {
@@ -133,6 +141,6 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
 };
 
   module.controller("GameController",
-    ["$log", "$routeParams", "GameService", "PlayerService", "currentUser", "Util", "$filter", "ngTableParams", "$scope", "growl", "$modal", GameController]);
+    ["$log", "$routeParams", "GameService", "PlayerService", "currentUser", "Util", 'Option', "$filter", "ngTableParams", "$scope", "growl", "$modal", GameController]);
 
 }(angular.module("civApp")));

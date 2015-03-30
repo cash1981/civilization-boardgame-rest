@@ -106,7 +106,7 @@
         <input type="text" name="gamename" id="gamename" placeholder="Name of game"
                aria-describedby="gamenameStatus" aria-hidden="true"
                unique-gamename="unique-gamename" required="required" ng-model="registerCtrl.gamename"
-               autofocus="autofocus" class="form-control" minlength="3" ng-minlength="3"/>
+               autofocus class="form-control" minlength="3" ng-minlength="3"/>
         <span ng-show="busy" class="glyphicon glyphicon-refresh rotateIn form-control-feedback" aria-hidden="true"></span>
         <div ng-if="form.gamename.$dirty" id="gamenameStatus" ng-messages="form.gamename.$error">
           <div ng-message="required" class="help-block has-error">Name is required</div>

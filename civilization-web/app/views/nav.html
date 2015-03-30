@@ -1,4 +1,4 @@
-﻿<nav class="navbar navbar-inverse" role="navigation">
+﻿<nav class="navbar navbar-inverse" role="navigation" ng-controller="LoginController as login">
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href="#/">Civilization Play By Forum</a>
@@ -6,8 +6,20 @@
     <ul class="nav navbar-nav">
       <li><a href="#/help">Help <span class="glyphicon glyphicon-question-sign"></span></a></li>
       <li><a href="#/about">About <span class="glyphicon glyphicon-info-sign"></span></a></li>
+
+      <li><a href="#/foo">Show option '{{login.showOption.show}}' <span class="glyphicon glyphicon-info-sign"></span></a></li>
+      <li ng-if="login.showOption.show" dropdown>
+          <a href class="dropdown-toggle" dropdown-toggle>
+            Options <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a ng-href tooltip-popup="This will withdraw you from the game and let someone else join">Withdraw from Game</a></li>
+            <li><a ng-href>2</a></li>
+          </ul>
+      </li>
+
     </ul>
-    <div ng-controller="LoginController as login" class="padd-right-5">
+    <div class="padd-right-5">
       <div ng-show="login.user.loggedIn" class="navbar-text navbar-right">
         <span class="padd-right-5">Hello {{ login.user.username }}!</span>
         <a href="#/logout" class="btn btn-default btn-sm" ng-click="login.signOut()">Sign Out</a>
@@ -40,7 +52,7 @@
         <input type="text" name="registerUsername" id="registerUsername" placeholder="Username"
                aria-describedby="registerUsernameStatus" aria-hidden="true"
                unique-username="unique-username" required="required" ng-model="registerCtrl.registerUsername"
-               autofocus="autofocus" class="form-control" minlength="3" ng-minlength="3"/>
+               autofocus class="form-control" minlength="3" ng-minlength="3"/>
         <span ng-show="busy" class="glyphicon glyphicon-refresh rotateIn form-control-feedback" aria-hidden="true"></span>
         <div ng-if="form.registerUsername.$dirty" id="registerUsernameStatus" ng-messages="form.registerUsername.$error">
           <div ng-message="required" class="help-block has-error">Username is required</div>

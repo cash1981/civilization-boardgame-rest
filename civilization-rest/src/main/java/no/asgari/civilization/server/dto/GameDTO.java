@@ -36,6 +36,7 @@ public class GameDTO {
     private String name;
     private long created;
     private String whosTurnIsIt; //username of the players turn
+    private boolean active;
 
     private List<GameLogDTO> publicLogs;
     private List<GameLogDTO> privateLogs;

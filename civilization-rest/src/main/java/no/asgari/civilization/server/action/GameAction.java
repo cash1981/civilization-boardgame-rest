@@ -104,7 +104,7 @@ public class GameAction extends BaseAction {
         WriteResult<PBF, String> pbfInsert = pbfCollection.insert(pbf);
         pbf.setId(pbfInsert.getSavedId());
         log.info("PBF game created with id " + pbfInsert.getSavedId());
-        joinGame(pbf.getId(), playerId, Optional.of(dto.getColor()));
+        joinGame(pbf, playerId, Optional.of(dto.getColor()), true);
         return pbf.getId();
     }
 
@@ -113,6 +113,7 @@ public class GameAction extends BaseAction {
         return Java8Util.streamFromIterable(dbCursor)
                 .map(GameAction::createPbfDTO)
                 .sorted(new Comparator<PbfDTO>() {
+                    //Sort on active and created date
                     @Override
                     public int compare(PbfDTO o1, PbfDTO o2) {
                         int v = Boolean.valueOf(o1.isActive()).compareTo(o2.isActive());
@@ -153,20 +154,25 @@ public class GameAction extends BaseAction {
         return dto;
     }
 
-    private static Playerhand createPlayerHand(Player player, String color) {
+    private static Playerhand createPlayerHand(Player player, String color, boolean gameCreator) {
         Playerhand playerhand = new Playerhand();
         playerhand.setUsername(player.getUsername());
         playerhand.setPlayerId(player.getId());
         playerhand.setYourTurn(false);
         playerhand.setColor(color);
+        playerhand.setGameCreator(gameCreator);
         return playerhand;
+    }
+
+    public void joinGame(String pbfId, String playerId, Optional<String> colorOpt) {
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        joinGame(pbf, playerId, colorOpt, false);
     }
 
     /**
      * Joins a game. If it is full it will throw exception
      */
-    public void joinGame(String pbfId, String playerId, Optional<String> colorOpt) {
-        PBF pbf = pbfCollection.findOneById(pbfId);
+    private void joinGame(PBF pbf, String playerId, Optional<String> colorOpt, boolean gameCreator) {
         if (pbf.getNumOfPlayers() == pbf.getPlayers().size()) {
             log.warn("Cannot join the game. Its full");
             Response badReq = Response.status(Response.Status.BAD_REQUEST)
@@ -187,11 +193,11 @@ public class GameAction extends BaseAction {
             throw new WebApplicationException(badReq);
         }
 
-        player.getGameIds().add(pbfId);
+        player.getGameIds().add(pbf.getId());
         playerCollection.updateById(player.getId(), player);
 
         String color = colorOpt.orElse(chooseColorForPlayer(pbf));
-        Playerhand playerhand = createPlayerHand(player, color);
+        Playerhand playerhand = createPlayerHand(player, color, gameCreator);
         if (!pbf.getPlayers().contains(playerhand)) {
             createInfoLog(pbf.getId(), playerhand.getUsername() + " joined the game and is playing color " + playerhand.getColor());
             pbf.getPlayers().add(playerhand);
@@ -265,6 +271,7 @@ public class GameAction extends BaseAction {
         dto.setType(pbf.getType());
         dto.setName(pbf.getName());
         dto.setWhosTurnIsIt(pbf.getNameOfUsersTurn());
+        dto.setActive(pbf.isActive());
 
         //Set logs
         List<GameLog> allPublicLogs = gameLogAction.getGameLogs(pbf.getId());

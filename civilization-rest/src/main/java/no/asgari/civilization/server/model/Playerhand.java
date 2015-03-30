@@ -51,6 +51,7 @@ public class Playerhand {
      * Determines whos turn it is each round *
      */
     private boolean yourTurn = false;
+    private boolean gameCreator = false;
 
     private List<Item> items = new ArrayList<>();
     private Set<Tech> techsChosen = new TreeSet<>();

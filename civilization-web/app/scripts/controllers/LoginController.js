@@ -1,7 +1,7 @@
 ﻿'use strict';
 (function (module) {
 
-  var LoginController = function (basicauth, currentUser, growl, loginRedirect, $modal, $log) {
+  var LoginController = function (basicauth, currentUser, growl, loginRedirect, Option, $modal, $log) {
     var model = this;
     model.user = currentUser.profile;
 
@@ -13,6 +13,7 @@
     model.registerEmail = null;
     model.registerPassword = null;
     model.registerVerification = null;
+    model.showOption = Option.value;
 
     model.login = function (form) {
       if (form.$valid) {
@@ -53,6 +54,6 @@
 
   };
 
-  module.controller("LoginController", ['basicauth', 'currentUser', 'growl', 'loginRedirect', '$modal', '$log', LoginController]);
+  module.controller("LoginController", ['basicauth', 'currentUser', 'growl', 'loginRedirect', 'Option', '$modal', '$log', LoginController]);
 
 }(angular.module("civApp")));
