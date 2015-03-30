@@ -2,6 +2,8 @@
 (function (module) {
 var GameController = function ($log, $routeParams, GameService, PlayerService, currentUser, Util, Option, $filter, ngTableParams, $scope, growl, $modal) {
   var model = this;
+  
+  model.Option = Option;
 
   $scope.$watch(function () {
     return GameService.getGameById(model.gameId);
