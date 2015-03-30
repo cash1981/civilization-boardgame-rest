@@ -11,9 +11,6 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
     }
     var game = newVal;
     $scope.currentGame = game;
-
-    $log.info("is user game creator: " + game.player.gameCreator);
-
     var hasAccess = game.player && game.player.username === model.user.username && game.active;
     $scope.userHasAccess = hasAccess;
     Option.value = {
