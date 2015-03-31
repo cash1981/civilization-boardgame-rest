@@ -3,7 +3,6 @@
 (function () {
   var application = angular.module('civApp', [
     'ngAnimate',
-    'ngCookies',
     'ngResource',
     'ngRoute',
     'ngSanitize',
