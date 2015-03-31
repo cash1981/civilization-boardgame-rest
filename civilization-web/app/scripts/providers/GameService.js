@@ -7,7 +7,7 @@
       var loading = {};
       var baseUrl = BASE_URL + "/game/";
 
-      this.$get = function ($http, $log, growl, $location, $q, formEncode, $routeParams) {
+      this.$get = function ($http, $log, growl, $location, $q, formEncode) {
         var createGame = function (game) {
 
           var newGameDTO = {
@@ -17,7 +17,7 @@
             "color": game.color
           };
 
-          //$log.info("Before calling post, json is ", angular.toJson(newGameDTO));
+          //$log.info("Before calling post, json is ", angularN.toJson(newGameDTO));
 
           return $http.post(baseUrl, newGameDTO)
             .success(function (data, status, headers) {

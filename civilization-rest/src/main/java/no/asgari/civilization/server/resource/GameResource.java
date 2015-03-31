@@ -47,6 +47,7 @@ import org.mongojack.JacksonDBCollection;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -190,6 +191,19 @@ public class GameResource {
         log.debug("location for new game is " + location);
         return Response.status(Response.Status.CREATED)
                 .location(location)
+                .build();
+    }
+
+    @DELETE
+    @Timed
+    @Path("/{pbfId}")
+    public Response endGame(@PathParam("pbfId") String pbfId, @Auth Player player) {
+        Preconditions.checkNotNull(pbfId);
+
+        log.info("Ending game with id " + pbfId);
+        GameAction gameAction = new GameAction(db);
+        gameAction.endGame(pbfId, player.getId());
+        return Response.status(Response.Status.OK)
                 .build();
     }
 

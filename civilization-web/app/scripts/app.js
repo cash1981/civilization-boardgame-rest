@@ -53,6 +53,9 @@
       .when('/logout', {
         redirectTo: '/'
       })
+      .when('/endgame', {
+        redirectTo: '/'
+      })
       .otherwise({
         templateUrl: '404.html'
       });

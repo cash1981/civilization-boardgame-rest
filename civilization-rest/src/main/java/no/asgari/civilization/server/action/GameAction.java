@@ -234,7 +234,6 @@ public class GameAction extends BaseAction {
                 .findFirst()
                 .orElseThrow(PlayerAction::cannotFindPlayer)
                 .getUsername();
-
     }
 
     public List<PlayerDTO> getAllPlayers(String pbfId) {
@@ -345,5 +344,22 @@ public class GameAction extends BaseAction {
         Preconditions.checkNotNull(pbfId);
         List<Chat> chats = chatCollection.find(DBQuery.is("pbfId", pbfId)).sort(DBSort.desc("created")).toArray();
         return chats;
+    }
+
+    public void endGame(String pbfId, String playerId) {
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+        //Only game creator can end game
+        if(!playerhand.isGameCreator()) {
+            Response response = Response.status(Response.Status.FORBIDDEN)
+                    .entity(new MessageDTO("Only game creator can end game"))
+                    .build();
+            throw new WebApplicationException(response);
+        }
+
+        pbf.setActive(false);
+        pbfCollection.updateById(pbfId, pbf);
+        createInfoLog(pbfId, playerhand.getUsername() + " Ended this game");
+        createInfoLog(pbfId, "Thank you for playing! Please donate if you liked this game!");
     }
 }

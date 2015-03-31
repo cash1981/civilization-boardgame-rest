@@ -1,39 +1,38 @@
-﻿<nav class="navbar navbar-inverse" role="navigation" ng-controller="LoginController as login">
+﻿<nav class="navbar navbar-inverse" role="navigation" ng-controller="NavController as navCtrl">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#/">Civilization Play By Forum</a>
+      <a class="navbar-brand" href="#/" ng-click="navCtrl.clearOptions()">Civilization Play By Forum</a>
     </div>
     <ul class="nav navbar-nav">
       <li><a href="#/help">Help <span class="glyphicon glyphicon-question-sign"></span></a></li>
       <li><a href="#/about">About <span class="glyphicon glyphicon-info-sign"></span></a></li>
 
-      <li><a href="#/foo">Show option '{{login.showOption.show}}' <span class="glyphicon glyphicon-info-sign"></span></a></li>
-      <li ng-if="login.showOption.show" dropdown>
+      <li ng-if="navCtrl.GameOption.value.show" dropdown>
           <a href class="dropdown-toggle" dropdown-toggle>
-            Options <span class="caret"></span>
+            Game Options <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
-            <li><a ng-href tooltip-popup="This will withdraw you from the game and let someone else join">Withdraw from Game</a></li>
-            <li><a ng-href>2</a></li>
+            <li><a href="#/endgame" ng-click="navCtrl.withdrawGame()">Withdraw from Game</a></li>
+            <li ng-if="navCtrl.GameOption.value.showEndGame"><a href="#/endgame" ng-click="navCtrl.endGame()">End Game</a></li>
           </ul>
       </li>
 
     </ul>
     <div class="padd-right-5">
-      <div ng-show="login.user.loggedIn" class="navbar-text navbar-right">
-        <span class="padd-right-5">Hello {{ login.user.username }}!</span>
-        <a href="#/logout" class="btn btn-default btn-sm" ng-click="login.signOut()">Sign Out</a>
+      <div ng-show="navCtrl.user.loggedIn" class="navbar-text navbar-right">
+        <span class="padd-right-5">Hello {{ navCtrl.user.username }}!</span>
+        <a href="#/logout" class="btn btn-default btn-sm" ng-click="navCtrl.signOut()">Sign Out</a>
       </div>
-      <form ng-if="!login.user.loggedIn" name="loginForm" class="navbar-form navbar-right"
-            ng-submit="login.login(loginForm)" novalidate>
+      <form ng-if="!navCtrl.user.loggedIn" name="loginForm" class="navbar-form navbar-right"
+            ng-submit="navCtrl.login(loginForm)" novalidate>
         <div class="form-group">
-          <input name="username" type="text" placeholder="Username" ng-model="login.username" required/>
+          <input name="username" type="text" placeholder="Username" ng-model="navCtrl.username" required/>
         </div>
         <div class="form-group">
-          <input name="password" type="password" placeholder="Password" ng-model="login.password" required/>
+          <input name="password" type="password" placeholder="Password" ng-model="navCtrl.password" required/>
         </div>
         <input class="btn btn-default btn-sm" type="submit" value="Login">
-        <input class="btn btn-default btn-sm" type="button" value="Sign up" ng-click="login.openSignup('sm')"/>
+        <input class="btn btn-default btn-sm" type="button" value="Sign up" ng-click="navCtrl.openSignup('sm')"/>
       </form>
     </div>
   </div> <!-- /container-fluid-->

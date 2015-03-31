@@ -23,11 +23,11 @@ public class MessageDTO {
     private final String message;
 
     @JsonCreator
-    public MessageDTO(@JsonProperty("message") String message) {
+    public MessageDTO(@JsonProperty("msg") String message) {
         this.message = message;
     }
 
-    @JsonProperty("message")
+    @JsonProperty("msg")
     public String getMessage() {
         return message;
     }

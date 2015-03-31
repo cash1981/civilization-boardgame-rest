@@ -1,8 +1,9 @@
 ﻿'use strict';
 (function (module) {
 
-  var LoginController = function (basicauth, currentUser, growl, loginRedirect, Option, $modal, $log) {
+  var NavController = function (GameService, $routeParams, basicauth, currentUser, growl, loginRedirect, GameOption, $modal, $log) {
     var model = this;
+    model.GameOption = GameOption;
     model.user = currentUser.profile;
 
     model.username = "";
@@ -13,7 +14,21 @@
     model.registerEmail = null;
     model.registerPassword = null;
     model.registerVerification = null;
-    model.showOption = Option.value;
+
+    model.clearOptions = function() {
+      GameOption.setShowValue(false);
+      GameOption.setShowEndGameValue(false);
+    };
+
+    model.endGame = function() {
+      $log.info("Ending game");
+      model.clearOptions();
+    };
+
+    model.withdrawGame = function() {
+      $log.info("Withdraw game");
+      model.clearOptions();
+    };
 
     model.login = function (form) {
       if (form.$valid) {
@@ -45,6 +60,6 @@
 
   };
 
-  module.controller("LoginController", ['basicauth', 'currentUser', 'growl', 'loginRedirect', 'Option', '$modal', '$log', LoginController]);
+  module.controller("NavController", ['GameService', '$routeParams', 'basicauth', 'currentUser', 'growl', 'loginRedirect', 'GameOption', '$modal', '$log', '$templateCache', NavController]);
 
 }(angular.module("civApp")));

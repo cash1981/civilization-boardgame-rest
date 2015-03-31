@@ -1,9 +1,7 @@
 'use strict';
 (function (module) {
-var GameController = function ($log, $routeParams, GameService, PlayerService, currentUser, Util, Option, $filter, ngTableParams, $scope, growl, $modal) {
+var GameController = function ($log, $routeParams, GameService, PlayerService, currentUser, Util, GameOption, $filter, ngTableParams, $scope, growl, $modal) {
   var model = this;
-  
-  model.Option = Option;
 
   $scope.$watch(function () {
     return GameService.getGameById(model.gameId);
@@ -15,15 +13,22 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
     $scope.currentGame = game;
     var hasAccess = game.player && game.player.username === model.user.username && game.active;
     $scope.userHasAccess = hasAccess;
-    Option.value = {
-      show: hasAccess
-    };
-
+    GameOption.setShowValue(hasAccess);
+    GameOption.setShowEndGameValue(game.player.gameCreator);
     model.yourTurn = game.player && game.player.yourTurn;
 
     if(model.yourTurn) {
       growl.info("<strong>It's your turn! Press end turn when you are done!</strong>");
     }
+
+    //Check votes
+    _.forEach(game.publicLogs, function(log) {
+      if($scope.canVote(log)) {
+        growl.warning("An undo was requested which needs your vote");
+        return false;
+      }
+    });
+
     model.tableParams.reload();
     return game;
   });
@@ -59,9 +64,6 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
           return false;
         }
       }
-      //TODO This growl message is spamming us
-      //growl.warning("An undo was requested which needs your vote");
-
       return true;
     }
     return hasVoted;
@@ -133,6 +135,7 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
     $scope.userHasAccess = false;
     model.yourTurn = false;
     model.gameId = $routeParams.id;
+    model.GameOption = GameOption;
   };
 
   initialize();
@@ -140,6 +143,6 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
 };
 
   module.controller("GameController",
-    ["$log", "$routeParams", "GameService", "PlayerService", "currentUser", "Util", 'Option', "$filter", "ngTableParams", "$scope", "growl", "$modal", GameController]);
+    ["$log", "$routeParams", "GameService", "PlayerService", "currentUser", "Util", 'GameOption', "$filter", "ngTableParams", "$scope", "growl", "$modal", GameController]);
 
 }(angular.module("civApp")));
