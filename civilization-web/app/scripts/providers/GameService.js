@@ -1,13 +1,13 @@
 'use strict';
 (function (civApp) {
 
-  civApp.config(function ($provide) {
-    $provide.provider("GameService", function (BASE_URL) {
+  civApp.config(["$provide", function ($provide) {
+    $provide.provider("GameService", ["BASE_URL", function (BASE_URL) {
       var games = {};
       var loading = {};
       var baseUrl = BASE_URL + "/game/";
 
-      this.$get = function ($http, $log, growl, $location, $q, formEncode) {
+      this.$get = ["$http", "$log", "growl", "$location", "$q", "formEncode", function ($http, $log, growl, $location, $q, formEncode) {
         var createGame = function (game) {
 
           var newGameDTO = {
@@ -78,8 +78,8 @@
           var url = baseUrl + gameid + "/undo/" + logid;
           $http.put(url)
             .success(function (response) {
-            growl.success("Undo initiated!");
-            return response;
+              growl.success("Undo initiated!");
+              return response;
             }).success(function (response) {
               fetchGameByIdFromServer(gameid);
               return response;
@@ -201,9 +201,9 @@
           chat: chat,
           players: players
         };
-      };
+      }];
 
-    });
-  });
+    }]);
+  }]);
 
 }(angular.module("civApp")));

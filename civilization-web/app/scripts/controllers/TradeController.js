@@ -1,5 +1,5 @@
 'use strict';
-angular.module('civApp').controller('TradeController', function (players, item, currentUser, $scope, $modalInstance, $log) {
+angular.module('civApp').controller('TradeController', ["players", "item", "currentUser", "$scope", "$modalInstance", "$log", function (players, item, currentUser, $scope, $modalInstance, $log) {
   var model = this;
   $log.info("TradeController instansiated, and we have item " + item + "and players " + players);
   model.players = players;
@@ -16,4 +16,4 @@ angular.module('civApp').controller('TradeController', function (players, item, 
   model.cancel = function () {
     $modalInstance.dismiss('cancel');
   };
-});
+}]);

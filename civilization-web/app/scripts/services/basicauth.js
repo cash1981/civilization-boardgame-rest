@@ -30,10 +30,10 @@
 
         return $http.post(url + '/login', data, configuration)
           .then(
-            processToken(username, password),
-              function() {
-                growl.error('Invalid login');
-              }
+          processToken(username, password),
+          function () {
+            growl.error('Invalid login');
+          }
         );
       };
 
@@ -79,9 +79,9 @@
     };
   };
 
-  module.config(function ($provide) {
+  module.config(["$provide", function ($provide) {
     $provide.provider('basicauth', [basicauth]);
-  });
+  }]);
 
 }(angular.module('civApp')));
 

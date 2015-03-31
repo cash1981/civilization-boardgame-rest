@@ -1,7 +1,7 @@
 'use strict';
 (function (civApp) {
 
-  civApp.factory('PlayerService', function ($http, $q, $log, growl, currentUser, BASE_URL, GameService, Util) {
+  civApp.factory('PlayerService', ["$http", "$q", "$log", "growl", "currentUser", "BASE_URL", "GameService", "Util", function ($http, $q, $log, growl, currentUser, BASE_URL, GameService, Util) {
     var baseUrl = BASE_URL + "/player/";
 
     var revealItem = function (gameId, item) {
@@ -117,13 +117,13 @@
         method: "POST",
         params: {name: selectedTech.tech.name}
       })
-      .success(function (response) {
-        growl.success("Tech chosen successfully");
-        return response;
-      }).success(function (response) {
-        GameService.fetchGameByIdFromServer(gameId);
-        return response;
-      }).error(function (data) {
+        .success(function (response) {
+          growl.success("Tech chosen successfully");
+          return response;
+        }).success(function (response) {
+          GameService.fetchGameByIdFromServer(gameId);
+          return response;
+        }).error(function (data) {
           growl.error("Could not choose tech");
           return data;
         });
@@ -195,6 +195,6 @@
       trade: trade
     };
 
-  });
+  }]);
 
 }(angular.module("civApp")));

@@ -38,11 +38,12 @@
     };
 
   };
+  requestCounter.$inject = ["$q"];
 
   module.factory("requestCounter", requestCounter);
 
-  module.config(function ($httpProvider) {
+  module.config(["$httpProvider", function ($httpProvider) {
     $httpProvider.interceptors.push("requestCounter");
-  });
+  }]);
 
 }(angular.module("civApp")));

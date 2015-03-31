@@ -12,10 +12,11 @@
       }
     };
   };
+  addToken.$inject = ["currentUser", "$q", "$log"];
 
   module.factory("addToken", addToken);
-  module.config(function ($httpProvider) {
+  module.config(["$httpProvider", function ($httpProvider) {
     $httpProvider.interceptors.push("addToken");
-  });
+  }]);
 
 })(angular.module("civApp"));

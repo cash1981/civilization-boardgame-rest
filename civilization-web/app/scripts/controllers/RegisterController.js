@@ -1,7 +1,8 @@
 'use strict';
-angular.module('civApp').controller('RegisterController', function ($scope, $modalInstance, $log, growl) {
+angular.module('civApp').controller('RegisterController', ["$scope", "$modalInstance", "$log", "growl", function ($scope, $modalInstance, $log, growl) {
   var model = this;
 
+  //Can also request this from the backend
   model.gameTypes = [
     { label: 'Base Game', value: 'BASE', disabled: true },
     { label: 'Fame and Fortune (FAF)', value: 'FAF', disabled: true },
@@ -44,4 +45,4 @@ angular.module('civApp').controller('RegisterController', function ($scope, $mod
   $scope.registerCancel = function () {
     $modalInstance.dismiss('cancel');
   };
-});
+}]);

@@ -42,6 +42,7 @@
       profile: profile
     };
   };
+  currentUser.$inject = ["localStorage", "$log"];
 
   module.factory("currentUser", currentUser);
 

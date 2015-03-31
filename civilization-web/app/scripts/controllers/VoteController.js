@@ -1,5 +1,5 @@
 'use strict';
-angular.module('civApp').controller('VoteController', function ($scope, $modalInstance, $log, logToUndo) {
+angular.module('civApp').controller('VoteController', ["$scope", "$modalInstance", "$log", "logToUndo", function ($scope, $modalInstance, $log, logToUndo) {
   $scope.voteOk = function () {
     var vote = {
       id: logToUndo.id,
@@ -19,4 +19,4 @@ angular.module('civApp').controller('VoteController', function ($scope, $modalIn
   $scope.voteCancel = function () {
     $modalInstance.dismiss('cancel');
   };
-});
+}]);

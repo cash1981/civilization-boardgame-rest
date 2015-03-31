@@ -17,6 +17,7 @@
       }
     };
   };
+  workSpinner.$inject = ["requestCounter"];
 
   module.directive("workSpinner", workSpinner);
 

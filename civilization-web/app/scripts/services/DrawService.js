@@ -1,7 +1,7 @@
 'use strict';
 (function (civApp) {
 
-  civApp.factory('DrawService', function ($http, $q, $log, growl, currentUser, BASE_URL, GameService) {
+  civApp.factory('DrawService', ["$http", "$q", "$log", "growl", "currentUser", "BASE_URL", "GameService", function ($http, $q, $log, growl, currentUser, BASE_URL, GameService) {
     var baseUrl = BASE_URL + "/draw/";
 
     var drawUnitsFromHand = function(gameId, numOfUnits) {
@@ -113,6 +113,6 @@
       drawItem: drawItem
     };
 
-  });
+  }]);
 
 }(angular.module("civApp")));

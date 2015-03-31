@@ -28,6 +28,7 @@
       remove: remove
     };
   };
+  localStorage.$inject = ["$window"];
 
   module.factory("localStorage", localStorage);
 
