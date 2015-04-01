@@ -170,7 +170,10 @@ public class CivilizationIntegrationTestApplication extends Application<Civiliza
         pbfId = writeResult.getSavedId();
 
         PBF oneById = pbfCollection.findOneById(pbfId);
-        oneById.getPlayers().add(createPlayerhand(createPlayer("cash1981", pbfId)));
+        Playerhand cash1981 = createPlayerhand(createPlayer("cash1981", pbfId));
+        cash1981.setGameCreator(true);
+        cash1981.setYourTurn(true);
+        oneById.getPlayers().add(cash1981);
         oneById.getPlayers().add(createPlayerhand(createPlayer("Karandras1", pbfId)));
         oneById.getPlayers().add(createPlayerhand(createPlayer("Itchi", pbfId)));
         oneById.getPlayers().add(createPlayerhand(createPlayer("Chul", pbfId)));
@@ -184,7 +187,10 @@ public class CivilizationIntegrationTestApplication extends Application<Civiliza
         pbfId_2 = writeResult.getSavedId();
 
         PBF oneById = pbfCollection.findOneById(pbfId_2);
-        oneById.getPlayers().add(createPlayerhand(createPlayer("Morthai", pbfId_2)));
+        Playerhand morthai = createPlayerhand(createPlayer("Morthai", pbfId_2));
+        morthai.setGameCreator(true);
+        morthai.setYourTurn(true);
+        oneById.getPlayers().add(morthai);
         oneById.getPlayers().add(createPlayerhand(createPlayer("CJWF", pbfId_2)));
         oneById.getPlayers().add(createPlayerhand(createPlayer("DaveLuca", pbfId_2)));
         oneById.getPlayers().add(createPlayerhand(createPlayer("Foobar", pbfId_2)));
@@ -203,9 +209,6 @@ public class CivilizationIntegrationTestApplication extends Application<Civiliza
         Playerhand playerhand = new Playerhand();
         playerhand.setUsername(player.getUsername());
         playerhand.setPlayerId(player.getId());
-        if (player.getUsername().equals("cash1981")) {
-            playerhand.setYourTurn(true);
-        }
         return playerhand;
     }
 

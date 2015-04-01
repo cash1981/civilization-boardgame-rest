@@ -236,7 +236,6 @@ public class GameResource {
             return Response.ok().build();
         }
 
-        log.warn("Cannot withdraw from game. Its already started");
         return Response.status(Response.Status.NOT_ACCEPTABLE)
                 .build();
     }

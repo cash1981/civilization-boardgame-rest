@@ -13,6 +13,7 @@ import no.asgari.civilization.server.mongodb.AbstractCivilizationTest;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Test;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -280,4 +281,51 @@ public class GameResourceTest extends AbstractCivilizationTest {
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
         assertThat(chats).hasSize(1);
     }
+
+    @Test
+    public void endGame() throws Exception {
+        //First create
+        CreateNewGameDTO dto = new CreateNewGameDTO();
+        dto.setNumOfPlayers(2);
+        dto.setName("PBF WaW2");
+        dto.setType(GameType.WAW);
+        dto.setColor(Playerhand.blue());
+
+        ObjectMapper mapper = new ObjectMapper();
+        String dtoAsJSon = mapper.writeValueAsString(dto);
+
+        URI uri = UriBuilder.fromPath(BASE_URL + "/game").build();
+        Response response = client().target(uri)
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .post(Entity.json(dtoAsJSon));
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED_201);
+
+        URI location = response.getLocation();
+        assertThat(location.getPath()).isNotEmpty();
+        String id = location.getPath().split(BASE_URL)[0];
+        assertThat(id.charAt(0)).isEqualTo('/');
+
+        Response secondResponse = client().target(
+                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s", id.substring(1)))
+                        .build())
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .delete();
+
+        assertThat(secondResponse.getStatus()).isEqualTo(200);
+    }
+
+    @Test
+    public void withdrawShouldNotWorkForCreator() throws Exception {
+            Response post = client().target(
+                    UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/withdraw", getApp().pbfId))
+                            .build())
+                    .request(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                    .post(null);
+
+        assertThat(post.getStatus()).isEqualTo(HttpStatus.FORBIDDEN_403);
+    }
+
 }

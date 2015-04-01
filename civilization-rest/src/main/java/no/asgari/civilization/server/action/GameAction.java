@@ -221,21 +221,6 @@ public class GameAction extends BaseAction {
         return difference.iterator().next();
     }
 
-    /**
-     * Returns the username of the starting turn player
-     *
-     * @param pbfId
-     * @return
-     */
-    public String getTurnPlayer(String pbfId) {
-        PBF pbf = findPBFById(pbfId);
-        return pbf.getPlayers().stream()
-                .filter(Playerhand::isYourTurn)
-                .findFirst()
-                .orElseThrow(PlayerAction::cannotFindPlayer)
-                .getUsername();
-    }
-
     public List<PlayerDTO> getAllPlayers(String pbfId) {
         Preconditions.checkNotNull(pbfId);
         PBF pbf = pbfCollection.findOneById(pbfId);
@@ -304,9 +289,6 @@ public class GameAction extends BaseAction {
 
     public boolean withdrawFromGame(String pbfId, String playerId) {
         PBF pbf = pbfCollection.findOneById(pbfId);
-        if (pbf.getNumOfPlayers() == pbf.getPlayers().size()) {
-            return false;
-        }
 
         if (!SecurityCheck.hasUserAccess(pbf, playerId)) {
             log.warn("User with id " + playerId + " is not player of this game, and cannot withdraw");
