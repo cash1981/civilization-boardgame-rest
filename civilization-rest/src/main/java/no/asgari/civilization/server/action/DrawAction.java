@@ -36,6 +36,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -305,14 +306,15 @@ public class DrawAction extends BaseAction {
 
     /**
      * draws a random item from playerhand and gives to another player
-     *  @param pbfId          - The pbf id
-     * @param sheetName      - the item to be automatically drawn from playerhand and given to another player
+     *
+     * @param pbfId          - The pbf id
+     * @param sheetNames     - the item to be automatically drawn from playerhand and given to another player
      * @param targetPlayerId - The targeted player which will recieve the item
      * @param playerId       - The logged in player that we will take the item from
      */
-    public Item drawRandomItemAndGiveToPlayer(String pbfId, SheetName sheetName, String targetPlayerId, String playerId) {
+    public Item drawRandomItemAndGiveToPlayer(String pbfId, EnumSet<SheetName> sheetNames, String targetPlayerId, String playerId) {
         Preconditions.checkNotNull(pbfId);
-        Preconditions.checkNotNull(sheetName);
+        Preconditions.checkNotNull(sheetNames);
         Preconditions.checkNotNull(targetPlayerId);
         Preconditions.checkNotNull(playerId);
 
@@ -322,20 +324,20 @@ public class DrawAction extends BaseAction {
 
         //Locate the item from player
         List<Item> itemToShuffle = playerFrom.getItems().stream()
-                .filter(it -> it.getSheetName() == sheetName)
+                .filter(it -> sheetNames.contains(it.getSheetName()))
                 .collect(Collectors.toList());
         if (itemToShuffle.isEmpty()) {
             throw new WebApplicationException(
                     Response.status(Response.Status.NOT_FOUND)
-                            .entity(new MessageDTO("You have no " + sheetName.getName() + " to draw"))
+                            .entity(new MessageDTO("You have nothing to draw"))
                             .build()
             );
         }
 
-        if(!(itemToShuffle.get(0) instanceof Tradable)) {
+        if (!(itemToShuffle.get(0) instanceof Tradable)) {
             throw new WebApplicationException(
                     Response.status(Response.Status.NOT_ACCEPTABLE)
-                            .entity(new MessageDTO(sheetName.getName() + " is not lootable"))
+                            .entity(new MessageDTO("Item is not lootable"))
                             .build()
             );
         }

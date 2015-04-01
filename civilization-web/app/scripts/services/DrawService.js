@@ -1,7 +1,7 @@
 'use strict';
 (function (civApp) {
 
-  civApp.factory('DrawService', ["$http", "$q", "$log", "growl", "currentUser", "BASE_URL", "GameService", function ($http, $q, $log, growl, currentUser, BASE_URL, GameService) {
+  civApp.factory('DrawService', ["$http", "$q", "$log", "growl", "currentUser", "BASE_URL", "GameService", "Util", function ($http, $q, $log, growl, currentUser, BASE_URL, GameService, Util) {
     var baseUrl = BASE_URL + "/draw/";
 
     var drawUnitsFromHand = function(gameId, numOfUnits) {
@@ -105,12 +105,32 @@
         });
     };
 
+    var loot = function (gameId, sheetName, playerId) {
+      var url = baseUrl + gameId + "/" + sheetName + "/loot/" + playerId;
+      return $http.post(url)
+        .success(function (response) {
+          var item = Util.nextElement(response);
+          growl.success("Item " + item.name + " looted by another player");
+          return response;
+        }).success(function (response) {
+          GameService.fetchGameByIdFromServer(gameId);
+          return response;
+        })
+        .error(function(data, status, headers, config) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+          growl.error("Item could not be lootet");
+          return data;
+        });
+    };
+
     return {
       drawUnitsFromHand: drawUnitsFromHand,
       revealHand: revealHand,
       discardBarbarians: discardBarbarians,
       drawBarbarians: drawBarbarians,
-      drawItem: drawItem
+      drawItem: drawItem,
+      loot: loot
     };
 
   }]);

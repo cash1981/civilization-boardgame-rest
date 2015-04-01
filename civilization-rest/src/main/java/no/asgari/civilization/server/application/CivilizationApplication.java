@@ -160,20 +160,20 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
 
     private void createUniqueIndexForPlayer(JacksonDBCollection<Player, String> playerCollection) {
         List<DBObject> indexInfos = playerCollection.getIndexInfo();
-        if(indexInfos.isEmpty()) {
+        if (indexInfos.isEmpty()) {
             playerCollection.createIndex(new BasicDBObject(Player.USERNAME, 1), new BasicDBObject("unique", true));
             playerCollection.createIndex(new BasicDBObject(Player.EMAIL, 1), new BasicDBObject("unique", true));
         }
     }
 
     private void createUniqueIndexForPBF(JacksonDBCollection<PBF, String> pbfCollection) {
-        if(pbfCollection.getIndexInfo().isEmpty()) {
+        if (pbfCollection.getIndexInfo().isEmpty()) {
             pbfCollection.createIndex(new BasicDBObject(PBF.NAME, 1), new BasicDBObject("unique", true));
         }
     }
 
     private void createIndexForChat(JacksonDBCollection<Chat, String> chatCollection) {
-        if(chatCollection.getIndexInfo().isEmpty()) {
+        if (chatCollection.getIndexInfo().isEmpty()) {
             chatCollection.createIndex(new BasicDBObject(Chat.PBFID, 1));
         }
     }

@@ -2,6 +2,9 @@ package no.asgari.civilization.server.resource;
 
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.action.DrawAction;
+import no.asgari.civilization.server.model.CultureI;
+import no.asgari.civilization.server.model.CultureII;
+import no.asgari.civilization.server.model.CultureIII;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
@@ -89,11 +92,11 @@ public class DrawResourceTest extends AbstractCivilizationTest {
 
     @Test
     public void testLooting() throws Exception {
-        drawVillage();
+        drawCulture();
 
         String pid = getAnotherPlayerId();
 
-        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/draw/%s/%s/loot/%s", getApp().pbfId, SheetName.VILLAGES, pid)).build();
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/draw/%s/%s/loot/%s", getApp().pbfId, "Culture Card", pid)).build();
         Response response = client()
                 .target(uri)
                 .request(MediaType.APPLICATION_JSON)
@@ -169,11 +172,17 @@ public class DrawResourceTest extends AbstractCivilizationTest {
         return pid;
     }
 
-    private void drawVillage() throws Exception {
+    private void drawCulture() throws Exception {
         DrawAction drawAction = new DrawAction(getApp().db);
-        Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.VILLAGES);
+        Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.CULTURE_1);
+        Optional<GameLog> gameLogOptional2 = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.CULTURE_2);
+        Optional<GameLog> gameLogOptional3 = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.CULTURE_3);
         assertTrue(gameLogOptional.isPresent());
-        assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Village.class);
+        assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(CultureI.class);
+        assertTrue(gameLogOptional2.isPresent());
+        assertThat(gameLogOptional2.get().getDraw().getItem()).isExactlyInstanceOf(CultureII.class);
+        assertTrue(gameLogOptional3.isPresent());
+        assertThat(gameLogOptional3.get().getDraw().getItem()).isExactlyInstanceOf(CultureIII.class);
     }
 
     private void testDrawArtilleryCard() throws Exception {

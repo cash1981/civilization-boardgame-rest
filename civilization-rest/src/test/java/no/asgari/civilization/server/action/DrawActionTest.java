@@ -23,6 +23,7 @@ import no.asgari.civilization.server.model.Wonder;
 import no.asgari.civilization.server.mongodb.AbstractCivilizationTest;
 import org.junit.Test;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -118,7 +119,7 @@ public class DrawActionTest extends AbstractCivilizationTest {
     }
 
     @Test
-    public void drawCultureI1AndMakeSureItsNoLongerInPBFCollection() throws Exception {
+    public void drawCulture2AndMakeSureItsNoLongerInPBFCollection() throws Exception {
         DrawAction drawAction = new DrawAction(getApp().db);
         //Before draw
         long aircrafts = getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
@@ -362,7 +363,7 @@ public class DrawActionTest extends AbstractCivilizationTest {
         }
 
         assertThat(nrOfVillagesP1).isGreaterThan(0L);
-        drawAction.drawRandomItemAndGiveToPlayer(getApp().pbfId, SheetName.VILLAGES, playerTo.getPlayerId(), getApp().playerId);
+        drawAction.drawRandomItemAndGiveToPlayer(getApp().pbfId, EnumSet.of(SheetName.VILLAGES), playerTo.getPlayerId(), getApp().playerId);
 
         pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
         for (Playerhand players : pbf.getPlayers()) {

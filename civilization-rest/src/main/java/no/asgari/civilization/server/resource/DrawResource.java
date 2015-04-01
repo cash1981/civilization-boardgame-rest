@@ -29,7 +29,6 @@ import no.asgari.civilization.server.model.Unit;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -40,6 +39,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,14 +72,18 @@ public class DrawResource {
         DrawAction drawAction = new DrawAction(db);
         //Check that it is tradable
         Optional<SheetName> sheetNameOptional = SheetName.find(sheetName);
-        if (!sheetNameOptional.isPresent()) {
+        if (!sheetNameOptional.isPresent() && !sheetName.equals("Culture Card")) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(new MessageDTO("Could not find item " + sheetName))
                     .build();
-        }
+        } else if (!sheetNameOptional.isPresent() && sheetName.equals("Culture Card")) {
+            Item item = drawAction.drawRandomItemAndGiveToPlayer(pbfId, SheetName.CULTURE_CARD, targetPlayerId, player.getId());
+            return Response.ok().entity(item).build();
 
-        Item item = drawAction.drawRandomItemAndGiveToPlayer(pbfId, sheetNameOptional.get(), targetPlayerId, player.getId());
-        return Response.ok().entity(item).build();
+        } else {
+            Item item = drawAction.drawRandomItemAndGiveToPlayer(pbfId, EnumSet.of(sheetNameOptional.get()), targetPlayerId, player.getId());
+            return Response.ok().entity(item).build();
+        }
     }
 
     @PUT

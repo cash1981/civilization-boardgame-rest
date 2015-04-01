@@ -18,7 +18,6 @@ package no.asgari.civilization.server.action;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
-import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
@@ -117,7 +116,7 @@ public class GameAction extends BaseAction {
                     @Override
                     public int compare(PbfDTO o1, PbfDTO o2) {
                         int v = Boolean.valueOf(o1.isActive()).compareTo(o2.isActive());
-                        if(v != 0) return v;
+                        if (v != 0) return v;
                         return Long.valueOf(o1.getCreated()).compareTo(o2.getCreated());
                     }
                 })
@@ -302,7 +301,7 @@ public class GameAction extends BaseAction {
         while (iterator.hasNext()) {
             Playerhand playerhand = iterator.next();
             if (playerhand.getPlayerId().equals(playerId)) {
-                if(playerhand.isGameCreator()) {
+                if (playerhand.isGameCreator()) {
                     Response badReq = Response.status(Response.Status.FORBIDDEN)
                             .entity(new MessageDTO("As game creator you cannot withdraw from the game"))
                             .build();
@@ -338,7 +337,7 @@ public class GameAction extends BaseAction {
         PBF pbf = pbfCollection.findOneById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         //Only game creator can end game
-        if(!playerhand.isGameCreator()) {
+        if (!playerhand.isGameCreator()) {
             Response response = Response.status(Response.Status.FORBIDDEN)
                     .entity(new MessageDTO("Only game creator can end game"))
                     .build();

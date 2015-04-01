@@ -47,6 +47,8 @@ public enum SheetName {
 
     public static final EnumSet<SheetName> UNITS = EnumSet.of(AIRCRAFT, ARTILLERY, INFANTRY, MOUNTED);
 
+    public static final EnumSet<SheetName> CULTURE_CARD = EnumSet.of(CULTURE_1, CULTURE_2, CULTURE_3);
+
     public static final EnumSet<SheetName> SHUFFLABLE_ITEMS = EnumSet.of(AIRCRAFT, ARTILLERY, INFANTRY, MOUNTED,
             GREAT_PERSON, CULTURE_1, CULTURE_2, CULTURE_3);
 

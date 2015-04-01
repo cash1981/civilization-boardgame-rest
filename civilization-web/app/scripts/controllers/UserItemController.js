@@ -198,6 +198,32 @@
       });
     };
 
+    model.openModalLoot = function(size, sheetName) {
+      if(!sheetName) {
+        return;
+      }
+
+      var modalInstance = $modal.open({
+        templateUrl: 'modalLoot.html',
+        controller: 'LootController as lootCtrl',
+        size: size,
+        resolve: {
+          players: function() {
+            return getPlayers;
+          },
+          sheetName: function () {
+            return sheetName;
+          }
+        }
+      });
+
+      modalInstance.result.then(function(loot) {
+        DrawService.loot($routeParams.id, loot.sheetName, loot.playerId);
+      }, function () {
+        $log.info('Modal dismissed at: ' + new Date());
+      });
+    };
+
     /* jshint ignore:start */
     model.tablePrivateLog = new ngTableParams({
       page: 1,            // show first page

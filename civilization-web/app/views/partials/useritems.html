@@ -211,7 +211,7 @@
   <div class="row" ng-show="userCtrl.units.length > 0">
     <div collapse="unitCollapse">
 
-      <!-- TODO Doesn't quite work -->
+      <!-- Doesn't quite work -->
       <!--<carousel interval="0">
         <slide ng-repeat="item in userCtrl.units">
           <img ng-src="/images/useritems/{{userCtrl.nextElement(item).image}}"
@@ -306,8 +306,20 @@
     </div>
   </div>
 
-  <div class="row" ng-show="userCtrl.cultureCards.length > 0">
-    <div collapse="cultureCardsCollapse">
+  <div collapse="cultureCardsCollapse">
+    <div class="row" ng-show="userCtrl.cultureCards.length > 0">
+      <div class="col-xs-12">
+        <button class="btn btn-danger btn-sm" ng-click="userCtrl.openModalLoot('md', 'Culture Card')">
+          Loot
+        </button>
+
+        <button type="button" class="btn btn-sm btn-danger" aria-label="Right Align"
+                popover-placement="right" popover="This will randomly send an item to a selected player">
+          <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+    <div class="row padd-top-7" ng-show="userCtrl.cultureCards.length > 0">
       <div ng-repeat="item in userCtrl.cultureCards" class="thumbnail col-md-3">
         <img ng-src="/images/useritems/{{userCtrl.nextElement(item).image}}"
              tooltip="{{userCtrl.nextElement(item).name}}"/>
@@ -333,7 +345,8 @@
                     tooltip="Reveal your item. This will make an entry in the game log and display hidden information">
               Reveal Item
             </button>
-            <button tooltip="Send item to a player" class="btn btn-sm btn-warning" ng-click="userCtrl.openModalTrade('md', userCtrl.nextElement(item))">
+            <button tooltip="Send item to a player" class="btn btn-sm btn-warning"
+                    ng-click="userCtrl.openModalTrade('md', userCtrl.nextElement(item))">
               Send to Player
             </button>
           </p>
@@ -350,6 +363,19 @@
   </div>
 
   <div class="row" ng-show="userCtrl.huts.length > 0">
+    <div class="col-xs-12">
+      <button class="btn btn-danger btn-sm" ng-click="userCtrl.openModalLoot('md', 'Huts')">
+        Loot
+      </button>
+
+      <button type="button" class="btn btn-sm btn-danger" aria-label="Right Align"
+              popover-placement="right" popover="This will randomly send an item to a selected player">
+        <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="row padd-top-7" ng-show="userCtrl.huts.length > 0">
     <div collapse="hutsCollapse">
       <div ng-repeat="item in userCtrl.huts" class="thumbnail col-md-3">
         <img ng-src="/images/useritems/{{item.hut.image}}" tooltip="{{item.hut.name}}"/>
@@ -371,7 +397,8 @@
                     tooltip="Reveal your item. This will make an entry in the game log and display hidden information">
               Reveal Item
             </button>
-            <button tooltip="Send item to a player" class="btn btn-sm btn-warning" ng-click="userCtrl.openModalTrade('md', userCtrl.nextElement(item))">
+            <button tooltip="Send item to a player" class="btn btn-sm btn-warning"
+                    ng-click="userCtrl.openModalTrade('md', userCtrl.nextElement(item))">
               Send to Player
             </button>
           </p>
@@ -388,6 +415,19 @@
   </div>
 
   <div class="row" ng-show="userCtrl.villages.length > 0">
+    <div class="col-xs-12">
+      <button class="btn btn-danger btn-sm" ng-click="userCtrl.openModalLoot('md', 'Villages')">
+        Loot
+      </button>
+
+      <button type="button" class="btn btn-sm btn-danger" aria-label="Right Align"
+              popover-placement="right" popover="This will randomly send an item to a selected player">
+        <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="row padd-top-7" ng-show="userCtrl.villages.length > 0">
     <div collapse="villagesCollapse">
       <div ng-repeat="item in userCtrl.villages" class="thumbnail col-md-3">
         <img ng-src="/images/useritems/{{item.village.image}}"
@@ -410,7 +450,8 @@
                     tooltip="Reveal your item. This will make an entry in the game log and display hidden information">
               Reveal Item
             </button>
-            <button tooltip="Send item to a player" class="btn btn-sm btn-warning" ng-click="userCtrl.openModalTrade('md', userCtrl.nextElement(item))">
+            <button tooltip="Send item to a player" class="btn btn-sm btn-warning"
+                    ng-click="userCtrl.openModalTrade('md', userCtrl.nextElement(item))">
               Send to Player
             </button>
           </p>
@@ -505,7 +546,7 @@
         </tbody>
       </table>
     </div>
-      <div class="col-md-3" ng-if="currentGame.whosTurnIsIt">
+    <div class="col-md-3" ng-if="currentGame.whosTurnIsIt">
       <div class="input-group">
         <div class="panel panel-default">
           <div class="panel-heading">
@@ -538,7 +579,6 @@
   </div>
 </div>
 
-
 <!-- Modal for trading -->
 <script type="text/ng-template" id="modalTrade.html">
   <div class="modal-header">
@@ -546,10 +586,12 @@
   </div>
   <div class="modal-body">
     <ul class="nav nav-pills nav-stacked">
-      <li ng-repeat="player in tradeCtrl.players" ng-class="tradeCtrl.playerTradeChosen === player ? 'active' : ''" role="presentation"><a ng-href="" ng-click="tradeCtrl.playerTradeChosen = player">{{player.username}}</a></li>
+      <li ng-repeat="player in tradeCtrl.players" ng-class="tradeCtrl.playerTradeChosen === player ? 'active' : ''"
+          role="presentation"><a ng-href="" ng-click="tradeCtrl.playerTradeChosen = player">{{player.username}}</a></li>
     </ul>
     <p>
-      <h4>Player chosen: <span class="label label-default" style="font-size: 1.2em;">{{tradeCtrl.playerTradeChosen.username}}</span></h4>
+    <h4>Player chosen: <span class="label label-default" style="font-size: 1.2em;">{{tradeCtrl.playerTradeChosen.username}}</span>
+    </h4>
     </p>
   </div>
   <div class="modal-footer">
@@ -558,3 +600,23 @@
   </div>
 </script>
 
+<!-- Modal for loot -->
+<script type="text/ng-template" id="modalLoot.html">
+  <div class="modal-header">
+    <h3 class="modal-title">Choose player that will loot a randomly selected <span><i>{{lootCtrl.sheetName}}</i></span> from you!</h3>
+  </div>
+  <div class="modal-body">
+    <ul class="nav nav-pills nav-stacked">
+      <li ng-repeat="player in lootCtrl.players" ng-class="lootCtrl.playerLootChosen === player ? 'active' : ''"
+          role="presentation"><a ng-href="" ng-click="lootCtrl.playerLootChosen = player">{{player.username}}</a></li>
+    </ul>
+    <p>
+    <h4>Player chosen: <span class="label label-default" style="font-size: 1.2em;">{{lootCtrl.playerLootChosen.username}}</span>
+    </h4>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-disabled="!lootCtrl.playerLootChosen" ng-click="lootCtrl.ok()">Ok</button>
+    <button class="btn btn-warning" ng-click="lootCtrl.cancel()">Cancel</button>
+  </div>
+</script>

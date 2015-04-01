@@ -4,7 +4,9 @@
   civApp.config(["$provide", function ($provide) {
     $provide.provider("GameService", ["BASE_URL", function (BASE_URL) {
       var games = {};
+      var playersCache = {};
       var loading = {};
+      var playerLoading = {};
       var baseUrl = BASE_URL + "/game/";
 
       this.$get = ["$http", "$log", "growl", "$location", "$q", "formEncode", function ($http, $log, growl, $location, $q, formEncode) {
@@ -178,12 +180,27 @@
         };
 
         var players = function(gameid) {
+          if (playerLoading[gameid]) {
+            return;
+          }
+
+          if(playersCache[gameid]) {
+            return playersCache[gameid];
+          }
+
+          return fetchPlayersFromServer(gameid);
+        };
+
+        var fetchPlayersFromServer = function (gameid) {
           if(!gameid) {
             return $q.reject("No gameid");
           }
           var url = baseUrl + gameid + "/players";
+          playerLoading[gameid] = true;
           return $http.get(url, {cache: true})
             .then(function (response) {
+              playersCache[gameid] = response.data;
+              playerLoading[gameid] = false;
               return response.data;
             });
         };
@@ -217,6 +234,7 @@
           getChatList: getChatList,
           chat: chat,
           players: players,
+          fetchPlayersFromServer: fetchPlayersFromServer,
           endGame: endGame,
           withdrawFromGame: withdrawFromGame
         };
