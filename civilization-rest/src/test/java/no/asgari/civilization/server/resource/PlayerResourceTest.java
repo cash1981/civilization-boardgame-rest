@@ -2,12 +2,16 @@ package no.asgari.civilization.server.resource;
 
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.action.DrawAction;
+import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.dto.ItemDTO;
+import no.asgari.civilization.server.model.Civ;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Infantry;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
+import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
+import no.asgari.civilization.server.model.Tech;
 import no.asgari.civilization.server.mongodb.AbstractCivilizationTest;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
@@ -22,6 +26,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.Optional;
+import java.util.Set;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,31 +45,26 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
         getApp().pbfCollection.updateById(getApp().pbfId, pbf);
     }
 
-
     @Test
     public void chooseTechThenRevealThenDelete() throws Exception {
-        final String techToReseach = "Pottery";
+        final String techToResearch = "Pottery";
 
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
-        pbf.getPlayers().stream()
-                .filter(p -> p.getUsername().equals("cash1981"))
-                .forEach(p -> assertThat(p.getTechsChosen()).isEmpty());
 
         URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/tech/choose", getApp().pbfId)).build();
         Response response = client().target(uri)
-                .queryParam("name", techToReseach)
+                .queryParam("name", techToResearch)
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .post(null);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT_204);
-        pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
         Optional<Playerhand> cash1981 = pbf.getPlayers().stream()
                 .filter(p -> p.getUsername().equals("cash1981"))
                 .findFirst();
         assertTrue(cash1981.isPresent());
         assertThat(cash1981.get().getTechsChosen()).isNotEmpty();
-        assertThat(cash1981.get().getTechsChosen().iterator().next().getName()).isEqualTo("Pottery");
+        assertThat(cash1981.get().getTechsChosen()).contains(new Tech("Pottery", Tech.LEVEL_1));
 
         //reveal it
         DBCursor<GameLog> gameLogs = getApp().gameLogCollection.find(DBQuery.is("pbfId", getApp().pbfId));
@@ -86,7 +86,7 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
         //Now remove it
         uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/tech/remove", getApp().pbfId)).build();
         response = client().target(uri)
-                .queryParam("name", techToReseach)
+                .queryParam("name", techToResearch)
                 .request()
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .delete(Response.class);
@@ -242,6 +242,30 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
         } else {
             fail("Should have gamelog");
         }
+    }
+
+    @Test
+    public void chooseCiv() throws Exception {
+        DrawAction drawAction = new DrawAction(getApp().db);
+        SheetName CIV = SheetName.find("CIV").get();
+        Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, CIV);
+
+        ItemDTO itemDTO = new ItemDTO();
+        itemDTO.setSheetName(SheetName.CIV.name());
+        itemDTO.setName(gameLogOptional.get().getDraw().getItem().getName());
+        itemDTO.setPbfId(getApp().pbfId);
+
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/item/reveal", getApp().pbfId)).build();
+        Response response = client().target(uri)
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .put(Entity.json(itemDTO), Response.class);
+        assertEquals(HttpStatus.OK_200, response.getStatus());
+
+        //Make sure tech is gotten
+        PlayerAction playerAction = new PlayerAction(getApp().db);
+        Set<Tech> playersTechs = playerAction.getPlayersTechs(getApp().pbfId, getApp().playerId);
+        assertThat(playersTechs).contains(((Civ)gameLogOptional.get().getDraw().getItem()).getStartingTech());
     }
 
     @Test
