@@ -14,22 +14,25 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
     var hasAccess = game.player && game.player.username === model.user.username && game.active;
     $scope.userHasAccess = hasAccess;
     GameOption.setShowValue(hasAccess);
-    GameOption.setShowEndGameValue(game.player.gameCreator);
-    model.yourTurn = game.player && game.player.yourTurn;
+    GameOption.setShowEndGameValue(hasAccess && game.player.gameCreator);
 
-    if(model.yourTurn) {
-      growl.info("<strong>It's your turn! Press end turn when you are done!</strong>");
-    }
+    if(game.active) {
+      //Check votes
+      /* jshint ignore:start */
+      _.forEach(game.publicLogs, function(log) {
+        if($scope.canVote(log)) {
+          growl.warning("An undo was requested which needs your vote");
+          return false;
+        }
+      });
+      /* jshint ignore:end */
 
-    /* jshint ignore:start */
-    //Check votes
-    _.forEach(game.publicLogs, function(log) {
-      if($scope.canVote(log)) {
-        growl.warning("An undo was requested which needs your vote");
-        return false;
+      model.yourTurn = game.player && game.player.yourTurn;
+
+      if(model.yourTurn) {
+        growl.info("<strong>It's your turn! Press end turn when you are done!</strong>");
       }
-    });
-    /* jshint ignore:end */
+    }
 
     model.tableParams.reload();
     return game;

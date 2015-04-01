@@ -320,6 +320,12 @@ public class GameAction extends BaseAction {
         while (iterator.hasNext()) {
             Playerhand playerhand = iterator.next();
             if (playerhand.getPlayerId().equals(playerId)) {
+                if(playerhand.isGameCreator()) {
+                    Response badReq = Response.status(Response.Status.FORBIDDEN)
+                            .entity(new MessageDTO("As game creator you cannot withdraw from the game"))
+                            .build();
+                    throw new WebApplicationException(badReq);
+                }
                 iterator.remove();
                 gameLogAction.createCommonPublicLog("Withdrew from game", pbfId, playerId);
                 pbfCollection.updateById(pbf.getId(), pbf);

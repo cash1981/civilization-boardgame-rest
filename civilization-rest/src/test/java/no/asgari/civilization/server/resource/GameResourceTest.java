@@ -175,7 +175,7 @@ public class GameResourceTest extends AbstractCivilizationTest {
                         .build())
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .put(null);
+                .post(null);
 
         assertThat(secondResponse.getStatus()).isEqualTo(200);
     }

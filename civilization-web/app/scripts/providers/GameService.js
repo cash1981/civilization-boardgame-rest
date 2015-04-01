@@ -188,6 +188,22 @@
             });
         };
 
+        var endGame = function (gameid) {
+          return $http.delete(baseUrl + gameid)
+            .then(function (response) {
+              growl.info("Game has ended");
+              return response.data;
+            });
+        };
+
+        var withdrawFromGame = function (gameid) {
+          return $http.post(baseUrl + gameid + "/withdraw")
+            .then(function (response) {
+              growl.info("You have withdrawn from the game");
+              return response.data;
+            });
+        };
+
         return {
           getAllGames: getAllGames,
           getGameById: getGameById,
@@ -200,7 +216,9 @@
           voteNo: voteNo,
           getChatList: getChatList,
           chat: chat,
-          players: players
+          players: players,
+          endGame: endGame,
+          withdrawFromGame: withdrawFromGame
         };
       }];
 

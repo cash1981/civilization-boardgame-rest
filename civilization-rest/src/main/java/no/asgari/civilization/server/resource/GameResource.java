@@ -223,7 +223,7 @@ public class GameResource {
      * Withdraw from existing game.
      * Game must not have started
      */
-    @PUT
+    @POST
     @Timed
     @Path("/{pbfId}/withdraw")
     public Response withdrawFromGame(@NotEmpty @PathParam("pbfId") String pbfId, @Auth Player player) {

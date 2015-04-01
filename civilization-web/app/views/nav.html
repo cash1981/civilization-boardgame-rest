@@ -12,8 +12,14 @@
             Game Options <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
-            <li><a href="#/endgame" ng-click="navCtrl.withdrawGame()">Withdraw from Game</a></li>
-            <li ng-if="navCtrl.GameOption.value.showEndGame"><a href="#/endgame" ng-click="navCtrl.endGame()">End Game</a></li>
+            <li><a href="#/endgame"
+                   ng-really-message="This will withdraw you from the current game. Are you sure?"
+                   ng-really-click="navCtrl.withdrawGame()">Withdraw from Game</a></li>
+            <li ng-if="navCtrl.GameOption.value.showEndGame">
+              <a href="#/endgame"
+                 ng-really-message="This will end the current game. This cannot be undone! Are you sure?"
+                 ng-really-click="navCtrl.endGame()"
+                 ng-click="navCtrl.endGame()">End Game</a></li>
           </ul>
       </li>
 
