@@ -1,6 +1,7 @@
-﻿(function (module) {
+﻿'use strict';
+(function (module) {
 
-  var addToken = function (currentUser, $q, $log) {
+  var addToken = function (currentUser, $q) {
 
     return {
       request: function (config) {
@@ -12,7 +13,7 @@
       }
     };
   };
-  addToken.$inject = ["currentUser", "$q", "$log"];
+  addToken.$inject = ["currentUser", "$q"];
 
   module.factory("addToken", addToken);
   module.config(["$httpProvider", function ($httpProvider) {

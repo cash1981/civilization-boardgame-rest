@@ -21,3 +21,4 @@ $http.delete doesn't work with content-type
 - Travis for continous integration
 - Ikke lett å ha parent pom og intellij. Finner ikke config fil. Maven klarer fint, men ikke intellij
 - Java 8 and checked exception in lambdas doesn't play well
+- Virkelig de siste 10% som tar tid. Opprydding av kode, jshint greier, ng-annotate greier, bygg og deploy, config

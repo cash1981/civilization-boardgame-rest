@@ -11,7 +11,7 @@
       return {
 
         responseError: function (response) {
-          if (response.status == 401) {
+          if (response.status === 401) {
             lastPath = $location.path();
             $location.path(loginUrl);
           }

@@ -21,6 +21,7 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
       growl.info("<strong>It's your turn! Press end turn when you are done!</strong>");
     }
 
+    /* jshint ignore:start */
     //Check votes
     _.forEach(game.publicLogs, function(log) {
       if($scope.canVote(log)) {
@@ -28,6 +29,7 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
         return false;
       }
     });
+    /* jshint ignore:end */
 
     model.tableParams.reload();
     return game;
@@ -60,7 +62,7 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
       var votes = log.draw.undo.votes;
 
       for(var vote in votes) {
-        if(vote == model.user.id) {
+        if(vote === model.user.id) {
           return false;
         }
       }
@@ -93,6 +95,7 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
     });
   };
 
+  /* jshint ignore:start */
   model.tableParams = new ngTableParams({
     page: 1,            // show first page
     count: 10,          // count per page
@@ -120,6 +123,7 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
     },
     $scope: { $data: {}, $emit: function () {}}
   });
+  /* jshint ignore:end */
 
   /**
    * Returns the next element in the object

@@ -24,12 +24,13 @@
               growl.success("Game created!");
               var loc = headers('Location');
               if(loc) {
+                /* jshint ignore:start */
                 var gameid = _.last(loc.split('/'));
                 if(gameid) {
                   $location.path('/game/' + gameid);
                 }
+                /* jshint ignore:end */
               }
-
               return data;
             })
             .error(function (data) {
@@ -85,8 +86,8 @@
               return response;
             })
             .error(function (data, status) {
-              if(status == 400) {
-                growl.error("Undo already initiated")
+              if(status === 400) {
+                growl.error("Undo already initiated");
               } else {
                 growl.error("Could not initiate undo for unknown reason");
               }
@@ -115,8 +116,8 @@
               return response;
             })
             .error(function (data, status) {
-              if(status == 412) {
-                growl.error("Could not register vote. Nothing to vote on")
+              if(status === 412) {
+                growl.error("Could not register vote. Nothing to vote on");
               } else {
                 growl.error("Could not vote for unknown reason");
               }
@@ -136,8 +137,8 @@
               return response;
             })
             .error(function (data, status) {
-              if(status == 412) {
-                growl.error("Could not register vote. Nothing to vote on")
+              if(status === 412) {
+                growl.error("Could not register vote. Nothing to vote on");
               } else {
                 growl.error("Could not vote for unknown reason");
               }

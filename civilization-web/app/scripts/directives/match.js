@@ -1,3 +1,4 @@
+'use strict';
 // http://codepen.io/brunoscopelliti/pen/ECyka
 
 angular.module('civApp').directive('match', [function () {
@@ -10,5 +11,5 @@ angular.module('civApp').directive('match', [function () {
       }, true);
 
     }
-  }
+  };
 }]);

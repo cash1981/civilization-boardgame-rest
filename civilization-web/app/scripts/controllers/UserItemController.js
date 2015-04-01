@@ -10,7 +10,9 @@
     model.itemName = function(item) {
       var key = Object.keys(item);
       if(key && key.length > -1) {
+        /* jshint ignore:start */
         return _.capitalize(key[0]);
+        /* jshint ignore:end */
       }
       return item;
     };
@@ -51,19 +53,19 @@
       //TODO refactor to lodash _forEach
       items.forEach(function (item) {
         var itemKey = Object.keys(item)[0];
-        if ("cultureI" == itemKey || "cultureII" == itemKey || "cultureIII" == itemKey) {
+        if ("cultureI" === itemKey || "cultureII" === itemKey || "cultureIII" === itemKey) {
           model.cultureCards.push(item);
-        } else if ("greatperson" == itemKey) {
+        } else if ("greatperson" === itemKey) {
           model.greatPersons.push(item);
-        } else if ("hut" == itemKey) {
+        } else if ("hut" === itemKey) {
           model.huts.push(item);
-        } else if ("village" == itemKey) {
+        } else if ("village" === itemKey) {
           model.villages.push(item);
-        } else if ("tile" == itemKey) {
+        } else if ("tile" === itemKey) {
           model.tiles.push(item);
-        } else if ("civ" == itemKey) {
+        } else if ("civ" === itemKey) {
           model.civs.push(item);
-        } else if ("aircraft" == itemKey || "mounted" == itemKey || "infantry" == itemKey || "artillery" == itemKey) {
+        } else if ("aircraft" === itemKey || "mounted" === itemKey || "infantry" === itemKey || "artillery" === itemKey) {
           model.units.push(item);
         } else {
           model.items.push(item);
@@ -89,15 +91,15 @@
           return;
         }
 
-        if(chosenTech.level == 1) {
+        if(chosenTech.level === 1) {
           model.chosenTechs1.push(chosenTech);
-        } else if(chosenTech.level == 2) {
+        } else if(chosenTech.level === 2) {
           model.chosenTechs2.push(chosenTech);
-        } else if(chosenTech.level == 3) {
+        } else if(chosenTech.level === 3) {
           model.chosenTechs3.push(chosenTech);
-        } else if(chosenTech.level == 4) {
+        } else if(chosenTech.level === 4) {
           model.chosenTechs4.push(chosenTech);
-        } else if(chosenTech.level == 5) {
+        } else if(chosenTech.level === 5) {
           model.chosenTechs5.push(chosenTech);
         }
       });
@@ -119,14 +121,14 @@
 
     model.drawItem = function(itemToDraw) {
       if(itemToDraw) {
-        DrawService.drawItem($routeParams.id, itemToDraw)
+        DrawService.drawItem($routeParams.id, itemToDraw);
       }
     };
 
     model.selectTech = function() {
       if($scope.selectedTech.tech) {
         PlayerService.selectTech($routeParams.id, $scope.selectedTech.tech)
-          .then(function(response) {
+          .then(function() {
             GameService.getAvailableTechs($routeParams.id)
               .then(function(techs) {
                 model.allAvailableTechs = techs;
@@ -138,7 +140,7 @@
     model.removeTech = function(techname) {
       $log.info("Removing tech " + techname);
       PlayerService.removeTech($routeParams.id, techname)
-        .then(function(response) {
+        .then(function() {
           GameService.getAvailableTechs($routeParams.id)
             .then(function(techs) {
               model.allAvailableTechs = techs;
@@ -154,6 +156,7 @@
       PlayerService.revealTech($routeParams.id, logid);
     };
 
+    /* jshint ignore:start */
     var getAvailableTechs = GameService.getAvailableTechs($routeParams.id)
       .then(function(techs) {
         model.allAvailableTechs = techs;
@@ -164,6 +167,7 @@
         model.chosenTechs = techs;
         putTechsInScope(model.chosenTechs);
       });
+    /* jshint ignore:end */
 
     var getPlayers = GameService.players($routeParams.id);
 
@@ -194,6 +198,7 @@
       });
     };
 
+    /* jshint ignore:start */
     model.tablePrivateLog = new ngTableParams({
       page: 1,            // show first page
       count: 10,          // count per page
@@ -216,6 +221,7 @@
       },
       $scope: { $data: {}, $emit: function () {}}
     });
+    /* jshint ignore:end */
 
     var initialize = function() {
       model.user = currentUser.profile;
@@ -240,8 +246,11 @@
       model.tiles = [];
       model.units = [];
 
+      /* jshint ignore:start */
       getAvailableTechs;
       getChosenTechs;
+      /* jshint ignore:end */
+
     };
 
     initialize();

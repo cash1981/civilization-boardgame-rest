@@ -3,7 +3,7 @@
 
   var USERKEY = "authorizationEncoded";
 
-  var currentUser = function (localStorage, $log) {
+  var currentUser = function (localStorage) {
     var saveUser = function () {
       localStorage.add(USERKEY, profile);
     };
@@ -42,7 +42,7 @@
       profile: profile
     };
   };
-  currentUser.$inject = ["localStorage", "$log"];
+  currentUser.$inject = ["localStorage"];
 
   module.factory("currentUser", currentUser);
 

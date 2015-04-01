@@ -62,6 +62,7 @@
       model.games = [];
       model.finishedGames = [];
       $scope.onlyMyGames = {};
+      /* jshint ignore:start */
       _.forEach(games, function(g) {
         if(g.active) {
           model.games.push(g);
@@ -69,6 +70,7 @@
           model.finishedGames.push(g);
         }
       });
+      /* jshint ignore:end */
       $log.info("Got games");
     };
 

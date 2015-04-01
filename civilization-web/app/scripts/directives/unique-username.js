@@ -1,3 +1,4 @@
+'use strict';
 /**
  * Copied and modified from ng-signup-form
  * https://github.com/zemirco/ng-signup-form
@@ -19,7 +20,7 @@ angular.module('civApp').directive('uniqueUsername', ['$http', 'BASE_URL', funct
         var url = BASE_URL + '/auth/register/check/username';
         scope.busy = true;
         $http.post(url, {name: value})
-          .success(function(data) {
+          .success(function() {
             // everything is fine -> do nothing
             scope.busy = false;
           })
@@ -32,7 +33,7 @@ angular.module('civApp').directive('uniqueUsername', ['$http', 'BASE_URL', funct
             }
             scope.busy = false;
           });
-      })
+      });
     }
-  }
+  };
 }]);

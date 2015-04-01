@@ -23,7 +23,7 @@
 
     return {
       nextElement: nextElement
-    }
+    };
   };
 
   module.factory("Util", util);

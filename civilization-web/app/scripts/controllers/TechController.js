@@ -37,15 +37,15 @@
           return;
         }
 
-        if(chosenTech.level == 1) {
+        if(chosenTech.level === 1) {
           model.chosenTechs1.push(chosenTech);
-        } else if(chosenTech.level == 2) {
+        } else if(chosenTech.level === 2) {
           model.chosenTechs2.push(chosenTech);
-        } else if(chosenTech.level == 3) {
+        } else if(chosenTech.level === 3) {
           model.chosenTechs3.push(chosenTech);
-        } else if(chosenTech.level == 4) {
+        } else if(chosenTech.level === 4) {
           model.chosenTechs4.push(chosenTech);
-        } else if(chosenTech.level == 5) {
+        } else if(chosenTech.level === 5) {
           model.chosenTechs5.push(chosenTech);
         }
       });
@@ -68,7 +68,7 @@
     model.selectTech = function() {
       if($scope.selectedTech) {
         PlayerService.selectTech($routeParams.id, $scope.selectedTech)
-          .then(function(response) {
+          .then(function() {
             GameService.getAvailableTechs($routeParams.id)
               .then(function(techs) {
                 model.allAvailableTechs = techs;
@@ -80,7 +80,7 @@
     model.removeTech = function(techname) {
       $log.info("Removing tech " + techname);
       PlayerService.removeTech($routeParams.id, techname)
-        .then(function(response) {
+        .then(function() {
           GameService.getAvailableTechs($routeParams.id)
             .then(function(techs) {
               model.allAvailableTechs = techs;
@@ -96,6 +96,7 @@
       PlayerService.revealTech($routeParams.id, logid);
     };
 
+    /* jshint ignore:start */
     var getAvailableTechs = GameService.getAvailableTechs($routeParams.id)
       .then(function(techs) {
         model.allAvailableTechs = techs;
@@ -106,13 +107,16 @@
         model.chosenTechs = techs;
         putTechsInScope(model.chosenTechs);
       });
+    /* jshint ignore:end */
 
     var initialize = function() {
       model.allAvailableTechs = [];
       model.techsChosen = [];
 
+      /* jshint ignore:start */
       getAvailableTechs;
       getChosenTechs;
+      /* jshint ignore:end */
     };
 
     initialize();

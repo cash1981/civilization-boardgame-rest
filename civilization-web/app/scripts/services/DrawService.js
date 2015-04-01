@@ -45,7 +45,7 @@
         })
         .error(function (data) {
           $log.error(data);
-          if(data.status == 412) {
+          if(data.status === 412) {
             growl.error("Cannot draw more barbarians until the others are discarded");
           } else {
             growl.error("Unable to draw barbarian units");
@@ -97,7 +97,7 @@
           return response;
         })
         .error(function (data, status) {
-          if (status == 410) {
+          if (status === 410) {
             growl.error("There are no more " + sheetName + " to draw!");
           } else {
             growl.error("Item could not be drawn");

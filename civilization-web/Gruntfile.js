@@ -40,14 +40,6 @@ module.exports = function (grunt) {
           livereload: '<%= connect.options.livereload %>'
         }
       },
-      jsTest: {
-        files: ['test/spec/{,*/}*.js'],
-        tasks: ['newer:jshint:test', 'karma']
-      },
-      styles: {
-        files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
-        tasks: ['newer:copy:styles', 'autoprefixer']
-      },
       gruntfile: {
         files: ['Gruntfile.js']
       },
@@ -68,7 +60,7 @@ module.exports = function (grunt) {
       options: {
         port: 9000,
         // Change this to '0.0.0.0' to access the server from outside.
-        hostname: 'localhost',
+        hostname: '0.0.0.0',
         livereload: 35729
       },
       livereload: {
@@ -77,22 +69,6 @@ module.exports = function (grunt) {
           middleware: function (connect) {
             return [
               connect.static('.tmp'),
-              connect().use(
-                '/bower_components',
-                connect.static('./bower_components')
-              ),
-              connect.static(appConfig.app)
-            ];
-          }
-        }
-      },
-      test: {
-        options: {
-          port: 9001,
-          middleware: function (connect) {
-            return [
-              connect.static('.tmp'),
-              connect.static('test'),
               connect().use(
                 '/bower_components',
                 connect.static('./bower_components')
@@ -145,20 +121,6 @@ module.exports = function (grunt) {
       server: '.tmp'
     },
 
-    // Add vendor prefixed styles
-    autoprefixer: {
-      options: {
-        browsers: ['last 1 version']
-      },
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '.tmp/styles/',
-          src: '{,*/}*.css',
-          dest: '.tmp/styles/'
-        }]
-      }
-    },
 
     // Automatically inject Bower components into the app
     wiredep: {
@@ -234,27 +196,17 @@ module.exports = function (grunt) {
     //   dist: {}
     // },
 
-    imagemin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.app %>/images',
-          src: '{,*/}*.{png,jpg,jpeg,gif}',
-          dest: '<%= yeoman.dist %>/images'
-        }]
-      }
-    },
+    //imagemin: {
+    //  dist: {
+    //    files: [{
+    //      expand: true,
+    //      cwd: '<%= yeoman.app %>/images',
+    //      src: '{,*/}*.{png,jpg,jpeg,gif}',
+    //      dest: '<%= yeoman.dist %>/images'
+    //    }]
+    //  }
+    //},
 
-    svgmin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.app %>/images',
-          src: '{,*/}*.svg',
-          dest: '<%= yeoman.dist %>/images'
-        }]
-      }
-    },
 
     htmlmin: {
       dist: {
@@ -340,18 +292,9 @@ module.exports = function (grunt) {
       ],
       dist: [
         'copy:styles',
-        'imagemin',
-        'svgmin'
       ]
-    },
-
-    // Test settings
-    karma: {
-      unit: {
-        configFile: 'test/karma.conf.js',
-        singleRun: true
-      }
     }
+
   });
 
 
@@ -364,7 +307,6 @@ module.exports = function (grunt) {
       'clean:server',
       'wiredep',
       'concurrent:server',
-      'autoprefixer',
       'connect:livereload',
       'watch'
     ]);
@@ -375,26 +317,17 @@ module.exports = function (grunt) {
     grunt.task.run(['serve:' + target]);
   });
 
-  grunt.registerTask('test', [
-    'clean:server',
-    'concurrent:test',
-    'autoprefixer',
-    'connect:test',
-    'karma'
-  ]);
-
   grunt.registerTask('build', [
     'clean:dist',
     'wiredep',
     'useminPrepare',
     'concurrent:dist',
-    'autoprefixer',
-    'concat',
-    'ngAnnotate',
+    //'concat',
+    //'ngAnnotate',
     'copy:dist',
     'cdnify',
-    'cssmin',
-    'uglify',
+    //'cssmin',
+    //'uglify',
     'filerev',
     'usemin',
     'htmlmin'
@@ -402,7 +335,6 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', [
     'newer:jshint',
-    'test',
     'build'
   ]);
 };
