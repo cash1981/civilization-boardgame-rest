@@ -16,7 +16,7 @@
 package no.asgari.civilization.server.model;
 
 /**
- * If something is Tradable it can be given to other players
+ * If something is Tradable it can be given or taken from other players
  */
 public interface Tradable {
 }

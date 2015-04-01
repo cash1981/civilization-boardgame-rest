@@ -28,6 +28,7 @@ import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
+import no.asgari.civilization.server.model.Tradable;
 import no.asgari.civilization.server.model.Unit;
 import org.mongojack.JacksonDBCollection;
 
@@ -304,13 +305,12 @@ public class DrawAction extends BaseAction {
 
     /**
      * draws a random item from playerhand and gives to another player
-     *
-     * @param pbfId          - The pbf id
-     * @param targetPlayerId - The targeted player which will recieve the item
+     *  @param pbfId          - The pbf id
      * @param sheetName      - the item to be automatically drawn from playerhand and given to another player
+     * @param targetPlayerId - The targeted player which will recieve the item
      * @param playerId       - The logged in player that we will take the item from
      */
-    public void drawRandomItemAndGiveToPlayer(String pbfId, SheetName sheetName, String targetPlayerId, String playerId) {
+    public Item drawRandomItemAndGiveToPlayer(String pbfId, SheetName sheetName, String targetPlayerId, String playerId) {
         Preconditions.checkNotNull(pbfId);
         Preconditions.checkNotNull(sheetName);
         Preconditions.checkNotNull(targetPlayerId);
@@ -332,6 +332,14 @@ public class DrawAction extends BaseAction {
             );
         }
 
+        if(!(itemToShuffle.get(0) instanceof Tradable)) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_ACCEPTABLE)
+                            .entity(new MessageDTO(sheetName.getName() + " is not lootable"))
+                            .build()
+            );
+        }
+
         Collections.shuffle(itemToShuffle);
         Item itemToGive = itemToShuffle.get(0);
         log.debug(playerFrom.getUsername() + " gives " + itemToGive + " to " + playerTo.getUsername());
@@ -346,9 +354,9 @@ public class DrawAction extends BaseAction {
             createCommonPublicLog(" receives " + itemToGive.revealPublic() + " from " + playerFrom.getUsername(), pbfId, playerTo.getPlayerId());
 
             pbfCollection.updateById(pbf.getId(), pbf);
-            return;
+            return itemToGive;
         } else {
-            cannotFindItem();
+            throw cannotFindItem();
         }
 
     }

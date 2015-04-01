@@ -31,7 +31,6 @@ import org.mongojack.JacksonDBCollection;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
-import java.util.List;
 
 @Log4j
 public abstract class BaseAction {
@@ -52,14 +51,6 @@ public abstract class BaseAction {
 
     protected GameLog createLog(Tech chosenTech, String pbfId, GameLog.LogType logType) {
         return logAction.createGameLog(chosenTech, pbfId, logType);
-    }
-
-    protected void createLog(List<? extends Item> items, String pbfId) {
-        items.forEach(item -> logAction.createGameLog(item, pbfId, GameLog.LogType.ITEM));
-    }
-
-    protected GameLog createLog(Item item, String pbfId, GameLog.LogType logType) {
-        return logAction.createGameLog(item, pbfId, logType);
     }
 
     protected GameLog createLog(Item item, String pbfId, GameLog.LogType logType, String playerId) {
@@ -128,19 +119,19 @@ public abstract class BaseAction {
                 .orElseThrow(PlayerAction::cannotFindPlayer);
     }
 
-    Playerhand getPlayerhandByPlayerId(String playerId, String pbfId) {
+    Playerhand getPlayerhandByPlayerId(String pbfId, String playerId) {
         PBF pbf = pbfCollection.findOneById(pbfId);
         return getPlayerhandByPlayerId(playerId, pbf);
     }
 
     static WebApplicationException cannotFindItem() {
-        return new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+        throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
                 .entity(Entity.json(new MessageDTO("Could not find item")))
                 .build());
     }
 
     static WebApplicationException cannotFindPlayer() {
-        return new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+        throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
                 .entity(Entity.json(new MessageDTO("Could not find player")))
                 .build());
     }

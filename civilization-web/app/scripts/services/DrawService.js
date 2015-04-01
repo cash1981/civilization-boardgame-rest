@@ -57,7 +57,7 @@
     var discardBarbarians = function(gameId) {
       var url = baseUrl + gameId + "/battle/discard/barbarians";
 
-      return $http.delete(url)
+      return $http.post(url)
         .success(function (response) {
           growl.success("Barbarians discarded");
           return response;

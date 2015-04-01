@@ -267,8 +267,8 @@ public class PlayerAction extends BaseAction {
             throw new WebApplicationException(Response.Status.FORBIDDEN);
         }
 
-        Draw<Tech> draw = gameLog.getDraw();
-        if (draw == null || draw.getItem() == null || (draw.getItem() instanceof Tech == false)) {
+        Draw<?> draw = gameLog.getDraw();
+        if (draw == null || draw.getItem() == null) {
             log.error("Couldn't find tech to reveal");
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }

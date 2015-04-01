@@ -21,7 +21,9 @@ import io.dropwizard.auth.Auth;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.action.DrawAction;
+import no.asgari.civilization.server.dto.MessageDTO;
 import no.asgari.civilization.server.model.GameLog;
+import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Unit;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -63,22 +65,21 @@ public class DrawResource {
      * @param sheetName      - the item to be automatically drawn from playerhand and given to another player
      * @param player         - The logged in player that we will take the item from
      */
-    @PUT
+    @POST
     @Timed
     @Path("/{sheetName}/loot/{targetPlayerId}")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response drawItemAndGiveToPlayer(@PathParam("pbfId") String pbfId, @PathParam("sheetName") String sheetName, @PathParam("targetPlayerId") String targetPlayerId, @Auth Player player) {
+    public Response loot(@PathParam("pbfId") String pbfId, @PathParam("sheetName") String sheetName, @PathParam("targetPlayerId") String targetPlayerId, @Auth Player player) {
         DrawAction drawAction = new DrawAction(db);
-
+        //Check that it is tradable
         Optional<SheetName> sheetNameOptional = SheetName.find(sheetName);
         if (!sheetNameOptional.isPresent()) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity("Could not find item " + sheetName)
+                    .entity(new MessageDTO("Could not find item " + sheetName))
                     .build();
         }
 
-        drawAction.drawRandomItemAndGiveToPlayer(pbfId, sheetNameOptional.get(), targetPlayerId, player.getId());
-        return Response.ok().build();
+        Item item = drawAction.drawRandomItemAndGiveToPlayer(pbfId, sheetNameOptional.get(), targetPlayerId, player.getId());
+        return Response.ok().entity(item).build();
     }
 
     @PUT
@@ -148,7 +149,7 @@ public class DrawResource {
      * @param pbfId
      * @return 201 no content
      */
-    @DELETE
+    @POST
     @Path("/battle/discard/barbarians")
     @Timed
     public Response discardBarbarians(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId) {
