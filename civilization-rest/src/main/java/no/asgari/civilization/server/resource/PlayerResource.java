@@ -133,7 +133,7 @@ public class PlayerResource {
     @Path("/endturn")
     @Timed
     public Response endTurn(@Auth Player player, @PathParam("pbfId") String pbfId) {
-        boolean success = playerAction.endTurn(pbfId, player.getUsername());
+        boolean success = playerAction.endTurn(pbfId, player);
 
         if (success) return Response.noContent().build();
 

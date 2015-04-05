@@ -27,7 +27,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class DrawResourceTest extends AbstractCivilizationTest {
-    protected static String BASE_URL = String.format("http://localhost:%d/civilization", RULE.getLocalPort());
+    protected static String BASE_URL = String.format("http://localhost:%d/civilization/api", RULE.getLocalPort());
 
     @Test
     public void drawUnitsForBattleThenDiscard() throws Exception {

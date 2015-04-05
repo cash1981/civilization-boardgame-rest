@@ -160,6 +160,7 @@ public class GameAction extends BaseAction {
         playerhand.setYourTurn(false);
         playerhand.setColor(color);
         playerhand.setGameCreator(gameCreator);
+        playerhand.setEmail(player.getEmail());
         return playerhand;
     }
 

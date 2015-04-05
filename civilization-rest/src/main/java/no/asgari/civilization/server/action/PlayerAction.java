@@ -22,6 +22,7 @@ import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.dto.ItemDTO;
+import no.asgari.civilization.server.email.SendEmail;
 import no.asgari.civilization.server.exception.PlayerExistException;
 import no.asgari.civilization.server.misc.SecurityCheck;
 import no.asgari.civilization.server.model.Civ;
@@ -134,24 +135,32 @@ public class PlayerAction extends BaseAction {
         return true;
     }
 
-    public boolean endTurn(String pbfId, String username) {
+    public boolean endTurn(String pbfId, Player player) {
         Preconditions.checkNotNull(pbfId);
-        Preconditions.checkNotNull(username);
+        Preconditions.checkNotNull(player.getUsername());
 
         PBF pbf = pbfCollection.findOneById(pbfId);
 
         //Loop through the list and find next starting player
         for (int i = 0; i < pbf.getPlayers().size(); i++) {
             Playerhand playerhand = pbf.getPlayers().get(i);
-            if (playerhand.getUsername().equals(username)) {
+            if (playerhand.getUsername().equals(player.getUsername())) {
                 playerhand.setYourTurn(false);
 
                 //Choose next player in line to be starting player
                 if (pbf.getPlayers().size() == (i + 1)) {
                     //We are at the end, pick the first player
-                    pbf.getPlayers().get(0).setYourTurn(true);
+                    Playerhand next = pbf.getPlayers().get(0);
+                    next.setYourTurn(true);
+                    //TODO make async call
+                    //@see https://jersey.java.net/nonav/documentation/latest/async.html#d0e10223
+                    SendEmail.sendYourTurn(pbf.getName(), next.getEmail());
                 } else {
-                    pbf.getPlayers().get(i + 1).setYourTurn(true);
+                    Playerhand next = pbf.getPlayers().get(i + 1);
+                    next.setYourTurn(true);
+                    //TODO make async call
+                    //@see https://jersey.java.net/nonav/documentation/latest/async.html#d0e10223
+                    SendEmail.sendYourTurn(pbf.getName(), next.getEmail());
                 }
 
                 try {

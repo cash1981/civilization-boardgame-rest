@@ -8,6 +8,7 @@ server:
     #type: https
     #port: 8443
     #Look at http://www.chrissearle.org/2007/10/25/Adding_self-signed_https_certificates_to_java_keystore/
+  rootPath: '/api/*'
   type: simple
   applicationContextPath: /civilization
   adminContextPath: /admin

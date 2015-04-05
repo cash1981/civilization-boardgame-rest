@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
 public class PlayerResourceTest extends AbstractCivilizationTest {
-    protected static String BASE_URL = String.format("http://localhost:%d/civilization", RULE.getLocalPort());
+    protected static String BASE_URL = String.format("http://localhost:%d/civilization/api", RULE.getLocalPort());
 
     @Before
     public void ensureCurrentPlayer() {

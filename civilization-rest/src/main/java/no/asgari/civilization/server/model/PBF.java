@@ -63,6 +63,7 @@ public class PBF {
 
     private int numOfPlayers;
     private boolean active = true;
+    private Player winner;
 
     private List<Item> items = Lists.newArrayList();
     private List<Playerhand> players = Lists.newArrayList();

@@ -18,7 +18,7 @@ import java.net.URI;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AuthResourceTest extends AbstractCivilizationTest {
-    protected static String BASE_URL = String.format("http://localhost:%d/civilization", RULE.getLocalPort());
+    protected static String BASE_URL = String.format("http://localhost:%d/civilization/api", RULE.getLocalPort());
 
     @Test
     public void shouldGet403WithWrongUsernamePass() {

@@ -16,6 +16,7 @@
 package no.asgari.civilization.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,6 +35,7 @@ import java.util.TreeSet;
 @JsonRootName("players")
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"username", "playerId"})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Playerhand {
     @NotBlank
     //Can consider using the playerId instead or removing @NotBlank
@@ -41,6 +43,8 @@ public class Playerhand {
 
     @NotBlank
     private String playerId;
+
+    private String email;
 
     private String color;
 
@@ -52,6 +56,7 @@ public class Playerhand {
      */
     private boolean yourTurn = false;
     private boolean gameCreator = false;
+    private boolean yourTurnEmailSent = false;
 
     private List<Item> items = new ArrayList<>();
     private Set<Tech> techsChosen = new TreeSet<>();
