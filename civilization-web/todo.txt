@@ -43,9 +43,9 @@ Inside a game
 
 #DONE - Trade
 #DONE - Show tiles also in the useritems
-- Withdraw game
-- Game creator (Add role or annotation)
-  -- End game
+#DONE - Withdraw game
+#DONE - Game creator (Add role or annotation)
+#DONE  -- End game
     --- Choose winner
 Kick players
   -- voting

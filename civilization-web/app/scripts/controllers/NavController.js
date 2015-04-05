@@ -1,7 +1,7 @@
 ﻿'use strict';
 (function (module) {
 
-  var NavController = function (GameService, $routeParams, basicauth, currentUser, growl, loginRedirect, GameOption, $modal, $log) {
+  var NavController = function (GameService, $routeParams, basicauth, currentUser, growl, loginRedirect, GameOption, $modal) {
     var model = this;
     model.GameOption = GameOption;
     model.user = currentUser.profile;
@@ -82,6 +82,6 @@
 
   };
 
-  module.controller("NavController", ['GameService', '$routeParams', 'basicauth', 'currentUser', 'growl', 'loginRedirect', 'GameOption', '$modal', '$log', '$templateCache', NavController]);
+  module.controller("NavController", ['GameService', '$routeParams', 'basicauth', 'currentUser', 'growl', 'loginRedirect', 'GameOption', '$modal', NavController]);
 
 }(angular.module("civApp")));

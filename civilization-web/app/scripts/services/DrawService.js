@@ -116,7 +116,7 @@
           GameService.fetchGameByIdFromServer(gameId);
           return response;
         })
-        .error(function(data, status, headers, config) {
+        .error(function(data) {
         // called asynchronously if an error occurs
         // or server returns response with an error status.
           growl.error("Item could not be lootet");
