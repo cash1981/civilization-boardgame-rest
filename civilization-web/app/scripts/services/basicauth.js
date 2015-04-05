@@ -18,7 +18,7 @@
       var login = function (username, password) {
         var configuration = {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
           }
         };
 
@@ -48,7 +48,7 @@
       var register = function (register) {
         var configuration = {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
           }
         };
 

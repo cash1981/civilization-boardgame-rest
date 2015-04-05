@@ -9,15 +9,15 @@
   <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
   <meta http-equiv="pragma" content="no-cache" />
 
-  <meta name="description" content="Civilization boardgame randomizer for play by forum games to remove need of moderator">
+  <meta name="description" content="Civilization boardgame randomizer for play by forum games to remove the need of moderator">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
-  <link rel="stylesheet" href="bower_components/ng-table/ng-table.css"/>
-  <link rel="stylesheet" href="bower_components/angular-growl-v2/build/angular-growl.css"/>
-  <link rel="stylesheet" href="bower_components/nya-bootstrap-select/dist/css/nya-bs-select.css"/>
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="bower_components/ng-table/ng-table.min.css"/>
+  <link rel="stylesheet" href="bower_components/angular-growl-v2/build/angular-growl.min.css"/>
+  <link rel="stylesheet" href="bower_components/nya-bootstrap-select/dist/css/nya-bs-select.min.css"/>
+  <link rel="stylesheet" href="bower_components/animate.css/animate.min.css"/>
   <link rel="stylesheet" href="styles/main.css">
-  <link rel="stylesheet" href="styles/animate.css">
   <link rel="stylesheet" href="styles/techtree.css">
 </head>
 <body ng-app="civApp" ng-cloak>
@@ -38,7 +38,7 @@
 </div>
 
 <footer class="footer">
-  Copyright &copy; 2015 by Shervin Asgari. All rights reserved. Licensed under Apache 2.0 License.
+  Copyright &copy; 2015 by Shervin Asgari. All rights reserved. Licensed under <a href="https://www.apache.org/licenses/LICENSE-2.0"> Apache 2.0 License.</a>
   <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0; padding: 0; display: inline;" class="pull-right">
     <input type="hidden" name="cmd" value="_s-xclick">
     <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
@@ -70,9 +70,9 @@
 -->
 
 <!--[if lt IE 9]>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/es5-shim/2.2.0/es5-shim.js"></script>
-<script src="bower_components/json3/lib/json3.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/es5-shim/2.2.0/es5-shim.min.js"></script>
+<script src="bower_components/json3/lib/json3.min.js"></script>
 <script>
   document.createElement('ui-select');
   document.createElement('ui-select-match');
@@ -80,21 +80,21 @@
 </script>
 <![endif]-->
 
-<script src="bower_components/jquery/dist/jquery.js"></script>
-<script src="bower_components/angular/angular.js"></script>
-<script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
-<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-<script src="bower_components/angular-resource/angular-resource.js"></script>
-<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-<script src="bower_components/angular-animate/angular-animate.js"></script>
-<script src="bower_components/angular-touch/angular-touch.js"></script>
-<script src="bower_components/angular-route/angular-route.js"></script>
-<script src="bower_components/angular-messages/angular-messages.js"></script>
-<script src="bower_components/angular-utf8-base64/angular-utf8-base64.js"></script>
-<script src="bower_components/ng-table/ng-table.js"></script>
-<script src="bower_components/lodash/dist/lodash.js"></script>
-<script src="bower_components/angular-growl-v2/build/angular-growl.js"></script>
-<script src="bower_components/nya-bootstrap-select/dist/js/nya-bs-select.js"></script>
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+<script src="bower_components/angular-resource/angular-resource.min.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+<script src="bower_components/angular-animate/angular-animate.min.js"></script>
+<script src="bower_components/angular-touch/angular-touch.min.js"></script>
+<script src="bower_components/angular-route/angular-route.min.js"></script>
+<script src="bower_components/angular-messages/angular-messages.min.js"></script>
+<script src="bower_components/angular-utf8-base64/angular-utf8-base64.min.js"></script>
+<script src="bower_components/ng-table/ng-table.min.js"></script>
+<script src="bower_components/lodash/dist/lodash.min.js"></script>
+<script src="bower_components/angular-growl-v2/build/angular-growl.min.js"></script>
+<script src="bower_components/nya-bootstrap-select/dist/js/nya-bs-select.min.js"></script>
 
 <script src="scripts/app.js"></script>
 <script src="scripts/providers/GameService.js"></script>
