@@ -41,6 +41,7 @@ import org.mongojack.WriteResult;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
+import java.net.URLDecoder;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -426,10 +427,13 @@ public class PlayerAction extends BaseAction {
      * @throws PlayerExistException - Throws this exception if username already exists
      */
     @SneakyThrows
-    public String createPlayer(String username, String passwordEncoded, String email) throws PlayerExistException {
-        Preconditions.checkNotNull(username);
+    public String createPlayer(String usernameEncoded, String passwordEncoded, String emailEncoded) throws PlayerExistException {
+        Preconditions.checkNotNull(usernameEncoded);
         Preconditions.checkNotNull(passwordEncoded);
-        Preconditions.checkNotNull(email);
+        Preconditions.checkNotNull(emailEncoded);
+
+        String username = URLDecoder.decode(usernameEncoded, "UTF-8");
+        String email = URLDecoder.decode(emailEncoded, "UTF-8");
 
         if (CivSingleton.instance().playerCache().asMap().containsValue(username)) {
             throw new PlayerExistException();
