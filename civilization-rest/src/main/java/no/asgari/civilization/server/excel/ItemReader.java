@@ -78,7 +78,6 @@ public class ItemReader {
     private static final Predicate<Cell> notRandomPredicate = cell -> !cell.toString().equals("RAND()");
     private static final Predicate<Cell> rowNotZeroPredicate = cell -> cell.getRow().getRowNum() != 0;
     private static final Predicate<Cell> columnIndexZeroPredicate = cell -> cell.getColumnIndex() == 0;
-    private static final String WONDERS = "wonders";
 
     @SuppressWarnings("unchecked")
     public void readItemsFromExcel(GameType gameType) throws IOException {
@@ -365,10 +364,10 @@ public class ItemReader {
         for (int i = 0; i < wondersName.size(); i++) {
             String wonder = wondersName.poll();
             String desc = descriptions.poll();
-            if (wonder.toLowerCase().contains(WONDERS)) {
+            if (wonder.toLowerCase().contains(SheetName.WONDERS.getName().toLowerCase())) {
                 break;
             }
-            ancientWonders.add(new Wonder(wonder, desc, Wonder.ANCIENT));
+            ancientWonders.add(new Wonder(wonder, desc, Wonder.ANCIENT, SheetName.ANCIENT_WONDERS));
         }
         Collections.shuffle(ancientWonders);
 
@@ -377,14 +376,14 @@ public class ItemReader {
         for (int i = 0; i < wondersName.size(); i++) {
             String wonder = wondersName.poll();
             String desc = descriptions.poll();
-            if (wonder.toLowerCase().contains(WONDERS)) {
+            if (wonder.toLowerCase().contains(SheetName.WONDERS.getName().toLowerCase())) {
                 break;
             }
-            medievalWonders.add(new Wonder(wonder, desc, Wonder.MEDIEVAL));
+            medievalWonders.add(new Wonder(wonder, desc, Wonder.MEDIEVAL, SheetName.MEDIEVAL_WONDERS));
         }
         Collections.shuffle(medievalWonders);
 
-        //Kun ancient
+        //Only modern left
         modernWonders = new LinkedList<>();
 
         int remainingSize = wondersName.size();
@@ -392,7 +391,7 @@ public class ItemReader {
         for (int i = 0; i < remainingSize; i++) {
             String wonder = wondersName.poll();
             String desc = descriptions.poll();
-            modernWonders.add(new Wonder(wonder, desc, Wonder.MODERN));
+            modernWonders.add(new Wonder(wonder, desc, Wonder.MODERN, SheetName.MODERN_WONDERS));
         }
         Collections.shuffle(modernWonders);
     }

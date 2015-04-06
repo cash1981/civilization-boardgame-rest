@@ -47,17 +47,13 @@ public class Wonder implements Item {
     private String ownerId;
     private SheetName sheetName;
 
-    public Wonder(String name, String description, String type) {
+    public Wonder(String name, String description, String type, SheetName sheetName) {
         this.name = name;
         this.description = description;
+        this.sheetName = sheetName;
         this.type = type;
         this.used = false;
         this.hidden = true;
-    }
-
-    @Override
-    public SheetName getSheetName() {
-        return sheetName = SheetName.WONDERS;
     }
 
     @Override

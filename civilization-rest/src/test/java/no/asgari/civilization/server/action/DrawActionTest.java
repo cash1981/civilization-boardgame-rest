@@ -247,17 +247,49 @@ public class DrawActionTest extends AbstractCivilizationTest {
     }
 
     @Test
-    public void drawWonderAndMakeSureItsNoLongerInPBFCollection() throws Exception {
+    public void drawAncientWonderAndMakeSureItsNoLongerInPBFCollection() throws Exception {
         DrawAction drawAction = new DrawAction(getApp().db);
         //Before draw
         long aircrafts = getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
-                .filter(p -> p.getSheetName() == SheetName.WONDERS)
+                .filter(p -> p.getSheetName() == SheetName.ANCIENT_WONDERS)
                 .count();
 
-        Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.WONDERS);
+        Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.ANCIENT_WONDERS);
         assertTrue(gameLogOptional.isPresent());
         assertEquals(aircrafts - 1, getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
-                .filter(p -> p.getSheetName() == SheetName.WONDERS)
+                .filter(p -> p.getSheetName() == SheetName.ANCIENT_WONDERS)
+                .count());
+        assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Wonder.class);
+    }
+
+    @Test
+    public void drawMedievalWonderAndMakeSureItsNoLongerInPBFCollection() throws Exception {
+        DrawAction drawAction = new DrawAction(getApp().db);
+        //Before draw
+        long aircrafts = getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+                .filter(p -> p.getSheetName() == SheetName.MEDIEVAL_WONDERS)
+                .count();
+
+        Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.MEDIEVAL_WONDERS);
+        assertTrue(gameLogOptional.isPresent());
+        assertEquals(aircrafts - 1, getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+                .filter(p -> p.getSheetName() == SheetName.MEDIEVAL_WONDERS)
+                .count());
+        assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Wonder.class);
+    }
+
+    @Test
+    public void drawModernWonderAndMakeSureItsNoLongerInPBFCollection() throws Exception {
+        DrawAction drawAction = new DrawAction(getApp().db);
+        //Before draw
+        long aircrafts = getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+                .filter(p -> p.getSheetName() == SheetName.MODERN_WONDERS)
+                .count();
+
+        Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.MODERN_WONDERS);
+        assertTrue(gameLogOptional.isPresent());
+        assertEquals(aircrafts - 1, getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+                .filter(p -> p.getSheetName() == SheetName.MODERN_WONDERS)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Wonder.class);
     }
