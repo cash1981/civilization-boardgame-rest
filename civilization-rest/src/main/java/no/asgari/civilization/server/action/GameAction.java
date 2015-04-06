@@ -23,6 +23,7 @@ import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
+import no.asgari.civilization.server.dto.DrawDTO;
 import no.asgari.civilization.server.dto.GameDTO;
 import no.asgari.civilization.server.dto.GameLogDTO;
 import no.asgari.civilization.server.dto.MessageDTO;
@@ -261,7 +262,7 @@ public class GameAction extends BaseAction {
         List<GameLog> allPublicLogs = gameLogAction.getGameLogs(pbf.getId());
         List<GameLogDTO> publicGamelogDTOs = allPublicLogs.stream()
                 .filter(log -> !Strings.isNullOrEmpty(log.getPublicLog()))
-                .map(log -> new GameLogDTO(log.getId(), log.getPublicLog(), log.getCreatedInMillis(), log.getDraw()))
+                .map(log -> new GameLogDTO(log.getId(), log.getPublicLog(), log.getCreatedInMillis(), new DrawDTO(log.getDraw())))
                 .collect(Collectors.toList());
         dto.setPublicLogs(publicGamelogDTOs);
 
@@ -277,7 +278,7 @@ public class GameAction extends BaseAction {
                 List<GameLog> allPrivateLogs = gameLogAction.getGameLogsBelongingToPlayer(pbf.getId(), playerhand.get().getUsername());
                 List<GameLogDTO> privateGamelogDTOs = allPrivateLogs.stream()
                         .filter(log -> !Strings.isNullOrEmpty(log.getPrivateLog()))
-                        .map(log -> new GameLogDTO(log.getId(), log.getPrivateLog(), log.getCreatedInMillis(), log.getDraw()))
+                        .map(log -> new GameLogDTO(log.getId(), log.getPrivateLog(), log.getCreatedInMillis(), new DrawDTO(log.getDraw())))
                         .collect(Collectors.toList());
 
                 dto.setPlayer(playerhand.get());

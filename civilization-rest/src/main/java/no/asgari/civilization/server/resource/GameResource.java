@@ -31,6 +31,7 @@ import no.asgari.civilization.server.action.UndoAction;
 import no.asgari.civilization.server.dto.ChatDTO;
 import no.asgari.civilization.server.dto.CheckNameDTO;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
+import no.asgari.civilization.server.dto.DrawDTO;
 import no.asgari.civilization.server.dto.GameDTO;
 import no.asgari.civilization.server.dto.GameLogDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
@@ -264,7 +265,7 @@ public class GameResource {
         if (!allPublicLogs.isEmpty()) {
             gameLogDTOs = allPublicLogs.stream()
                     .filter(log -> !Strings.isNullOrEmpty(log.getPublicLog()))
-                    .map(gl -> new GameLogDTO(gl.getId(), gl.getPublicLog(), gl.getCreatedInMillis(), gl.getDraw()))
+                    .map(gl -> new GameLogDTO(gl.getId(), gl.getPublicLog(), gl.getCreatedInMillis(), new DrawDTO(gl.getDraw())))
                     .collect(Collectors.toList());
         }
         return gameLogDTOs;
@@ -281,7 +282,7 @@ public class GameResource {
         if (!allPrivateLogs.isEmpty()) {
             gameLogDTOs = allPrivateLogs.stream()
                     .filter(log -> !Strings.isNullOrEmpty(log.getPrivateLog()))
-                    .map(gl -> new GameLogDTO(gl.getId(), gl.getPrivateLog(), gl.getCreatedInMillis(), gl.getDraw()))
+                    .map(gl -> new GameLogDTO(gl.getId(), gl.getPrivateLog(), gl.getCreatedInMillis(), new DrawDTO(gl.getDraw())))
                     .collect(Collectors.toList());
         }
         return gameLogDTOs;
