@@ -71,7 +71,8 @@
         };
 
         var getAllGames = function () {
-          return $http.get(baseUrl, {cache: true})
+          //return $http.get(baseUrl, {cache: true})
+          return $http.get(baseUrl)
             .then(function (response) {
               return response.data;
             });
@@ -150,7 +151,7 @@
 
         var getChatList = function (gameid) {
           var url = baseUrl + gameid + "/chat/";
-          return $http.get(url, {cache: true})
+          return $http.get(url)
             .then(function (response) {
               return response.data;
             });
@@ -165,7 +166,7 @@
 
           var configuration = {
             headers: {
-              'Content-Type': 'application/x-www-form-urlencoded'
+              'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
             }
           };
 

@@ -9,7 +9,7 @@
           .then(function (data) {
             var newChat = data;
             if (newChat) {
-              newChat.message = decodeURIComponent(data.message);
+              newChat.message = data.message;
               $scope.chatList.unshift(newChat);
               model.chatMessage = "";
             }

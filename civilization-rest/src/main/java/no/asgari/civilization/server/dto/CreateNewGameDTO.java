@@ -34,7 +34,7 @@ public class CreateNewGameDTO {
     private GameType type;
 
     @NotNull
-    @Min(1)
+    @Min(2)
     @Max(5)
     private Integer numOfPlayers;
 

@@ -14,7 +14,7 @@
     <!-- Games that are not active anymore should have a light grey background -->
     <tr ng-repeat="chat in chatList" ng-class-even="'row-even'" ng-class-odd="'row-odd'">
       <td>{{chat.created | date:'dd-MM-yyyy - HH:mm:ss'}}</td>
-      <td><span ng-bind-html="chat.username"></span></td>
+      <td>{{chat.username}}></span></td>
       <td colspan="3"><span ng-bind-html="chat.message"></span></td>
     </tr>
     </tbody>

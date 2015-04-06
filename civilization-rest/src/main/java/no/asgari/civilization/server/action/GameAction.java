@@ -20,6 +20,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 import com.mongodb.DB;
 import lombok.Cleanup;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
@@ -45,6 +46,7 @@ import org.mongojack.WriteResult;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import java.net.URLDecoder;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Comparator;
@@ -319,10 +321,11 @@ public class GameAction extends BaseAction {
         return false;
     }
 
+    @SneakyThrows
     public Chat chat(String pbfId, String message, String username) {
         Chat chat = new Chat();
         chat.setPbfId(pbfId);
-        chat.setMessage(message);
+        chat.setMessage(URLDecoder.decode(message, "UTF-8"));
         chat.setUsername(username);
         String id = chatCollection.insert(chat).getSavedId();
         chat.setId(id);
