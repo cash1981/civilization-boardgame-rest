@@ -199,7 +199,7 @@ public class GameResourceTest extends AbstractCivilizationTest {
 
     @Test
     public void getListOfPlayersInGameExceptCurrentLoggedIn() throws Exception {
-        PBF pbf = getApp().pbfCollection.findOne();
+        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
 
         Response response = client().target(
                 UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/players", pbf.getId()))
