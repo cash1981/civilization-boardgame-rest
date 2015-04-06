@@ -24,11 +24,11 @@ import lombok.extern.log4j.Log4j;
  */
 @Log4j
 public class SendEmail {
-    private static final SendGrid sendgrid = new SendGrid(System.getenv("SENDGRID_USER"), System.getenv("SENDGRID_PASS"));
+    private static final SendGrid sendgrid = new SendGrid(System.getenv("SENDGRID_USERNAME"), System.getenv("SENDGRID_PASSWORD"));
 
     public static boolean sendYourTurn(String gamename, String emailToo) {
-        if(System.getenv("SENDGRID_USER") == null || System.getenv("SENDGRID_PASS") == null) {
-            log.error("Missing environment variable for SENDGRID_USER or SENDGRID_PASS");
+        if(System.getenv("SENDGRID_USERNAME") == null || System.getenv("SENDGRID_PASSWORD") == null) {
+            log.error("Missing environment variable for SENDGRID_USERNAME or SENDGRID_PASSWORD");
             return false;
         }
         SendGrid.Email email = new SendGrid.Email();
