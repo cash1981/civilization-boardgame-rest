@@ -434,6 +434,7 @@ public class PlayerAction extends BaseAction {
 
         String username = URLDecoder.decode(usernameEncoded, "UTF-8");
         String email = URLDecoder.decode(emailEncoded, "UTF-8");
+        String password = URLDecoder.decode(passwordEncoded, "UTF-8");
 
         if (CivSingleton.instance().playerCache().asMap().containsValue(username)) {
             throw new PlayerExistException();
@@ -441,8 +442,7 @@ public class PlayerAction extends BaseAction {
 
         Player player = new Player();
         player.setUsername(username);
-        String decodedPassword = new String(Base64.getDecoder().decode(passwordEncoded), "UTF-8");
-        log.debug("Password decoded as " + decodedPassword);
+        String decodedPassword = new String(Base64.getDecoder().decode(password), "UTF-8");
 
         player.setPassword(DigestUtils.sha1Hex(decodedPassword));
         player.setEmail(email);
