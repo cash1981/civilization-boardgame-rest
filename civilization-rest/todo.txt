@@ -56,13 +56,13 @@
 - Created annotation/filter/interceptor for userHasAccess
 #DONE - Choose color
 
-- Security hole:
-    -- hide the drawn item in the public log, 
-    -- Perhaps refactor to add the logid on an item instead
+#DONE - Security hole:
+    #DONE -- hide the drawn item in the public log,
+    #DONE -- Perhaps refactor to add the logid on an item instead
 
 Nice to have
 - Change basic authentication to OAUTH
-- Hide the draw.item in public log.
+#DONE - Hide the draw.item in public log.
 #DONE - Chat with scrolling capabilites.
 	-- Websocket?
 - Each item can have path to a picture so that client can show it
