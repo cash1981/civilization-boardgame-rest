@@ -32,7 +32,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class GameResourceTest extends AbstractCivilizationTest {
-    protected static String BASE_URL = String.format("http://localhost:%d/civilization/api", RULE.getLocalPort());
+    protected static String BASE_URL = String.format("http://localhost:%d/api", RULE.getLocalPort());
 
     @Test
     public void shouldGetActiveGames() {

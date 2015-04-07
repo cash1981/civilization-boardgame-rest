@@ -15,6 +15,7 @@ angular.module('civApp').controller('RegisterController', ["$scope", "$modalInst
   $scope.createGameOk = function() {
     if(model.selectedGametype && model.selectedGametype.value !== 'WAW') {
       growl.error('We only support Wisdom and Warfare the time being');
+      return;
     }
 
     var createNewGame = {
@@ -30,6 +31,11 @@ angular.module('civApp').controller('RegisterController', ["$scope", "$modalInst
   $scope.registerOk = function() {
     if(!model.verification && !model.password && model.password !== model.verification) {
       growl.error("Passwords did not match");
+      return;
+    }
+
+    if(!model.securityQuestion && model.securityQuestion.toUpperCase() !== "WRITING") {
+      growl.error('Wrong answer to the security question');
       return;
     }
 

@@ -38,7 +38,7 @@
           <input name="password" type="password" placeholder="Password" ng-model="navCtrl.password" required/>
         </div>
         <input class="btn btn-default btn-sm" type="submit" value="Login">
-        <input class="btn btn-default btn-sm" type="button" value="Sign up" ng-click="navCtrl.openSignup('sm')"/>
+        <input class="btn btn-default btn-sm" type="button" value="Sign up" ng-click="navCtrl.openSignup('md')"/>
       </form>
     </div>
   </div> <!-- /container-fluid-->
@@ -89,6 +89,16 @@
         <div ng-if="form.verification.$dirty" id="registerVerificationStatus" ng-messages="form.verification.$error">
           <div ng-message="required" class="help-block has-error">Please repeat your password</div>
           <div ng-message="match" class="help-block has-error">Password don't match</div>
+        </div>
+      </div>
+
+      <div class="form-group" ng-class="form.securityQuestion.$invalid  && form.securityQuestion.$dirty ? 'has-error' : ''">
+        <label for="verification" class="control-label">Security Question: What is China's starting tech?</label>
+        <input type="text" name="securityQuestion" id="securityQuestion" ng-model="registersecurityQuestion" pattern="[wW][rR][iI][tT][iI][nN][gG]" ng-pattern="/[wW][rR][iI][tT][iI][nN][gG]/"
+               required="required" class="form-control" aria-describedby="registersecurityQuestionStatus" />
+        <div ng-if="form.securityQuestion.$dirty" id="registersecurityQuestionStatus" ng-messages="form.securityQuestion.$error">
+          <div ng-message="required" class="help-block has-error">Security Question is required</div>
+          <div ng-message="match" class="help-block has-error">Wrong answer</div>
         </div>
       </div>
     </div>

@@ -28,7 +28,7 @@ Inside a game
 #DONE        -- confirmation
 #DONE    -- Discard your item
 #DONE      -- confirmation
-- Option to withdraw from a game after they have joined, before it is started
+#DONE - Option to withdraw from a game after they have joined, before it is started
 #DONE - Chat system, so that players can do table talk and negotiations etc
   -- Websocket?
 
@@ -49,15 +49,18 @@ Inside a game
     --- Choose winner
 Kick players
   -- voting
+Email notification
+  -- options on each game to turn off
+  - Email everyone for each new game created
 
-- Rewrite chat with ng-bind-html
+#DONE - Rewrite chat with ng-bind-html
 
 Nice to have: (Will be implemented in later versions)
 - each image onclick with enlarge 200%
-- Implement email verification on register?
 - Upload of the map after you powerpoint it
-  -- Must have forward/back buttons so that you can review history of the maps
-  -- Will send the jpg/png to the server, and save it in mongodb
+- Implement email verification on register
+- Must have forward/back buttons so that you can review history of the maps
+- Will send the jpg/png to the server, and save it in mongodb
 - Probably need to implement turns, so that you can filter on turns and see what orders where from what turns etc
   -- Same with maps. Should perhaps be connected with the turns
 #DONE - Register new players
@@ -72,13 +75,13 @@ Nice to have: (Will be implemented in later versions)
 
 - Resolve entire game controller before showing anything
 - Game list
-  -- Need a way to end a game so that active is set to false and it doesn't show on the game list
-  -- Need a way to show the finished games (Perhaps active/finished tab)
-  -- A way to show "My games" (Perhaps a checkbox filter)
+#DONE  -- Need a way to end a game so that active is set to false and it doesn't show on the game list
+#DONE  -- Need a way to show the finished games (Perhaps active/finished tab)
+#DONE  -- A way to show "My games" (Perhaps a checkbox filter)
   -- Pagination on the list would be nice, otherwise that page might become pretty long
-  -- Sort newest first? Or eldest first?
-  -- When creating a game, then going back to the view, it gives you the cache
-    -- Must disable the cache or invalidate it when you create a game, or join
+#DONE  -- Sort newest first? Or eldest first?
+#DONE  -- When creating a game, then going back to the view, it gives you the cache
+#DONE  -- Must disable the cache or invalidate it when you create a game, or join
 
 check ngmodules.org to find modules
 
