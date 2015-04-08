@@ -20,5 +20,34 @@ $http.delete doesn't work with content-type
 
 - Travis for continous integration
 - Ikke lett å ha parent pom og intellij. Finner ikke config fil. Maven klarer fint, men ikke intellij
+    -- Legge på $MODULE_DIR$
 - Java 8 and checked exception in lambdas doesn't play well
-- Virkelig de siste 10% som tar tid. Opprydding av kode, jshint greier, ng-annotate greier, bygg og deploy, config
+- Har to brancher, en med heroku og 1 server og en med 2 server og master
+    -- Git cherry-pick er veldig fin å ha. Den klarer til og med å skjønne hvilke filer det er snakk om selv om de er flyttet et annet sted i branchene
+
+
+Hvordan fullføre prosjekter
+- De første 90% tar 10% av tiden, mens de siste 10% tar 90% av tiden.
+    -- Jeg har mange "halvferdige" prosjekter. Ting drar ut i tid, man mister motivasjonen eller andre nye kule teknologier/prosjekter dukker opp
+        som tar fokuset vekk. Man blir liksom aldri ferdig
+- Virkelig de siste 10% som tar tid. Opprydding av kode, jshint greier, ng-annotate greier, bygg og deploy, config,
+- Når man får problemer så er det viktig å ikke bruke så mye tid på det. Det er enkelt å miste motivasjonen.
+    Søk hjelp, spør på stackoverflow.com eller kolleger/venner og begynn på en ny oppgave
+- Lag en liste med alle oppgaver som skal gjøres i en prioritert rekkefølge.
+    -- Ikke bruk masse tid på fancy verktøy som jira.
+    -- Notepad eller lignende fungerer i massevis. Marker elementer med #DONE når du er ferdig
+    -- Nederst i dokumentet seksjonerer du NICE TO HAVE. Dette er type gold plating, ting som ikke er nødvendigvis viktig, men hadde vært kjekt
+- Unngå store refaktoreringer
+    -- Ofte finner man ut at man kunne gjort ting anderledes og bedre. Det er veldig viktig at man er nøye på slike overveielser og ikke bruker
+    lang tid på store refaktoreringer som egentlig ikke bringer noe verdi. Det vil si, det gir kanskje verdi for deg rent psykologisk. Det gir deg
+    en god følelse av å gjøre ting bedre. Du ønsker å gjøre ting profesjonelt, men det bringer ikke produktet ditt nærmere mål!
+    -- Legg heller refaktorerings ønsker nede i NICE TO HAVE seksjonen
+- KISS
+   - Dette er veldig viktig. Det er bedre å få på plass funksjonalitet som virker enn å gjøre det fancy, flott og komplisert. Dette spiser mye tid.
+- Ikke bruk masse tid på å finne noe gjenbrukbart som du må igjen bruke masse tid på å lese dokumentasjonen til og prøve å skreddersy inn i din løsning
+    istedet for å heller bare skrive den selv
+    -- F.eks, jeg ønsket å lage et skjema. Jeg tenkte det sikkert var hundrevis av HTML skjema'er ute på nettet jeg kunne kopiere.
+        Jeg brukte masse tid på å finne en som passet stilen jeg ønsket, og med de innebygde valideringene jeg ønsket
+
+
+

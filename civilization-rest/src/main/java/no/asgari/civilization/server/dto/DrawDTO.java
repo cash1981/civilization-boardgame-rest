@@ -40,6 +40,7 @@ public class DrawDTO {
             this.pbfId = draw.getPbfId();
             this.undo = draw.getUndo();
             this.created = draw.getCreated();
+            this.hidden = draw.getItem() == null || draw.getItem().isHidden();
         }
     }
 
@@ -62,6 +63,8 @@ public class DrawDTO {
      * If null, then no undo has been performed
      */
     private Undo undo = null;
+
+    private boolean hidden;
 
     /**
      * Returns true if undo has been requested

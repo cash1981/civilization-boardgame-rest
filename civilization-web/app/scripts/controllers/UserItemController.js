@@ -149,7 +149,7 @@
     };
 
     model.canRevealTech = function(log) {
-      return $scope.userHasAccess && log && log.draw && log.draw.item && Util.nextElement(log.draw.item).hidden && log.log.indexOf("researched") > -1;
+      return $scope.userHasAccess && log && log.draw && log.draw.hidden && log.log.indexOf("researched") > -1;
     };
 
     model.revealTechFromLog = function(logid) {
