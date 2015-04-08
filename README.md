@@ -4,6 +4,8 @@ Civlization boardgame (Fantasy Flight Games)
 [![Build Status](https://travis-ci.org/dropwizard/dropwizard-java8.svg?branch=master)](https://travis-ci.org/cash1981/civilization-boardgame)
 [![Coverage Status](https://coveralls.io/repos/cash1981/civilization-boardgame/badge.svg)](https://coveralls.io/r/cash1981/civilization-boardgame)
 
+##You can find the application here (http://civ.asgari.no)
+
 ##First version
 
 This will hopefully be a web application where you can use to randomize items for the Civilization boardgame. The first version is targeted for Play By Forums.
@@ -30,4 +32,4 @@ Future version will be a fully playable web client with drag and drop play
 * Grunt (http://gruntjs.com/)
 
 ##Installation
-Install what is required, and then run mvn clean install or mvn exec:java on civilization-rest and grunt serve on civilization-web
+Install what is required, and then run ```mvn clean install``` or ```mvn exec:java``` on civilization-rest and ```npm install``` and ```bower install``` then ```grunt serve``` on civilization-web

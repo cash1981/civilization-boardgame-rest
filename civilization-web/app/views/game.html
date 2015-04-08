@@ -25,7 +25,7 @@
         <h1 ng-bind-html="latestLog"></h1>
         <span ng-if="userHasAccess">
           <form ng-submit="chatCtrl.chat()">
-            <input type="text" ng-model="chatCtrl.chatMessage" placeholder="Write your chat message here" size="50" maxlength="250"/>
+            <input type="text" ng-model="chatCtrl.chatMessage" placeholder="Write your chat message here" maxlength="250"/>
             <!-- Hack, will put submit button out of view -->
             <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
           </form>
