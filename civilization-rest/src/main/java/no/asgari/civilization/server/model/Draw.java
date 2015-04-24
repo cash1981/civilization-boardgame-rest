@@ -84,4 +84,6 @@ public class Draw<T extends Item> {
         return undo != null;
     }
 
+    private int drawNumber;
+
 }

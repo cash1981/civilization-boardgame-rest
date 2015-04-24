@@ -89,12 +89,12 @@ public class GameLog {
     }
 
     @JsonIgnore
-    public void createAndSetLog(LogType logType) {
+    public void createAndSetLog(LogType logType, int drawNumber) {
         final String DELIM = " - ";
         switch (logType) {
             case ITEM:
-                privateLog = username + " drew " + DELIM + draw.getItem().revealAll();
-                publicLog = username + " drew " + DELIM + draw.getItem().revealPublic();
+                privateLog = username + " drew #" + drawNumber + DELIM + draw.getItem().revealAll();
+                publicLog = username + " drew #" + drawNumber + DELIM + draw.getItem().revealPublic();
                 break;
             case BATTLE:
                 privateLog = username + " plays " + DELIM + draw.getItem().revealAll();
@@ -106,19 +106,19 @@ public class GameLog {
                 break;
             case TECH:
                 privateLog = username + " has researched " + DELIM + draw.getItem().revealAll();
-                publicLog = username + " has researched " + DELIM + draw.getItem().revealPublic();
+                publicLog = username + " has researched a hidden technology";
                 break;
             case DISCARD:
-                privateLog = username + " has discarded " + DELIM + draw.getItem().revealAll();
-                publicLog = username + " has discarded " + DELIM + draw.getItem().revealAll();
+                privateLog = username + " has discarded #" + drawNumber + DELIM + draw.getItem().revealAll();
+                publicLog = username + " has discarded #" + drawNumber + DELIM + draw.getItem().revealAll();
                 break;
             case REVEAL:
                 privateLog = username + " has revealed " + DELIM + draw.getItem().revealAll();
                 publicLog = username + " has revealed " + DELIM + draw.getItem().revealAll();
                 break;
             case UNDO:
-                privateLog = username + " has requested undo of " + DELIM + draw.getItem().revealAll();
-                publicLog = username + " has requested undo of " + DELIM + draw.getItem().revealAll();
+                privateLog = username + " has requested undo of #" + drawNumber + DELIM + draw.getItem().revealAll();
+                publicLog = username + " has requested undo of #" + drawNumber + DELIM + draw.getItem().revealAll();
                 break;
         }
     }
