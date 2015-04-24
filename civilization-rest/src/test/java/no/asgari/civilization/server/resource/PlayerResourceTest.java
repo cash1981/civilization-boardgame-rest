@@ -9,7 +9,6 @@ import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Infantry;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
-import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.model.Tech;
 import no.asgari.civilization.server.mongodb.AbstractCivilizationTest;
@@ -64,7 +63,7 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
                 .findFirst();
         assertTrue(cash1981.isPresent());
         assertThat(cash1981.get().getTechsChosen()).isNotEmpty();
-        assertThat(cash1981.get().getTechsChosen()).contains(new Tech("Pottery", Tech.LEVEL_1));
+        assertThat(cash1981.get().getTechsChosen()).contains(new Tech("Pottery", Tech.LEVEL_1, 0));
 
         //reveal it
         DBCursor<GameLog> gameLogs = getApp().gameLogCollection.find(DBQuery.is("pbfId", getApp().pbfId));

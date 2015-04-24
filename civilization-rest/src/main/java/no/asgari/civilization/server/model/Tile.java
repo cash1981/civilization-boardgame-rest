@@ -16,6 +16,7 @@
 package no.asgari.civilization.server.model;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -31,6 +32,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @JsonTypeName("tile")
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Tile implements Item, Image {
     @NotEmpty
     private String name;
@@ -41,11 +43,13 @@ public class Tile implements Item, Image {
     private String ownerId; // game_id or player_id (username)
     private String image;
     private SheetName sheetName;
+    private int itemNumber;
 
-    public Tile(String name) {
+    public Tile(String name, int itemNumber) {
         this.name = name;
         this.used = false;
         this.hidden = true;
+        this.itemNumber = itemNumber;
     }
 
     @Override

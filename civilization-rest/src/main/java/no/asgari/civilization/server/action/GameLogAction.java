@@ -63,7 +63,7 @@ public class GameLogAction {
             log.error("Couldn't retrieve username from cache");
             pl.setUsername(getUsernameFromPlayerId(draw.getPlayerId()));
         }
-        pl.createAndSetLog(logType);
+        pl.createAndSetLog(logType, draw.getItem() != null ? draw.getItem().getItemNumber() : 0);
         pl.setId(save(pl));
         return pl;
     }
@@ -84,7 +84,7 @@ public class GameLogAction {
             log.error("Couldn't retrieve username from cache");
             pl.setUsername(getUsernameFromPlayerId(playerId));
         }
-        pl.createAndSetLog(logType);
+        pl.createAndSetLog(logType, item.getItemNumber());
         pl.setId(save(pl));
         return pl;
     }
@@ -178,7 +178,7 @@ public class GameLogAction {
             log.error("Couldn't retrieve username from cache");
             gl.setUsername(getUsernameFromPlayerId(item.getOwnerId()));
         }
-        gl.createAndSetLog(logType);
+        gl.createAndSetLog(logType, item.getItemNumber());
         gl.setId(save(gl));
 
         GameLog gl2 = new GameLog();

@@ -62,4 +62,8 @@ public interface Item extends Spreadsheet, Type, Comparable<Spreadsheet> {
 
     public String getDescription();
 
+    public int getItemNumber();
+
+    public void setItemNumber(int itemNumber);
+
 }

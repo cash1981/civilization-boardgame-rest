@@ -43,7 +43,7 @@ public class DrawActionTest extends AbstractCivilizationTest {
         assertThat(gameLog.getDraw().getPlayerId()).isEqualToIgnoringCase(getApp().playerId);
         assertThat(gameLog.getDraw().getItem()).isExactlyInstanceOf(Civ.class);
         assertThat(gameLog.getPrivateLog()).matches(".+drew.*Civ.+");
-        assertFalse(gameLog.getPublicLog().matches(".+drew.*Civ.+"));
+        assertTrue(gameLog.getPublicLog().matches(".+drew.*Civ..*"));
 
         PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
         assertThat(pbf).isNotNull();

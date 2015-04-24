@@ -16,6 +16,7 @@
 package no.asgari.civilization.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -31,6 +32,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @JsonTypeName("wonder")
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Wonder implements Item {
     @JsonIgnore
     public static final String ANCIENT = "Ancient";
@@ -46,14 +48,16 @@ public class Wonder implements Item {
     private boolean hidden = true;
     private String ownerId;
     private SheetName sheetName;
+    private int itemNumber;
 
-    public Wonder(String name, String description, String type, SheetName sheetName) {
+    public Wonder(String name, String description, String type, SheetName sheetName, int itemNumber) {
         this.name = name;
         this.description = description;
         this.sheetName = sheetName;
         this.type = type;
         this.used = false;
         this.hidden = true;
+        this.itemNumber = itemNumber;
     }
 
     @Override

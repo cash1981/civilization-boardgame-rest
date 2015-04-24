@@ -83,5 +83,4 @@ public class Draw<T extends Item> {
     private boolean isUndoInitiated() {
         return undo != null;
     }
-
 }

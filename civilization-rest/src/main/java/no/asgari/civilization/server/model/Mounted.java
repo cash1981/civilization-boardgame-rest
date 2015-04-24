@@ -17,6 +17,7 @@ package no.asgari.civilization.server.model;
 
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -29,6 +30,7 @@ import no.asgari.civilization.server.SheetName;
 @JsonTypeName("mounted")
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"}, callSuper = false)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Mounted extends Unit implements Image {
     private int level = 0;
     private String ownerId;
@@ -40,10 +42,12 @@ public class Mounted extends Unit implements Image {
     private boolean isInBattle;
     private String image;
     private SheetName sheetName;
+    private int itemNumber;
 
-    public Mounted(int attack, int health) {
+    public Mounted(int attack, int health, int itemNumber) {
         this.attack = attack;
         this.health = health;
+        this.itemNumber = itemNumber;
     }
 
     @Override

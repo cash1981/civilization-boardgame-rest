@@ -15,6 +15,7 @@
 
 package no.asgari.civilization.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.EqualsAndHashCode;
@@ -31,6 +32,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @JsonTypeName("citystate")
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"}, callSuper = false)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Citystate implements Item, Image {
     @JsonProperty
     @NotEmpty
@@ -48,6 +50,7 @@ public class Citystate implements Item, Image {
     private String ownerId; // (playerId)
     private String image;
     private SheetName sheetName;
+    private int itemNumber;
 
     public Citystate(String name) {
         this.name = name;
