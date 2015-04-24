@@ -87,11 +87,11 @@
     <tab ng-if="!userHasAccess" heading="Chat" class="col-md-4">
       <ng-include src="'views/partials/chat.html'"></ng-include>
     </tab>
-    <tab ng-if="userHasAccess && currentGame.whosTurnIsIt" heading="My Items" class="col-md-2">
+    <tab ng-if="userHasAccess && currentGame.whosTurnIsIt" heading="My Items" active="true" class="col-md-2">
       <ng-include src="'views/partials/useritems.html'"></ng-include>
     </tab>
-    <tab ng-if="userHasAccess && currentGame.whosTurnIsIt" heading="Draw" class="col-md-2">
-      <ng-include src="'views/partials/draw.html'"></ng-include>
+    <tab ng-if="userHasAccess && currentGame.whosTurnIsIt" heading="Battle" class="col-md-2">
+      <ng-include src="'views/partials/battle.html'"></ng-include>
     </tab>
     <!--<tab heading="Tech tree" class="col-md-2">
       <ng-include src="'views/partials/techtree.html'"></ng-include>
