@@ -15,6 +15,7 @@
 
 package no.asgari.civilization.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -30,6 +31,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @JsonTypeName("greatperson")
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GreatPerson implements Item, Image {
     @NotEmpty
     private String name;
@@ -40,6 +42,7 @@ public class GreatPerson implements Item, Image {
     private String ownerId; // game_id or player_id (username)
     private String image;
     private SheetName sheetName;
+    private int itemNumber;
 
     public GreatPerson(String name) {
         this.name = name;

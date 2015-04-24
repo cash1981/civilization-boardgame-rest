@@ -16,6 +16,7 @@
 package no.asgari.civilization.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -34,6 +35,7 @@ import java.time.ZoneId;
 @Data
 @JsonRootName("chat")
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Chat {
     public static final String COL_NAME = "chat";
     public static final String PBFID = "pbfId";

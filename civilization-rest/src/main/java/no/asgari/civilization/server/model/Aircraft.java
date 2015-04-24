@@ -16,6 +16,7 @@
 package no.asgari.civilization.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ import no.asgari.civilization.server.SheetName;
 @Setter
 @JsonTypeName("aircraft")
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 //@EqualsAndHashCode(of = {"used", "attack", "health", "type"}, callSuper = true)
 public class Aircraft extends Unit implements Image {
     private String ownerId; // id of the player which owns this item
@@ -37,10 +39,12 @@ public class Aircraft extends Unit implements Image {
     private boolean isInBattle;
     private String image;
     private SheetName sheetName;
+    private int itemNumber;
 
-    public Aircraft(int attack, int health) {
+    public Aircraft(int attack, int health, int itemNumber) {
         this.attack = attack;
         this.health = health;
+        this.itemNumber = itemNumber;
     }
 
     @Override

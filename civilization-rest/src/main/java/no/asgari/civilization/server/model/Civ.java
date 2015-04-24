@@ -15,6 +15,7 @@
 
 package no.asgari.civilization.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.EqualsAndHashCode;
@@ -30,6 +31,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @ToString(of = "name")
 @JsonTypeName("civ")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "objectType")
+@JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"})
 public class Civ implements Item {
@@ -42,6 +44,7 @@ public class Civ implements Item {
     private String ownerId; // id of the player which owns this item
     private SheetName sheetName;
     private Tech startingTech;
+    private int itemNumber;
 
     public Civ(String name) {
         this.name = name;

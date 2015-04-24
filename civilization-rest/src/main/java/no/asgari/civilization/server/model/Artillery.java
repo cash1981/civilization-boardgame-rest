@@ -15,6 +15,7 @@
 
 package no.asgari.civilization.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -25,6 +26,7 @@ import no.asgari.civilization.server.SheetName;
 @Getter
 @Setter
 @JsonTypeName("artillery")
+@JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"}, callSuper = false)
 public class Artillery extends Unit implements Image {
@@ -38,10 +40,12 @@ public class Artillery extends Unit implements Image {
     private boolean isInBattle;
     private String image;
     private SheetName sheetName;
+    private int itemNumber;
 
-    public Artillery(int attack, int health) {
+    public Artillery(int attack, int health, int itemNumber) {
         this.attack = attack;
         this.health = health;
+        this.itemNumber = itemNumber;
     }
 
     @Override

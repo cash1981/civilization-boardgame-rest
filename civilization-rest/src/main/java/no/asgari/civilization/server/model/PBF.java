@@ -64,7 +64,6 @@ public class PBF {
     private int numOfPlayers;
     private boolean active = true;
     private Player winner;
-    private int drawCounter;
     private List<Item> items = Lists.newArrayList();
     private List<Playerhand> players = Lists.newArrayList();
     private List<Tech> techs = Lists.newArrayList();
@@ -88,7 +87,4 @@ public class PBF {
         return "";
     }
 
-    public void increaseDrawCounter() {
-        drawCounter = drawCounter + 1;
-    }
 }

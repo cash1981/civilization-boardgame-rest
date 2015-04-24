@@ -37,6 +37,7 @@ import no.asgari.civilization.server.model.Tech;
 import no.asgari.civilization.server.model.Tile;
 import no.asgari.civilization.server.model.Village;
 import no.asgari.civilization.server.model.Wonder;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -48,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -79,6 +81,8 @@ public class ItemReader {
     private static final Predicate<Cell> rowNotZeroPredicate = cell -> cell.getRow().getRowNum() != 0;
     private static final Predicate<Cell> columnIndexZeroPredicate = cell -> cell.getColumnIndex() == 0;
 
+    private static AtomicInteger itemCounter = new AtomicInteger(RandomUtils.nextInt(1,20));
+
     @SuppressWarnings("unchecked")
     public void readItemsFromExcel(GameType gameType) throws IOException {
         InputStream in;
@@ -108,10 +112,10 @@ public class ItemReader {
             shuffledTiles = (LinkedList<Tile>) getShuffledTilesFromExcel(wb);
             extractShuffledWondersFromExcel(wb);
             allTechs = getTechsFromExcel(wb);
-            createInfantryTest(wb);
-            createMountedTest(wb);
-            createArtilleryTest(wb);
-            createAircraftTest(wb);
+            readInfantry(wb);
+            readMounted(wb);
+            readArtillery(wb);
+            readAircraft(wb);
 
             redrawableItems = ImmutableList.<Item>builder()
                     .addAll(shuffledCultureI)
@@ -151,6 +155,7 @@ public class ItemReader {
         //Description should be in the same order as city states
         for (int i = 0; i < cityStates.size(); i++) {
             Citystate item = cityStates.get(i);
+            item.setItemNumber(itemCounter.incrementAndGet());
             item.setDescription(description.get(i));
         }
 
@@ -183,7 +188,7 @@ public class ItemReader {
         //Description should be in the same order as cultures
         for (int i = 0; i < civs.size(); i++) {
             Civ item = civs.get(i);
-            item.setStartingTech(new Tech(startingTech.get(i), 1));
+            item.setStartingTech(new Tech(startingTech.get(i), Tech.LEVEL_1, itemCounter.incrementAndGet()));
         }
 
         Collections.shuffle(civs);
@@ -216,6 +221,7 @@ public class ItemReader {
         //Description should be in the same order as cultures
         for (int i = 0; i < cultures.size(); i++) {
             CultureI item = cultures.get(i);
+            item.setItemNumber(itemCounter.incrementAndGet());
             item.setDescription(description.get(i));
         }
 
@@ -248,6 +254,7 @@ public class ItemReader {
         //Description should be in the same order as culture2s
         for (int i = 0; i < culture2s.size(); i++) {
             CultureII item = culture2s.get(i);
+            item.setItemNumber(itemCounter.incrementAndGet());
             item.setDescription(description.get(i));
         }
 
@@ -280,6 +287,7 @@ public class ItemReader {
         //Description should be in the same order as culture3s
         for (int i = 0; i < culture3s.size(); i++) {
             CultureIII item = culture3s.get(i);
+            item.setItemNumber(itemCounter.incrementAndGet());
             item.setDescription(description.get(i));
         }
 
@@ -321,6 +329,7 @@ public class ItemReader {
         for (int i = 0; i < gps.size(); i++) {
             GreatPerson item = gps.get(i);
             item.setDescription(description.get(i));
+            item.setItemNumber(itemCounter.incrementAndGet());
             item.setType(tile.get(i));
         }
 
@@ -367,7 +376,7 @@ public class ItemReader {
             if (wonder.toLowerCase().contains(SheetName.WONDERS.getName().toLowerCase())) {
                 break;
             }
-            ancientWonders.add(new Wonder(wonder, desc, Wonder.ANCIENT, SheetName.ANCIENT_WONDERS));
+            ancientWonders.add(new Wonder(wonder, desc, Wonder.ANCIENT, SheetName.ANCIENT_WONDERS,itemCounter.incrementAndGet()));
         }
         Collections.shuffle(ancientWonders);
 
@@ -379,7 +388,7 @@ public class ItemReader {
             if (wonder.toLowerCase().contains(SheetName.WONDERS.getName().toLowerCase())) {
                 break;
             }
-            medievalWonders.add(new Wonder(wonder, desc, Wonder.MEDIEVAL, SheetName.MEDIEVAL_WONDERS));
+            medievalWonders.add(new Wonder(wonder, desc, Wonder.MEDIEVAL, SheetName.MEDIEVAL_WONDERS,itemCounter.incrementAndGet()));
         }
         Collections.shuffle(medievalWonders);
 
@@ -391,7 +400,7 @@ public class ItemReader {
         for (int i = 0; i < remainingSize; i++) {
             String wonder = wondersName.poll();
             String desc = descriptions.poll();
-            modernWonders.add(new Wonder(wonder, desc, Wonder.MODERN, SheetName.MODERN_WONDERS));
+            modernWonders.add(new Wonder(wonder, desc, Wonder.MODERN, SheetName.MODERN_WONDERS,itemCounter.incrementAndGet()));
         }
         Collections.shuffle(modernWonders);
     }
@@ -407,7 +416,7 @@ public class ItemReader {
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
-                .map(tilename -> new Tile(String.format("%d", (int) Double.valueOf(tilename.toString()).doubleValue())))
+                .map(tilename -> new Tile(String.format("%d", (int) Double.valueOf(tilename.toString()).doubleValue()),itemCounter.incrementAndGet()))
                 .collect(Collectors.toList());
 
         Collections.shuffle(tiles);
@@ -425,7 +434,7 @@ public class ItemReader {
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
-                .map(hut -> new Hut(hut.toString()))
+                .map(hut -> new Hut(hut.toString(), itemCounter.incrementAndGet()))
                 .collect(Collectors.toList());
 
         Collections.shuffle(huts);
@@ -443,7 +452,7 @@ public class ItemReader {
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
-                .map(village -> new Village(village.toString()))
+                .map(village -> new Village(village.toString(), itemCounter.incrementAndGet()))
                 .collect(Collectors.toList());
 
         Collections.shuffle(villages);
@@ -467,7 +476,7 @@ public class ItemReader {
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
-                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_1))
+                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_1, itemCounter.incrementAndGet()))
                 .collect(Collectors.toList());
 
         sheet = wb.getSheet(SheetName.LEVEL_2_TECH.getName());
@@ -479,7 +488,7 @@ public class ItemReader {
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
-                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_2))
+                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_2, itemCounter.incrementAndGet()))
                 .collect(Collectors.toList());
 
         sheet = wb.getSheet(SheetName.LEVEL_3_TECH.getName());
@@ -491,7 +500,7 @@ public class ItemReader {
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
-                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_3))
+                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_3, itemCounter.incrementAndGet()))
                 .collect(Collectors.toList());
 
         sheet = wb.getSheet(SheetName.LEVEL_4_TECH.getName());
@@ -503,7 +512,7 @@ public class ItemReader {
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
-                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_4))
+                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_4, itemCounter.incrementAndGet()))
                 .collect(Collectors.toList());
 
         List<Tech> allTechs = new ArrayList<>(level1Techs);
@@ -516,7 +525,7 @@ public class ItemReader {
         return allTechs;
     }
 
-    private void createInfantryTest(Workbook wb) throws IOException {
+    private void readInfantry(Workbook wb) throws IOException {
         Sheet infantrySheet = wb.getSheet(SheetName.INFANTRY.toString());
 
 
@@ -536,7 +545,7 @@ public class ItemReader {
         log.debug(infantryList);
     }
 
-    private void createMountedTest(Workbook wb) throws IOException {
+    private void readMounted(Workbook wb) throws IOException {
         Sheet mountedsheet = wb.getSheet(SheetName.MOUNTED.toString());
 
         List<Cell> unfilteredCells = new ArrayList<>();
@@ -555,7 +564,7 @@ public class ItemReader {
         log.debug("Mounted units from excel are " + mountedList);
     }
 
-    private void createArtilleryTest(Workbook wb) throws IOException {
+    private void readArtillery(Workbook wb) throws IOException {
         Sheet artillerySheet = wb.getSheet(SheetName.ARTILLERY.toString());
 
         List<Cell> unfilteredCells = new ArrayList<>();
@@ -574,7 +583,7 @@ public class ItemReader {
         log.debug("Artillery units from excel are " + artilleryList);
     }
 
-    private void createAircraftTest(Workbook wb) throws IOException {
+    private void readAircraft(Workbook wb) throws IOException {
         Sheet aircraftSheet = wb.getSheet(SheetName.AIRCRAFT.toString());
 
         List<Cell> unfilteredCells = new ArrayList<>();
@@ -599,7 +608,7 @@ public class ItemReader {
         int attack = Integer.parseInt(Iterables.get(split, 0));
         int health = Integer.parseInt(Iterables.get(split, 1));
 
-        return new Infantry(attack, health);
+        return new Infantry(attack, health, itemCounter.incrementAndGet());
     }
 
     private static Artillery createArtillery(String string) {
@@ -607,7 +616,7 @@ public class ItemReader {
         int attack = Integer.parseInt(Iterables.get(split, 0));
         int health = Integer.parseInt(Iterables.get(split, 1));
 
-        return new Artillery(attack, health);
+        return new Artillery(attack, health, itemCounter.incrementAndGet());
     }
 
     private static Mounted createMounted(String string) {
@@ -615,7 +624,7 @@ public class ItemReader {
         int attack = Integer.parseInt(Iterables.get(split, 0));
         int health = Integer.parseInt(Iterables.get(split, 1));
 
-        return new Mounted(attack, health);
+        return new Mounted(attack, health, itemCounter.incrementAndGet());
     }
 
     private static Aircraft createAircraft(String string) {
@@ -623,7 +632,7 @@ public class ItemReader {
         int attack = Integer.parseInt(Iterables.get(split, 0));
         int health = Integer.parseInt(Iterables.get(split, 1));
 
-        return new Aircraft(attack, health);
+        return new Aircraft(attack, health, itemCounter.incrementAndGet());
     }
 
     private static Iterable<String> split(String string) {

@@ -17,6 +17,7 @@ package no.asgari.civilization.server.model;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,6 +29,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * All the Level 1, 2, 3, 4 and Space Flight techs
  */
 @JsonRootName("tech")
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"name"})
@@ -44,7 +46,7 @@ public class Tech implements Item, Level, Image {
     public static final int LEVEL_5 = 5;
 
     @JsonIgnore
-    public static final Tech SPACE_FLIGHT = new Tech("Space Flight", LEVEL_5);
+    public static final Tech SPACE_FLIGHT = new Tech("Space Flight", LEVEL_5, 0);
 
     @NotEmpty
     private String name;
@@ -56,11 +58,13 @@ public class Tech implements Item, Level, Image {
     private int level;
     private String image;
     private SheetName sheetName;
+    private int itemNumber;
 
-    public Tech(String name, int level) {
+    public Tech(String name, int level, int itemNumber) {
         this.name = name;
         this.level = level;
         hidden = true;
+        this.itemNumber = itemNumber;
     }
 
     @Override
