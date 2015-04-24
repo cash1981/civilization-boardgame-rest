@@ -466,14 +466,14 @@
   <!-- allAvailableTechs -->
   <div class="row">
     <div class="col-md-9">
-      <table class="tech-pyramid red">
+      <table class="tech-pyramid">
         <tbody>
         <tr>
           <td class="spacer" colspan="4"></td>
           <td class="researched" colspan="2" title="Space Flight" ng-if="userCtrl.chosenTechs5.length > 0">
             Space Flight
               <span
-                class="glyphicon glyphicon-remove remove"
+                class="glyphicon glyphicon-remove remove red"
                 aria-hidden="true"
                 tooltip="This will remove your tech"
                 ng-really-message="Are you sure you want to remove the tech?"
@@ -489,7 +489,7 @@
           <td class="researched" colspan="2" ng-repeat="tech in userCtrl.chosenTechs4" title="{{tech.name}}">
             {{tech.name}}
               <span
-                class="glyphicon glyphicon-remove remove"
+                class="glyphicon glyphicon-remove remove red"
                 aria-hidden="true"
                 tooltip="This will remove your tech"
                 ng-really-message="Are you sure you want to remove the tech?"
@@ -505,7 +505,7 @@
           <td class="researched" colspan="2" ng-repeat="tech in userCtrl.chosenTechs3" title="{{tech.name}}">
             {{tech.name}}
               <span
-                class="glyphicon glyphicon-remove remove"
+                class="glyphicon glyphicon-remove remove red"
                 aria-hidden="true"
                 tooltip="This will remove your tech"
                 ng-really-message="Are you sure you want to remove the tech?"
@@ -521,7 +521,7 @@
           <td class="researched" colspan="2" ng-repeat="tech in userCtrl.chosenTechs2" title="{{tech.name}}">
             {{tech.name}}
               <span
-                class="glyphicon glyphicon-remove remove"
+                class="glyphicon glyphicon-remove remove red"
                 aria-hidden="true"
                 tooltip="This will remove your tech"
                 ng-really-message="Are you sure you want to remove the tech?"
@@ -536,7 +536,7 @@
           <td class="researched" colspan="2" ng-repeat="tech in userCtrl.chosenTechs1" title="{{tech.name}}">
             {{tech.name}}
               <span
-                class="glyphicon glyphicon-remove remove"
+                class="glyphicon glyphicon-remove remove red"
                 aria-hidden="true"
                 tooltip="This will remove your tech"
                 ng-really-message="Are you sure you want to remove the tech?"
