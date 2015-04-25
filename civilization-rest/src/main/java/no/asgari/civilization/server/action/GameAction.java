@@ -16,6 +16,7 @@
 package no.asgari.civilization.server.action;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 import com.mongodb.DB;
@@ -38,6 +39,7 @@ import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
+import org.apache.commons.lang3.CharSet;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
 import org.mongojack.DBSort;
@@ -248,7 +250,7 @@ public class GameAction extends BaseAction {
         return players.get(0);
     }
 
-    public GameDTO getGame(PBF pbf, Player player) {
+    public GameDTO mapGameDTO(PBF pbf, Player player) {
         Preconditions.checkNotNull(pbf);
         //Set common stuff
         GameDTO dto = new GameDTO();
@@ -259,6 +261,8 @@ public class GameAction extends BaseAction {
         dto.setName(pbf.getName());
         dto.setWhosTurnIsIt(pbf.getNameOfUsersTurn());
         dto.setActive(pbf.isActive());
+        dto.setMapLink(pbf.getMapLink());
+        dto.setAssetLink(pbf.getAssetLink());
 
         //Set logs
         List<GameLog> allPublicLogs = gameLogAction.getGameLogs(pbf.getId());
@@ -353,5 +357,48 @@ public class GameAction extends BaseAction {
         pbfCollection.updateById(pbfId, pbf);
         createInfoLog(pbfId, playerhand.getUsername() + " Ended this game");
         createInfoLog(pbfId, "Thank you for playing! Please donate if you liked this game!");
+    }
+
+    /**
+     * Will return the id from the google presentation
+     */
+    @SneakyThrows
+    public String addMapLink(String pbfId, String linkEncoded, String playerId) {
+        String link = URLDecoder.decode(linkEncoded, "UTF-8");
+        if(link.matches("(?i)^https://docs\\.google\\.com/presentation/d/.*$")) {
+            String removedPart = link.replace("https://docs.google.com/presentation/d/", "");
+            String id = removedPart.split("/")[0];
+            log.info("Id from google presentation is: " + id);
+
+            PBF pbf = pbfCollection.findOneById(pbfId);
+
+            pbf.setMapLink(id);
+            pbfCollection.updateById(pbfId, pbf);
+            Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+            createInfoLog(pbfId, playerhand.getUsername() + " Added map link");
+            return id;
+        }
+        return null;
+    }
+
+    /**
+     * Will return the id from the google presentation
+     */
+    @SneakyThrows
+    public String addAssetLink(String pbfId, String linkEncoded, String playerId) {
+        String link = URLDecoder.decode(linkEncoded, "UTF-8");
+        if(link.matches("(?i)^https://docs\\.google\\.com/spreadsheets/d/.*$")) {
+            String removedPart = link.replace("https://docs.google.com/spreadsheets/d/", "");
+            String id = removedPart.split("/")[0];
+            log.info("Id from google presentation is: " + id);
+
+            PBF pbf = pbfCollection.findOneById(pbfId);
+            pbf.setAssetLink(id);
+            pbfCollection.updateById(pbfId, pbf);
+            Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+            createInfoLog(pbfId, playerhand.getUsername() + " Added asset link");
+            return id;
+        }
+        return null;
     }
 }

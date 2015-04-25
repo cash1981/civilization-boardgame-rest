@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import no.asgari.civilization.server.dto.ChatDTO;
 import no.asgari.civilization.server.dto.CheckNameDTO;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
-import no.asgari.civilization.server.model.Chat;
+import no.asgari.civilization.server.dto.MessageDTO;
 import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
@@ -13,7 +13,6 @@ import no.asgari.civilization.server.mongodb.AbstractCivilizationTest;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Test;
 
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -318,14 +317,51 @@ public class GameResourceTest extends AbstractCivilizationTest {
 
     @Test
     public void withdrawShouldNotWorkForCreator() throws Exception {
-            Response post = client().target(
-                    UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/withdraw", getApp().pbfId))
-                            .build())
-                    .request(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                    .post(null);
+        Response post = client().target(
+                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/withdraw", getApp().pbfId))
+                        .build())
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .post(null);
 
         assertThat(post.getStatus()).isEqualTo(HttpStatus.FORBIDDEN_403);
+    }
+
+    @Test
+    public void addMapLink() throws Exception {
+        PBF pbf = getApp().pbfCollection.findOne();
+        assertThat(pbf.getMapLink()).isNullOrEmpty();
+        Form form = new Form("link", "https://docs.google.com/presentation/d/1hgP0f6hj4-lU6ysdOb02gd7oC5gXo8zAAke4RhgIt54/edit?usp=sharing");
+        Response response = client().target(
+                UriBuilder.fromPath(BASE_URL + String.format("/game/%s/map", pbf.getId())).build())
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .post(Entity.form(form), Response.class);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
+        MessageDTO message = response.readEntity(MessageDTO.class);
+        assertThat(message.getMessage()).isEqualTo("1hgP0f6hj4-lU6ysdOb02gd7oC5gXo8zAAke4RhgIt54");
+
+        pbf = getApp().pbfCollection.findOneById(pbf.getId());
+        assertThat(pbf.getMapLink()).isEqualToIgnoringCase("1hgP0f6hj4-lU6ysdOb02gd7oC5gXo8zAAke4RhgIt54");
+    }
+
+    @Test
+    public void addAssetLink() throws Exception {
+        PBF pbf = getApp().pbfCollection.findOne();
+        assertThat(pbf.getAssetLink()).isNullOrEmpty();
+        Form form = new Form("link", "https://docs.google.com/spreadsheets/d/10-syTLb2i2NdB8T_alH9KeyzT8FTlBK6Csmc_Hjjir8/pubhtml?widget=true&amp;headers=false");
+        Response response = client().target(
+                UriBuilder.fromPath(BASE_URL + String.format("/game/%s/asset", pbf.getId())).build())
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .post(Entity.form(form), Response.class);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
+        MessageDTO message = response.readEntity(MessageDTO.class);
+        assertThat(message.getMessage()).isEqualTo("10-syTLb2i2NdB8T_alH9KeyzT8FTlBK6Csmc_Hjjir8");
+        pbf = getApp().pbfCollection.findOneById(pbf.getId());
+        assertThat(pbf.getAssetLink()).isEqualToIgnoringCase("10-syTLb2i2NdB8T_alH9KeyzT8FTlBK6Csmc_Hjjir8");
     }
 
 }

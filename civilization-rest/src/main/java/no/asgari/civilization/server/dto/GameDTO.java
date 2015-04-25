@@ -37,6 +37,8 @@ public class GameDTO {
     private long created;
     private String whosTurnIsIt; //username of the players turn
     private boolean active;
+    private String mapLink;
+    private String assetLink;
 
     private List<GameLogDTO> publicLogs;
     private List<GameLogDTO> privateLogs;

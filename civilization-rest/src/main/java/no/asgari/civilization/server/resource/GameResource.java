@@ -34,6 +34,7 @@ import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.DrawDTO;
 import no.asgari.civilization.server.dto.GameDTO;
 import no.asgari.civilization.server.dto.GameLogDTO;
+import no.asgari.civilization.server.dto.MessageDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
 import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.model.Chat;
@@ -141,7 +142,7 @@ public class GameResource {
         }
         GameAction gameAction = new GameAction(db);
         PBF pbf = gameAction.findPBFById(pbfId);
-        GameDTO gameDTO = gameAction.getGame(pbf, player);
+        GameDTO gameDTO = gameAction.mapGameDTO(pbf, player);
 
         return Response.ok()
                 .entity(gameDTO)
@@ -426,5 +427,31 @@ public class GameResource {
         });
 
         return Response.ok().entity(chatDTOs).build();
+    }
+
+    @POST
+    @Timed
+    @Path("/{pbfId}/map")
+    @Consumes(value = MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response updateMap(@Auth Player player, @FormParam("link") String link, @PathParam("pbfId") String pbfId) {
+        Preconditions.checkNotNull(link);
+
+        GameAction gameAction = new GameAction(db);
+        String linkId = gameAction.addMapLink(pbfId, link, player.getId());
+        return Response.ok().entity(new MessageDTO(linkId)).build();
+    }
+
+    @POST
+    @Timed
+    @Path("/{pbfId}/asset")
+    @Consumes(value = MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response updateAsset(@Auth Player player, @FormParam("link") String link, @PathParam("pbfId") String pbfId) {
+        Preconditions.checkNotNull(link);
+
+        GameAction gameAction = new GameAction(db);
+        String linkId = gameAction.addAssetLink(pbfId, link, player.getId());
+        return Response.ok().entity(new MessageDTO(linkId)).build();
     }
 }

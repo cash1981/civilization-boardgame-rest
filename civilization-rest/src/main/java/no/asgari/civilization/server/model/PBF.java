@@ -56,6 +56,8 @@ public class PBF {
     @NotBlank
     private String name;
     private GameType type;
+    private String mapLink;
+    private String assetLink;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
