@@ -75,26 +75,13 @@
         </tr>
       </table>
     </tab>
-    <tab ng-if="userHasAccess" heading="Map and asset" class="col-md-2">
-      <h1>Here you can find a template for a 4 player map and asset file which you can copy and use for your own games</h1>
-      <h2>You need a Google account, so either sign up or login, then copy the template, and start editing</h2>
-      <h3>You should share the url in the chat and give edit access to all players, so everyone can participate in editing the map</h3>
-
-      <h1><a href="https://docs.google.com/presentation/d/1hgP0f6hj4-lU6ysdOb02gd7oC5gXo8zAAke4RhgIt54/edit?usp=sharing" target="_blank">Map link</a></h1>
-      <h1><a href="https://docs.google.com/spreadsheets/d/10-syTLb2i2NdB8T_alH9KeyzT8FTlBK6Csmc_Hjjir8/edit?usp=sharing" target="_blank">Asset link</a></h1>
+    <tab heading="Map" class="col-md-2">
+      <ng-include src="'views/partials/map.html'"></ng-include>
     </tab>
-    <tab ng-if="!userHasAccess" heading="Map" class="col-md-4">
-      <h1>Here you can find a template for a 4 player map and asset file which you can copy and use for your own games</h1>
-      <h2>You need a Google account, so either sign up or login, then copy the template, and start editing</h2>
-      <h3>You should share the url in the chat and give edit access to all players, so everyone can participate in editing the map</h3>
-
-      <h1><a href="https://docs.google.com/presentation/d/1hgP0f6hj4-lU6ysdOb02gd7oC5gXo8zAAke4RhgIt54/edit?usp=sharing" target="_blank">Map link</a></h1>
-      <h1><a href="https://docs.google.com/spreadsheets/d/10-syTLb2i2NdB8T_alH9KeyzT8FTlBK6Csmc_Hjjir8/edit?usp=sharing" target="_blank">Asset link</a></h1>
+    <tab heading="Asset" class="col-md-2">
+      <ng-include src="'views/partials/asset.html'"></ng-include>
     </tab>
-    <tab ng-if="userHasAccess" heading="Chat" class="col-md-2">
-      <ng-include src="'views/partials/chat.html'"></ng-include>
-    </tab>
-    <tab ng-if="!userHasAccess" heading="Chat" class="col-md-4">
+    <tab heading="Chat" class="col-md-2">
       <ng-include src="'views/partials/chat.html'"></ng-include>
     </tab>
     <tab ng-if="userHasAccess && currentGame.whosTurnIsIt" heading="My Items" active="true" class="col-md-2">
@@ -103,9 +90,6 @@
     <tab ng-if="userHasAccess && currentGame.whosTurnIsIt" heading="Battle" class="col-md-2">
       <ng-include src="'views/partials/battle.html'"></ng-include>
     </tab>
-    <!--<tab heading="Tech tree" class="col-md-2">
-      <ng-include src="'views/partials/techtree.html'"></ng-include>
-    </tab>-->
   </tabset>
 
   <!--<div class="row">json '{{currentGame | json}}'</div>-->

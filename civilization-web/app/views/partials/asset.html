@@ -1,49 +1,41 @@
 <div ng-cloak>
-  <div class="row">
-    <div class="col-xs-12">
-      <h1>Here you can find a template for a 4 player map and asset file which you can copy and use for your own games</h1>
-      <h2>You need a Google account. Push the edit , so either sign up or login, then copy the template, and start editing</h2>
-      <h3>You should share the url in the chat and give edit access to all players, so everyone can participate in editing the map</h3>
-    </div>
-  </div>
-
-  <div class="row padd-top-7 padd-right-5" ng-if="userHasAccess">
-    <div class="panel panel-success col-md-6 col-xs-6">
-      <div class="panel-heading">Enter the link to a copy of your map presentation file</div>
+  <div class="row padd-top-7">
+    <div class="panel panel-default col-xs-12">
+      <div class="panel-heading"><h3>Below is a read-only version of the asset file</h3></div>
       <div class="panel-body">
-        <form name="form" ng-submit="gameCtrl.updateMapLink()">
-          <div class="form-group">
-            <label for="inputMapLink">Link to copy of map presentation</label>
-            <input type="text" class="form-control" id="inputMapLink" ng-model="currentGame.newMapLink" name="inputMapLink"
-                   placeholder="Insert link to your copy of the map" />
-          </div>
-          <button type="submit" class="btn btn-success">Update link!</button>
-        </form>
+        <iframe class="col-xs-12" ng-src="{{currentGame.assetLink}}" frameborder="0" height="555"></iframe>
       </div>
     </div>
-
-    <div class="panel panel-success col-md-6 col-xs-6">
-      <div class="panel-heading">Enter the link to a copy of your asset file</div>
+  </div>
+  <div class="row" ng-if="userHasAccess">
+    <div class="panel panel-success col-xs-12">
+      <div class="panel-heading"><h3>Template for a 4 player asset file which you can copy and use for your own games</h3>
+      </div>
       <div class="panel-body">
+        <ul>
+          <li>You need a Google account</li>
+          <li>Push the Asset Template link</li>
+          <li>Make a copy of your own (File -> copy)</li>
+          <li>Make it public to read (File -> Share)</li>
+          <li>Copy the URL and save it into the form</li>
+          <li>A read only view should now appear</li>
+          <li><b>Share the URL in the chat and give edit access to all players, so everyone can participate in editing the file</b></li>
+        </ul>
+        <h1><a href="https://docs.google.com/spreadsheets/d/10-syTLb2i2NdB8T_alH9KeyzT8FTlBK6Csmc_Hjjir8/edit?usp=sharing" target="_blank">Asset template</a></h1>
+
+        <p class="padd-top-7">
+
         <form name="assetForm" ng-submit="gameCtrl.updateAssetLink()">
           <div class="form-group">
-            <label for="inputAssetLink">Link to copy of asset file</label>
+            <label for="inputAssetLink">Link to copy of your asset file</label>
             <input type="text" class="form-control" id="inputAssetLink" ng-model="currentGame.newAssetLink" name="inputAssetLink"
-                   placeholder="Insert link to your copy of the map" />
+                   placeholder="Insert link to copy of your asset file" />
           </div>
           <button type="submit" class="btn btn-success">Update link!</button>
         </form>
+        </p>
       </div>
     </div>
-  </div>
-
-
- <!-- <h1><a href="https://docs.google.com/presentation/d/1hgP0f6hj4-lU6ysdOb02gd7oC5gXo8zAAke4RhgIt54/edit?usp=sharing" target="_blank">Map link</a></h1>
-  <h1><a href="https://docs.google.com/spreadsheets/d/10-syTLb2i2NdB8T_alH9KeyzT8FTlBK6Csmc_Hjjir8/edit?usp=sharing" target="_blank">Asset link</a></h1>
--->
-  <div class="row padd-top-7">
-    <!--<iframe class="col-xs-12" src="https://docs.google.com/presentation/d/1hgP0f6hj4-lU6ysdOb02gd7oC5gXo8zAAke4RhgIt54/embed?start=false&loop=false&delayms=3000" frameborder="0" height="1024" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>-->
-    <iframe class="col-xs-12" ng-src="{{currentGame.mapLink}}" frameborder="0" height="1024" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
   </div>
 </div>
 

@@ -1,0 +1,47 @@
+<div ng-cloak>
+  <!-- <h1><a href="https://docs.google.com/presentation/d/1hgP0f6hj4-lU6ysdOb02gd7oC5gXo8zAAke4RhgIt54/edit?usp=sharing" target="_blank">Map link</a></h1>
+   <h1><a href="https://docs.google.com/spreadsheets/d/10-syTLb2i2NdB8T_alH9KeyzT8FTlBK6Csmc_Hjjir8/edit?usp=sharing" target="_blank">Asset link</a></h1>
+ -->
+  <div class="row padd-top-7">
+    <div class="row padd-top-7">
+      <div class="panel panel-default col-xs-12">
+        <div class="panel-heading"><h3>Below is a the map. You need to open the editor to edit it!</h3></div>
+        <div class="panel-body">
+          <iframe class="col-xs-12" ng-src="{{currentGame.mapLink}}" frameborder="0" height="1024"
+                  allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" ng-if="userHasAccess">
+    <div class="panel panel-success col-xs-12">
+      <div class="panel-heading"><h3>Template for a 4 player map which you can copy and use for your own games</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+          <li>You need a Google account</li>
+          <li>Push options -> open editor</li>
+          <li>Make a copy of your own (File -> copy)</li>
+          <li>Make it public to read (File -> Share)</li>
+          <li>Copy the URL and save it into the form</li>
+          <li>A read only view should now appear</li>
+          <li><b>Share the URL in the chat and give edit access to all players, so everyone can participate in editing the map</b></li>
+        </ul>
+
+        <p class="padd-top-7">
+        <form name="form" ng-submit="gameCtrl.updateMapLink()">
+          <div class="form-group">
+            <label for="inputMapLink">Link to copy of your map presentation</label>
+            <input type="text" class="form-control" id="inputMapLink" ng-model="currentGame.newMapLink"
+                   name="inputMapLink"
+                   placeholder="Insert link to copy of your map"/>
+          </div>
+          <button type="submit" class="btn btn-success">Update link!</button>
+        </form>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+

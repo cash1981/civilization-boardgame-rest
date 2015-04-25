@@ -21,8 +21,22 @@
       return obj;
     };
 
+    var mapLink = function(id) {
+      var base = "https://docs.google.com/presentation/d/";
+      var end = "/embed?start=false&loop=false&delayms=3000";
+      return base + id + end;
+    };
+
+    var assetLink = function(id) {
+      var base = "https://docs.google.com/spreadsheets/d/";
+      var end = "/pubhtml?widget=true&amp;headers=false";
+      return base + id + end;
+    };
+
     return {
-      nextElement: nextElement
+      nextElement: nextElement,
+      mapLink: mapLink,
+      assetLink: assetLink
     };
   };
 
