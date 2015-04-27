@@ -130,7 +130,7 @@ var GameController = function ($log, $routeParams, GameService, PlayerService, c
   };
 
   model.updateAssetLink = function() {
-    var link = $scope.currentGame.newMapLink;
+    var link = $scope.currentGame.newAssetLink;
     var startsWith = new RegExp('^' + "https://docs.google.com/spreadsheets/d/", 'i');
     if(!startsWith.test(link)) {
       growl.error("Wrong URL. Must start with https://docs.google.com/spreadsheets/d/");
