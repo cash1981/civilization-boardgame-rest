@@ -16,7 +16,7 @@
 
     var initialize = function() {
       model.user = currentUser.profile;
-      model.number = 1;
+      model.number = 3;
       if($scope.currentGame.player.barbarians) {
         model.barbarians = $scope.currentGame.player.barbarians;
       } else {

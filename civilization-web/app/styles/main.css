@@ -154,6 +154,7 @@ input.ng-touched.ng-invalid {
 div.battle {
   background: url('/images/useritems/Battlefield_gross.png') no-repeat center center;
   background-size: cover;
+  padding-left: 10px;
 }
 
 /* Remove the stupid yellow color in chrome when it wants to remember a input text field for you */
