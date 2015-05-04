@@ -157,15 +157,6 @@ public class DrawAction extends BaseAction {
             return unitsInHand;
         }
 
-        //Check if already units in battle
-        /*long inBattle = unitsInHand.stream()
-                .filter(Unit::isInBattle)
-                .count();
-        if (inBattle > 0L) {
-            throw new WebApplicationException(Response.status(Response.Status.PRECONDITION_FAILED)
-                    .build());
-        }*/
-
         if (unitsInHand.size() <= numberOfDraws) {
             //username has drawn X units from his battlehand
             playerhand.setBattlehand(unitsInHand);
@@ -208,16 +199,22 @@ public class DrawAction extends BaseAction {
         if (!pbf.getItems().stream().anyMatch(p -> p.getSheetName() == SheetName.INFANTRY)) {
             reshuffleItems(SheetName.INFANTRY, pbf);
             drawBarbarians(pbfId, playerId);
+        } else {
+            log.warn("No more Infantry units to draw");
         }
 
         if (!pbf.getItems().stream().anyMatch(p -> p.getSheetName() == SheetName.MOUNTED)) {
             reshuffleItems(SheetName.MOUNTED, pbf);
             drawBarbarians(pbfId, playerId);
+        } else {
+            log.warn("No more Mounted units to draw");
         }
 
         if (!pbf.getItems().stream().anyMatch(p -> p.getSheetName() == SheetName.ARTILLERY)) {
             reshuffleItems(SheetName.ARTILLERY, pbf);
             drawBarbarians(pbfId, playerId);
+        } else {
+            log.warn("No more Artillery units to draw");
         }
 
         Iterator<Item> iterator = pbf.getItems().iterator();
