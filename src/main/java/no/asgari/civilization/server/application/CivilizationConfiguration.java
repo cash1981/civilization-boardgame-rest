@@ -27,15 +27,18 @@ public class CivilizationConfiguration extends Configuration {
 
     @JsonProperty
     @NotEmpty
-    public String mongohost = System.getenv("MONGODB_DB_HOST") == null ? "localhost" : System.getenv("MONGODB_DB_HOST");
+    public String mongohost = System.getenv("MONGODB_HOST") == null ? "localhost" : System.getenv("MONGODB_HOST");
 
     @JsonProperty
     @Min(1)
     @Max(65535)
-    public int mongoport = System.getenv("MONGODB_DB_PORT") == null ? 27017 : Integer.parseInt(System.getenv("MONGODB_DB_PORT"));
+    public int mongoport = System.getenv("MONGODB_PORT") == null ? 27017 : Integer.parseInt(System.getenv("MONGODB_PORT"));
 
     @JsonProperty
     @NotEmpty
-    public String mongodb = System.getenv("MOGNODB_DB_NAME") == null ? CIVILIZATION : System.getenv("MOGNODB_DB_NAME");
+    public String mongodb = System.getenv("MONGODB_NAME") == null ? CIVILIZATION : System.getenv("MONGODB_NAME");
 
+    public String mongodbUser = System.getenv("MONGODB_USER") == null ? null : System.getenv("MONGODB_USER");
+
+    public String mongodbPassword = System.getenv("MONGODB_PASS") == null ? null : System.getenv("MONGODB_PASS");
 }

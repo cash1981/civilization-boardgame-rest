@@ -16,6 +16,7 @@
 package no.asgari.civilization.server.application;
 
 import com.codahale.metrics.MetricRegistry;
+import com.google.common.base.Strings;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheBuilderSpec;
 import com.google.common.cache.CacheLoader;
@@ -24,6 +25,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.basic.BasicCredentials;
@@ -61,7 +63,12 @@ import java.util.concurrent.TimeUnit;
 public class CivilizationApplication extends Application<CivilizationConfiguration> {
 
     public static void main(String[] args) throws Exception {
-        new CivilizationApplication().run("server", "src/main/resources/config.yml");
+        if(args == null || args.length == 0) {
+            new CivilizationApplication().run("server", "src/main/resources/config.yml");
+        }
+        else {
+            new CivilizationApplication().run(args);
+        }
     }
 
     @Override
@@ -72,10 +79,19 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
 
     @Override
     public void run(CivilizationConfiguration configuration, Environment environment) throws Exception {
-        MongoClient mongo = new MongoClient(configuration.mongohost, configuration.mongoport);
-        DB db = mongo.getDB(configuration.mongodb);
+        DB db;
+        MongoClient mongo;
+        if(!Strings.isNullOrEmpty(configuration.mongodbUser) && !Strings.isNullOrEmpty(configuration.mongodbPassword)) {
+            MongoClientURI clientURI = new MongoClientURI("mongodb://" + configuration.mongodbUser + ":" + configuration.mongodbPassword
+                    + "@" + configuration.mongohost + ":" + configuration.mongoport + "/" + configuration.mongodb);
+
+            mongo = new MongoClient(clientURI);
+            db = mongo.getDB(clientURI.getDatabase());
+        } else {
+            mongo = new MongoClient(configuration.mongohost, configuration.mongoport);
+            db = mongo.getDB(configuration.mongodb);
+        }
         MongoManaged mongoManaged = new MongoManaged(mongo);
-        //Database
         environment.lifecycle().manage(mongoManaged);
 
         JacksonDBCollection<Player, String> playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);

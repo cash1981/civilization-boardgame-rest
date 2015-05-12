@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -Ddw.server.connector.port=$PORT -Dfile.encoding=UTF-8 -jar civilization-rest/target/civilization-rest-1.0-SNAPSHOT.jar server civilization-rest/src/main/resources/config-heroku.yml
+web: java $JAVA_OPTS -Ddw.server.connector.port=$PORT -Dfile.encoding=UTF-8 -jar target/civilization-rest-1.0-SNAPSHOT.jar server src/main/resources/config-heroku.yml
