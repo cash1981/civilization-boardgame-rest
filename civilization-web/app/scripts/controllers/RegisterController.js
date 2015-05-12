@@ -29,12 +29,12 @@ angular.module('civApp').controller('RegisterController', ["$scope", "$modalInst
   };
 
   $scope.registerOk = function() {
-    if(!model.verification && !model.password && model.password !== model.verification) {
+    if(!$scope.verification || !$scope.password && $scope.password !== $scope.verification) {
       growl.error("Passwords did not match");
       return;
     }
 
-    if(!model.securityQuestion && model.securityQuestion.toUpperCase() !== "WRITING") {
+    if(!$scope.securityQuestion || $scope.securityQuestion.toUpperCase() !== "WRITING") {
       growl.error('Wrong answer to the security question');
       return;
     }

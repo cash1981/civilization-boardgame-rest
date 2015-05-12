@@ -94,7 +94,7 @@
 
       <div class="form-group" ng-class="form.securityQuestion.$invalid  && form.securityQuestion.$dirty ? 'has-error' : ''">
         <label for="verification" class="control-label">Security Question: What is China's starting tech?</label>
-        <input type="text" name="securityQuestion" id="securityQuestion" ng-model="registersecurityQuestion" pattern="[wW][rR][iI][tT][iI][nN][gG]" ng-pattern="/[wW][rR][iI][tT][iI][nN][gG]/"
+        <input type="text" name="securityQuestion" id="securityQuestion" ng-model="securityQuestion" pattern="[wW][rR][iI][tT][iI][nN][gG]" ng-pattern="/[wW][rR][iI][tT][iI][nN][gG]/"
                required="required" class="form-control" aria-describedby="registersecurityQuestionStatus" />
         <div ng-if="form.securityQuestion.$dirty" id="registersecurityQuestionStatus" ng-messages="form.securityQuestion.$error">
           <div ng-message="required" class="help-block has-error">Security Question is required</div>
