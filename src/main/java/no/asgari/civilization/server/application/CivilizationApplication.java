@@ -126,9 +126,6 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         //Authentication
         environment.jersey().register(authBinder);
 
-        // Enable CORS headers
-        FilterRegistration.Dynamic cors = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
-
         // Configure CORS parameters
         FilterRegistration.Dynamic filter = environment.servlets().addFilter("CORSFilter", CrossOriginFilter.class);
 
