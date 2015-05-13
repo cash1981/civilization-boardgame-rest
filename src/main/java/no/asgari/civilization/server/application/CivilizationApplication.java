@@ -132,7 +132,7 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         filter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, environment.getApplicationContext().getContextPath() + "api/*");
         filter.setInitParameter(ALLOWED_METHODS_PARAM, "GET,PUT,POST,OPTIONS");
         filter.setInitParameter(ALLOWED_ORIGINS_PARAM, "*");
-        filter.setInitParameter(ALLOWED_HEADERS_PARAM, "X-Requested-With,Content-Type,Accept,Origin, Accept");
+        filter.setInitParameter(ALLOWED_HEADERS_PARAM, "X-Requested-With,Content-Type,Accept,Origin,authorization");
         filter.setInitParameter(ALLOW_CREDENTIALS_PARAM, "true");
     }
 
