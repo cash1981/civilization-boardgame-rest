@@ -129,10 +129,10 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         // Configure CORS parameters
         FilterRegistration.Dynamic filter = environment.servlets().addFilter("CORSFilter", CrossOriginFilter.class);
 
-        filter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, environment.getApplicationContext().getContextPath() + "*");
+        filter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, environment.getApplicationContext().getContextPath() + "api/*");
         filter.setInitParameter(ALLOWED_METHODS_PARAM, "GET,PUT,POST,OPTIONS");
-        filter.setInitParameter(ALLOWED_ORIGINS_PARAM, "allowed_host");
-        filter.setInitParameter(ALLOWED_HEADERS_PARAM, "Origin, Content-Type, Accept");
+        filter.setInitParameter(ALLOWED_ORIGINS_PARAM, "*");
+        filter.setInitParameter(ALLOWED_HEADERS_PARAM, "X-Requested-With,Content-Type,Accept,Origin, Accept");
         filter.setInitParameter(ALLOW_CREDENTIALS_PARAM, "true");
     }
 
