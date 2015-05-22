@@ -188,6 +188,7 @@ public class ItemReader {
         //Description should be in the same order as cultures
         for (int i = 0; i < civs.size(); i++) {
             Civ item = civs.get(i);
+            item.setItemNumber(itemCounter.incrementAndGet());
             item.setStartingTech(new Tech(startingTech.get(i), Tech.LEVEL_1, itemCounter.incrementAndGet()));
         }
 
