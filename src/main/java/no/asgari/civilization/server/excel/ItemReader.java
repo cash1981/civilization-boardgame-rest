@@ -185,10 +185,19 @@ public class ItemReader {
                 .map(Object::toString)
                 .collect(Collectors.toList());
 
+        List<String> descriptionCells = unfilteredCivCells.stream()
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
+                .filter(cell -> cell.getColumnIndex() == 2)
+                .map(Object::toString)
+                .collect(Collectors.toList());
+
         //Description should be in the same order as cultures
         for (int i = 0; i < civs.size(); i++) {
             Civ item = civs.get(i);
             item.setItemNumber(itemCounter.incrementAndGet());
+            item.setDescription(descriptionCells.get(i));
             item.setStartingTech(new Tech(startingTech.get(i), Tech.LEVEL_1, itemCounter.incrementAndGet()));
         }
 
@@ -409,10 +418,10 @@ public class ItemReader {
     private LinkedList<? extends Item> getShuffledTilesFromExcel(Workbook wb) {
         Sheet tileSheet = wb.getSheet(SheetName.TILES.getName());
 
-        List<Cell> unfilteredCivCells = new ArrayList<>();
-        tileSheet.forEach(row -> row.forEach(unfilteredCivCells::add));
+        List<Cell> unfilteredTileCells = new ArrayList<>();
+        tileSheet.forEach(row -> row.forEach(unfilteredTileCells::add));
 
-        List<Tile> tiles = unfilteredCivCells.stream()
+        List<Tile> tiles = unfilteredTileCells.stream()
                 .filter(notEmptyPredicate)
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)

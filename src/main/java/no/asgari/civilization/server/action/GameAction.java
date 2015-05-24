@@ -16,7 +16,6 @@
 package no.asgari.civilization.server.action;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 import com.mongodb.DB;
@@ -39,7 +38,6 @@ import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
-import org.apache.commons.lang3.CharSet;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
 import org.mongojack.DBSort;

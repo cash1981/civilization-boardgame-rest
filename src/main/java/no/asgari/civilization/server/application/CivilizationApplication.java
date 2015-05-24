@@ -48,7 +48,6 @@ import no.asgari.civilization.server.resource.PlayerResource;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.glassfish.hk2.utilities.Binder;
 import org.mongojack.JacksonDBCollection;
-import static org.eclipse.jetty.servlets.CrossOriginFilter.*;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
@@ -58,6 +57,8 @@ import java.io.IOException;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static org.eclipse.jetty.servlets.CrossOriginFilter.*;
 
 @Log4j
 @SuppressWarnings("unchecked")
