@@ -37,28 +37,25 @@ import javax.ws.rs.core.Response;
 @Consumes(MediaType.APPLICATION_JSON)
 public class AdminResource {
 
-    private final DB db;
     private final GameAction gameAction;
 
     public AdminResource(DB db) {
-        this.db = db;
         gameAction = new GameAction(db);
     }
 
 
     /**
      * Since this will go in production, for now only I am allowed to change this
-     * @param admin
      * @param gameid
      */
     @Path("/changeuser")
     @POST
-    public Response changeUserForGame(@Auth Player admin, @QueryParam("gameid") String gameid,
+    public Response changeUserForGame(@QueryParam("gameid") String gameid,
                                       @QueryParam("fromUsername") String fromUsername,
                                       @QueryParam("toUsername") String toUsername) {
-        if(!admin.getUsername().equals("cash1981")) {
+        /*if(!admin.getUsername().equals("cash1981")) {
             return Response.status(Response.Status.FORBIDDEN).build();
-        }
+        }*/
 
         gameAction.changeUserFromExistingGame(gameid, fromUsername, toUsername);
 
