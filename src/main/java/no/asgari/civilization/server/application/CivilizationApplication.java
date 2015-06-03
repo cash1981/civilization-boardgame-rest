@@ -41,6 +41,7 @@ import no.asgari.civilization.server.model.Chat;
 import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
+import no.asgari.civilization.server.resource.AdminResource;
 import no.asgari.civilization.server.resource.AuthResource;
 import no.asgari.civilization.server.resource.DrawResource;
 import no.asgari.civilization.server.resource.GameResource;
@@ -113,6 +114,7 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         environment.jersey().register(new AuthResource(db));
         environment.jersey().register(new PlayerResource(db));
         environment.jersey().register(new DrawResource(db));
+        environment.jersey().register(new AdminResource(db));
 
         //Authenticator
         CachingAuthenticator<BasicCredentials, Player> cachingAuthenticator = new CachingAuthenticator<>(

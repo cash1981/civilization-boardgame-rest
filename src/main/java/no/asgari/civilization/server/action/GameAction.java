@@ -30,6 +30,7 @@ import no.asgari.civilization.server.dto.GameLogDTO;
 import no.asgari.civilization.server.dto.MessageDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
 import no.asgari.civilization.server.dto.PlayerDTO;
+import no.asgari.civilization.server.email.SendEmail;
 import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.misc.Java8Util;
 import no.asgari.civilization.server.misc.SecurityCheck;
@@ -56,6 +57,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Log4j
 public class GameAction extends BaseAction {
@@ -398,5 +400,32 @@ public class GameAction extends BaseAction {
             return id;
         }
         return null;
+    }
+
+    public void changeUserFromExistingGame(String gameid, String fromUsername, String toUsername) {
+        Preconditions.checkNotNull(gameid);
+        Preconditions.checkNotNull(fromUsername);
+        Preconditions.checkNotNull(toUsername);
+
+
+        PBF pbf = pbfCollection.findOneById(gameid);
+        Player fromPlayer = playerCollection.find(DBQuery.is("username", fromUsername)).toArray(1).get(0);
+        Player toPlayer = playerCollection.find(DBQuery.is("username", toUsername)).toArray(1).get(0);
+
+        //Find all instance of ownerid, and replace with toUsername
+        Playerhand fromPlayerhand = pbf.getPlayers().stream().filter(p -> p.getUsername().equals(fromUsername)).findFirst().orElseThrow(PlayerAction::cannotFindPlayer);
+
+        fromPlayerhand.setUsername(toUsername);
+        fromPlayerhand.setPlayerId(toPlayer.getId());
+        fromPlayerhand.setEmail(fromPlayer.getEmail());
+
+        fromPlayerhand.getBarbarians().forEach(b -> b.setOwnerId(fromPlayer.getId()));
+        fromPlayerhand.getBattlehand().forEach(b -> b.setOwnerId(fromPlayer.getId()));
+        fromPlayerhand.getTechsChosen().forEach(b -> b.setOwnerId(fromPlayer.getId()));
+        fromPlayerhand.getItems().forEach(b -> b.setOwnerId(fromPlayer.getId()));
+
+        pbfCollection.updateById(pbf.getId(), pbf);
+        createInfoLog(pbf.getId(), toUsername + " is now playing instead of " + fromUsername);
+        SendEmail.sendMessage(fromPlayerhand.getEmail(), "You are now playing in " + pbf.getName(), "Please log in to http://civ.asgari.no and start playing!");
     }
 }

@@ -27,6 +27,7 @@ public class SendEmail {
     public static final String SENDGRID_USERNAME = "SENDGRID_USERNAME";
     public static final String SENDGRID_PASSWORD = "SENDGRID_PASSWORD";
     private static final SendGrid sendgrid = new SendGrid(System.getenv(SENDGRID_USERNAME), System.getenv(SENDGRID_PASSWORD));
+    public static final String NO_REPLY_ASGARI_NO = "no-reply@asgari.no";
 
     public static boolean sendYourTurn(String gamename, String emailToo) {
         if(System.getenv(SENDGRID_USERNAME) == null || System.getenv(SENDGRID_PASSWORD) == null) {
@@ -35,7 +36,7 @@ public class SendEmail {
         }
         SendGrid.Email email = new SendGrid.Email();
         email.addTo(emailToo);
-        email.setFrom("no-reply@asgari.no");
+        email.setFrom(NO_REPLY_ASGARI_NO);
         email.setSubject("It is your turn");
         email.setText("It's your turn to play in " + gamename + "!");
 
@@ -44,6 +45,26 @@ public class SendEmail {
             return response.getStatus();
         } catch (SendGridException e) {
             log.error("Error sending email: " + e.getMessage(), e);
+        }
+        return false;
+    }
+
+    public static boolean sendMessage(String email, String subject, String message) {
+        if(System.getenv(SENDGRID_USERNAME) == null || System.getenv(SENDGRID_PASSWORD) == null) {
+            log.error("Missing environment variable for SENDGRID_USERNAME or SENDGRID_PASSWORD");
+            return false;
+        }
+        SendGrid.Email sendGridEmail = new SendGrid.Email();
+        sendGridEmail.addTo(email);
+        sendGridEmail.setFrom(NO_REPLY_ASGARI_NO);
+        sendGridEmail.setSubject(subject);
+        sendGridEmail.setText(message);
+
+        try {
+            SendGrid.Response response = sendgrid.send(sendGridEmail);
+            return response.getStatus();
+        } catch (SendGridException e) {
+            log.error("Error sending sendGridEmail: " + e.getMessage(), e);
         }
         return false;
     }
