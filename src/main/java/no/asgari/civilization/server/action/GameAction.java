@@ -409,7 +409,6 @@ public class GameAction extends BaseAction {
 
 
         PBF pbf = pbfCollection.findOneById(gameid);
-        Player fromPlayer = playerCollection.find(DBQuery.is("username", fromUsername)).toArray(1).get(0);
         Player toPlayer = playerCollection.find(DBQuery.is("username", toUsername)).toArray(1).get(0);
 
         //Find all instance of ownerid, and replace with toUsername
@@ -417,12 +416,12 @@ public class GameAction extends BaseAction {
 
         fromPlayerhand.setUsername(toUsername);
         fromPlayerhand.setPlayerId(toPlayer.getId());
-        fromPlayerhand.setEmail(fromPlayer.getEmail());
+        fromPlayerhand.setEmail(toPlayer.getEmail());
 
-        fromPlayerhand.getBarbarians().forEach(b -> b.setOwnerId(fromPlayer.getId()));
-        fromPlayerhand.getBattlehand().forEach(b -> b.setOwnerId(fromPlayer.getId()));
-        fromPlayerhand.getTechsChosen().forEach(b -> b.setOwnerId(fromPlayer.getId()));
-        fromPlayerhand.getItems().forEach(b -> b.setOwnerId(fromPlayer.getId()));
+        fromPlayerhand.getBarbarians().forEach(b -> b.setOwnerId(toPlayer.getId()));
+        fromPlayerhand.getBattlehand().forEach(b -> b.setOwnerId(toPlayer.getId()));
+        fromPlayerhand.getTechsChosen().forEach(b -> b.setOwnerId(toPlayer.getId()));
+        fromPlayerhand.getItems().forEach(b -> b.setOwnerId(toPlayer.getId()));
 
         pbfCollection.updateById(pbf.getId(), pbf);
         createInfoLog(pbf.getId(), toUsername + " is now playing instead of " + fromUsername);
