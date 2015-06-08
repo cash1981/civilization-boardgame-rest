@@ -109,6 +109,11 @@ public class GameAction extends BaseAction {
         pbf.setId(pbfInsert.getSavedId());
         log.info("PBF game created with id " + pbfInsert.getSavedId());
         joinGame(pbf, playerId, Optional.of(dto.getColor()), true);
+
+        playerCollection.find().toArray().stream().forEach(p ->
+                SendEmail.sendMessage(p.getEmail(), "New Civilization game created",
+                        "A new game by the name " + pbf.getName() + " was just created! Visit http://civ.asgari.no to join the game."));
+
         return pbf.getId();
     }
 
