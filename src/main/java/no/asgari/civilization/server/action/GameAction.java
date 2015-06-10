@@ -39,6 +39,7 @@ import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
 import org.mongojack.DBSort;
@@ -176,6 +177,7 @@ public class GameAction extends BaseAction {
 
     public void joinGame(String pbfId, String playerId, Optional<String> colorOpt) {
         PBF pbf = pbfCollection.findOneById(pbfId);
+        pbf.getPlayers().stream().forEach(p -> SendEmail.sendMessage(p.getEmail(), "Game update", "Someone joined " + pbf.getName() + ". Go to " + SendEmail.URL + " to find out who!"));
         joinGame(pbf, playerId, colorOpt, false);
     }
 

@@ -28,6 +28,7 @@ public class SendEmail {
     public static final String SENDGRID_PASSWORD = "SENDGRID_PASSWORD";
     private static final SendGrid sendgrid = new SendGrid(System.getenv(SENDGRID_USERNAME), System.getenv(SENDGRID_PASSWORD));
     public static final String NO_REPLY_ASGARI_NO = "no-reply@asgari.no";
+    public static final String URL = "http://civ.asgari.no/";
 
     public static boolean sendYourTurn(String gamename, String emailToo) {
         if(System.getenv(SENDGRID_USERNAME) == null || System.getenv(SENDGRID_PASSWORD) == null) {
