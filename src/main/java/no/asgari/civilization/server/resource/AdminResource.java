@@ -70,7 +70,7 @@ public class AdminResource {
      */
     @Path("/deletegame")
     @POST
-    public Response deleteGame(@Auth Player admin, @QueryParam("gameid") String gameid) {
+    public Response deleteGame(@@QueryParam("gameid") String gameid) {
 //        if(!admin.getUsername().equals("cash1981")) {
 //            return Response.status(Response.Status.FORBIDDEN).build();
 //        }
