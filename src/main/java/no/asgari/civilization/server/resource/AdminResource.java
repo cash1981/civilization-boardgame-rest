@@ -65,12 +65,11 @@ public class AdminResource {
 
     /**
      * Since this will go in production, for now only I am allowed to change this
-     * @param admin
      * @param gameid
      */
     @Path("/deletegame")
     @POST
-    public Response deleteGame(@@QueryParam("gameid") String gameid) {
+    public Response deleteGame(@QueryParam("gameid") String gameid) {
 //        if(!admin.getUsername().equals("cash1981")) {
 //            return Response.status(Response.Status.FORBIDDEN).build();
 //        }
