@@ -46,19 +46,38 @@ public class AdminResource {
 
     /**
      * Since this will go in production, for now only I am allowed to change this
+     * @param admin
      * @param gameid
      */
     @Path("/changeuser")
     @POST
-    public Response changeUserForGame(@QueryParam("gameid") String gameid,
+    public Response changeUserForGame(@Auth Player admin, @QueryParam("gameid") String gameid,
                                       @QueryParam("fromUsername") String fromUsername,
                                       @QueryParam("toUsername") String toUsername) {
-        /*if(!admin.getUsername().equals("cash1981")) {
+        if(!admin.getUsername().equals("cash1981")) {
             return Response.status(Response.Status.FORBIDDEN).build();
-        }*/
+        }
 
         gameAction.changeUserFromExistingGame(gameid, fromUsername, toUsername);
 
         return Response.ok().build();
+    }
+
+    /**
+     * Since this will go in production, for now only I am allowed to change this
+     * @param admin
+     * @param gameid
+     */
+    @Path("/deletegame")
+    @POST
+    public Response deleteGame(@Auth Player admin, @QueryParam("gameid") String gameid) {
+//        if(!admin.getUsername().equals("cash1981")) {
+//            return Response.status(Response.Status.FORBIDDEN).build();
+//        }
+
+        boolean deleted = gameAction.deleteGame(gameid);
+        if(deleted) return Response.ok().build();
+
+        return Response.status(Response.Status.NOT_MODIFIED).build();
     }
 }

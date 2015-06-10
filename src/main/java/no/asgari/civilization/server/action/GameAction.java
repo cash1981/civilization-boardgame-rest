@@ -39,6 +39,7 @@ import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
@@ -57,6 +58,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -414,7 +416,6 @@ public class GameAction extends BaseAction {
         Preconditions.checkNotNull(fromUsername);
         Preconditions.checkNotNull(toUsername);
 
-
         PBF pbf = pbfCollection.findOneById(gameid);
         Player toPlayer = playerCollection.find(DBQuery.is("username", toUsername)).toArray(1).get(0);
 
@@ -434,4 +435,25 @@ public class GameAction extends BaseAction {
         createInfoLog(pbf.getId(), toUsername + " is now playing instead of " + fromUsername);
         SendEmail.sendMessage(fromPlayerhand.getEmail(), "You are now playing in " + pbf.getName(), "Please log in to http://civ.asgari.no and start playing!");
     }
+
+    public boolean deleteGame(String gameid) {
+        Preconditions.checkNotNull(gameid);
+
+        WriteResult<PBF, String> writeResult = pbfCollection.removeById(gameid);
+        log.warn("Managed to delete game: " + Strings.isNullOrEmpty(writeResult.getError()));
+
+        List<Player> playerList = playerCollection.find().toArray().stream()
+                .filter(p -> p.getGameIds().contains(gameid))
+                .collect(Collectors.toList());
+
+        playerList.forEach(player -> {
+            log.info("Deleting game from " + player.getUsername() + "s collection also");
+            player.getGameIds().remove(gameid);
+            playerCollection.save(player);
+        });
+
+        return Strings.isNullOrEmpty(writeResult.getError());
+
+    }
+
 }
