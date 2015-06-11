@@ -15,10 +15,15 @@
 
 package no.asgari.civilization.server.application;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.LoadingCache;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.model.GameType;
+
+import javax.print.DocFlavor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Application singleton
@@ -34,7 +39,10 @@ public final class CivSingleton {
 
     private LoadingCache<GameType, ItemReader> itemsCache;
 
+    private Cache<String, String> chatCache;
+
     private CivSingleton() {
+        this.chatCache = CacheBuilder.<String, String>newBuilder().expireAfterWrite(30, TimeUnit.MINUTES).build();
     }
 
     public static CivSingleton instance() {
@@ -64,4 +72,9 @@ public final class CivSingleton {
     public LoadingCache<GameType, ItemReader> itemsCache() {
         return itemsCache;
     }
+
+    public Cache<String, String> getChatCache() {
+        return chatCache;
+    }
+
 }

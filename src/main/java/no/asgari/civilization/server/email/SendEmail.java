@@ -30,6 +30,10 @@ public class SendEmail {
     public static final String NO_REPLY_ASGARI_NO = "no-reply@asgari.no";
     public static final String URL = "http://civ.asgari.no/";
 
+    public static String gamelink(String pbfId) {
+        return URL + "#/game/" + pbfId;
+    }
+
     public static boolean sendYourTurn(String gamename, String emailToo) {
         if(System.getenv(SENDGRID_USERNAME) == null || System.getenv(SENDGRID_PASSWORD) == null) {
             log.error("Missing environment variable for SENDGRID_USERNAME or SENDGRID_PASSWORD");

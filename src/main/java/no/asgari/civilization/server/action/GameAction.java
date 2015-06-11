@@ -342,6 +342,16 @@ public class GameAction extends BaseAction {
         chat.setUsername(username);
         String id = chatCollection.insert(chat).getSavedId();
         chat.setId(id);
+
+        String msg = CivSingleton.instance().getChatCache().getIfPresent(pbfId);
+        if(Strings.isNullOrEmpty(msg)) {
+            CivSingleton.instance().getChatCache().put(pbfId, message);
+            getListOfPlayersPlaying(pbfId)
+                    .forEach(
+                            p -> SendEmail.sendMessage(p.getEmail(), "New Chat", username + " wrote in the chat: " + message + ".\nLogin to " + SendEmail.gamelink(pbfId) + " to see the chat")
+                    );
+        }
+
         return chat;
     }
 

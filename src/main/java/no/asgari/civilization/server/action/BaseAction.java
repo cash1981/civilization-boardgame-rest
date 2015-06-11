@@ -31,6 +31,7 @@ import org.mongojack.JacksonDBCollection;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Log4j
 public abstract class BaseAction {
@@ -134,6 +135,10 @@ public abstract class BaseAction {
         throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
                 .entity(Entity.json(new MessageDTO("Could not find player")))
                 .build());
+    }
+
+    List<Playerhand> getListOfPlayersPlaying(String pbfId) {
+        return findPBFById(pbfId).getPlayers();
     }
 
 }
