@@ -18,6 +18,7 @@ package no.asgari.civilization.server.action;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
+import com.google.common.html.HtmlEscapers;
 import com.mongodb.DB;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
@@ -348,7 +349,7 @@ public class GameAction extends BaseAction {
             CivSingleton.instance().getChatCache().put(pbfId, message);
             getListOfPlayersPlaying(pbfId)
                     .forEach(
-                            p -> SendEmail.sendMessage(p.getEmail(), "New Chat", username + " wrote in the chat: " + message + ".\nLogin to " + SendEmail.gamelink(pbfId) + " to see the chat")
+                            p -> SendEmail.sendMessage(p.getEmail(), "New Chat", username + " wrote in the chat: " + chat.getMessage() + ".\nLogin to " + SendEmail.gamelink(pbfId) + " to see the chat")
                     );
         }
 
