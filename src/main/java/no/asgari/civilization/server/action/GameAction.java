@@ -450,6 +450,7 @@ public class GameAction extends BaseAction {
     public boolean deleteGame(String gameid) {
         Preconditions.checkNotNull(gameid);
 
+        final PBF pbf = findPBFById(gameid);
         WriteResult<PBF, String> writeResult = pbfCollection.removeById(gameid);
         log.warn("Managed to delete game: " + Strings.isNullOrEmpty(writeResult.getError()));
 
@@ -460,6 +461,7 @@ public class GameAction extends BaseAction {
         playerList.forEach(player -> {
             log.info("Deleting game from " + player.getUsername() + "s collection also");
             player.getGameIds().remove(gameid);
+            SendEmail.sendMessage(player.getEmail(), "Game deleted", "Your game " + pbf.getName() + " was deleted by the admin due to inactivity");
             playerCollection.save(player);
         });
 
