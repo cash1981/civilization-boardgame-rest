@@ -104,7 +104,7 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         createUsernameCache(playerCollection);
         createUniqueIndexForPBF(pbfCollection);
         createIndexForChat(chatCollection);
-        createItemCache();
+        //createItemCache(); //TODO Have to rewrite the code to make it work, right now everyone gets same number and same draws
 
         //healtcheck
         environment.healthChecks().register("MongoHealthCheck", new MongoHealthCheck(mongo));

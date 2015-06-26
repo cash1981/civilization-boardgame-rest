@@ -50,6 +50,7 @@ import org.mongojack.WriteResult;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.net.URLDecoder;
 import java.time.ZoneId;
 import java.util.Collections;
@@ -83,12 +84,11 @@ public class GameAction extends BaseAction {
         pbf.setName(dto.getName());
         pbf.setType(dto.getType());
         pbf.setNumOfPlayers(dto.getNumOfPlayers());
-        ItemReader itemReader;
+        ItemReader itemReader = new ItemReader();
         try {
-            itemReader = CivSingleton.instance().itemsCache().get(dto.getType());
-        } catch (ExecutionException e) {
-            log.error("Couldnt get itemReader from cache " + e.getMessage(), e);
-            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+            itemReader.readItemsFromExcel(dto.getType());
+        } catch (IOException e) {
+            log.error("Couldn't read Excel document " + e.getMessage(), e);
         }
 
         pbf.getItems().addAll(itemReader.shuffledCivs);

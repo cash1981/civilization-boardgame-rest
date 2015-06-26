@@ -36,7 +36,7 @@ import java.util.TreeSet;
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"username", "playerId"})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Playerhand {
+public class Playerhand implements Comparable<Playerhand> {
     @NotBlank
     //Can consider using the playerId instead or removing @NotBlank
     private String username;
@@ -86,5 +86,10 @@ public class Playerhand {
     @JsonIgnore
     public static String blue() {
         return "Blue";
+    }
+
+    @Override
+    public int compareTo(Playerhand o) {
+        return o.getUsername().compareTo(o.getUsername());
     }
 }
