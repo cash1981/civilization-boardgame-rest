@@ -51,12 +51,12 @@ public class AdminResource {
      */
     @Path("/changeuser")
     @POST
-    public Response changeUserForGame(@Auth Player admin, @QueryParam("gameid") String gameid,
+    public Response changeUserForGame(@QueryParam("gameid") String gameid,
                                       @QueryParam("fromUsername") String fromUsername,
                                       @QueryParam("toUsername") String toUsername) {
-        if(!admin.getUsername().equals("cash1981")) {
+        /*if(!admin.getUsername().equals("cash1981")) {
             return Response.status(Response.Status.FORBIDDEN).build();
-        }
+        }*/
 
         gameAction.changeUserFromExistingGame(gameid, fromUsername, toUsername);
 
@@ -70,12 +70,12 @@ public class AdminResource {
      */
     @Path("/deletegame")
     @POST
-    public Response deleteGame(@QueryParam("gameid") String gameid) {
-/*
+    public Response deleteGame(@Auth Player admin, @QueryParam("gameid") String gameid) {
+
         if(!admin.getUsername().equals("cash1981")) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
-*/
+
 
         boolean deleted = gameAction.deleteGame(gameid);
         if(deleted) return Response.ok().build();
