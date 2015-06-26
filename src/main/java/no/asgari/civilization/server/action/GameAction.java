@@ -116,7 +116,7 @@ public class GameAction extends BaseAction {
 
         playerCollection.find().toArray().stream().forEach(p ->
                 SendEmail.sendMessage(p.getEmail(), "New Civilization game created",
-                        "A new game by the name " + pbf.getName() + " was just created! Visit http://civ.asgari.no to join the game."));
+                        "A new game by the name " + pbf.getName() + " was just created! Visit http://civ.asgari.no to join the game.\n\nIf you no longer wish to receive these email, send an email to shervin@asgari.no and ask to be removed, and I will remove you from the list!"));
 
         return pbf.getId();
     }
