@@ -21,6 +21,7 @@ import no.asgari.civilization.server.action.GameAction;
 import no.asgari.civilization.server.model.Player;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -54,7 +55,7 @@ public class AdminResource {
     public Response changeUserForGame(@Auth Player admin, @QueryParam("gameid") String gameid,
                                       @QueryParam("fromUsername") String fromUsername,
                                       @QueryParam("toUsername") String toUsername) {
-        if(!admin.getUsername().equals("cash1981")) {
+        if(!admin.getUsername().equals("admin")) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
@@ -68,14 +69,12 @@ public class AdminResource {
      * @param admin
      * @param gameid
      */
-    @Path("/deletegame")
-    @POST
+    @Path("/deletegame/{gameid}")
+    @DELETE
     public Response deleteGame(@Auth Player admin, @QueryParam("gameid") String gameid) {
-
-        if(!admin.getUsername().equals("cash1981")) {
+        if(!admin.getUsername().equals("admin")) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
-
 
         boolean deleted = gameAction.deleteGame(gameid);
         if(deleted) return Response.ok().build();

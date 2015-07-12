@@ -98,7 +98,7 @@ public class GameResource {
     @Timed
     public Response getAllGames() {
         GameAction gameAction = new GameAction(db);
-        List<PbfDTO> games = gameAction.getAllActiveGames();
+        List<PbfDTO> games = gameAction.getAllGames();
 
         return Response.ok()
                 .entity(games)
@@ -198,7 +198,7 @@ public class GameResource {
 
     @DELETE
     @Timed
-    @Path("/{pbfId}")
+    @Path("/{pbfId}/end")
     public Response endGame(@PathParam("pbfId") String pbfId, @Auth Player player) {
         Preconditions.checkNotNull(pbfId);
 

@@ -121,18 +121,14 @@ public class GameAction extends BaseAction {
         return pbf.getId();
     }
 
-    public List<PbfDTO> getAllActiveGames() {
+    public List<PbfDTO> getAllGames() {
         @Cleanup DBCursor<PBF> dbCursor = pbfCollection.find();
         return Java8Util.streamFromIterable(dbCursor)
                 .map(GameAction::createPbfDTO)
-                .sorted(new Comparator<PbfDTO>() {
-                    //Sort on active and created date
-                    @Override
-                    public int compare(PbfDTO o1, PbfDTO o2) {
-                        int v = Boolean.valueOf(o1.isActive()).compareTo(o2.isActive());
-                        if (v != 0) return v;
-                        return Long.valueOf(o1.getCreated()).compareTo(o2.getCreated());
-                    }
+                .sorted((o1, o2) -> {
+                    int v = Boolean.valueOf(o1.isActive()).compareTo(o2.isActive());
+                    if (v != 0) return v;
+                    return Long.valueOf(o1.getCreated()).compareTo(o2.getCreated());
                 })
                 .collect(Collectors.toList());
     }
