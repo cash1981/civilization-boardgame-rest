@@ -415,16 +415,11 @@ public class GameResource {
 
         List<ChatDTO> chatDTOs = new ArrayList<>(chats.size());
         for (Chat c : chats) {
-            chatDTOs.add(new ChatDTO(c.getId(), c.getPbfId(), c.getUsername(), URLDecoder.decode(c.getMessage(), "UTF-8"), c.getCreatedInMillis()));
+            chatDTOs.add(new ChatDTO(c.getId(), c.getPbfId(), c.getUsername(), c.getMessage(), c.getCreatedInMillis()));
         }
 
         //Sort newest date first
-        Collections.sort(chatDTOs, new Comparator<ChatDTO>() {
-            @Override
-            public int compare(ChatDTO o1, ChatDTO o2) {
-                return -Long.valueOf(o1.getCreated()).compareTo(o2.getCreated());
-            }
-        });
+        Collections.sort(chatDTOs, (o1, o2) -> -Long.valueOf(o1.getCreated()).compareTo(o2.getCreated()));
 
         return Response.ok().entity(chatDTOs).build();
     }
