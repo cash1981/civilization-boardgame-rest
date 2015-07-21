@@ -18,7 +18,6 @@ package no.asgari.civilization.server.action;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
-import com.google.common.html.HtmlEscapers;
 import com.mongodb.DB;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
@@ -40,8 +39,6 @@ import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.util.HSSFColor;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
 import org.mongojack.DBSort;
@@ -54,15 +51,11 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import java.time.ZoneId;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Log4j
 public class GameAction extends BaseAction {

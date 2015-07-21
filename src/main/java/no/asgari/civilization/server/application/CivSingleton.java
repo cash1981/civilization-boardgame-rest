@@ -22,7 +22,6 @@ import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.model.GameType;
 
-import javax.print.DocFlavor;
 import java.util.concurrent.TimeUnit;
 
 /**

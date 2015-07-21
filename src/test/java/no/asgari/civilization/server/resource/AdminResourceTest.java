@@ -23,7 +23,7 @@ public class AdminResourceTest extends AbstractCivilizationTest {
                 .queryParam("fromUsername", "Itchi")
                 .queryParam("toUsername", "DaveLuca")
                 .request()
-                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .header(HttpHeaders.AUTHORIZATION, getAdminEncoded())
                 .post(null);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);

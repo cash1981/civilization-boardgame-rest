@@ -111,6 +111,9 @@ public class CivilizationIntegrationTestApplication extends Application<Civiliza
         //Authentication
         environment.jersey().register(authBinder);
 
+        //Test data
+        createPlayer("admin", null);
+
         createNewPBFGame();
         createAnotherPBF();
         createEmptyPBF();
@@ -159,10 +162,6 @@ public class CivilizationIntegrationTestApplication extends Application<Civiliza
 
     private void createIndexForPBF(JacksonDBCollection<PBF, String> pbfCollection) {
         pbfCollection.createIndex(new BasicDBObject(PBF.NAME, 1), new BasicDBObject("unique", true));
-    }
-
-    protected String getUsernameAndPassEncoded() {
-        return "Basic " + B64Code.encode("cash1981" + ":" + "foo", StringUtil.__ISO_8859_1);
     }
 
     private void createNewPBFGame() throws IOException {
