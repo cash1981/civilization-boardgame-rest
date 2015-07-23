@@ -54,11 +54,14 @@ public class PlayerAction extends BaseAction {
     private final JacksonDBCollection<PBF, String> pbfCollection;
     private final JacksonDBCollection<GameLog, String> gameLogCollection;
 
+    private final DrawAction drawAction;
+
     public PlayerAction(DB db) {
         super(db);
         this.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
         this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
         this.gameLogCollection = JacksonDBCollection.wrap(db.getCollection(GameLog.COL_NAME), GameLog.class, String.class);
+        this.drawAction = new DrawAction(db);
     }
 
     /**
@@ -236,9 +239,11 @@ public class PlayerAction extends BaseAction {
             startingTech.setHidden(false);
             startingTech.setOwnerId(playerId);
             playerhand.getTechsChosen().add(startingTech);
+            pbfCollection.updateById(pbf.getId(), pbf);
+            drawStartingItems(pbfId, playerId, civ);
+        } else {
+            pbfCollection.updateById(pbf.getId(), pbf);
         }
-
-        pbfCollection.updateById(pbf.getId(), pbf);
 
         //Create a new log entry
         logAction.createGameLog(itemToReveal, pbf.getId(), GameLog.LogType.REVEAL);
@@ -258,6 +263,46 @@ public class PlayerAction extends BaseAction {
         return false;
     }
 
+    /**
+     * Only units and wonder for Egypt is drawn
+     */
+    private void drawStartingItems(String pbfId, String playerId, Civ civ) {
+        switch(civ.getName()) {
+            case "Germans":
+                drawAction.draw(pbfId, playerId, SheetName.INFANTRY);
+                drawAction.draw(pbfId, playerId, SheetName.INFANTRY);
+                drawAction.draw(pbfId, playerId, SheetName.INFANTRY);
+                drawAction.draw(pbfId, playerId, SheetName.ARTILLERY);
+                drawAction.draw(pbfId, playerId, SheetName.MOUNTED);
+                break;
+            case "Mongols":
+                drawAction.draw(pbfId, playerId, SheetName.INFANTRY);
+                drawAction.draw(pbfId, playerId, SheetName.ARTILLERY);
+                drawAction.draw(pbfId, playerId, SheetName.MOUNTED);
+                drawAction.draw(pbfId, playerId, SheetName.MOUNTED);
+                drawAction.draw(pbfId, playerId, SheetName.MOUNTED);
+                break;
+            case "Zulu":
+                drawAction.draw(pbfId, playerId, SheetName.INFANTRY);
+                drawAction.draw(pbfId, playerId, SheetName.ARTILLERY);
+                drawAction.draw(pbfId, playerId, SheetName.ARTILLERY);
+                drawAction.draw(pbfId, playerId, SheetName.ARTILLERY);
+                drawAction.draw(pbfId, playerId, SheetName.MOUNTED);
+                break;
+            case "Egyptians":
+                drawAction.draw(pbfId, playerId, SheetName.INFANTRY);
+                drawAction.draw(pbfId, playerId, SheetName.ARTILLERY);
+                drawAction.draw(pbfId, playerId, SheetName.MOUNTED);
+                drawAction.draw(pbfId, playerId, SheetName.ANCIENT_WONDERS);
+                break;
+            default:
+                drawAction.draw(pbfId, playerId, SheetName.INFANTRY);
+                drawAction.draw(pbfId, playerId, SheetName.ARTILLERY);
+                drawAction.draw(pbfId, playerId, SheetName.MOUNTED);
+                break;
+        }
+
+    }
     /**
      * Revealing of techs are really just saving a public log with the hidden content information
      *
