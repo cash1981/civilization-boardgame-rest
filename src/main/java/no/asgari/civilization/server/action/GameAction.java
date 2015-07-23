@@ -369,6 +369,9 @@ public class GameAction extends BaseAction {
         pbfCollection.updateById(pbfId, pbf);
         createInfoLog(pbfId, playerhand.getUsername() + " Ended this game");
         createInfoLog(pbfId, "Thank you for playing! Please donate if you liked this game!");
+        pbf.getPlayers().forEach(p -> SendEmail.sendMessage(p.getEmail(), "Game ended", pbf.getName() + " has ended. I hope you enjoyed playing.\n" +
+                "If you like this game, please consider donating. You can find the link at the bottom of the site. It will help keep the lights on, and continue adding more features!" +
+                "\n\nBest regards Shervin Asgari aka Cash"));
     }
 
     /**
