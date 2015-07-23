@@ -34,6 +34,7 @@ import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.model.Tech;
 import no.asgari.civilization.server.model.Tradable;
+import no.asgari.civilization.server.model.Unit;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
@@ -243,7 +244,10 @@ public class PlayerAction extends BaseAction {
             logAction.createGameLog(itemToReveal, pbf.getId(), GameLog.LogType.REVEAL);
             log.debug("item to be reveal " + itemToReveal);
 
-            drawStartingItems(pbfId, playerId, civ);
+            //If player has no units, then no need to call this
+            if(!playerhand.getItems().stream().anyMatch(p -> p instanceof Unit)) {
+                drawStartingItems(pbfId, playerId, civ);
+            }
 
             deleteTheOtherCivs(pbfId, playerId, civ);
         } else {
