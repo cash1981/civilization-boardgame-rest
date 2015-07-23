@@ -34,7 +34,7 @@ public class SendEmail {
         return URL + "#/game/" + pbfId;
     }
 
-    public static boolean sendYourTurn(String gamename, String emailToo) {
+    public static boolean sendYourTurn(String gamename, String emailToo, String pbfId) {
         if(System.getenv(SENDGRID_USERNAME) == null || System.getenv(SENDGRID_PASSWORD) == null) {
             log.error("Missing environment variable for SENDGRID_USERNAME or SENDGRID_PASSWORD");
             return false;
@@ -43,7 +43,8 @@ public class SendEmail {
         email.addTo(emailToo);
         email.setFrom(NO_REPLY_ASGARI_NO);
         email.setSubject("It is your turn");
-        email.setText("It's your turn to play in " + gamename + "!");
+        email.setText("It's your turn to play in " + gamename + "!\n\n" +
+                "Go to " + gamelink(pbfId) + " to start your turn");
 
         try {
             SendGrid.Response response = sendgrid.send(email);
