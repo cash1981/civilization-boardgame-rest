@@ -43,9 +43,11 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import java.net.URLDecoder;
 import java.util.Base64;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Log4j
 public class PlayerAction extends BaseAction {
@@ -54,11 +56,14 @@ public class PlayerAction extends BaseAction {
     private final JacksonDBCollection<PBF, String> pbfCollection;
     private final JacksonDBCollection<GameLog, String> gameLogCollection;
 
+    private final DrawAction drawAction;
+
     public PlayerAction(DB db) {
         super(db);
         this.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
         this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
         this.gameLogCollection = JacksonDBCollection.wrap(db.getCollection(GameLog.COL_NAME), GameLog.class, String.class);
+        this.drawAction = new DrawAction(db);
     }
 
     /**
@@ -192,10 +197,7 @@ public class PlayerAction extends BaseAction {
 
         //Check if item can be found on the player
         PBF pbf = pbfCollection.findOneById(pbfId);
-        Playerhand playerhand = pbf.getPlayers().stream()
-                .filter(p -> p.getPlayerId().equals(playerId))
-                .findFirst()
-                .orElseThrow(PlayerAction::cannotFindPlayer);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
 
         if (!SecurityCheck.hasUserAccess(pbf, playerId)) {
             log.error("User with id " + playerId + " has no access to pbf " + pbf.getName());
@@ -236,13 +238,43 @@ public class PlayerAction extends BaseAction {
             startingTech.setHidden(false);
             startingTech.setOwnerId(playerId);
             playerhand.getTechsChosen().add(startingTech);
+            pbfCollection.updateById(pbf.getId(), pbf);
+            //Create a new log entry
+            logAction.createGameLog(itemToReveal, pbf.getId(), GameLog.LogType.REVEAL);
+            log.debug("item to be reveal " + itemToReveal);
+
+            drawStartingItems(pbfId, playerId, civ);
+
+            deleteTheOtherCivs(pbfId, playerId, civ);
+        } else {
+            pbfCollection.updateById(pbf.getId(), pbf);
+            //Create a new log entry
+            logAction.createGameLog(itemToReveal, pbf.getId(), GameLog.LogType.REVEAL);
+            log.debug("item to be reveal " + itemToReveal);
         }
 
-        pbfCollection.updateById(pbf.getId(), pbf);
+    }
 
-        //Create a new log entry
-        logAction.createGameLog(itemToReveal, pbf.getId(), GameLog.LogType.REVEAL);
-        log.debug("item to be reveal " + itemToReveal);
+    private void deleteTheOtherCivs(String pbfId, String playerId, Civ civ) {
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId,pbf);
+        Iterator<Item> iterator = playerhand.getItems().iterator();
+        boolean deleted = false;
+        while(iterator.hasNext()) {
+            Item item = iterator.next();
+            if(item instanceof Civ && !item.equals(civ)) {
+                item.setHidden(true);
+                item.setOwnerId(null);
+                pbf.getDiscardedItems().add(item);
+                iterator.remove();
+                deleted = true;
+                createLog(item, pbf.getId(), GameLog.LogType.DISCARD, playerId);
+            }
+        }
+
+        if(deleted) {
+            pbfCollection.updateById(pbf.getId(), pbf);
+        }
     }
 
     private boolean isCivilization(Playerhand playerhand, Optional<SheetName> sheetName) {
@@ -258,6 +290,46 @@ public class PlayerAction extends BaseAction {
         return false;
     }
 
+    /**
+     * Only units and wonder for Egypt is drawn
+     */
+    private void drawStartingItems(String pbfId, String playerId, Civ civ) {
+        switch(civ.getName()) {
+            case "Germans":
+                drawAction.draw(pbfId, playerId, SheetName.INFANTRY);
+                drawAction.draw(pbfId, playerId, SheetName.INFANTRY);
+                drawAction.draw(pbfId, playerId, SheetName.INFANTRY);
+                drawAction.draw(pbfId, playerId, SheetName.ARTILLERY);
+                drawAction.draw(pbfId, playerId, SheetName.MOUNTED);
+                break;
+            case "Mongols":
+                drawAction.draw(pbfId, playerId, SheetName.INFANTRY);
+                drawAction.draw(pbfId, playerId, SheetName.ARTILLERY);
+                drawAction.draw(pbfId, playerId, SheetName.MOUNTED);
+                drawAction.draw(pbfId, playerId, SheetName.MOUNTED);
+                drawAction.draw(pbfId, playerId, SheetName.MOUNTED);
+                break;
+            case "Zulu":
+                drawAction.draw(pbfId, playerId, SheetName.INFANTRY);
+                drawAction.draw(pbfId, playerId, SheetName.ARTILLERY);
+                drawAction.draw(pbfId, playerId, SheetName.ARTILLERY);
+                drawAction.draw(pbfId, playerId, SheetName.ARTILLERY);
+                drawAction.draw(pbfId, playerId, SheetName.MOUNTED);
+                break;
+            case "Egyptians":
+                drawAction.draw(pbfId, playerId, SheetName.INFANTRY);
+                drawAction.draw(pbfId, playerId, SheetName.ARTILLERY);
+                drawAction.draw(pbfId, playerId, SheetName.MOUNTED);
+                drawAction.draw(pbfId, playerId, SheetName.ANCIENT_WONDERS);
+                break;
+            default:
+                drawAction.draw(pbfId, playerId, SheetName.INFANTRY);
+                drawAction.draw(pbfId, playerId, SheetName.ARTILLERY);
+                drawAction.draw(pbfId, playerId, SheetName.MOUNTED);
+                break;
+        }
+
+    }
     /**
      * Revealing of techs are really just saving a public log with the hidden content information
      *
