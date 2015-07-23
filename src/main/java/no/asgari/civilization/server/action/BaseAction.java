@@ -120,11 +120,6 @@ public abstract class BaseAction {
                 .orElseThrow(PlayerAction::cannotFindPlayer);
     }
 
-    Playerhand getPlayerhandByPlayerId(String pbfId, String playerId) {
-        PBF pbf = pbfCollection.findOneById(pbfId);
-        return getPlayerhandByPlayerId(playerId, pbf);
-    }
-
     static WebApplicationException cannotFindItem() {
         throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
                 .entity(Entity.json(new MessageDTO("Could not find item")))
