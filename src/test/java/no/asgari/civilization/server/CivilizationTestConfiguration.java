@@ -9,12 +9,12 @@ public class CivilizationTestConfiguration extends Configuration {
     public static final String CIVILIZATION_TEST = "civ-test";
 
     @JsonProperty
-    public String mongohost = System.getenv("MONGODB_DB_HOST") == null ? "localhost" : System.getenv("MONGODB_DB_HOST");
+    public String mongohost = "localhost";
 
     @JsonProperty
-    public int mongoport = System.getenv("MONGODB_DB_PORT") == null ? 27017 : Integer.parseInt(System.getenv("MONGODB_DB_PORT"));
+    public int mongoport = 27017;
 
     @JsonProperty
-    public String mongodb = System.getenv("MOGNODB_DB_NAME") == null ? CIVILIZATION_TEST : System.getenv("MOGNODB_DB_NAME");
+    public String mongodb = CIVILIZATION_TEST;
 
 }

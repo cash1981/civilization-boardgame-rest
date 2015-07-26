@@ -1,0 +1,42 @@
+mongohost: localhost
+mongoport: 27017
+mongodb: civ-test
+
+#Application config
+server:
+  #applicationConnectors:
+    #type: https
+    #port: 8443
+    #Look at http://www.chrissearle.org/2007/10/25/Adding_self-signed_https_certificates_to_java_keystore/
+  rootPath: '/api/*'
+  type: simple
+  applicationContextPath: /
+  adminContextPath: /admin
+  gzip:
+    enabled: true
+    bufferSize: 8KiB
+
+  connector:
+    type: http
+    port: 8080
+
+  requestLog:
+    timeZone: Europe/Oslo
+
+# Logging settings.
+logging:
+
+  # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
+  level: INFO
+
+  # Logger-specific levels.
+  loggers:
+
+    # Sets the level for 'no.asgari.civilization' to DEBUG.
+    no.asgari.civilization: INFO
+    #org.eclipse.jetty.servlets: DEBUG
+
+  appenders:
+    - type: console
+      timeZone: Europe/Oslo
+#authenticationCachePolicy: maximumSize=100, expireAfterAccess=10m

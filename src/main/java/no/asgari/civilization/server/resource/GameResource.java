@@ -61,12 +61,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -402,26 +398,17 @@ public class GameResource {
 
         GameAction gameAction = new GameAction(db);
         Chat chat = gameAction.chat(pbfId, message, player.getUsername());
-        return Response.created(URI.create(chat.getId())).entity(new ChatDTO(chat)).build();
+        return Response.created(URI.create(chat.getId())).entity(gameAction.getChat(pbfId)).build();
     }
 
     @GET
     @Timed
     @Path("/{pbfId}/chat")
     @Produces(value = MediaType.APPLICATION_JSON)
-    public Response getChatList(@PathParam("pbfId") String pbfId) throws UnsupportedEncodingException {
+    public Response getChatList(@PathParam("pbfId") String pbfId) {
         GameAction gameAction = new GameAction(db);
-        List<Chat> chats = gameAction.getChat(pbfId);
-
-        List<ChatDTO> chatDTOs = new ArrayList<>(chats.size());
-        for (Chat c : chats) {
-            chatDTOs.add(new ChatDTO(c.getId(), c.getPbfId(), c.getUsername(), c.getMessage(), c.getCreatedInMillis()));
-        }
-
-        //Sort newest date first
-        Collections.sort(chatDTOs, (o1, o2) -> -Long.valueOf(o1.getCreated()).compareTo(o2.getCreated()));
-
-        return Response.ok().entity(chatDTOs).build();
+        List<ChatDTO> chats = gameAction.getChat(pbfId);
+        return Response.ok().entity(chats).build();
     }
 
     @POST

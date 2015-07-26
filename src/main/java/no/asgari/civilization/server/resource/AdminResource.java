@@ -53,8 +53,10 @@ public class AdminResource {
     @Path("/changeuser")
     @POST
     public Response changeUserForGame(@Auth Player admin, @QueryParam("gameid") String gameid,
+    //public Response changeUserForGame(@QueryParam("gameid") String gameid,
                                       @QueryParam("fromUsername") String fromUsername,
                                       @QueryParam("toUsername") String toUsername) {
+
         if(!admin.getUsername().equals("admin")) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
@@ -69,9 +71,11 @@ public class AdminResource {
      * @param admin
      * @param gameid
      */
-    @Path("/deletegame/{gameid}")
-    @DELETE
+    @Path("/deletegame")
+    @POST
     public Response deleteGame(@Auth Player admin, @QueryParam("gameid") String gameid) {
+    //public Response deleteGame(@QueryParam("gameid") String gameid) {
+
         if(!admin.getUsername().equals("admin")) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }

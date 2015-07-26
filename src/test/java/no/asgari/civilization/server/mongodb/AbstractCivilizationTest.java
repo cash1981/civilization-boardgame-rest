@@ -19,7 +19,7 @@ public abstract class AbstractCivilizationTest {
     }
 
     @ClassRule
-    public static final DropwizardAppRule<CivilizationTestConfiguration> RULE = new DropwizardAppRule<>(CivilizationIntegrationTestApplication.class, "src/main/resources/config.yml");
+    public static final DropwizardAppRule<CivilizationTestConfiguration> RULE = new DropwizardAppRule<>(CivilizationIntegrationTestApplication.class, "src/main/resources/config-test.yml");
 
     protected static CivilizationIntegrationTestApplication getApp() {
         return RULE.getApplication();

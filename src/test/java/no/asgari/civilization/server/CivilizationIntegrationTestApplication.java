@@ -210,6 +210,7 @@ public class CivilizationIntegrationTestApplication extends Application<Civiliza
         Playerhand playerhand = new Playerhand();
         playerhand.setUsername(player.getUsername());
         playerhand.setPlayerId(player.getId());
+        playerhand.setColor("Red");
         return playerhand;
     }
 
