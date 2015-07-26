@@ -8,10 +8,8 @@ import no.asgari.civilization.server.model.CultureIII;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
-import no.asgari.civilization.server.model.Village;
 import no.asgari.civilization.server.mongodb.AbstractCivilizationTest;
 import org.eclipse.jetty.http.HttpStatus;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.core.HttpHeaders;

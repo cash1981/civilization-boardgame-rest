@@ -265,10 +265,9 @@ public class GameResourceTest extends AbstractCivilizationTest {
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .post(Entity.form(form), Response.class);
 
+        List<ChatDTO> chat = response.readEntity(List.class);
         assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED_201);
-        ChatDTO chat = response.readEntity(ChatDTO.class);
-        assertThat(chat.getMessage()).isEqualTo("Chat message");
-        assertThat(chat.getUsername()).isEqualTo("cash1981");
+        assertThat(chat).hasSize(1);
 
         response = client().target(
                 UriBuilder.fromPath(BASE_URL + String.format("/game/%s/chat", pbf.getId())).build())

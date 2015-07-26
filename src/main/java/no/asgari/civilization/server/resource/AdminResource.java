@@ -15,10 +15,8 @@
 package no.asgari.civilization.server.resource;
 
 import com.mongodb.DB;
-import io.dropwizard.auth.Auth;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.GameAction;
-import no.asgari.civilization.server.model.Player;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;

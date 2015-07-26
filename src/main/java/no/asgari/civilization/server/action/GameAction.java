@@ -18,12 +18,12 @@ package no.asgari.civilization.server.action;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
-import com.google.common.html.HtmlEscapers;
 import com.mongodb.DB;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.application.CivSingleton;
+import no.asgari.civilization.server.dto.ChatDTO;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.DrawDTO;
 import no.asgari.civilization.server.dto.GameDTO;
@@ -40,8 +40,6 @@ import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.util.HSSFColor;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
 import org.mongojack.DBSort;
@@ -53,16 +51,15 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Log4j
 public class GameAction extends BaseAction {
@@ -352,18 +349,33 @@ public class GameAction extends BaseAction {
         if(Strings.isNullOrEmpty(msg)) {
             CivSingleton.instance().getChatCache().put(pbfId, message);
             getListOfPlayersPlaying(pbfId)
+                    .stream()
+                    .filter(p -> !p.getUsername().equals(username))
                     .forEach(
-                            p -> SendEmail.sendMessage(p.getEmail(), "New Chat", username + " wrote in the chat: " + chat.getMessage() + ".\nLogin to " + SendEmail.gamelink(pbfId) + " to see the chat")
+                            p -> SendEmail.sendMessage(p.getEmail(), "New Chat", username + " wrote in the chat: " + chat.getMessage()
+                                    + ".\nLogin to " + SendEmail.gamelink(pbfId) + " to see the chat")
                     );
         }
 
         return chat;
     }
 
-    public List<Chat> getChat(String pbfId) {
+    public List<ChatDTO> getChat(String pbfId) {
         Preconditions.checkNotNull(pbfId);
         List<Chat> chats = chatCollection.find(DBQuery.is("pbfId", pbfId)).sort(DBSort.desc("created")).toArray();
-        return chats;
+
+        PBF pbf = findPBFById(pbfId);
+        Map<String, String> colorMap = pbf.getPlayers().stream()
+                .collect(Collectors.toMap(Playerhand::getUsername, Playerhand::getColor));
+
+        List<ChatDTO> chatDTOs = new ArrayList<>(chats.size());
+        for (Chat c : chats) {
+            chatDTOs.add(new ChatDTO(c.getId(), c.getPbfId(), c.getUsername(), c.getMessage(), colorMap.get(c.getUsername()), c.getCreatedInMillis()));
+        }
+
+        //Sort newest date first
+        Collections.sort(chatDTOs, (o1, o2) -> -Long.valueOf(o1.getCreated()).compareTo(o2.getCreated()));
+        return chatDTOs;
     }
 
     public void endGame(String pbfId, String playerId) {
@@ -429,29 +441,29 @@ public class GameAction extends BaseAction {
         return null;
     }
 
-    public void changeUserFromExistingGame(String gameid, String fromUsername, String toUsername) {
+    public void changeUserFromExistingGame(String gameid, String oldUsername, String newUsername) {
         Preconditions.checkNotNull(gameid);
-        Preconditions.checkNotNull(fromUsername);
-        Preconditions.checkNotNull(toUsername);
+        Preconditions.checkNotNull(oldUsername);
+        Preconditions.checkNotNull(newUsername);
 
         PBF pbf = pbfCollection.findOneById(gameid);
-        Player toPlayer = playerCollection.find(DBQuery.is("username", toUsername)).toArray(1).get(0);
+        Player toPlayer = playerCollection.find(DBQuery.is("username", newUsername)).toArray(1).get(0);
 
-        //Find all instance of ownerid, and replace with toUsername
-        Playerhand fromPlayerhand = pbf.getPlayers().stream().filter(p -> p.getUsername().equals(fromUsername)).findFirst().orElseThrow(PlayerAction::cannotFindPlayer);
+        //Find all instance of ownerid, and replace with newUsername
+        Playerhand playerhandToReplace = pbf.getPlayers().stream().filter(p -> p.getUsername().equals(oldUsername)).findFirst().orElseThrow(PlayerAction::cannotFindPlayer);
 
-        fromPlayerhand.setUsername(toUsername);
-        fromPlayerhand.setPlayerId(toPlayer.getId());
-        fromPlayerhand.setEmail(toPlayer.getEmail());
+        playerhandToReplace.setUsername(newUsername);
+        playerhandToReplace.setPlayerId(toPlayer.getId());
+        playerhandToReplace.setEmail(toPlayer.getEmail());
 
-        fromPlayerhand.getBarbarians().forEach(b -> b.setOwnerId(toPlayer.getId()));
-        fromPlayerhand.getBattlehand().forEach(b -> b.setOwnerId(toPlayer.getId()));
-        fromPlayerhand.getTechsChosen().forEach(b -> b.setOwnerId(toPlayer.getId()));
-        fromPlayerhand.getItems().forEach(b -> b.setOwnerId(toPlayer.getId()));
+        playerhandToReplace.getBarbarians().forEach(b -> b.setOwnerId(toPlayer.getId()));
+        playerhandToReplace.getBattlehand().forEach(b -> b.setOwnerId(toPlayer.getId()));
+        playerhandToReplace.getTechsChosen().forEach(b -> b.setOwnerId(toPlayer.getId()));
+        playerhandToReplace.getItems().forEach(b -> b.setOwnerId(toPlayer.getId()));
 
         pbfCollection.updateById(pbf.getId(), pbf);
-        createInfoLog(pbf.getId(), toUsername + " is now playing instead of " + fromUsername);
-        SendEmail.sendMessage(fromPlayerhand.getEmail(), "You are now playing in " + pbf.getName(), "Please log in to http://civ.asgari.no and start playing!");
+        createInfoLog(pbf.getId(), newUsername + " is now playing instead of " + oldUsername);
+        SendEmail.sendMessage(playerhandToReplace.getEmail(), "You are now playing in " + pbf.getName(), "Please log in to http://civ.asgari.no and start playing!");
     }
 
     public boolean deleteGame(String gameid) {

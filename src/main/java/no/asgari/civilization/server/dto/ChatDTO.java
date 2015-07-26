@@ -30,14 +30,16 @@ public class ChatDTO {
     private String pbfId;
     private String username;
     private String message;
+    private String color;
     private long created;
 
-    public ChatDTO(String id, String pbfId, String username, String message, long createdInMillis) {
+    public ChatDTO(String id, String pbfId, String username, String message, String color, long createdInMillis) {
         this.id = id;
         this.pbfId = pbfId;
         this.username = username;
         this.message = message;
         this.created = createdInMillis;
+        this.color = color;
     }
 
     public ChatDTO(Chat chat) {
