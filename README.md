@@ -1,8 +1,8 @@
 Civlization boardgame (Fantasy Flight Games)
 =================================
 
-[![Build Status](https://travis-ci.org/cash1981/civilization-boardgame.svg?branch=master)](https://travis-ci.org/cash1981/civilization-boardgame)
-[![Coverage Status](https://coveralls.io/repos/cash1981/civilization-boardgame/badge.svg)](https://coveralls.io/r/cash1981/civilization-boardgame)
+[![Build Status](https://travis-ci.org/cash1981/civilization-boardgame-rest.svg?branch=master)](https://travis-ci.org/cash1981/civilization-boardgame-rest)
+[![Coverage Status](https://coveralls.io/repos/cash1981/civilization-boardgame-rest/badge.svg)](https://coveralls.io/r/cash1981/civilization-boardgame-rest)
 
 #You can find the application deployed here 
 Here --> (http://civ.asgari.no)
