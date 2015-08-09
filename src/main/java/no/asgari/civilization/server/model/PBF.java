@@ -73,6 +73,9 @@ public class PBF {
     //Will use these to reshuffle items which are discarded and can be drawn again
     private List<Item> discardedItems = Lists.newArrayList();
 
+    //If a player leaves, his items and stuff will be put here
+    private List<Playerhand> withdrawnPlayers = Lists.newArrayList();
+
     /**
      * Returns the username of the player who is start of turn
      */

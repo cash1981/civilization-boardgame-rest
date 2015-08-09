@@ -33,6 +33,10 @@ public abstract class AbstractCivilizationTest {
         return "Basic " + B64Code.encode("admin" + ":" + "foo", StringUtil.__ISO_8859_1);
     }
 
+    protected static String getItchiEncoded() {
+        return "Basic " + B64Code.encode("Itchi" + ":" + "foo", StringUtil.__ISO_8859_1);
+    }
+
     protected static Client client() {
         Client client = ClientBuilder.newClient();
         client.property(ClientProperties.SUPPRESS_HTTP_COMPLIANCE_VALIDATION, true);

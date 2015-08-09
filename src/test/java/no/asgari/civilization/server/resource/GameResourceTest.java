@@ -2,6 +2,8 @@ package no.asgari.civilization.server.resource;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jdk.nashorn.internal.ir.annotations.Ignore;
+import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.dto.ChatDTO;
 import no.asgari.civilization.server.dto.CheckNameDTO;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
@@ -11,6 +13,8 @@ import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.mongodb.AbstractCivilizationTest;
 import org.eclipse.jetty.http.HttpStatus;
+import org.eclipse.jetty.util.B64Code;
+import org.eclipse.jetty.util.StringUtil;
 import org.junit.Test;
 
 import javax.ws.rs.client.Client;
@@ -165,19 +169,19 @@ public class GameResourceTest extends AbstractCivilizationTest {
                 UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/join", getApp().pbfId_3))
                         .build())
                 .request(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .header(HttpHeaders.AUTHORIZATION, getAdminEncoded())
                 .post(null);
 
-        assertThat(response.getStatus()).isEqualTo(200);
+        assertThat(response.getStatus()).isEqualTo(204);
 
         Response secondResponse = client().target(
                 UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/withdraw", getApp().pbfId_3))
                         .build())
                 .request(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .header(HttpHeaders.AUTHORIZATION, getAdminEncoded())
                 .post(null);
 
-        assertThat(secondResponse.getStatus()).isEqualTo(200);
+        assertThat(secondResponse.getStatus()).isEqualTo(204);
     }
 
     @Test
@@ -199,6 +203,7 @@ public class GameResourceTest extends AbstractCivilizationTest {
     @Test
     public void getListOfPlayersInGameExceptCurrentLoggedIn() throws Exception {
         PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        int players = pbf.getPlayers().size() - 1;
 
         Response response = client().target(
                 UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/players", pbf.getId()))
@@ -208,9 +213,9 @@ public class GameResourceTest extends AbstractCivilizationTest {
                 .get(Response.class);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
-        List players = response.readEntity(List.class);
-        assertThat(players).isNotNull();
-        assertThat(players).hasSize(3);
+        List playersList = response.readEntity(List.class);
+        assertThat(playersList).isNotNull();
+        assertThat(playersList.size()).isEqualTo(players);
     }
 
     @Test
@@ -305,25 +310,47 @@ public class GameResourceTest extends AbstractCivilizationTest {
         assertThat(id.charAt(0)).isEqualTo('/');
 
         Response secondResponse = client().target(
-                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s", id.substring(1)))
+                UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/end", id.substring(1)))
                         .build())
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .delete();
 
-        assertThat(secondResponse.getStatus()).isEqualTo(200);
+        assertThat(secondResponse.getStatus()).isEqualTo(204);
     }
 
     @Test
-    public void withdrawShouldNotWorkForCreator() throws Exception {
+    public void withdrawShouldPutInWithdrawInPBF() throws Exception {
+        //First ensure its your turn
+        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        Playerhand playerhand = pbf.getPlayers().stream()
+                .filter(p -> p.getUsername().equals("Itchi"))
+                .findFirst().get();
+        playerhand.setYourTurn(true);
+        getApp().pbfCollection.updateById(getApp().pbfId, pbf);
+
+        //Må draw noe først, også teste den etterpå
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/draw/%s/%s", getApp().pbfId, SheetName.ARTILLERY)).build();
+        Response response = client().target(uri)
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getItchiEncoded())
+                .post(null);
+        assertEquals(HttpStatus.OK_200, response.getStatus());
+
+        pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        assertThat(pbf.getWithdrawnPlayers()).isEmpty();
+
         Response post = client().target(
                 UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/withdraw", getApp().pbfId))
                         .build())
                 .request(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .header(HttpHeaders.AUTHORIZATION, getItchiEncoded())
                 .post(null);
 
-        assertThat(post.getStatus()).isEqualTo(HttpStatus.FORBIDDEN_403);
+        pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        assertThat(pbf.getWithdrawnPlayers()).isNotEmpty();
+
+        assertThat(post.getStatus()).isEqualTo(HttpStatus.NO_CONTENT_204);
     }
 
     @Test

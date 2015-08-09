@@ -102,14 +102,7 @@ public class GameLogAction {
      * Common messages like, user joined game, user withdrew game etc
      */
     public GameLog createCommonPublicLog(String publicMessage, String pbfId, String playerId) {
-        GameLog pl = new GameLog();
-        pl.setPbfId(pbfId);
-        try {
-            pl.setUsername(CivSingleton.instance().playerCache().get(playerId));
-        } catch (Exception e) {
-            log.error("Couldn't retrieve username from cache");
-            pl.setUsername(getUsernameFromPlayerId(playerId));
-        }
+        GameLog pl = createCommonGameLog(pbfId, playerId);
         pl.setPublicLog(pl.getUsername() + " " + publicMessage);
         pl.setPrivateLog("");
         pl.setId(save(pl));
@@ -117,14 +110,7 @@ public class GameLogAction {
     }
 
     public GameLog createCommonPrivateLog(String privateMessage, String pbfId, String playerId) {
-        GameLog pl = new GameLog();
-        pl.setPbfId(pbfId);
-        try {
-            pl.setUsername(CivSingleton.instance().playerCache().get(playerId));
-        } catch (Exception e) {
-            log.error("Couldn't retrieve username from cache");
-            pl.setUsername(getUsernameFromPlayerId(playerId));
-        }
+        GameLog pl = createCommonGameLog(pbfId, playerId);
         pl.setPrivateLog(pl.getUsername() + " " + privateMessage);
         pl.setPublicLog("");
         pl.setId(save(pl));
@@ -132,6 +118,14 @@ public class GameLogAction {
     }
 
     public GameLog createCommonPrivatePublicLog(String message, String pbfId, String playerId) {
+        GameLog pl = createCommonGameLog(pbfId, playerId);
+        pl.setPrivateLog(pl.getUsername() + " " + message);
+        pl.setPublicLog(pl.getUsername() + " " + message);
+        pl.setId(save(pl));
+        return pl;
+    }
+
+    private GameLog createCommonGameLog(String pbfId, String playerId) {
         GameLog pl = new GameLog();
         pl.setPbfId(pbfId);
         try {
@@ -140,9 +134,6 @@ public class GameLogAction {
             log.error("Couldn't retrieve username from cache");
             pl.setUsername(getUsernameFromPlayerId(playerId));
         }
-        pl.setPrivateLog(pl.getUsername() + " " + message);
-        pl.setPublicLog(pl.getUsername() + " " + message);
-        pl.setId(save(pl));
         return pl;
     }
 
