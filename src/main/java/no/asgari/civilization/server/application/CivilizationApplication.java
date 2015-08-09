@@ -137,27 +137,7 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         filter.setInitParameter(ALLOWED_ORIGINS_PARAM, "*");
         filter.setInitParameter(ALLOWED_HEADERS_PARAM, "X-Requested-With,Content-Type,Accept,Origin,authorization");
         filter.setInitParameter(ALLOW_CREDENTIALS_PARAM, "true");
-    }
-
-    private void createItemCache() {
-        CivSingleton.instance().setItemsCache(
-                CacheBuilder.newBuilder()
-                        .expireAfterWrite(3, TimeUnit.HOURS)
-                        .maximumSize(4) //1 for each game type
-                        .removalListener(lis -> log.debug("Removing " + lis.getKey() + " from the gameCache"))
-                        .build(new CacheLoader<GameType, ItemReader>() {
-                            public ItemReader load(GameType type) {
-                                ItemReader itemReader = new ItemReader();
-                                try {
-                                    itemReader.readItemsFromExcel(type);
-                                } catch (IOException e) {
-                                    log.error("Couldn't read from Excel file " + e.getMessage(), e);
-                                    throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
-                                }
-                                return itemReader;
-                            }
-                        })
-        );
+        filter.setInitParameter(EXPOSED_HEADERS_PARAM, "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,Location,Accept-Content-Encoding");
     }
 
     private void createUsernameCache(JacksonDBCollection<Player, String> playerCollection) {
