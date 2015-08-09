@@ -151,7 +151,8 @@ public class UndoActionTest extends AbstractCivilizationTest {
     }
 
     private String getAnotherPlayerId() {
-        Player anotherPlayer = getApp().playerCollection.findOne(DBQuery.notEquals("_id", getApp().playerId));
+        //Player anotherPlayer = getApp().playerCollection.findOne(DBQuery.notEquals("_id", getApp().playerId));
+        Player anotherPlayer = getApp().playerCollection.findOne(DBQuery.is("username", "Itchi"));
         assertThat(anotherPlayer).isNotNull();
         assertThat(anotherPlayer.getId()).isNotEqualTo(getApp().playerId);
         return anotherPlayer.getId();

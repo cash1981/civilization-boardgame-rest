@@ -205,9 +205,17 @@ public class GameAction extends BaseAction {
 
         player.getGameIds().add(pbf.getId());
         playerCollection.updateById(player.getId(), player);
+        Playerhand playerhand;
+        if(!pbf.getWithdrawnPlayers().isEmpty()) {
+            playerhand = pbf.getWithdrawnPlayers().remove(0);
+            playerhand.setEmail(player.getEmail());
+            playerhand.setPlayerId(player.getId());
+            playerhand.setUsername(player.getUsername());
 
-        String color = colorOpt.orElse(chooseColorForPlayer(pbf));
-        Playerhand playerhand = createPlayerHand(player, color, gameCreator);
+        } else {
+            String color = colorOpt.orElse(chooseColorForPlayer(pbf));
+            playerhand = createPlayerHand(player, color, gameCreator);
+        }
         if (!pbf.getPlayers().contains(playerhand)) {
             createInfoLog(pbf.getId(), playerhand.getUsername() + " joined the game and is playing color " + playerhand.getColor());
             pbf.getPlayers().add(playerhand);
@@ -240,6 +248,9 @@ public class GameAction extends BaseAction {
     }
 
     private PBF startIfAllPlayers(PBF pbf) {
+        if(pbf.getPlayers().stream().anyMatch(Playerhand::isYourTurn)) {
+            return pbf;
+        }
         final int numOfPlayersNeeded = pbf.getNumOfPlayers();
         if (numOfPlayersNeeded == pbf.getPlayers().size()) {
             Playerhand randomPlayer = getRandomPlayer(pbf.getPlayers());
@@ -315,19 +326,32 @@ public class GameAction extends BaseAction {
             Playerhand playerhand = iterator.next();
             if (playerhand.getPlayerId().equals(playerId)) {
                 if (playerhand.isGameCreator()) {
-                    Response badReq = Response.status(Response.Status.FORBIDDEN)
-                            .entity(new MessageDTO("As game creator you cannot withdraw from the game"))
-                            .build();
-                    throw new WebApplicationException(badReq);
+                    Optional<Playerhand> optionalNextPlayer = getRandomPlayerExcept(pbf.getPlayers(), playerhand.getUsername());
+                    if(optionalNextPlayer.isPresent()) {
+                        Playerhand nextPlayer = optionalNextPlayer.get();
+                        nextPlayer.setGameCreator(true);
+                        gameLogAction.createCommonPrivatePublicLog("Is now game creator", pbfId, nextPlayer.getPlayerId());
+                    } else {
+                        Response badReq = Response.status(Response.Status.FORBIDDEN)
+                                .entity(new MessageDTO("As game creator, you must end game not withdraw from it"))
+                                .build();
+                        throw new WebApplicationException(badReq);
+                    }
                 }
+                pbf.getWithdrawnPlayers().add(playerhand);
                 iterator.remove();
                 gameLogAction.createCommonPublicLog("Withdrew from game", pbfId, playerId);
+                //TODO remove from PlayerCollection also
                 pbfCollection.updateById(pbf.getId(), pbf);
                 return true;
             }
         }
 
         return false;
+    }
+
+    private Optional<Playerhand> getRandomPlayerExcept(List<Playerhand> players, String username) {
+        return players.stream().filter(p -> !p.getUsername().equals(username)).findAny();
     }
 
     @SneakyThrows
@@ -360,7 +384,9 @@ public class GameAction extends BaseAction {
 
         PBF pbf = findPBFById(pbfId);
         Map<String, String> colorMap = pbf.getPlayers().stream()
-                .collect(Collectors.toMap(Playerhand::getUsername, Playerhand::getColor));
+                .collect(Collectors.toMap(Playerhand::getUsername, (playerhand) -> {
+                    return (playerhand.getColor() != null) ? playerhand.getColor() : "";
+                }));
 
         List<ChatDTO> chatDTOs = new ArrayList<>(chats.size());
         for (Chat c : chats) {

@@ -56,7 +56,6 @@ public class Playerhand implements Comparable<Playerhand> {
      */
     private boolean yourTurn = false;
     private boolean gameCreator = false;
-    private boolean yourTurnEmailSent = false;
 
     private List<Item> items = new ArrayList<>();
     private Set<Tech> techsChosen = new TreeSet<>();

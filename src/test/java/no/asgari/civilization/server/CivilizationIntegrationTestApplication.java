@@ -117,8 +117,10 @@ public class CivilizationIntegrationTestApplication extends Application<Civiliza
         createNewPBFGame();
         createAnotherPBF();
         createEmptyPBF();
-        playerId = playerCollection.findOne().getId();
 
+        playerId = playerCollection.find().toArray().stream()
+                .filter(p -> p.getUsername().equals("cash1981"))
+                .findFirst().get().getId();
     }
 
     private void createItemCache() {

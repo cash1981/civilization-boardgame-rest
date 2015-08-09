@@ -201,8 +201,7 @@ public class GameResource {
         log.info("Ending game with id " + pbfId);
         GameAction gameAction = new GameAction(db);
         gameAction.endGame(pbfId, player.getId());
-        return Response.status(Response.Status.OK)
-                .build();
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @POST
@@ -214,7 +213,7 @@ public class GameResource {
 
         GameAction gameAction = new GameAction(db);
         gameAction.joinGame(pbfId, player.getId(), Optional.empty());
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
     /**
@@ -231,11 +230,10 @@ public class GameResource {
         GameAction gameAction = new GameAction(db);
         boolean ok = gameAction.withdrawFromGame(pbfId, player.getId());
         if (ok) {
-            return Response.ok().build();
+            return Response.noContent().build();
         }
 
-        return Response.status(Response.Status.NOT_ACCEPTABLE)
-                .build();
+        return Response.status(Response.Status.NOT_ACCEPTABLE).build();
     }
 
     /**
