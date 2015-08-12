@@ -18,6 +18,7 @@ package no.asgari.civilization.server.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,7 +29,7 @@ import no.asgari.civilization.server.SheetName;
 @JsonTypeName("aircraft")
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-//@EqualsAndHashCode(of = {"used", "attack", "health", "type"}, callSuper = true)
+@EqualsAndHashCode(of = {"attack", "health", "sheetName"}, callSuper = false)
 public class Aircraft extends Unit implements Image {
     private String ownerId; // id of the player which owns this item
     private boolean hidden = true;
@@ -81,33 +82,6 @@ public class Aircraft extends Unit implements Image {
     @Override
     public String toString() {
         return getType() + " " + attack + "." + health;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Aircraft aircraft = (Aircraft) o;
-
-        if (attack != aircraft.attack) return false;
-        if (killed != aircraft.killed) return false;
-        if (health != aircraft.health) return false;
-        if (hidden != aircraft.hidden) return false;
-        if (used != aircraft.used) return false;
-        return isInBattle == aircraft.isInBattle;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (hidden ? 1 : 0);
-        result = 31 * result + (used ? 1 : 0);
-        result = 31 * result + (killed ? 1 : 0);
-        result = 31 * result + attack;
-        result = 31 * result + health;
-        result = 31 * result + (isInBattle ? 1 : 0);
-        return result;
     }
 
     @Override

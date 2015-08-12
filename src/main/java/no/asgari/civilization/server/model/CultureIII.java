@@ -31,7 +31,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @ToString(of = "name")
 @JsonTypeName("cultureIII")
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"})
+@EqualsAndHashCode(of = {"name", "description", "type"})
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CultureIII implements Item, Tradable, Image {
     @NotEmpty

@@ -31,7 +31,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Setter
 @JsonTypeName("citystate")
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"}, callSuper = false)
+@EqualsAndHashCode(of = {"name", "type", "description"}, callSuper = false)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Citystate implements Item, Image {
     @JsonProperty

@@ -30,7 +30,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @ToString(of = "name")
 @JsonTypeName("village")
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"})
+@EqualsAndHashCode(exclude = {"ownerId", "hidden", "used", "itemNumber"})
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Village implements Item, Tradable, Image {
     @NotEmpty
