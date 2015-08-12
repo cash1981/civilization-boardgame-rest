@@ -267,7 +267,6 @@ public class PlayerAction extends BaseAction {
             Item item = iterator.next();
             if(item instanceof Civ && !item.equals(civ)) {
                 item.setHidden(true);
-                item.setOwnerId(null);
                 pbf.getDiscardedItems().add(item);
                 iterator.remove();
                 deleted = true;
@@ -467,10 +466,9 @@ public class PlayerAction extends BaseAction {
 
         Item itemToDelete = itemToDeleteOptional.get();
         itemToDelete.setHidden(true);
-        itemToDelete.setOwnerId(null);
+        //itemToDelete.setOwnerId(null);
 
-        boolean removed = playerhand.getItems().remove(itemToDeleteOptional.get());
-        if (removed) {
+        if (playerhand.getItems().remove(itemToDeleteOptional.get())) {
             pbf.getDiscardedItems().add(itemToDeleteOptional.get());
             createLog(itemToDelete, pbf.getId(), GameLog.LogType.DISCARD, playerId);
             pbfCollection.updateById(pbf.getId(), pbf);

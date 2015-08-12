@@ -56,29 +56,37 @@ public class UndoAction extends BaseAction {
         Preconditions.checkNotNull(draw.getItem());
 
         Item item = draw.getItem();
-        boolean removed;
         Playerhand playerhand = getPlayerhandByPlayerId(draw.getPlayerId(), pbf);
         if (item instanceof Tech) {
             //Remove from tech
-            removed = playerhand.getTechsChosen().remove(item);
-            if (removed) {
+            if (playerhand.getTechsChosen().remove(item)) {
                 createInfoLog(pbf.getId(), "has removed " + draw.getItem().getName() + " from " + playerhand.getUsername());
                 log.debug("Successfully undoed tech");
-            } else log.error("Didn't find tech to remove from playerhand: " + item);
+            } else if (pbf.getDiscardedItems().remove(item)) {
+                playerhand.getTechsChosen().add((Tech)item);
+                createInfoLog(pbf.getId(), "has added back " + draw.getItem().getName() + " to " + playerhand.getUsername());
+            } else {
+                log.error("Didn't find tech to remove from playerhand: " + item);
+                return false;
+            }
         } else {
-            removed = playerhand.getItems().remove(item);
-            if (removed) {
+            if (playerhand.getItems().remove(item)) {
                 createInfoLog(pbf.getId(), "has removed " + draw.getItem().getName() + " from " + playerhand.getUsername() + " and put back in the deck. Deck is reshuffled");
                 pbf.getItems().add(item);
                 Collections.shuffle(pbf.getItems());
                 log.debug("Successfully undoed item");
-            } else log.error("Didn't find item to remove from playerhand: " + item);
-        }
-        if (removed) {
-            pbfCollection.updateById(pbf.getId(), pbf);
+            }  else if (pbf.getDiscardedItems().remove(item)) {
+                item.setHidden(true);
+                playerhand.getItems().add(item);
+                createInfoLog(pbf.getId(), "has added back " + draw.getItem().getName() + " to " + playerhand.getUsername());
+            } else {
+                log.error("Didn't find item to remove from playerhand: " + item);
+                return false;
+            }
         }
 
-        return removed;
+        pbfCollection.updateById(pbf.getId(), pbf);
+        return true;
     }
 
     /**

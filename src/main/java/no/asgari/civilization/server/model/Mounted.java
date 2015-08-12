@@ -29,7 +29,7 @@ import no.asgari.civilization.server.SheetName;
 @Setter
 @JsonTypeName("mounted")
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"}, callSuper = false)
+@EqualsAndHashCode(exclude = {"ownerId", "hidden", "used", "itemNumber"}, callSuper = false)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Mounted extends Unit implements Image {
     private int level = 0;

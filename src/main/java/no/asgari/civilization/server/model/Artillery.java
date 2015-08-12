@@ -28,7 +28,7 @@ import no.asgari.civilization.server.SheetName;
 @JsonTypeName("artillery")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"}, callSuper = false)
+@EqualsAndHashCode(exclude = {"ownerId", "hidden", "used", "itemNumber"}, callSuper = false)
 public class Artillery extends Unit implements Image {
     private int level = 0;
     private String ownerId;
