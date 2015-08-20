@@ -35,6 +35,7 @@ import org.mongojack.JacksonDBCollection;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Iterator;
@@ -103,11 +104,11 @@ public class DrawAction extends BaseAction {
             log.warn("Tried to reshuffle " + sheetName.getName() + " but not a shufflable type");
             throw new NoMoreItemsException(sheetName.getName());
         }
-        ItemReader itemReader;
+        ItemReader itemReader = new ItemReader();
         try {
-            itemReader = CivSingleton.instance().itemsCache().get(pbf.getType());
-        } catch (ExecutionException e) {
-            log.error("Couldnt get itemReader from cache " + e.getMessage(), e);
+            itemReader.readItemsFromExcel(pbf.getType());
+        } catch (IOException e) {
+            log.error("Couldn't read Excel document " + e.getMessage(), e);
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
 
