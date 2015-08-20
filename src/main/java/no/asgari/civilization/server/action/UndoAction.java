@@ -79,6 +79,11 @@ public class UndoAction extends BaseAction {
                 item.setHidden(true);
                 playerhand.getItems().add(item);
                 createInfoLog(pbf.getId(), "has added back " + draw.getItem().getName() + " to " + playerhand.getUsername());
+            } else if(pbf.getItems().remove(item)) {
+                //In rare cases the item is put back in the deck by reshuffling
+                item.setHidden(true);
+                playerhand.getItems().add(item);
+                createInfoLog(pbf.getId(), "has added back " + draw.getItem().getName() + " to " + playerhand.getUsername());
             } else {
                 log.error("Didn't find item to remove from playerhand: " + item);
                 return false;
