@@ -36,8 +36,6 @@ import no.asgari.civilization.server.resource.DrawResource;
 import no.asgari.civilization.server.resource.GameResource;
 import no.asgari.civilization.server.resource.PlayerResource;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.eclipse.jetty.util.B64Code;
-import org.eclipse.jetty.util.StringUtil;
 import org.glassfish.hk2.utilities.Binder;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;

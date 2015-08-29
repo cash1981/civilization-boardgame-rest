@@ -16,11 +16,13 @@
 package no.asgari.civilization.server.action;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 import com.mongodb.DB;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.application.CivSingleton;
+import no.asgari.civilization.server.dto.ForgotpassDTO;
 import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.email.SendEmail;
 import no.asgari.civilization.server.exception.PlayerExistException;
@@ -36,12 +38,14 @@ import no.asgari.civilization.server.model.Tech;
 import no.asgari.civilization.server.model.Tradable;
 import no.asgari.civilization.server.model.Unit;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Base64;
 import java.util.Iterator;
@@ -244,7 +248,7 @@ public class PlayerAction extends BaseAction {
             log.debug("item to be reveal " + itemToReveal);
 
             //If player has no units, then no need to call this
-            if(!playerhand.getItems().stream().anyMatch(p -> p instanceof Unit)) {
+            if (!playerhand.getItems().stream().anyMatch(p -> p instanceof Unit)) {
                 drawStartingItems(pbfId, playerId, civ);
             }
 
@@ -260,12 +264,12 @@ public class PlayerAction extends BaseAction {
 
     private void deleteTheOtherCivs(String pbfId, String playerId, Civ civ) {
         PBF pbf = pbfCollection.findOneById(pbfId);
-        Playerhand playerhand = getPlayerhandByPlayerId(playerId,pbf);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         Iterator<Item> iterator = playerhand.getItems().iterator();
         boolean deleted = false;
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             Item item = iterator.next();
-            if(item instanceof Civ && !item.equals(civ)) {
+            if (item instanceof Civ && !item.equals(civ)) {
                 item.setHidden(true);
                 pbf.getDiscardedItems().add(item);
                 iterator.remove();
@@ -274,7 +278,7 @@ public class PlayerAction extends BaseAction {
             }
         }
 
-        if(deleted) {
+        if (deleted) {
             pbfCollection.updateById(pbf.getId(), pbf);
         }
     }
@@ -296,7 +300,7 @@ public class PlayerAction extends BaseAction {
      * Only units and wonder for Egypt is drawn
      */
     private void drawStartingItems(String pbfId, String playerId, Civ civ) {
-        switch(civ.getName()) {
+        switch (civ.getName()) {
             case "Germans":
                 drawAction.draw(pbfId, playerId, SheetName.INFANTRY);
                 drawAction.draw(pbfId, playerId, SheetName.INFANTRY);
@@ -332,6 +336,7 @@ public class PlayerAction extends BaseAction {
         }
 
     }
+
     /**
      * Revealing of techs are really just saving a public log with the hidden content information
      *
@@ -522,5 +527,53 @@ public class PlayerAction extends BaseAction {
         WriteResult<Player, String> insert = playerCollection.insert(player);
         log.info(String.format("Saving player with id %s", insert.getSavedId()));
         return insert.getSavedId();
+    }
+
+    public void newPassword(String username, String newPass) throws Exception {
+        Player player = playerCollection.findOne(DBQuery.is(Player.USERNAME, username));
+        if (player == null) {
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        }
+
+        String password = URLDecoder.decode(newPass, "UTF-8");
+        player.setPassword(DigestUtils.sha1Hex(password));
+        playerCollection.updateById(player.getId(), player);
+    }
+
+    public boolean newPassword(ForgotpassDTO forgotpassDTO) {
+        Preconditions.checkNotNull(forgotpassDTO.getEmail());
+        Preconditions.checkNotNull(forgotpassDTO.getNewpassword());
+
+        Player player = playerCollection.findOne(DBQuery.is(Player.EMAIL, forgotpassDTO.getEmail()));
+        if (player == null) {
+            log.error("Couldn't find user by email " + forgotpassDTO.getEmail());
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+
+        player.setNewPassword(forgotpassDTO.getNewpassword());
+        playerCollection.updateById(player.getId(), player);
+        return SendEmail.sendMessage(player.getEmail(),
+                "Please verify your email",
+                "Your password was requested to be changed. If you want to change your password then please press this link: "
+                        + SendEmail.URL + "api/auth/verify/" + player.getId());
+    }
+
+    public boolean verifyPassword(String playerId) {
+        Player player = playerCollection.findOneById(playerId);
+        if (player != null && !Strings.isNullOrEmpty(player.getNewPassword())) {
+            try {
+                String password = URLDecoder.decode(player.getNewPassword(), "UTF-8");
+                String decodedPassword = new String(Base64.getDecoder().decode(password), "UTF-8");
+                player.setPassword(DigestUtils.sha1Hex(decodedPassword));
+                player.setNewPassword(null);
+                playerCollection.updateById(player.getId(), player);
+                return true;
+            } catch (UnsupportedEncodingException e) {
+                log.error("Couldn't write password ", e);
+                throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            }
+        }
+
+        return false;
     }
 }

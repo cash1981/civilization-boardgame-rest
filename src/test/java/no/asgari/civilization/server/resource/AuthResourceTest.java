@@ -2,8 +2,10 @@ package no.asgari.civilization.server.resource;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.Cleanup;
+import no.asgari.civilization.server.dto.ForgotpassDTO;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.mongodb.AbstractCivilizationTest;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Test;
 import org.mongojack.DBCursor;
@@ -14,6 +16,7 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -79,6 +82,30 @@ public class AuthResourceTest extends AbstractCivilizationTest {
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED_201);
         assertThat(response.getLocation().getPath()).contains(uri.getPath());
+    }
+
+    @Test
+    public void verifyPassword() throws Exception {
+        ForgotpassDTO dto = new ForgotpassDTO();
+        dto.setEmail("cash1981@mailinator.com");
+        dto.setNewpassword("baz");
+
+        Response response = client().target(BASE_URL + "/auth/newpassword")
+                .request()
+                .put(Entity.json(dto));
+
+        Player cash = getApp().playerCollection.findOneById(getApp().playerId);
+        assertThat(cash.getNewPassword()).isEqualTo("baz");
+
+        response = client().target(BASE_URL + "/auth/verify/" + getApp().playerId)
+                .request()
+                .get();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
+
+        cash = getApp().playerCollection.findOneById(getApp().playerId);
+        assertThat(cash.getNewPassword()).isNull();
+        assertThat(cash.getPassword()).isEqualTo(DigestUtils.sha1Hex(new String(Base64.getDecoder().decode("baz"), "UTF-8")));
     }
 
 }

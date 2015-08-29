@@ -15,6 +15,7 @@
 
 package no.asgari.civilization.server.resource;
 
+import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Preconditions;
 import com.google.common.html.HtmlEscapers;
 import com.mongodb.BasicDBObject;
@@ -25,6 +26,7 @@ import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.application.CivAuthenticator;
 import no.asgari.civilization.server.dto.CheckNameDTO;
+import no.asgari.civilization.server.dto.ForgotpassDTO;
 import no.asgari.civilization.server.model.Player;
 import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
@@ -33,8 +35,11 @@ import org.mongojack.JacksonDBCollection;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
@@ -131,6 +136,33 @@ public class AuthResource {
         }
 
         return Response.ok().build();
+    }
+
+
+    @PUT
+    @Path("/newpassword")
+    @Timed
+    public Response newPassword(ForgotpassDTO forgotpassDTO) {
+        PlayerAction playerAction = new PlayerAction(db);
+        boolean yes = playerAction.newPassword(forgotpassDTO);
+        if(yes) {
+            return Response.ok().build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
+
+    @Path("/verify/{playerId}")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public Response verifyPassword(@PathParam("playerId") String playerId) {
+        PlayerAction playerAction = new PlayerAction(db);
+        boolean yes = playerAction.verifyPassword(playerId);
+        if(yes) {
+            return Response.ok().entity("<html>Your password was correctly changed. <a href=\"http://playciv.com\">Try to login again </a></html>").build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 
 }

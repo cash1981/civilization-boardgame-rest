@@ -19,7 +19,6 @@ import com.google.common.base.Preconditions;
 import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.SheetName;
-import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.dto.MessageDTO;
 import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.exception.NoMoreItemsException;
@@ -41,7 +40,6 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 

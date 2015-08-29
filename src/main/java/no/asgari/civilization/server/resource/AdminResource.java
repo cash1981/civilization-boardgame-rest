@@ -18,13 +18,10 @@ import com.mongodb.DB;
 import io.dropwizard.auth.Auth;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.GameAction;
-import no.asgari.civilization.server.dto.MessageDTO;
 import no.asgari.civilization.server.model.Player;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -46,20 +43,20 @@ public class AdminResource {
         gameAction = new GameAction(db);
     }
 
-
     /**
      * Since this will go in production, for now only I am allowed to change this
+     *
      * @param admin
      * @param gameid
      */
     @Path("/changeuser")
     @POST
     public Response changeUserForGame(@Auth Player admin, @QueryParam("gameid") String gameid,
-    //public Response changeUserForGame(@QueryParam("gameid") String gameid,
+                                      //public Response changeUserForGame(@QueryParam("gameid") String gameid,
                                       @QueryParam("fromUsername") String fromUsername,
                                       @QueryParam("toUsername") String toUsername) {
 
-        if(!admin.getUsername().equals("admin")) {
+        if (!admin.getUsername().equals("admin")) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
@@ -70,20 +67,21 @@ public class AdminResource {
 
     /**
      * Since this will go in production, for now only I am allowed to change this
+     *
      * @param admin
      * @param gameid
      */
     @Path("/deletegame")
     @POST
     public Response deleteGame(@Auth Player admin, @QueryParam("gameid") String gameid) {
-    //public Response deleteGame(@QueryParam("gameid") String gameid) {
+        //public Response deleteGame(@QueryParam("gameid") String gameid) {
 
-        if(!admin.getUsername().equals("admin")) {
+        if (!admin.getUsername().equals("admin")) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
         boolean deleted = gameAction.deleteGame(gameid);
-        if(deleted) return Response.ok().build();
+        if (deleted) return Response.ok().build();
 
         return Response.status(Response.Status.NOT_MODIFIED).build();
     }
