@@ -505,7 +505,15 @@ public class GameAction extends BaseAction {
         });
 
         return Strings.isNullOrEmpty(writeResult.getError());
-
     }
 
+    public void sendMailToAll(String msg) {
+        playerCollection.find().toArray()
+                .stream()
+                .forEach(player -> {
+                    SendEmail.sendMessage(player.getEmail(), "Update to civilization",
+                            "Hello " + player.getUsername() +
+                            "\n" + msg);
+                });
+    }
 }

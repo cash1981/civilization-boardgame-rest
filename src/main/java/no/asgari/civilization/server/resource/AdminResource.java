@@ -18,11 +18,13 @@ import com.mongodb.DB;
 import io.dropwizard.auth.Auth;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.GameAction;
+import no.asgari.civilization.server.dto.MessageDTO;
 import no.asgari.civilization.server.model.Player;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -85,4 +87,15 @@ public class AdminResource {
 
         return Response.status(Response.Status.NOT_MODIFIED).build();
     }
+
+    /*
+    @PUT
+    @Path("/mail")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response sendMail(@QueryParam("msg") String msg) {
+        gameAction.sendMailToAll(msg);
+        return Response.noContent().build();
+    }
+    */
 }

@@ -27,8 +27,10 @@ public class SendEmail {
     public static final String SENDGRID_USERNAME = "SENDGRID_USERNAME";
     public static final String SENDGRID_PASSWORD = "SENDGRID_PASSWORD";
     private static final SendGrid sendgrid = new SendGrid(System.getenv(SENDGRID_USERNAME), System.getenv(SENDGRID_PASSWORD));
-    public static final String NO_REPLY_ASGARI_NO = "no-reply@asgari.no";
-    public static final String URL = "http://civ.asgari.no/";
+    public static final String NOREPLY_PLAYCIV_COM = "noreply@playciv.com";
+    public static final String URL = "http://playciv.com/";
+
+    public static final String UNSUBSCRIBE = "\n\nIf you wish to unsubscribe from these emails, send an email to cash@playciv.com and ask to be removed";
 
     public static String gamelink(String pbfId) {
         return URL + "#/game/" + pbfId;
@@ -41,7 +43,7 @@ public class SendEmail {
         }
         SendGrid.Email email = new SendGrid.Email();
         email.addTo(emailToo);
-        email.setFrom(NO_REPLY_ASGARI_NO);
+        email.setFrom(NOREPLY_PLAYCIV_COM);
         email.setSubject("It is your turn");
         email.setText("It's your turn to play in " + gamename + "!\n\n" +
                 "Go to " + gamelink(pbfId) + " to start your turn");
@@ -62,9 +64,9 @@ public class SendEmail {
         }
         SendGrid.Email sendGridEmail = new SendGrid.Email();
         sendGridEmail.addTo(email);
-        sendGridEmail.setFrom(NO_REPLY_ASGARI_NO);
+        sendGridEmail.setFrom(NOREPLY_PLAYCIV_COM);
         sendGridEmail.setSubject(subject);
-        sendGridEmail.setText(message);
+        sendGridEmail.setText(message + UNSUBSCRIBE);
 
         try {
             SendGrid.Response response = sendgrid.send(sendGridEmail);
