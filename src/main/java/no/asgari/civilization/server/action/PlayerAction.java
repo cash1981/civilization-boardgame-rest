@@ -563,8 +563,7 @@ public class PlayerAction extends BaseAction {
         if (player != null && !Strings.isNullOrEmpty(player.getNewPassword())) {
             try {
                 String password = URLDecoder.decode(player.getNewPassword(), "UTF-8");
-                String decodedPassword = new String(Base64.getDecoder().decode(password), "UTF-8");
-                player.setPassword(DigestUtils.sha1Hex(decodedPassword));
+                player.setPassword(DigestUtils.sha1Hex(password));
                 player.setNewPassword(null);
                 playerCollection.updateById(player.getId(), player);
                 return true;
