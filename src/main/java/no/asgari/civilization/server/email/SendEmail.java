@@ -29,6 +29,7 @@ public class SendEmail {
     private static final SendGrid sendgrid = new SendGrid(System.getenv(SENDGRID_USERNAME), System.getenv(SENDGRID_PASSWORD));
     public static final String NOREPLY_PLAYCIV_COM = "noreply@playciv.com";
     public static final String URL = "http://playciv.com/";
+    public static final String REST_URL = "https://civilization-boardgame.herokuapp.com/";
 
     public static final String UNSUBSCRIBE = "\n\nIf you wish to unsubscribe from these emails, send an email to cash@playciv.com and ask to be removed";
 

@@ -555,7 +555,7 @@ public class PlayerAction extends BaseAction {
         return SendEmail.sendMessage(player.getEmail(),
                 "Please verify your email",
                 "Your password was requested to be changed. If you want to change your password then please press this link: "
-                        + SendEmail.URL + "api/auth/verify/" + player.getId());
+                        + SendEmail.REST_URL + "api/auth/verify/" + player.getId());
     }
 
     public boolean verifyPassword(String playerId) {
