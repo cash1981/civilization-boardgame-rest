@@ -90,14 +90,13 @@ public class AuthResourceTest extends AbstractCivilizationTest {
         dto.setEmail("cash1981@mailinator.com");
         dto.setNewpassword("baz");
 
-        Response response = client().target(BASE_URL + "/auth/newpassword")
-                .request()
-                .put(Entity.json(dto));
+        URI uri = UriBuilder.fromPath(BASE_URL + "/auth/newpassword").build();
+        client().target(uri).request().put(Entity.json(dto));
 
         Player cash = getApp().playerCollection.findOneById(getApp().playerId);
         assertThat(cash.getNewPassword()).isEqualTo("baz");
 
-        response = client().target(BASE_URL + "/auth/verify/" + getApp().playerId)
+        Response response = client().target(BASE_URL + "/auth/verify/" + getApp().playerId)
                 .request()
                 .get();
 
@@ -105,7 +104,7 @@ public class AuthResourceTest extends AbstractCivilizationTest {
 
         cash = getApp().playerCollection.findOneById(getApp().playerId);
         assertThat(cash.getNewPassword()).isNull();
-        assertThat(cash.getPassword()).isEqualTo(DigestUtils.sha1Hex(new String(Base64.getDecoder().decode("baz"), "UTF-8")));
+        assertThat(cash.getPassword()).isEqualTo(DigestUtils.sha1Hex("baz"));
     }
 
 }
