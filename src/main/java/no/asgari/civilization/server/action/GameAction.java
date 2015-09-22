@@ -114,12 +114,14 @@ public class GameAction extends BaseAction {
                 .filter(p -> !p.isDisableEmail())
                 .forEach(p ->
                 SendEmail.sendMessage(p.getEmail(), "New Civilization game created",
-                        "A new game by the name " + pbf.getName() + " was just created! Visit http://playciv.com to join the game." +
-                        "\n\nIf you no longer wish to receive these email, send an email to shervin@asgari.no and ask to be removed, " +
-                                "and I will remove you from the list!"));
+                        "A new game by the name " + pbf.getName() + " was just created! Visit " + SendEmail.URL + " to join the game."));
         return pbf.getId();
     }
 
+    /**
+     * Returns all games sorted on active first
+     * @return
+     */
     public List<PbfDTO> getAllGames() {
         @Cleanup DBCursor<PBF> dbCursor = pbfCollection.find();
         return Java8Util.streamFromIterable(dbCursor)
