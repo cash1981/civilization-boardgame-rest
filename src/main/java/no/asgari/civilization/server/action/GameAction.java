@@ -114,12 +114,14 @@ public class GameAction extends BaseAction {
                 .filter(p -> !p.isDisableEmail())
                 .forEach(p ->
                 SendEmail.sendMessage(p.getEmail(), "New Civilization game created",
-                        "A new game by the name " + pbf.getName() + " was just created! Visit http://civ.asgari.no to join the game." +
-                        "\n\nIf you no longer wish to receive these email, send an email to shervin@asgari.no and ask to be removed, " +
-                                "and I will remove you from the list!"));
+                        "A new game by the name " + pbf.getName() + " was just created! Visit " + SendEmail.URL + " to join the game."));
         return pbf.getId();
     }
 
+    /**
+     * Returns all games sorted on active first
+     * @return
+     */
     public List<PbfDTO> getAllGames() {
         @Cleanup DBCursor<PBF> dbCursor = pbfCollection.find();
         return Java8Util.streamFromIterable(dbCursor)
@@ -483,7 +485,7 @@ public class GameAction extends BaseAction {
 
         pbfCollection.updateById(pbf.getId(), pbf);
         createInfoLog(pbf.getId(), newUsername + " is now playing instead of " + oldUsername);
-        SendEmail.sendMessage(playerhandToReplace.getEmail(), "You are now playing in " + pbf.getName(), "Please log in to http://civ.asgari.no and start playing!");
+        SendEmail.sendMessage(playerhandToReplace.getEmail(), "You are now playing in " + pbf.getName(), "Please log in to http://playciv.com and start playing!");
     }
 
     public boolean deleteGame(String gameid) {
