@@ -44,7 +44,6 @@ public class Chat {
     @ObjectId
     private String id;
 
-    @NotNull
     private String pbfId;
 
     @NotNull

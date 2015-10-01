@@ -3,10 +3,12 @@ package no.asgari.civilization.server.resource;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.asgari.civilization.server.SheetName;
+import no.asgari.civilization.server.action.GameAction;
 import no.asgari.civilization.server.dto.ChatDTO;
 import no.asgari.civilization.server.dto.CheckNameDTO;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.MessageDTO;
+import no.asgari.civilization.server.model.Chat;
 import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
@@ -281,6 +283,33 @@ public class GameResourceTest extends AbstractCivilizationTest {
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
         assertThat(chats).hasSize(1);
     }
+
+
+    @Test
+    public void publicChatTest() throws Exception {
+        Form form = new Form("message", "public chat message");
+        Response response = client().target(
+                UriBuilder.fromPath(BASE_URL + "/game/publicchat").build())
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .post(Entity.form(form), Response.class);
+
+        List<ChatDTO> chat = response.readEntity(List.class);
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED_201);
+        assertThat(chat).hasSize(1);
+
+        response = client().target(
+                UriBuilder.fromPath(BASE_URL + "/game/publicchat").build())
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .get();
+
+        List chats = response.readEntity(List.class);
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
+        assertThat(chats).hasSize(1);
+
+    }
+
 
     @Test
     public void endGame() throws Exception {
