@@ -42,6 +42,12 @@ public class ChatDTO {
         this.color = color;
     }
 
+    public ChatDTO(String username, String message, long createdInMillis) {
+        this.username = username;
+        this.message = message;
+        this.created = createdInMillis;
+    }
+
     public ChatDTO(Chat chat) {
         this.created = chat.getCreatedInMillis();
         this.id = chat.getId();
