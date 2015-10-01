@@ -34,7 +34,7 @@ logging:
 
     # Sets the level for 'no.asgari.civilization' to DEBUG.
     no.asgari.civilization: INFO
-    #org.eclipse.jetty.servlets: DEBUG
+    org.eclipse.jetty.servlets: DEBUG
 
   appenders:
     - type: console
