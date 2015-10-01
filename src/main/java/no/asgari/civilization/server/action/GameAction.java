@@ -366,16 +366,18 @@ public class GameAction extends BaseAction {
         String id = chatCollection.insert(chat).getSavedId();
         chat.setId(id);
 
-        String msg = CivSingleton.instance().getChatCache().getIfPresent(pbfId);
-        if(Strings.isNullOrEmpty(msg)) {
-            CivSingleton.instance().getChatCache().put(pbfId, message);
-            getListOfPlayersPlaying(pbfId)
-                    .stream()
-                    .filter(p -> !p.getUsername().equals(username))
-                    .forEach(
-                            p -> SendEmail.sendMessage(p.getEmail(), "New Chat", username + " wrote in the chat: " + chat.getMessage()
-                                    + ".\nLogin to " + SendEmail.gamelink(pbfId) + " to see the chat")
-                    );
+        if(pbfId != null) {
+            String msg = CivSingleton.instance().getChatCache().getIfPresent(pbfId);
+            if (Strings.isNullOrEmpty(msg)) {
+                CivSingleton.instance().getChatCache().put(pbfId, message);
+                getListOfPlayersPlaying(pbfId)
+                        .stream()
+                        .filter(p -> !p.getUsername().equals(username))
+                        .forEach(
+                                p -> SendEmail.sendMessage(p.getEmail(), "New Chat", username + " wrote in the chat: " + chat.getMessage()
+                                        + ".\nLogin to " + SendEmail.gamelink(pbfId) + " to see the chat")
+                        );
+            }
         }
 
         return chat;
@@ -494,7 +496,7 @@ public class GameAction extends BaseAction {
 
         final PBF pbf = findPBFById(gameid);
         WriteResult<PBF, String> writeResult = pbfCollection.removeById(gameid);
-        log.warn("Managed to delete game: " + Strings.isNullOrEmpty(writeResult.getError()));
+        log.warn("Managed to delete game: " + Strings.isNullOrEmpty(writeResult.getWriteResult().toString()));
 
         List<Player> playerList = playerCollection.find().toArray().stream()
                 .filter(p -> p.getGameIds().contains(gameid))
@@ -507,7 +509,7 @@ public class GameAction extends BaseAction {
             playerCollection.save(player);
         });
 
-        return Strings.isNullOrEmpty(writeResult.getError());
+        return Strings.isNullOrEmpty(writeResult.getWriteResult().toString());
     }
 
     public void sendMailToAll(String msg) {
@@ -520,12 +522,16 @@ public class GameAction extends BaseAction {
                 });
     }
 
+    /**
+     * Gets public chat which is 1 week old and maximum 50 entries, sorted on created
+     */
     public List<ChatDTO> getPublicChat() {
         return chatCollection.find(DBQuery.notExists("pbfId")).sort(DBSort.desc("created")).toArray()
                 .stream()
                 .filter(c -> c.getCreated().isAfter(LocalDateTime.now().minusWeeks(1)))
                 .sorted((a, b) -> a.getCreated().compareTo(b.getCreated()))
                 .map(c -> new ChatDTO(c.getUsername(), c.getMessage(), c.getCreatedInMillis()))
+                .limit(50)
                 .collect(Collectors.toList());
     }
 }

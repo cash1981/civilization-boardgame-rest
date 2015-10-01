@@ -399,6 +399,19 @@ public class GameResource {
         return Response.created(URI.create(chat.getId())).entity(gameAction.getChat(pbfId)).build();
     }
 
+    @POST
+    @Timed
+    @Path("/publicchat")
+    @Consumes(value = MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response publicChat(@Auth Player player, @FormParam("message") String message) {
+        Preconditions.checkNotNull(message);
+
+        GameAction gameAction = new GameAction(db);
+        Chat chat = gameAction.chat(null, message, player.getUsername());
+        return Response.created(URI.create(chat.getId())).entity(gameAction.getPublicChat()).build();
+    }
+
     @GET
     @Timed
     @Path("/{pbfId}/chat")
@@ -411,7 +424,7 @@ public class GameResource {
 
     @GET
     @Timed
-    @Path("/chat")
+    @Path("/publicchat")
     @Produces(value = MediaType.APPLICATION_JSON)
     public Response getPublicChatList() {
         GameAction gameAction = new GameAction(db);
