@@ -493,7 +493,7 @@ public class GameAction extends BaseAction {
 
         final PBF pbf = findPBFById(gameid);
         WriteResult<PBF, String> writeResult = pbfCollection.removeById(gameid);
-        log.warn("Managed to delete game: " + Strings.isNullOrEmpty(writeResult.getError()));
+        log.warn("Managed to delete game: " + Strings.isNullOrEmpty(writeResult.getWriteResult().toString()));
 
         List<Player> playerList = playerCollection.find().toArray().stream()
                 .filter(p -> p.getGameIds().contains(gameid))
@@ -506,7 +506,7 @@ public class GameAction extends BaseAction {
             playerCollection.save(player);
         });
 
-        return Strings.isNullOrEmpty(writeResult.getError());
+        return Strings.isNullOrEmpty(writeResult.getWriteResult().toString());
     }
 
     public void sendMailToAll(String msg) {
