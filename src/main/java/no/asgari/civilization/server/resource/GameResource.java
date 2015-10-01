@@ -409,6 +409,16 @@ public class GameResource {
         return Response.ok().entity(chats).build();
     }
 
+    @GET
+    @Timed
+    @Path("/chat")
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response getPublicChatList() {
+        GameAction gameAction = new GameAction(db);
+        List<ChatDTO> chats = gameAction.getPublicChat();
+        return Response.ok().entity(chats).build();
+    }
+
     @POST
     @Timed
     @Path("/{pbfId}/map")

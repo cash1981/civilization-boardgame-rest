@@ -50,6 +50,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -517,5 +518,14 @@ public class GameAction extends BaseAction {
                             "Hello " + player.getUsername() +
                             "\n" + msg);
                 });
+    }
+
+    public List<ChatDTO> getPublicChat() {
+        return chatCollection.find(DBQuery.notExists("pbfId")).sort(DBSort.desc("created")).toArray()
+                .stream()
+                .filter(c -> c.getCreated().isAfter(LocalDateTime.now().minusWeeks(1)))
+                .sorted((a, b) -> a.getCreated().compareTo(b.getCreated()))
+                .map(c -> new ChatDTO(c.getUsername(), c.getMessage(), c.getCreatedInMillis()))
+                .collect(Collectors.toList());
     }
 }
