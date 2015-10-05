@@ -33,6 +33,7 @@ import no.asgari.civilization.server.model.Hut;
 import no.asgari.civilization.server.model.Infantry;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.Mounted;
+import no.asgari.civilization.server.model.SocialPolicy;
 import no.asgari.civilization.server.model.Tech;
 import no.asgari.civilization.server.model.Tile;
 import no.asgari.civilization.server.model.Village;
@@ -73,6 +74,7 @@ public class ItemReader {
     public LinkedList<Artillery> artilleryList;
     public LinkedList<Mounted> mountedList;
     public LinkedList<Infantry> infantryList;
+    public List<SocialPolicy> socialPolicies;
 
     public ImmutableList<Item> redrawableItems;
 
@@ -116,7 +118,7 @@ public class ItemReader {
             readMounted(wb);
             readArtillery(wb);
             readAircraft(wb);
-
+            socialPolicies = (LinkedList<SocialPolicy>) getSocialPolicies(wb);
             redrawableItems = ImmutableList.<Item>builder()
                     .addAll(shuffledCultureI)
                     .addAll(shuffledCultureII)
@@ -610,6 +612,48 @@ public class ItemReader {
         Collections.shuffle(aircraftUnits);
         aircraftList = new LinkedList<>(aircraftUnits);
         log.debug("Aircraft units from excel are " + aircraftList);
+    }
+
+    private LinkedList<? extends Item> getSocialPolicies(Workbook wb) {
+        Sheet spSheet = wb.getSheet(SheetName.SOCIAL_POLICY.getName().toString());
+
+        List<Cell> unfilteredSPCells = new ArrayList<>();
+        spSheet.forEach(row -> row.forEach(unfilteredSPCells::add));
+
+        List<SocialPolicy> sps = unfilteredSPCells.stream()
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
+                .filter(columnIndexZeroPredicate)
+                .map(sp -> new SocialPolicy(sp.toString()))
+                .collect(Collectors.toList());
+
+        List<String> descriptionCells = unfilteredSPCells.stream()
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
+                .filter(cell -> cell.getColumnIndex() == 1)
+                .map(Object::toString)
+                .collect(Collectors.toList());
+
+        List<String> flipsideCells = unfilteredSPCells.stream()
+                .filter(notEmptyPredicate)
+                .filter(notRandomPredicate)
+                .filter(rowNotZeroPredicate)
+                .filter(cell -> cell.getColumnIndex() == 2)
+                .map(Object::toString)
+                .collect(Collectors.toList());
+
+        //Description should be in the same order as flipside
+        for (int i = 0; i < sps.size(); i++) {
+            SocialPolicy item = sps.get(i);
+            item.setItemNumber(itemCounter.incrementAndGet());
+            item.setDescription(descriptionCells.get(i));
+            item.setFlipside(flipsideCells.get(i));
+        }
+
+        Collections.shuffle(sps);
+        return new LinkedList<>(sps);
     }
 
     private static Infantry createInfantry(String string) {

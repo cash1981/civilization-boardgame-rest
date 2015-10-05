@@ -55,7 +55,7 @@ public class GameLog {
     private static final String DELIM = " - ";
 
     public enum LogType {
-        TRADE, BATTLE, ITEM, TECH, SHUFFLE, DISCARD, WITHDRAW, JOIN, REVEAL, UNDO, VOTE
+        TRADE, BATTLE, ITEM, TECH, SHUFFLE, DISCARD, WITHDRAW, JOIN, REVEAL, UNDO, SOCIAL_POLICY, VOTE
     }
 
     @Id
@@ -105,8 +105,12 @@ public class GameLog {
                 privateLog = username + " has received " + DELIM + draw.getItem().revealAll();
                 publicLog = username + " has received " + DELIM + draw.getItem().revealPublic();
                 break;
+            case SOCIAL_POLICY:
+                privateLog = username + " has chosen " + DELIM + draw.getItem().revealAll();
+                publicLog = username + " has chosen a hidden social policy" + ITEM_NUMBER;
+                break;
             case TECH:
-                privateLog = username + " has researched " + DELIM + draw.getItem().revealAll()  + ITEM_NUMBER;
+                privateLog = username + " has researched " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
                 publicLog = username + " has researched a hidden technology" + ITEM_NUMBER;
                 break;
             case DISCARD:

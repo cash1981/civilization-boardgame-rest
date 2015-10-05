@@ -66,6 +66,7 @@ public class PBFTestAction {
         pbf.getItems().addAll(items.medievalWonders);
         pbf.getItems().addAll(items.modernWonders);
         pbf.getTechs().addAll(items.allTechs);
+        pbf.getSocialPolicies().addAll(items.socialPolicies);
         return pbf;
     }
 }

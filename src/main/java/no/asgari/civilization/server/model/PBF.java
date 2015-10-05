@@ -31,6 +31,7 @@ import org.mongojack.ObjectId;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,6 +70,7 @@ public class PBF {
     private List<Item> items = Lists.newArrayList();
     private List<Playerhand> players = Lists.newArrayList();
     private List<Tech> techs = Lists.newArrayList();
+    private List<SocialPolicy> socialPolicies = new ArrayList<>(8);
 
     //Will use these to reshuffle items which are discarded and can be drawn again
     private List<Item> discardedItems = Lists.newArrayList();

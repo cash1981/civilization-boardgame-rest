@@ -26,7 +26,7 @@ public enum SheetName {
     CULTURE_3("Culture III"), GREAT_PERSON("Great Person"), INFANTRY("Infantry"), ARTILLERY("Artillery"), MOUNTED("Mounted"),
     AIRCRAFT("Aircraft"), VILLAGES("Villages"), HUTS("Huts"), WONDERS("Wonders"), ANCIENT_WONDERS("Ancient Wonders"), MEDIEVAL_WONDERS("Medieval Wonders"),
     MODERN_WONDERS("Modern Wonders"), TILES("Tiles"), CITY_STATES("City-states"), LEVEL_1_TECH("Level 1 Tech"), LEVEL_2_TECH("Level 2 Tech"),
-    LEVEL_3_TECH("Level 3 Tech"), LEVEL_4_TECH("Level 4 Tech"), LEVEL_5_TECH("Level 5 Tech");
+    LEVEL_3_TECH("Level 3 Tech"), LEVEL_4_TECH("Level 4 Tech"), LEVEL_5_TECH("Level 5 Tech"), SOCIAL_POLICY("Social Policy");
 
     private String label;
 
@@ -42,7 +42,7 @@ public enum SheetName {
             EnumSet.of(CIV, CULTURE_1, CULTURE_2, CULTURE_3,
                     GREAT_PERSON, INFANTRY, ARTILLERY, MOUNTED, AIRCRAFT,
                     VILLAGES, HUTS, WONDERS, ANCIENT_WONDERS, MEDIEVAL_WONDERS, MODERN_WONDERS, TILES, CITY_STATES,
-                    LEVEL_1_TECH, LEVEL_2_TECH, LEVEL_3_TECH, LEVEL_4_TECH, LEVEL_5_TECH);
+                    LEVEL_1_TECH, LEVEL_2_TECH, LEVEL_3_TECH, LEVEL_4_TECH, LEVEL_5_TECH, SOCIAL_POLICY);
 
     public static final EnumSet<SheetName> TECHS = EnumSet.of(LEVEL_1_TECH, LEVEL_2_TECH, LEVEL_3_TECH, LEVEL_4_TECH, LEVEL_5_TECH);
 

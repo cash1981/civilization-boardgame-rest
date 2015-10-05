@@ -46,6 +46,7 @@ public class ItemReaderTest {
         assertThat(itemReader.artilleryList).isNotEmpty();
         assertThat(itemReader.infantryList).isNotEmpty();
         assertThat(itemReader.aircraftList).isNotEmpty();
+        assertThat(itemReader.socialPolicies).isNotEmpty();
     }
 
 }

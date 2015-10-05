@@ -27,6 +27,7 @@ import java.net.URI;
 import java.util.Optional;
 import java.util.Set;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
@@ -47,7 +48,6 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
     @Test
     public void chooseTechThenRevealThenDelete() throws Exception {
         final String techToResearch = "Pottery";
-
 
         URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/tech/choose", getApp().pbfId)).build();
         Response response = client().target(uri)
@@ -364,6 +364,39 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
                 .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
                 .post(Entity.json(itemDTO), Response.class);
         assertEquals(HttpStatus.OK_200, response.getStatus());
+    }
+
+    @Test
+    public void chooseSocialPolicyThenFlipside() throws Exception {
+        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        long socialPolicies = pbf.getPlayers()
+                .stream()
+                .flatMap(p -> p.getSocialPolicies().stream())
+                .count();
+        assertEquals(0, socialPolicies);
+
+        String spToChoose = "Rationalism";
+        URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/player/%s/socialpolicy/choose", getApp().pbfId)).build();
+        Response response = client().target(uri)
+                .queryParam("name", spToChoose)
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .post(null);
+        assertEquals(HttpStatus.NO_CONTENT_204, response.getStatus());
+
+        pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        socialPolicies = pbf.getPlayers()
+                .stream()
+                .flatMap(p -> p.getSocialPolicies().stream())
+                .count();
+        assertEquals(1, socialPolicies);
+
+        response = client().target(uri)
+                .queryParam("name", "Patronage")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
+                .post(null);
+        assertEquals(HttpStatus.BAD_REQUEST_400, response.getStatus());
     }
 
     private ItemDTO createItemDTO(SheetName sheetName, String itemName) {

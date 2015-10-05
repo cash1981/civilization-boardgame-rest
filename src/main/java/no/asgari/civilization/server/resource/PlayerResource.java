@@ -84,6 +84,24 @@ public class PlayerResource {
     }
 
     /**
+     * Will choose a social policy and update the player collection.
+     * <p/>
+     * This method will also check if other players have chosen a flipside and throw exception
+     *
+     * @param player
+     * @param pbfId
+     * @param socialpolicy
+     * @return
+     */
+    @POST
+    @Path("/socialpolicy/choose")
+    @Timed
+    public Response chooseSocialPolicy(@Auth Player player, @PathParam("pbfId") String pbfId, @NotEmpty @QueryParam("name") String socialpolicy) {
+        playerAction.chooseSocialPolicy(pbfId, socialpolicy, player.getId());
+        return Response.noContent().build();
+    }
+
+    /**
      * Will remove the tech from the playerhand. Will not update the gamelog since the tech is only for private view
      *
      * @param player

@@ -19,7 +19,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 import com.mongodb.DB;
-import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.application.CivSingleton;
@@ -33,14 +32,12 @@ import no.asgari.civilization.server.dto.PbfDTO;
 import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.email.SendEmail;
 import no.asgari.civilization.server.excel.ItemReader;
-import no.asgari.civilization.server.misc.Java8Util;
 import no.asgari.civilization.server.misc.SecurityCheck;
 import no.asgari.civilization.server.model.Chat;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
-import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
 import org.mongojack.DBSort;
 import org.mongojack.JacksonDBCollection;
@@ -54,6 +51,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -105,6 +103,7 @@ public class GameAction extends BaseAction {
         pbf.getItems().addAll(itemReader.artilleryList);
         pbf.getItems().addAll(itemReader.infantryList);
         pbf.getTechs().addAll(itemReader.allTechs);
+        pbf.getSocialPolicies().addAll(itemReader.socialPolicies);
 
         WriteResult<PBF, String> pbfInsert = pbfCollection.insert(pbf);
         pbf.setId(pbfInsert.getSavedId());
@@ -114,18 +113,19 @@ public class GameAction extends BaseAction {
         playerCollection.find().toArray().stream()
                 .filter(p -> !p.isDisableEmail())
                 .forEach(p ->
-                SendEmail.sendMessage(p.getEmail(), "New Civilization game created",
-                        "A new game by the name " + pbf.getName() + " was just created! Visit " + SendEmail.URL + " to join the game."));
+                        SendEmail.sendMessage(p.getEmail(), "New Civilization game created",
+                                "A new game by the name " + pbf.getName() + " was just created! Visit " + SendEmail.URL + " to join the game."));
         return pbf.getId();
     }
 
     /**
      * Returns all games sorted on active first
+     *
      * @return
      */
     public List<PbfDTO> getAllGames() {
-        @Cleanup DBCursor<PBF> dbCursor = pbfCollection.find();
-        return Java8Util.streamFromIterable(dbCursor)
+        List<PBF> pbfs = pbfCollection.find().toArray();
+        return pbfs.stream()
                 .map(GameAction::createPbfDTO)
                 .sorted((o1, o2) -> {
                     int v = Boolean.valueOf(o1.isActive()).compareTo(o2.isActive());
@@ -209,7 +209,7 @@ public class GameAction extends BaseAction {
         player.getGameIds().add(pbf.getId());
         playerCollection.updateById(player.getId(), player);
         Playerhand playerhand;
-        if(!pbf.getWithdrawnPlayers().isEmpty()) {
+        if (!pbf.getWithdrawnPlayers().isEmpty()) {
             playerhand = pbf.getWithdrawnPlayers().remove(0);
             playerhand.setEmail(player.getEmail());
             playerhand.setPlayerId(player.getId());
@@ -251,7 +251,7 @@ public class GameAction extends BaseAction {
     }
 
     private PBF startIfAllPlayers(PBF pbf) {
-        if(pbf.getPlayers().stream().anyMatch(Playerhand::isYourTurn)) {
+        if (pbf.getPlayers().stream().anyMatch(Playerhand::isYourTurn)) {
             return pbf;
         }
         final int numOfPlayersNeeded = pbf.getNumOfPlayers();
@@ -330,7 +330,7 @@ public class GameAction extends BaseAction {
             if (playerhand.getPlayerId().equals(playerId)) {
                 if (playerhand.isGameCreator()) {
                     Optional<Playerhand> optionalNextPlayer = getRandomPlayerExcept(pbf.getPlayers(), playerhand.getUsername());
-                    if(optionalNextPlayer.isPresent()) {
+                    if (optionalNextPlayer.isPresent()) {
                         Playerhand nextPlayer = optionalNextPlayer.get();
                         nextPlayer.setGameCreator(true);
                         gameLogAction.createCommonPrivatePublicLog("Is now game creator", pbfId, nextPlayer.getPlayerId());
@@ -366,7 +366,7 @@ public class GameAction extends BaseAction {
         String id = chatCollection.insert(chat).getSavedId();
         chat.setId(id);
 
-        if(pbfId != null) {
+        if (pbfId != null) {
             String msg = CivSingleton.instance().getChatCache().getIfPresent(pbfId);
             if (Strings.isNullOrEmpty(msg)) {
                 CivSingleton.instance().getChatCache().put(pbfId, message);
@@ -429,7 +429,7 @@ public class GameAction extends BaseAction {
     @SneakyThrows
     public String addMapLink(String pbfId, String linkEncoded, String playerId) {
         String link = URLDecoder.decode(linkEncoded, "UTF-8");
-        if(link.matches("(?i)^https://docs\\.google\\.com/presentation/d/.*$")) {
+        if (link.matches("(?i)^https://docs\\.google\\.com/presentation/d/.*$")) {
             String removedPart = link.replace("https://docs.google.com/presentation/d/", "");
             String id = removedPart.split("/")[0];
             log.info("Id from google presentation is: " + id);
@@ -451,7 +451,7 @@ public class GameAction extends BaseAction {
     @SneakyThrows
     public String addAssetLink(String pbfId, String linkEncoded, String playerId) {
         String link = URLDecoder.decode(linkEncoded, "UTF-8");
-        if(link.matches("(?i)^https://docs\\.google\\.com/spreadsheets/d/.*$")) {
+        if (link.matches("(?i)^https://docs\\.google\\.com/spreadsheets/d/.*$")) {
             String removedPart = link.replace("https://docs.google.com/spreadsheets/d/", "");
             String id = removedPart.split("/")[0];
             log.info("Id from google presentation is: " + id);
@@ -518,7 +518,7 @@ public class GameAction extends BaseAction {
                 .forEach(player -> {
                     SendEmail.sendMessage(player.getEmail(), "Update to civilization",
                             "Hello " + player.getUsername() +
-                            "\n" + msg);
+                                    "\n" + msg);
                 });
     }
 

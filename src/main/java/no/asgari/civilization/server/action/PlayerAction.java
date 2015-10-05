@@ -34,6 +34,7 @@ import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
+import no.asgari.civilization.server.model.SocialPolicy;
 import no.asgari.civilization.server.model.Tech;
 import no.asgari.civilization.server.model.Tradable;
 import no.asgari.civilization.server.model.Unit;
@@ -574,5 +575,45 @@ public class PlayerAction extends BaseAction {
         }
 
         return false;
+    }
+
+    public GameLog chooseSocialPolicy(String pbfId, String socialPolicyName, String playerId) {
+        Preconditions.checkNotNull(pbfId);
+        Preconditions.checkNotNull(socialPolicyName);
+
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        if (!SecurityCheck.hasUserAccess(pbf, playerId)) {
+            log.error("User with id " + playerId + " has no access to pbf " + pbf.getName());
+            throw new WebApplicationException(Response.Status.FORBIDDEN);
+        }
+
+        Optional<SocialPolicy> socialPolicyOptional = pbf.getSocialPolicies().stream()
+                .filter(it -> it.getName().equals(socialPolicyName))
+                .findFirst();
+        //if not static then this::cannotFindItem
+        SocialPolicy socialPolicy = socialPolicyOptional.orElseThrow(PlayerAction::cannotFindItem);
+
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+        if (playerhand.getSocialPolicies().contains(socialPolicy)) {
+            log.warn("Player with id " + playerId + " tried to add same social policy as they had");
+            return null;
+        }
+
+        if(playerhand.getSocialPolicies().stream().anyMatch(sp -> sp.getName().equals(socialPolicy.getFlipside()))) {
+            log.warn("Player with id " + playerId + " tried to add a social policy on same flipside");
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        }
+
+        SocialPolicy sp = new SocialPolicy(socialPolicyName);
+        sp.setFlipside(socialPolicy.getFlipside());
+        sp.setOwnerId(playerId);
+        sp.setHidden(true);
+
+        playerhand.getSocialPolicies().add(sp);
+
+        pbfCollection.updateById(pbf.getId(), pbf);
+        log.debug("Player " + playerId + " chose social policy " + sp.getName());
+
+        return super.createLog(sp, pbfId, GameLog.LogType.TECH, playerId);
     }
 }
