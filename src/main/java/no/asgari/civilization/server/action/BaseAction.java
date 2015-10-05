@@ -24,6 +24,7 @@ import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
+import no.asgari.civilization.server.model.SocialPolicy;
 import no.asgari.civilization.server.model.Spreadsheet;
 import no.asgari.civilization.server.model.Tech;
 import org.mongojack.JacksonDBCollection;
@@ -52,6 +53,10 @@ public abstract class BaseAction {
 
     protected GameLog createLog(Tech chosenTech, String pbfId, GameLog.LogType logType) {
         return logAction.createGameLog(chosenTech, pbfId, logType);
+    }
+
+    protected GameLog createLog(SocialPolicy socialPolicy, String pbfId, GameLog.LogType logType) {
+        return logAction.createGameLog(socialPolicy, pbfId, logType);
     }
 
     protected GameLog createLog(Item item, String pbfId, GameLog.LogType logType, String playerId) {
