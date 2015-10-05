@@ -48,11 +48,6 @@ public class Aircraft extends Unit implements Image {
         this.itemNumber = itemNumber;
     }
 
-    @Override
-    public String getType() {
-        return type = getClass().getSimpleName();
-    }
-
     /**
      * Aircrafts have no level
      *

@@ -49,11 +49,6 @@ public class Artillery extends Unit implements Image {
     }
 
     @Override
-    public String getType() {
-        return type = getClass().getSimpleName();
-    }
-
-    @Override
     public SheetName getSheetName() {
         return sheetName = SheetName.ARTILLERY;
     }

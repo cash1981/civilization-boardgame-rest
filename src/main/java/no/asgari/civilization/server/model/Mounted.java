@@ -51,12 +51,6 @@ public class Mounted extends Unit implements Image {
     }
 
     @Override
-    public String getType() {
-        type = getClass().getSimpleName();
-        return type;
-    }
-
-    @Override
     public SheetName getSheetName() {
         return sheetName = SheetName.MOUNTED;
     }

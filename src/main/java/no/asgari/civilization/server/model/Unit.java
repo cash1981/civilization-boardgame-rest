@@ -19,9 +19,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Setter;
 
 @Setter
-public abstract class Unit implements Item, Level {
-    String type;
-    String name;
+public abstract class Unit implements Item, Level, Type {
+    private String name;
 
     @JsonIgnore
     static final int LEVEL_1 = 1;
