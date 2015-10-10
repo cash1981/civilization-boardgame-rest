@@ -632,7 +632,7 @@ public class PlayerAction extends BaseAction {
         return pbf.getPlayers().stream()
                 .filter(p -> p.getCivilization() != null)
                 .map(p -> {
-                    return new AllTechsDTO(p.getCivilization().getName(),
+                    return new AllTechsDTO(p.getCivilization().getName(), p.getColor(),
                             p.getTechsChosen().stream().filter(t -> !t.isHidden())
                                     .map(t -> new TechDTO(t.getName(), t.getLevel()))
                                     .collect(Collectors.toList()));

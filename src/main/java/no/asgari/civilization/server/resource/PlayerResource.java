@@ -132,7 +132,7 @@ public class PlayerResource {
      */
     @GET
     @Path("/tech/{playerId}")
-    public Response getChosenTechs(@PathParam("pbfId") String pbfId, @PathParam("playerId") String playerId) {
+    public Response getChosenTechsByAllPlayers(@PathParam("pbfId") String pbfId, @PathParam("playerId") String playerId) {
         Player pl = playerAction.getPlayerById(playerId);
         if (pl == null) {
             log.error("Didn't find player with id " + playerId);
@@ -150,7 +150,7 @@ public class PlayerResource {
      */
     @GET
     @Path("/tech/all")
-    public List<AllTechsDTO> getChosenTechs(@PathParam("pbfId") String pbfId) {
+    public List<AllTechsDTO> getChosenTechsByAllPlayers(@PathParam("pbfId") String pbfId) {
         return playerAction.getTechsForAllPlayers(pbfId);
     }
 

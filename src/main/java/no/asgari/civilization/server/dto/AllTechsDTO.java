@@ -13,5 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class AllTechsDTO {
     private String civ;
+    private String color;
     private List<TechDTO> techs;
 }
