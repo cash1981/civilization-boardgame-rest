@@ -22,8 +22,10 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.application.CivSingleton;
+import no.asgari.civilization.server.dto.AllTechsDTO;
 import no.asgari.civilization.server.dto.ForgotpassDTO;
 import no.asgari.civilization.server.dto.ItemDTO;
+import no.asgari.civilization.server.dto.TechDTO;
 import no.asgari.civilization.server.email.SendEmail;
 import no.asgari.civilization.server.exception.PlayerExistException;
 import no.asgari.civilization.server.misc.SecurityCheck;
@@ -51,8 +53,10 @@ import java.net.URLDecoder;
 import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Log4j
 public class PlayerAction extends BaseAction {
@@ -138,7 +142,6 @@ public class PlayerAction extends BaseAction {
             log.error("Could not remove tech " + techName + " from player with id " + playerId + " in pbf " + pbf.getName());
             return false;
         }
-
         pbfCollection.updateById(pbf.getId(), pbf);
 
         //No point in creating game log, the techs are for your own information
@@ -366,7 +369,12 @@ public class PlayerAction extends BaseAction {
         Item item = draw.getItem();
         item.setHidden(false);
 
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+        Tech tech = playerhand.getTechsChosen().stream().filter(t -> t.getName().equals(item.getName())).findFirst().orElseThrow(PlayerAction::cannotFindItem);
+        tech.setHidden(false);
+
         gameLogCollection.updateById(gameLog.getId(), gameLog);
+        pbfCollection.updateById(pbfId, pbf);
 
         createLog(item, pbf.getId(), GameLog.LogType.REVEAL, playerId);
     }
@@ -599,7 +607,7 @@ public class PlayerAction extends BaseAction {
             return null;
         }
 
-        if(playerhand.getSocialPolicies().stream().anyMatch(sp -> sp.getName().equals(socialPolicy.getFlipside()))) {
+        if (playerhand.getSocialPolicies().stream().anyMatch(sp -> sp.getName().equals(socialPolicy.getFlipside()))) {
             log.warn("Player with id " + playerId + " tried to add a social policy on same flipside");
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
@@ -615,5 +623,21 @@ public class PlayerAction extends BaseAction {
         log.debug("Player " + playerId + " chose social policy " + sp.getName());
 
         return super.createLog(sp, pbfId, GameLog.LogType.TECH, playerId);
+    }
+
+    public List<AllTechsDTO> getTechsForAllPlayers(String pbfId) {
+        Preconditions.checkNotNull(pbfId);
+
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        return pbf.getPlayers().stream()
+                .filter(p -> p.getCivilization() != null)
+                .map(p -> {
+                    return new AllTechsDTO(p.getCivilization().getName(),
+                            p.getTechsChosen().stream().filter(t -> !t.isHidden())
+                                    .map(t -> new TechDTO(t.getName(), t.getLevel()))
+                                    .collect(Collectors.toList()));
+                })
+                .collect(Collectors.toList());
+
     }
 }

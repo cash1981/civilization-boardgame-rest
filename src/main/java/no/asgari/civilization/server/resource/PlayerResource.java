@@ -24,6 +24,7 @@ import no.asgari.civilization.server.action.DrawAction;
 import no.asgari.civilization.server.action.GameLogAction;
 import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.action.UndoAction;
+import no.asgari.civilization.server.dto.AllTechsDTO;
 import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Player;
@@ -44,6 +45,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -137,6 +140,18 @@ public class PlayerResource {
         }
         Set<Tech> playersTechs = playerAction.getPlayersTechs(pbfId, playerId);
         return Response.ok().entity(playersTechs).build();
+    }
+
+    /**
+     * If logged in playerId is specified we will use that, otherwise we will use logged in player.
+     * This because a logged in player, might go into someone elses game
+     *
+     * @return
+     */
+    @GET
+    @Path("/tech/all")
+    public List<AllTechsDTO> getChosenTechs(@PathParam("pbfId") String pbfId) {
+        return playerAction.getTechsForAllPlayers(pbfId);
     }
 
     /**

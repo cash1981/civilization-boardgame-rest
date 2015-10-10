@@ -422,6 +422,9 @@ public class GameResource {
         return Response.ok().entity(chats).build();
     }
 
+    /**
+     * Gets public chat which is 1 week old and maximum 50 entries, sorted on created
+     */
     @GET
     @Timed
     @Path("/publicchat")
