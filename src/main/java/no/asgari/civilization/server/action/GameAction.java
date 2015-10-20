@@ -256,17 +256,18 @@ public class GameAction extends BaseAction {
         }
         final int numOfPlayersNeeded = pbf.getNumOfPlayers();
         if (numOfPlayersNeeded == pbf.getPlayers().size()) {
-            Playerhand randomPlayer = getRandomPlayer(pbf.getPlayers());
-            log.debug("Setting starting player " + randomPlayer);
-            randomPlayer.setYourTurn(true);
-            createInfoLog(pbf.getId(), "Starting player is " + randomPlayer.getUsername());
+            Collections.shuffle(pbf.getPlayers());
+            pbf.getPlayers().get(0).setYourTurn(true);
+            createInfoLog(pbf.getId(), "Game has now started. Good luck, and have fun!");
+
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i < pbf.getPlayers().size(); i++) {
+                Playerhand player = pbf.getPlayers().get(i);
+                sb.append(getNameForPlayerNumber(i) + " player is " + player.getUsername() + ". ");
+            }
+            createInfoLog(pbf.getId(), sb.toString());
         }
         return pbf;
-    }
-
-    private Playerhand getRandomPlayer(List<Playerhand> players) {
-        Collections.shuffle(players);
-        return players.get(0);
     }
 
     public GameDTO mapGameDTO(PBF pbf, Player player) {
@@ -533,5 +534,24 @@ public class GameAction extends BaseAction {
                 .map(c -> new ChatDTO(c.getUsername(), c.getMessage(), c.getCreatedInMillis()))
                 .limit(50)
                 .collect(Collectors.toList());
+    }
+
+    private String getNameForPlayerNumber(int nr) {
+        switch (nr) {
+            case 0:
+                return "First";
+            case 1:
+                return "Second";
+            case 2:
+                return "Third";
+            case 3:
+                return "Fourth";
+            case 4:
+                return "Fifth";
+            case 5:
+                return "Sixth";
+        }
+
+        return "";
     }
 }
