@@ -23,9 +23,11 @@ import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.DrawAction;
 import no.asgari.civilization.server.action.GameLogAction;
 import no.asgari.civilization.server.action.PlayerAction;
+import no.asgari.civilization.server.action.TurnAction;
 import no.asgari.civilization.server.action.UndoAction;
 import no.asgari.civilization.server.dto.AllTechsDTO;
 import no.asgari.civilization.server.dto.ItemDTO;
+import no.asgari.civilization.server.dto.TurnDTO;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Tech;
@@ -46,7 +48,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -132,7 +133,7 @@ public class PlayerResource {
      */
     @GET
     @Path("/tech/{playerId}")
-    public Response getChosenTechsByAllPlayers(@PathParam("pbfId") String pbfId, @PathParam("playerId") String playerId) {
+    public Response getChosenTechFromPlayer(@PathParam("pbfId") String pbfId, @PathParam("playerId") String playerId) {
         Player pl = playerAction.getPlayerById(playerId);
         if (pl == null) {
             log.error("Didn't find player with id " + playerId);
@@ -150,7 +151,7 @@ public class PlayerResource {
      */
     @GET
     @Path("/tech/all")
-    public List<AllTechsDTO> getChosenTechsByAllPlayers(@PathParam("pbfId") String pbfId) {
+    public List<AllTechsDTO> getChosenTechFromPlayer(@PathParam("pbfId") String pbfId) {
         return playerAction.getTechsForAllPlayers(pbfId);
     }
 
@@ -277,5 +278,17 @@ public class PlayerResource {
         undoAction.getPlayersActiveUndoes(pbfId, player.getUsername());
         return Response.ok().build();
     }
+
+    @PUT
+    @Path("/turn/update/sot")
+    public Response createSOT(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId,
+                              TurnDTO turn) {
+
+        TurnAction turnAction = new TurnAction(db);
+        turnAction.updateAndLockSOT(pbfId, player.getId(), turn);
+
+        return Response.noContent().build();
+    }
+
 
 }

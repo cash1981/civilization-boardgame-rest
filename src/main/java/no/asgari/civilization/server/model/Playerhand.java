@@ -62,6 +62,7 @@ public class Playerhand implements Comparable<Playerhand> {
     private List<Unit> barbarians = new ArrayList<>(3);
     private List<Unit> battlehand = new ArrayList<>();
     private List<SocialPolicy> socialPolicies = new ArrayList<>();
+    private List<PlayerTurn> playerTurns = new ArrayList<>();
 
     @JsonIgnore
     public static String green() {

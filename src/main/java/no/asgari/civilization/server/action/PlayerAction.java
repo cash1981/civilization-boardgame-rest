@@ -53,7 +53,6 @@ import java.net.URLDecoder;
 import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -457,7 +456,7 @@ public class PlayerAction extends BaseAction {
 
         itemToTrade.setOwnerId(toPlayer.getPlayerId());
         pbfCollection.updateById(pbf.getId(), pbf);
-        logAction.createTradeGameLog(itemToTrade, pbf.getId(), GameLog.LogType.TRADE, fromPlayer.getUsername());
+        logAction.createTradeGameLog(itemToTrade, pbf.getId(), GameLog.LogType.TRADE_BETWEEN_PLAYERS, fromPlayer.getUsername());
         return true;
     }
 

@@ -25,6 +25,8 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.google.common.collect.Lists;
 import lombok.Data;
+import no.asgari.civilization.server.action.BaseAction;
+import no.asgari.civilization.server.action.PlayerAction;
 import org.hibernate.validator.constraints.NotBlank;
 import org.mongojack.Id;
 import org.mongojack.ObjectId;
@@ -34,6 +36,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * PBF stands for Play By Forum
@@ -67,16 +71,17 @@ public class PBF {
     private int numOfPlayers;
     private boolean active = true;
     private Player winner;
-    private List<Item> items = Lists.newArrayList();
-    private List<Playerhand> players = Lists.newArrayList();
-    private List<Tech> techs = Lists.newArrayList();
+    private List<Item> items = new ArrayList<>();
+    private List<Playerhand> players = new ArrayList<>();
+    private List<Tech> techs = new ArrayList<>();
     private List<SocialPolicy> socialPolicies = new ArrayList<>(8);
+    private Set<Turn> publicTurns = new TreeSet<>();
 
     //Will use these to reshuffle items which are discarded and can be drawn again
-    private List<Item> discardedItems = Lists.newArrayList();
+    private List<Item> discardedItems = new ArrayList<>();
 
     //If a player leaves, his items and stuff will be put here
-    private List<Playerhand> withdrawnPlayers = Lists.newArrayList();
+    private List<Playerhand> withdrawnPlayers = new ArrayList<>();
 
     /**
      * Returns the username of the player who is start of turn
@@ -92,6 +97,12 @@ public class PBF {
         }
 
         return "";
+    }
+
+    public Optional<Turn> getTurnByUsernameAndTurnNr(String username, int turn) {
+        return publicTurns.stream()
+                .filter(t -> t.getUsername().equals(username) && turn == t.getTurnNumber())
+                .findFirst();
     }
 
 }

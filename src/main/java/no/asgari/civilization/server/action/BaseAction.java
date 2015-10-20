@@ -67,6 +67,10 @@ public abstract class BaseAction {
         return logAction.createGameLog(draw, pbfId, username, vote);
     }
 
+    protected GameLog createLog(String pbfId, GameLog.LogType logType, String playerId) {
+        return logAction.createGameLog(pbfId, logType, playerId);
+    }
+
     protected GameLog createCommonPrivateLog(String privateMessage, String pbfId, String playerId) {
         return logAction.createCommonPrivateLog(privateMessage, pbfId, playerId);
     }
@@ -125,7 +129,7 @@ public abstract class BaseAction {
                 .orElseThrow(PlayerAction::cannotFindPlayer);
     }
 
-    static WebApplicationException cannotFindItem() {
+    public static WebApplicationException cannotFindItem() {
         throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
                 .entity(Entity.json(new MessageDTO("Could not find item")))
                 .build());

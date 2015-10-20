@@ -179,4 +179,18 @@ public class GameLogAction {
         gl2.setPublicLog("");
         gl2.setId(save(gl2));
     }
+
+    public GameLog createGameLog(String pbfId, GameLog.LogType logType, String playerId) {
+        GameLog pl = new GameLog();
+        pl.setPbfId(pbfId);
+        try {
+            pl.setUsername(CivSingleton.instance().playerCache().get(playerId));
+        } catch (ExecutionException e) {
+            log.error("Couldn't retrieve username from cache");
+            pl.setUsername(getUsernameFromPlayerId(playerId));
+        }
+        pl.createAndSetLog(logType, 0);
+        pl.setId(save(pl));
+        return pl;
+    }
 }

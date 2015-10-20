@@ -55,7 +55,8 @@ public class GameLog {
     private static final String DELIM = " - ";
 
     public enum LogType {
-        TRADE, BATTLE, ITEM, TECH, SHUFFLE, DISCARD, WITHDRAW, JOIN, REVEAL, UNDO, SOCIAL_POLICY, VOTE
+        TRADE_BETWEEN_PLAYERS, BATTLE, ITEM, TECH, SHUFFLE, DISCARD, WITHDRAW, JOIN, REVEAL,
+        UNDO, SOCIAL_POLICY, VOTE, SETUP, SOT, TRADE , CM, MOVEMENT, RESEARCH;
     }
 
     @Id
@@ -101,7 +102,7 @@ public class GameLog {
                 privateLog = username + " plays " + DELIM + draw.getItem().revealAll();
                 publicLog = username + " reveals " + DELIM + draw.getItem().revealPublic();
                 break;
-            case TRADE:
+            case TRADE_BETWEEN_PLAYERS:
                 privateLog = username + " has received " + DELIM + draw.getItem().revealAll();
                 publicLog = username + " has received " + DELIM + draw.getItem().revealPublic();
                 break;
@@ -114,8 +115,8 @@ public class GameLog {
                 publicLog = username + " has researched a hidden technology" + ITEM_NUMBER;
                 break;
             case DISCARD:
-                privateLog = username + " has discarded " + DELIM + draw.getItem().revealAll()  + ITEM_NUMBER;
-                publicLog = username + " has discarded " + DELIM + draw.getItem().revealAll()  + ITEM_NUMBER;
+                privateLog = username + " has discarded " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
+                publicLog = username + " has discarded " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
                 break;
             case REVEAL:
                 privateLog = username + " has revealed " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
@@ -123,7 +124,31 @@ public class GameLog {
                 break;
             case UNDO:
                 privateLog = username + " has requested undo of " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
-                publicLog = username + " has requested undo of " + DELIM + draw.getItem().revealAll()  + ITEM_NUMBER;
+                publicLog = username + " has requested undo of " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
+                break;
+            case SOT:
+                privateLog = username + " has updated and locked start of turn phase";
+                publicLog = username + " has updated and locked start of turn phase";
+                break;
+            case SETUP:
+                privateLog = username + " has updated and locked setup phase";
+                publicLog = username + " has updated and locked setup phase";
+                break;
+            case TRADE:
+                privateLog = username + " has updated and locked trade phase";
+                publicLog = username + " has updated and locked trade phase";
+                break;
+            case CM:
+                privateLog = username + " has updated and locked city management phase";
+                publicLog = username + " has updated and locked city management phase";
+                break;
+            case MOVEMENT:
+                privateLog = username + " has updated and locked movement phase";
+                publicLog = username + " has updated and locked movement phase";
+                break;
+            case RESEARCH:
+                privateLog = username + " has updated and locked research phase";
+                publicLog = username + " has updated and locked research phase";
                 break;
         }
     }
