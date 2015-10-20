@@ -17,6 +17,8 @@ package no.asgari.civilization.server.action;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Sets;
 import com.mongodb.DB;
 import lombok.SneakyThrows;
@@ -30,6 +32,7 @@ import no.asgari.civilization.server.dto.GameLogDTO;
 import no.asgari.civilization.server.dto.MessageDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
 import no.asgari.civilization.server.dto.PlayerDTO;
+import no.asgari.civilization.server.dto.WinnerDTO;
 import no.asgari.civilization.server.email.SendEmail;
 import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.misc.SecurityCheck;
@@ -58,6 +61,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Log4j
 public class GameAction extends BaseAction {
@@ -132,7 +137,7 @@ public class GameAction extends BaseAction {
                     if (v != 0) return v;
                     return Long.valueOf(o1.getCreated()).compareTo(o2.getCreated());
                 })
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     /**
@@ -152,7 +157,7 @@ public class GameAction extends BaseAction {
         dto.setNumOfPlayers(pbf.getNumOfPlayers());
         dto.setPlayers(pbf.getPlayers().stream()
                 .map(p -> createPlayerDTO(p, pbf.getId()))
-                .collect(Collectors.toList()));
+                .collect(toList()));
         dto.setNameOfUsersTurn(pbf.getNameOfUsersTurn());
         return dto;
     }
@@ -247,7 +252,7 @@ public class GameAction extends BaseAction {
         PBF pbf = pbfCollection.findOneById(pbfId);
         return pbf.getPlayers().stream()
                 .map(p -> createPlayerDTO(p, pbf.getId()))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     private PBF startIfAllPlayers(PBF pbf) {
@@ -289,7 +294,7 @@ public class GameAction extends BaseAction {
         List<GameLogDTO> publicGamelogDTOs = allPublicLogs.stream()
                 .filter(log -> !Strings.isNullOrEmpty(log.getPublicLog()))
                 .map(log -> new GameLogDTO(log.getId(), log.getPublicLog(), log.getCreatedInMillis(), new DrawDTO(log.getDraw())))
-                .collect(Collectors.toList());
+                .collect(toList());
         dto.setPublicLogs(publicGamelogDTOs);
 
         //Set private player info if correct player is loggedIn.
@@ -305,7 +310,7 @@ public class GameAction extends BaseAction {
                 List<GameLogDTO> privateGamelogDTOs = allPrivateLogs.stream()
                         .filter(log -> !Strings.isNullOrEmpty(log.getPrivateLog()))
                         .map(log -> new GameLogDTO(log.getId(), log.getPrivateLog(), log.getCreatedInMillis(), new DrawDTO(log.getDraw())))
-                        .collect(Collectors.toList());
+                        .collect(toList());
 
                 dto.setPlayer(playerhand.get());
                 dto.setPrivateLogs(privateGamelogDTOs);
@@ -404,7 +409,7 @@ public class GameAction extends BaseAction {
         return chatDTOs;
     }
 
-    public void endGame(String pbfId, String playerId) {
+    public void endGame(String pbfId, String playerId, String winner) {
         PBF pbf = pbfCollection.findOneById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         //Only game creator can end game
@@ -413,6 +418,15 @@ public class GameAction extends BaseAction {
                     .entity(new MessageDTO("Only game creator can end game"))
                     .build();
             throw new WebApplicationException(response);
+        }
+
+        if(!Strings.isNullOrEmpty(winner)) {
+            if(!pbf.getPlayers().stream()
+                    .anyMatch(p -> p.getUsername().equals(winner))) {
+                throw new WebApplicationException(Response.Status.NOT_FOUND);
+            }
+
+            pbf.setWinner(winner);
         }
 
         pbf.setActive(false);
@@ -501,7 +515,7 @@ public class GameAction extends BaseAction {
 
         List<Player> playerList = playerCollection.find().toArray().stream()
                 .filter(p -> p.getGameIds().contains(gameid))
-                .collect(Collectors.toList());
+                .collect(toList());
 
         playerList.forEach(player -> {
             log.info("Deleting game from " + player.getUsername() + "s collection also");
@@ -533,7 +547,20 @@ public class GameAction extends BaseAction {
                 .sorted((a, b) -> a.getCreated().compareTo(b.getCreated()))
                 .map(c -> new ChatDTO(c.getUsername(), c.getMessage(), c.getCreatedInMillis()))
                 .limit(50)
-                .collect(Collectors.toList());
+                .collect(toList());
+    }
+
+    public List<WinnerDTO> getWinners() {
+        List<PBF> pbfs = pbfCollection.find().toArray();
+        final ListMultimap<String, String> multimap = ArrayListMultimap.create();
+
+        pbfs.stream()
+                .filter(pbf -> !Strings.isNullOrEmpty(pbf.getWinner()))
+                .forEach(pbf -> multimap.put(pbf.getWinner(), pbf.getId()));
+
+        return multimap.keySet().stream()
+                .map(user -> new WinnerDTO(user, multimap.get(user).size()))
+                .collect(toList());
     }
 
     private String getNameForPlayerNumber(int nr) {
