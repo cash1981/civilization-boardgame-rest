@@ -12,7 +12,7 @@ import java.util.Set;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
-public class PlayerTurn {
+public class PlayerTurn implements Comparable<PlayerTurn> {
     private int turnNumber = 1;
     private String username;
     private Map<String, Boolean> setupMap = new HashMap<>(1);
@@ -21,6 +21,11 @@ public class PlayerTurn {
     private Map<String, Boolean> cmMap = new HashMap<>(1);
     private Map<String, Boolean> movementMap = new HashMap<>(1);
     private Map<String, Boolean> researchMap = new HashMap<>(1);
+
+    public PlayerTurn(String username, int turnNumber) {
+        this.username = username;
+        this.turnNumber = turnNumber;
+    }
 
     /**
      * If all orders are finished, turn is ended
@@ -94,5 +99,14 @@ public class PlayerTurn {
         }
 
         return null;
+    }
+
+    @Override
+    public int compareTo(PlayerTurn o) {
+        int i = this.username.compareTo(o.getUsername());
+        if(i != 0) {
+            return i;
+        }
+        return -Integer.valueOf(this.turnNumber).compareTo(o.getTurnNumber());
     }
 }

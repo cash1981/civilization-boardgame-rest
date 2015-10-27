@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
-public class Turn implements Comparable<Turn> {
+public class  Turn implements Comparable<Turn> {
     private int turnNumber;
     private String username;
     private String setup;

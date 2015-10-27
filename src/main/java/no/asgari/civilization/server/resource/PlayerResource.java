@@ -280,12 +280,22 @@ public class PlayerResource {
     }
 
     @PUT
-    @Path("/turn/update/sot")
-    public Response createSOT(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId,
-                              TurnDTO turn) {
+    @Path("/turn/update")
+    public Response updateTurn(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId,
+                              @Valid TurnDTO turn) {
 
         TurnAction turnAction = new TurnAction(db);
-        turnAction.updateAndLockSOT(pbfId, player.getId(), turn);
+        if("SOT".equalsIgnoreCase(turn.getPhase())) {
+            turnAction.updateAndLockSOT(pbfId, player.getId(), turn);
+        } else if("Trade".equalsIgnoreCase(turn.getPhase())) {
+            turnAction.updateAndLockTrade(pbfId, player.getId(), turn);
+        } else if("CM".equalsIgnoreCase(turn.getPhase())) {
+            turnAction.updateAndLockCM(pbfId, player.getId(), turn);
+        } else if("Movement".equalsIgnoreCase(turn.getPhase())) {
+            turnAction.updateAndLockMovement(pbfId, player.getId(), turn);
+        } else if("Research".equalsIgnoreCase(turn.getPhase())) {
+            turnAction.updateAndLockResearch(pbfId, player.getId(), turn);
+        }
 
         return Response.noContent().build();
     }

@@ -37,6 +37,7 @@ import no.asgari.civilization.server.dto.GameLogDTO;
 import no.asgari.civilization.server.dto.MessageDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
 import no.asgari.civilization.server.dto.PlayerDTO;
+import no.asgari.civilization.server.dto.WinnerDTO;
 import no.asgari.civilization.server.model.Chat;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
@@ -57,6 +58,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -66,7 +68,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Path("game")
 @Produces(MediaType.APPLICATION_JSON)
@@ -168,12 +171,25 @@ public class GameResource {
         List<PlayerDTO> players = gameAction.getAllPlayers(pbfId);
         if (player != null) {
             return Response.ok()
-                    .entity(players.stream().filter(p -> !p.getPlayerId().equals(player.getId())).collect(Collectors.toList()))
+                    .entity(players.stream().filter(p -> !p.getPlayerId().equals(player.getId())).collect(toList()))
                     .build();
         }
         return Response.ok()
                 .entity(players)
                 .build();
+    }
+
+    /**
+     * Will return a list of all the players of this PBF.
+     */
+    @GET
+    @Path("/{pbfId}/players/all")
+    public Response getAllPlayersForPBF(@NotEmpty @PathParam("pbfId") String pbfId) {
+        GameAction gameAction = new GameAction(db);
+        List<PlayerDTO> players = gameAction.getAllPlayers(pbfId);
+            return Response.ok()
+                    .entity(players)
+                    .build();
     }
 
     @POST
@@ -195,13 +211,12 @@ public class GameResource {
     @DELETE
     @Timed
     @Path("/{pbfId}/end")
-    public Response endGame(@PathParam("pbfId") String pbfId, @Auth Player player) {
+    public void endGame(@PathParam("pbfId") String pbfId, @Auth Player player, @QueryParam("winner") String winner) {
         Preconditions.checkNotNull(pbfId);
 
         log.info("Ending game with id " + pbfId);
         GameAction gameAction = new GameAction(db);
-        gameAction.endGame(pbfId, player.getId());
-        return Response.status(Response.Status.NO_CONTENT).build();
+        gameAction.endGame(pbfId, player.getId(), winner);
     }
 
     @POST
@@ -261,7 +276,7 @@ public class GameResource {
             gameLogDTOs = allPublicLogs.stream()
                     .filter(log -> !Strings.isNullOrEmpty(log.getPublicLog()))
                     .map(gl -> new GameLogDTO(gl.getId(), gl.getPublicLog(), gl.getCreatedInMillis(), new DrawDTO(gl.getDraw())))
-                    .collect(Collectors.toList());
+                    .collect(toList());
         }
         return gameLogDTOs;
     }
@@ -278,7 +293,7 @@ public class GameResource {
             gameLogDTOs = allPrivateLogs.stream()
                     .filter(log -> !Strings.isNullOrEmpty(log.getPrivateLog()))
                     .map(gl -> new GameLogDTO(gl.getId(), gl.getPrivateLog(), gl.getCreatedInMillis(), new DrawDTO(gl.getDraw())))
-                    .collect(Collectors.toList());
+                    .collect(toList());
         }
         return gameLogDTOs;
     }
@@ -459,5 +474,13 @@ public class GameResource {
         GameAction gameAction = new GameAction(db);
         String linkId = gameAction.addAssetLink(pbfId, link, player.getId());
         return Response.ok().entity(new MessageDTO(linkId)).build();
+    }
+
+    @GET
+    @Path("winners")
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public List<WinnerDTO> getWinners() {
+        GameAction gameAction = new GameAction(db);
+        return gameAction.getWinners();
     }
 }

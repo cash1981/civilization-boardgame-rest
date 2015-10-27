@@ -25,8 +25,6 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.google.common.collect.Lists;
 import lombok.Data;
-import no.asgari.civilization.server.action.BaseAction;
-import no.asgari.civilization.server.action.PlayerAction;
 import org.hibernate.validator.constraints.NotBlank;
 import org.mongojack.Id;
 import org.mongojack.ObjectId;
@@ -70,10 +68,10 @@ public class PBF {
 
     private int numOfPlayers;
     private boolean active = true;
-    private Player winner;
-    private List<Item> items = new ArrayList<>();
-    private List<Playerhand> players = new ArrayList<>();
-    private List<Tech> techs = new ArrayList<>();
+    private String winner; //username
+    private List<Item> items = Lists.newArrayList();
+    private List<Playerhand> players = Lists.newArrayList();
+    private List<Tech> techs = Lists.newArrayList();
     private List<SocialPolicy> socialPolicies = new ArrayList<>(8);
     private Set<Turn> publicTurns = new TreeSet<>();
 
