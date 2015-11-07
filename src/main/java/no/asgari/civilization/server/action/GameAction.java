@@ -412,7 +412,7 @@ public class GameAction extends BaseAction {
         PBF pbf = pbfCollection.findOneById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         //Only game creator can end game
-        if (!playerhand.isGameCreator()) {
+        if (!playerhand.isGameCreator() || !"admin".equals(playerhand.getUsername())) {
             Response response = Response.status(Response.Status.FORBIDDEN)
                     .entity(new MessageDTO("Only game creator can end game"))
                     .build();

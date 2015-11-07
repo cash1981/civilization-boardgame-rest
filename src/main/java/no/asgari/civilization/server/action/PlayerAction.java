@@ -165,15 +165,11 @@ public class PlayerAction extends BaseAction {
                     //We are at the end, pick the first player
                     Playerhand next = pbf.getPlayers().get(0);
                     next.setYourTurn(true);
-                    //TODO make async call
-                    //@see https://jersey.java.net/nonav/documentation/latest/async.html#d0e10223
-                    SendEmail.sendYourTurn(pbf.getName(), next.getEmail(), pbf.getId());
+                    sendEmailAsync(pbf, next);
                 } else {
                     Playerhand next = pbf.getPlayers().get(i + 1);
                     next.setYourTurn(true);
-                    //TODO make async call
-                    //@see https://jersey.java.net/nonav/documentation/latest/async.html#d0e10223
-                    SendEmail.sendYourTurn(pbf.getName(), next.getEmail(), pbf.getId());
+                    sendEmailAsync(pbf, next);
                 }
 
                 try {
@@ -187,6 +183,12 @@ public class PlayerAction extends BaseAction {
             }
         }
         return false;
+    }
+
+    private void sendEmailAsync(PBF pbf, Playerhand next) {
+        new Thread(() -> {
+            SendEmail.sendYourTurn(pbf.getName(), next.getEmail(), pbf.getId());
+        }).start();
     }
 
     /**

@@ -93,7 +93,8 @@ public class GameLogAction {
         GameLog pl = new GameLog();
         pl.setPbfId(pbfId);
         pl.setUsername(username);
-        pl.setPublicLog(username + " has voted " + (vote ? "yes" : "no") + " to undo " + draw.getItem().getName());
+        pl.setPublicLog(username + " has voted " + (vote ? "yes" : "no") + " to undo "
+                + draw.getItem().revealPublic() + " with item number " + draw.getItem().getItemNumber());
         pl.setId(save(pl));
         return pl;
     }
