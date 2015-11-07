@@ -54,7 +54,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -266,7 +265,7 @@ public class GameAction extends BaseAction {
             createInfoLog(pbf.getId(), "Game has now started. Good luck, and have fun!");
 
             StringBuilder sb = new StringBuilder();
-            for(int i=0; i < pbf.getPlayers().size(); i++) {
+            for (int i = 0; i < pbf.getPlayers().size(); i++) {
                 Playerhand player = pbf.getPlayers().get(i);
                 sb.append(getNameForPlayerNumber(i) + " player is " + player.getUsername() + ". ");
             }
@@ -409,19 +408,22 @@ public class GameAction extends BaseAction {
         return chatDTOs;
     }
 
-    public void endGame(String pbfId, String playerId, String winner) {
+    public void endGame(String pbfId, Player player, String winner) {
         PBF pbf = pbfCollection.findOneById(pbfId);
-        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        //Only game creator can end game
-        if (!playerhand.isGameCreator()) {
-            Response response = Response.status(Response.Status.FORBIDDEN)
-                    .entity(new MessageDTO("Only game creator can end game"))
-                    .build();
-            throw new WebApplicationException(response);
+
+        if (!"admin".equals(player.getUsername())) {
+            Playerhand playerhand = getPlayerhandByPlayerId(player.getId(), pbf);
+            //Only game creator can end game
+            if (!playerhand.isGameCreator()) {
+                Response response = Response.status(Response.Status.FORBIDDEN)
+                        .entity(new MessageDTO("Only game creator can end game"))
+                        .build();
+                throw new WebApplicationException(response);
+            }
         }
 
-        if(!Strings.isNullOrEmpty(winner)) {
-            if(!pbf.getPlayers().stream()
+        if (!Strings.isNullOrEmpty(winner)) {
+            if (!pbf.getPlayers().stream()
                     .anyMatch(p -> p.getUsername().equals(winner))) {
                 throw new WebApplicationException(Response.Status.NOT_FOUND);
             }
@@ -430,7 +432,7 @@ public class GameAction extends BaseAction {
         }
 
         pbf.setActive(false);
-        createInfoLog(pbfId, playerhand.getUsername() + " Ended this game");
+        createInfoLog(pbfId, player.getUsername() + " Ended this game");
         createInfoLog(pbfId, "Thank you for playing! Please donate if you liked this game!");
         pbf.getPlayers().forEach(p -> SendEmail.sendMessage(p.getEmail(), "Game ended", pbf.getName() + " has ended. I hope you enjoyed playing.\n" +
                 "If you like this game, please consider donating. You can find the link at the bottom of the site. It will help keep the lights on, and continue adding more features!" +
@@ -520,11 +522,12 @@ public class GameAction extends BaseAction {
         playerList.forEach(player -> {
             log.info("Deleting game from " + player.getUsername() + "s collection also");
             player.getGameIds().remove(gameid);
-            SendEmail.sendMessage(player.getEmail(), "Game deleted", "Your game " + pbf.getName() + " was deleted by the admin due to inactivity");
+            SendEmail.sendMessage(player.getEmail(), "Game deleted", "Your game " + pbf.getName() + " was deleted by the admin. " +
+                    "If this was incorrect, please contact the admin.");
             playerCollection.save(player);
         });
 
-        return Strings.isNullOrEmpty(writeResult.getWriteResult().toString());
+        return true;
     }
 
     public void sendMailToAll(String msg) {

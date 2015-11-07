@@ -218,7 +218,7 @@ public class GameResource {
 
         log.info("Ending game with id " + pbfId);
         GameAction gameAction = new GameAction(db);
-        gameAction.endGame(pbfId, player.getId(), winner);
+        gameAction.endGame(pbfId, player, winner);
     }
 
     @POST
