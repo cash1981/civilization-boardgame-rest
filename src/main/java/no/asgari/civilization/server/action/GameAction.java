@@ -32,12 +32,14 @@ import no.asgari.civilization.server.dto.GameLogDTO;
 import no.asgari.civilization.server.dto.MessageDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
 import no.asgari.civilization.server.dto.PlayerDTO;
+import no.asgari.civilization.server.dto.RevealedItemDTO;
 import no.asgari.civilization.server.dto.WinnerDTO;
 import no.asgari.civilization.server.email.SendEmail;
 import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.misc.SecurityCheck;
 import no.asgari.civilization.server.model.Chat;
 import no.asgari.civilization.server.model.GameLog;
+import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
@@ -61,7 +63,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Log4j
 public class GameAction extends BaseAction {
@@ -315,6 +319,7 @@ public class GameAction extends BaseAction {
                 dto.setPrivateLogs(privateGamelogDTOs);
             }
         }
+        dto.setRevealedItems(getAllRevealedItems(pbf));
         return dto;
     }
 
@@ -564,6 +569,40 @@ public class GameAction extends BaseAction {
         return multimap.keySet().stream()
                 .map(user -> new WinnerDTO(user, multimap.get(user).size()))
                 .collect(toList());
+    }
+
+    private List<RevealedItemDTO> getAllRevealedItems(PBF pbf) {
+        final Map<String, List<Item>> discarded = pbf.getDiscardedItems().stream()
+                .sorted()
+                .collect(groupingBy(Item::getOwnerId, toList()));
+
+        final Map<String, List<Item>> revealed = pbf.getPlayers().stream()
+                .flatMap(p -> p.getItems().stream())
+                .filter(it -> !it.isHidden())
+                .sorted()
+                .collect(groupingBy(Item::getOwnerId, toList()));
+
+        List<RevealedItemDTO> revealedDTO = discarded.keySet().stream()
+                .map(key -> {
+                    RevealedItemDTO dto = new RevealedItemDTO();
+                    dto.setUsername(playerCollection.findOneById(key).getUsername());
+                    discarded.get(key);
+                    dto.setItems(discarded.get(key));
+                    return dto;
+                })
+                .collect(toList());
+
+        revealedDTO.addAll(revealed.keySet().stream()
+                .map(key -> {
+                    RevealedItemDTO dto = new RevealedItemDTO();
+                    dto.setUsername(playerCollection.findOneById(key).getUsername());
+                    revealed.get(key);
+                    dto.setItems(revealed.get(key));
+                    return dto;
+                })
+                .collect(toList()));
+
+        return revealedDTO;
     }
 
     private String getNameForPlayerNumber(int nr) {

@@ -472,7 +472,7 @@ public class PlayerAction extends BaseAction {
         }
 
         //Find the item, then delete it
-        Optional<Item> itemToDeleteOptional = playerhand.getItems().parallelStream()
+        Optional<Item> itemToDeleteOptional = playerhand.getItems().stream()
                 .filter(item -> item.getSheetName() == dtoSheet.get() && item.getName().equals(itemdto.getName()))
                 .findAny();
 

@@ -43,5 +43,6 @@ public class GameDTO {
     private List<GameLogDTO> publicLogs;
     private List<GameLogDTO> privateLogs;
     private Playerhand player;
+    private List<RevealedItemDTO> revealedItems;
 
 }
