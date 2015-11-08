@@ -308,7 +308,7 @@ public class DrawAction extends BaseAction {
      * @param targetPlayerId - The targeted player which will recieve the item
      * @param playerId       - The logged in player that we will take the item from
      */
-    public Item drawRandomItemAndGiveToPlayer(String pbfId, EnumSet<SheetName> sheetNames, String targetPlayerId, String playerId) {
+    public Item loot(String pbfId, EnumSet<SheetName> sheetNames, String targetPlayerId, String playerId) {
         Preconditions.checkNotNull(pbfId);
         Preconditions.checkNotNull(sheetNames);
         Preconditions.checkNotNull(targetPlayerId);
@@ -345,11 +345,11 @@ public class DrawAction extends BaseAction {
         if (removed) {
             //Give to the other player
             playerTo.getItems().add(itemToGive);
-            createCommonPrivateLog(" gives " + itemToGive.revealAll() + " to " + playerTo.getUsername(), pbfId, playerFrom.getPlayerId());
-            createCommonPrivateLog(" receives " + itemToGive.revealAll() + " from " + playerFrom.getUsername(), pbfId, playerTo.getPlayerId());
+            createCommonPrivateLog(" is randomly looted " + itemToGive.revealAll() + " and gives to " + playerTo.getUsername(), pbfId, playerFrom.getPlayerId());
+            createCommonPrivateLog(" receives as loot " + itemToGive.revealAll() + " from " + playerFrom.getUsername(), pbfId, playerTo.getPlayerId());
 
-            createCommonPublicLog(" gives " + itemToGive.revealPublic() + " to " + playerTo.getUsername(), pbfId, playerFrom.getPlayerId());
-            createCommonPublicLog(" receives " + itemToGive.revealPublic() + " from " + playerFrom.getUsername(), pbfId, playerTo.getPlayerId());
+            createCommonPublicLog(" is randomly looted " + itemToGive.revealPublic() + " and gives to " + playerTo.getUsername(), pbfId, playerFrom.getPlayerId());
+            createCommonPublicLog(" receives as loot " + itemToGive.revealPublic() + " from " + playerFrom.getUsername(), pbfId, playerTo.getPlayerId());
 
             pbfCollection.updateById(pbf.getId(), pbf);
             return itemToGive;

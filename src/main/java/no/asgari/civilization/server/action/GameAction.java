@@ -32,7 +32,6 @@ import no.asgari.civilization.server.dto.GameLogDTO;
 import no.asgari.civilization.server.dto.MessageDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
 import no.asgari.civilization.server.dto.PlayerDTO;
-import no.asgari.civilization.server.dto.RevealedItemDTO;
 import no.asgari.civilization.server.dto.WinnerDTO;
 import no.asgari.civilization.server.email.SendEmail;
 import no.asgari.civilization.server.excel.ItemReader;
@@ -62,10 +61,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 @Log4j
 public class GameAction extends BaseAction {
@@ -539,7 +537,7 @@ public class GameAction extends BaseAction {
         playerCollection.find().toArray()
                 .stream()
                 .forEach(player -> {
-                    SendEmail.sendMessage(player.getEmail(), "Update to civilization",
+                    SendEmail.sendMessage(player.getEmail(), "Update to civilization (playciv.com)",
                             "Hello " + player.getUsername() +
                                     "\n" + msg);
                 });
@@ -571,38 +569,17 @@ public class GameAction extends BaseAction {
                 .collect(toList());
     }
 
-    private List<RevealedItemDTO> getAllRevealedItems(PBF pbf) {
-        final Map<String, List<Item>> discarded = pbf.getDiscardedItems().stream()
-                .sorted()
-                .collect(groupingBy(Item::getOwnerId, toList()));
+    private List<Item> getAllRevealedItems(PBF pbf) {
+        Stream<Item> discardedStream = pbf.getDiscardedItems().stream()
+                .sorted();
 
-        final Map<String, List<Item>> revealed = pbf.getPlayers().stream()
+        Stream<Item> playerStream = pbf.getPlayers().stream()
                 .flatMap(p -> p.getItems().stream())
                 .filter(it -> !it.isHidden())
-                .sorted()
-                .collect(groupingBy(Item::getOwnerId, toList()));
+                .sorted();
 
-        List<RevealedItemDTO> revealedDTO = discarded.keySet().stream()
-                .map(key -> {
-                    RevealedItemDTO dto = new RevealedItemDTO();
-                    dto.setUsername(playerCollection.findOneById(key).getUsername());
-                    discarded.get(key);
-                    dto.setItems(discarded.get(key));
-                    return dto;
-                })
-                .collect(toList());
-
-        revealedDTO.addAll(revealed.keySet().stream()
-                .map(key -> {
-                    RevealedItemDTO dto = new RevealedItemDTO();
-                    dto.setUsername(playerCollection.findOneById(key).getUsername());
-                    revealed.get(key);
-                    dto.setItems(revealed.get(key));
-                    return dto;
-                })
-                .collect(toList()));
-
-        return revealedDTO;
+        Stream<Item> concatedStream = Stream.concat(discardedStream, playerStream);
+        return concatedStream.collect(toList());
     }
 
     private String getNameForPlayerNumber(int nr) {
