@@ -85,6 +85,7 @@ public class AdminResource {
         return Response.status(Response.Status.NOT_MODIFIED).build();
     }
 
+    /*
     @PUT
     @Path("/mail")
     @Consumes(MediaType.TEXT_PLAIN)
@@ -93,4 +94,5 @@ public class AdminResource {
         gameAction.sendMailToAll(msg);
         return Response.noContent().build();
     }
+    */
 }
