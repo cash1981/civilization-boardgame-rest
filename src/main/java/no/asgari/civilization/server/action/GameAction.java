@@ -570,13 +570,14 @@ public class GameAction extends BaseAction {
     }
 
     private List<Item> getAllRevealedItems(PBF pbf) {
+        //Had to have comparator inside sort, otherwise weird exception
         Stream<Item> discardedStream = pbf.getDiscardedItems().stream()
-                .sorted();
+                .sorted((o1, o2) -> o1.getSheetName().compareTo(o2.getSheetName()));
 
         Stream<Item> playerStream = pbf.getPlayers().stream()
                 .flatMap(p -> p.getItems().stream())
                 .filter(it -> !it.isHidden())
-                .sorted();
+                .sorted((o1, o2) -> o1.getSheetName().compareTo(o2.getSheetName()));
 
         Stream<Item> concatedStream = Stream.concat(discardedStream, playerStream);
         return concatedStream.collect(toList());
