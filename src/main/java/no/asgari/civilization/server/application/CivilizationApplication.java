@@ -61,10 +61,9 @@ import static org.eclipse.jetty.servlets.CrossOriginFilter.*;
 public class CivilizationApplication extends Application<CivilizationConfiguration> {
 
     public static void main(String[] args) throws Exception {
-        if(args == null || args.length == 0) {
+        if (args == null || args.length == 0) {
             new CivilizationApplication().run("server", "src/main/resources/config.yml");
-        }
-        else {
+        } else {
             new CivilizationApplication().run(args);
         }
     }
@@ -79,7 +78,7 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
     public void run(CivilizationConfiguration configuration, Environment environment) throws Exception {
         DB db;
         MongoClient mongo;
-        if(!Strings.isNullOrEmpty(configuration.mongodbUser) && !Strings.isNullOrEmpty(configuration.mongodbPassword)) {
+        if (!Strings.isNullOrEmpty(configuration.mongodbUser) && !Strings.isNullOrEmpty(configuration.mongodbPassword)) {
             MongoClientURI clientURI = new MongoClientURI("mongodb://" + configuration.mongodbUser + ":" + configuration.mongodbPassword
                     + "@" + configuration.mongohost + ":" + configuration.mongoport + "/" + configuration.mongodb);
 

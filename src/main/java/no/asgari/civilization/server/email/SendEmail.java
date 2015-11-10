@@ -38,7 +38,7 @@ public class SendEmail {
     }
 
     public static boolean sendYourTurn(String gamename, String emailToo, String pbfId) {
-        if(System.getenv(SENDGRID_USERNAME) == null || System.getenv(SENDGRID_PASSWORD) == null) {
+        if (System.getenv(SENDGRID_USERNAME) == null || System.getenv(SENDGRID_PASSWORD) == null) {
             log.error("Missing environment variable for SENDGRID_USERNAME or SENDGRID_PASSWORD");
             return false;
         }
@@ -59,7 +59,7 @@ public class SendEmail {
     }
 
     public static boolean sendMessage(String email, String subject, String message) {
-        if(System.getenv(SENDGRID_USERNAME) == null || System.getenv(SENDGRID_PASSWORD) == null) {
+        if (System.getenv(SENDGRID_USERNAME) == null || System.getenv(SENDGRID_PASSWORD) == null) {
             log.error("Missing environment variable for SENDGRID_USERNAME or SENDGRID_PASSWORD");
             return false;
         }

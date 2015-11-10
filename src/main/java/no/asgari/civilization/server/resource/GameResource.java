@@ -49,7 +49,6 @@ import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -69,7 +68,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -189,9 +187,9 @@ public class GameResource {
     public Response getAllPlayersForPBF(@NotEmpty @PathParam("pbfId") String pbfId) {
         GameAction gameAction = new GameAction(db);
         List<PlayerDTO> players = gameAction.getAllPlayers(pbfId);
-            return Response.ok()
-                    .entity(players)
-                    .build();
+        return Response.ok()
+                .entity(players)
+                .build();
     }
 
     @POST

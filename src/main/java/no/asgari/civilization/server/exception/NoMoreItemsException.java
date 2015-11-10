@@ -15,14 +15,17 @@
 
 package no.asgari.civilization.server.exception;
 
+import no.asgari.civilization.server.dto.MessageDTO;
+
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 public class NoMoreItemsException extends WebApplicationException {
     public NoMoreItemsException(String name) {
         super(Response.status(Response.Status.GONE)
-                .entity("{\"msg:\" \"No more " + name + " to draw!\"}")
+                .entity(Entity.json(new MessageDTO("No more " + name + " to draw!")))
                 .type(MediaType.APPLICATION_JSON)
                 .build());
     }

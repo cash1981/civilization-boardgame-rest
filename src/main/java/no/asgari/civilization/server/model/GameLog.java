@@ -114,8 +114,8 @@ public class GameLog {
                 publicLog = username + " has researched a hidden technology" + ITEM_NUMBER;
                 break;
             case DISCARD:
-                privateLog = username + " has discarded " + DELIM + draw.getItem().revealAll()  + ITEM_NUMBER;
-                publicLog = username + " has discarded " + DELIM + draw.getItem().revealAll()  + ITEM_NUMBER;
+                privateLog = username + " has discarded " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
+                publicLog = username + " has discarded " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
                 break;
             case REVEAL:
                 privateLog = username + " has revealed " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
@@ -123,7 +123,7 @@ public class GameLog {
                 break;
             case UNDO:
                 privateLog = username + " has requested undo of " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
-                publicLog = username + " has requested undo of " + DELIM + draw.getItem().revealPublic()  + ITEM_NUMBER;
+                publicLog = username + " has requested undo of " + DELIM + draw.getItem().revealPublic() + ITEM_NUMBER;
                 break;
         }
     }

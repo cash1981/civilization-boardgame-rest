@@ -53,7 +53,6 @@ import java.net.URLDecoder;
 import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -480,7 +479,7 @@ public class PlayerAction extends BaseAction {
 
         Item itemToDelete = itemToDeleteOptional.get();
         itemToDelete.setHidden(true);
-        //itemToDelete.setOwnerId(null);
+        //itemToDelete.setOwnerId(null); //I think I need this in case of undo
 
         if (playerhand.getItems().remove(itemToDeleteOptional.get())) {
             pbf.getDiscardedItems().add(itemToDeleteOptional.get());
