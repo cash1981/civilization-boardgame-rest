@@ -21,8 +21,10 @@ import no.asgari.civilization.server.action.GameAction;
 import no.asgari.civilization.server.model.Player;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -74,7 +76,7 @@ public class AdminResource {
     @Path("/deletegame")
     @POST
     public Response deleteGame(@Auth Player admin, @QueryParam("gameid") String gameid) {
-        if (!admin.getUsername().equals("admin")) {
+        if (!"admin".equals(admin.getUsername())) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
@@ -82,6 +84,22 @@ public class AdminResource {
         if (deleted) return Response.ok().build();
 
         return Response.status(Response.Status.NOT_MODIFIED).build();
+    }
+
+    @Path("/email/notification/{playerId}/stop")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public Response stopEmail(@PathParam("playerId") String playerId) {
+
+        boolean yes = gameAction.disableEmailForPlayer(playerId);
+        if (yes) {
+            return Response.ok().entity(
+                    "You will no longer get anymore emails. Don't forget to check in once in a while. " +
+                    "If you reconsider and want to get emails again, then you have to manually send a mail to cash@playciv.com and ask to get emails again")
+                    .build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 
     /*

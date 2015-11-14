@@ -28,6 +28,7 @@ import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.dto.TechDTO;
 import no.asgari.civilization.server.email.SendEmail;
 import no.asgari.civilization.server.exception.PlayerExistException;
+import no.asgari.civilization.server.misc.CivUtil;
 import no.asgari.civilization.server.misc.SecurityCheck;
 import no.asgari.civilization.server.model.Civ;
 import no.asgari.civilization.server.model.Draw;
@@ -161,19 +162,18 @@ public class PlayerAction extends BaseAction {
                 playerhand.setYourTurn(false);
 
                 //Choose next player in line to be starting player
+                Playerhand nextPlayer;
                 if (pbf.getPlayers().size() == (i + 1)) {
                     //We are at the end, pick the first player
-                    Playerhand next = pbf.getPlayers().get(0);
-                    next.setYourTurn(true);
-                    //TODO make async call
-                    //@see https://jersey.java.net/nonav/documentation/latest/async.html#d0e10223
-                    SendEmail.sendYourTurn(pbf.getName(), next.getEmail(), pbf.getId());
+                    nextPlayer = pbf.getPlayers().get(0);
                 } else {
-                    Playerhand next = pbf.getPlayers().get(i + 1);
-                    next.setYourTurn(true);
-                    //TODO make async call
-                    //@see https://jersey.java.net/nonav/documentation/latest/async.html#d0e10223
-                    SendEmail.sendYourTurn(pbf.getName(), next.getEmail(), pbf.getId());
+                    nextPlayer = pbf.getPlayers().get(i + 1);
+                }
+                //TODO make async call
+                //@see https://jersey.java.net/nonav/documentation/latest/async.html#d0e10223
+                nextPlayer.setYourTurn(true);
+                if(CivUtil.shouldSendEmail(nextPlayer)) {
+                    SendEmail.sendYourTurn(pbf.getName(), nextPlayer.getEmail(), pbf.getId());
                 }
 
                 try {
@@ -563,7 +563,7 @@ public class PlayerAction extends BaseAction {
         return SendEmail.sendMessage(player.getEmail(),
                 "Please verify your email",
                 "Your password was requested to be changed. If you want to change your password then please press this link: "
-                        + SendEmail.REST_URL + "api/auth/verify/" + player.getId());
+                        + SendEmail.REST_URL + "api/auth/verify/" + player.getId(), player.getId());
     }
 
     public boolean verifyPassword(String playerId) {

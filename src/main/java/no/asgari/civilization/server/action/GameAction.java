@@ -35,6 +35,7 @@ import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.dto.WinnerDTO;
 import no.asgari.civilization.server.email.SendEmail;
 import no.asgari.civilization.server.excel.ItemReader;
+import no.asgari.civilization.server.misc.CivUtil;
 import no.asgari.civilization.server.misc.SecurityCheck;
 import no.asgari.civilization.server.model.Chat;
 import no.asgari.civilization.server.model.GameLog;
@@ -118,9 +119,13 @@ public class GameAction extends BaseAction {
 
         playerCollection.find().toArray().stream()
                 .filter(p -> !p.isDisableEmail())
-                .forEach(p ->
+                .forEach(p -> {
+                    if(CivUtil.shouldSendEmail(p)) {
                         SendEmail.sendMessage(p.getEmail(), "New Civilization game created",
-                                "A new game by the name " + pbf.getName() + " was just created! Visit " + SendEmail.URL + " to join the game."));
+                                "A new game by the name " + pbf.getName() + " was just created! Visit " + SendEmail.URL + " to join the game.", p.getId());
+                        playerCollection.updateById(p.getId(), p);
+                    }
+                });
         return pbf.getId();
     }
 
@@ -182,10 +187,10 @@ public class GameAction extends BaseAction {
         return playerhand;
     }
 
-    public void joinGame(String pbfId, String playerId, Optional<String> colorOpt) {
+    public void joinGame(String pbfId, Player player, Optional<String> colorOpt) {
         PBF pbf = pbfCollection.findOneById(pbfId);
-        pbf.getPlayers().stream().forEach(p -> SendEmail.sendMessage(p.getEmail(), "Game update", "Someone joined " + pbf.getName() + ". Go to " + SendEmail.URL + " to find out who!"));
-        joinGame(pbf, playerId, colorOpt, false);
+        pbf.getPlayers().stream().forEach(p -> SendEmail.sendMessage(p.getEmail(), "Game update", player.getUsername() + " joined " + pbf.getName() + ". Go to " + SendEmail.URL + " to find out who!", p.getPlayerId()));
+        joinGame(pbf, player.getId(), colorOpt, false);
     }
 
     /**
@@ -374,16 +379,22 @@ public class GameAction extends BaseAction {
         String id = chatCollection.insert(chat).getSavedId();
         chat.setId(id);
 
+        PBF pbf = findPBFById(pbfId);
+
         if (pbfId != null) {
             String msg = CivSingleton.instance().getChatCache().getIfPresent(pbfId);
             if (Strings.isNullOrEmpty(msg)) {
                 CivSingleton.instance().getChatCache().put(pbfId, message);
-                getListOfPlayersPlaying(pbfId)
+                pbf.getPlayers()
                         .stream()
                         .filter(p -> !p.getUsername().equals(username))
-                        .forEach(
-                                p -> SendEmail.sendMessage(p.getEmail(), "New Chat", username + " wrote in the chat: " + chat.getMessage()
-                                        + ".\nLogin to " + SendEmail.gamelink(pbfId) + " to see the chat")
+                        .forEach(p -> {
+                                    if(CivUtil.shouldSendEmail(p)) {
+                                        SendEmail.sendMessage(p.getEmail(), "New Chat", username + " wrote in the chat: " + chat.getMessage()
+                                                + ".\nLogin to " + SendEmail.gamelink(pbfId) + " to see the chat", p.getPlayerId());
+                                        pbfCollection.updateById(pbfId, pbf);
+                                    }
+                                }
                         );
             }
         }
@@ -439,7 +450,7 @@ public class GameAction extends BaseAction {
         createInfoLog(pbfId, "Thank you for playing! Please donate if you liked this game!");
         pbf.getPlayers().forEach(p -> SendEmail.sendMessage(p.getEmail(), "Game ended", pbf.getName() + " has ended. I hope you enjoyed playing.\n" +
                 "If you like this game, please consider donating. You can find the link at the bottom of the site. It will help keep the lights on, and continue adding more features!" +
-                "\n\nBest regards Shervin Asgari aka Cash"));
+                "\n\nBest regards Shervin Asgari aka Cash", p.getPlayerId()));
         pbfCollection.updateById(pbfId, pbf);
     }
 
@@ -508,7 +519,7 @@ public class GameAction extends BaseAction {
 
         pbfCollection.updateById(pbf.getId(), pbf);
         createInfoLog(pbf.getId(), newUsername + " is now playing instead of " + oldUsername);
-        SendEmail.sendMessage(playerhandToReplace.getEmail(), "You are now playing in " + pbf.getName(), "Please log in to http://playciv.com and start playing!");
+        SendEmail.sendMessage(playerhandToReplace.getEmail(), "You are now playing in " + pbf.getName(), "Please log in to http://playciv.com and start playing!", playerhandToReplace.getPlayerId());
     }
 
     public boolean deleteGame(String gameid) {
@@ -526,7 +537,7 @@ public class GameAction extends BaseAction {
             log.info("Deleting game from " + player.getUsername() + "s collection also");
             player.getGameIds().remove(gameid);
             SendEmail.sendMessage(player.getEmail(), "Game deleted", "Your game " + pbf.getName() + " was deleted by the admin. " +
-                    "If this was incorrect, please contact the admin.");
+                    "If this was incorrect, please contact the admin.", player.getId());
             playerCollection.save(player);
         });
 
@@ -536,10 +547,11 @@ public class GameAction extends BaseAction {
     public void sendMailToAll(String msg) {
         playerCollection.find().toArray()
                 .stream()
+                .filter(p -> !p.isDisableEmail())
                 .forEach(player -> {
                     SendEmail.sendMessage(player.getEmail(), "Update to civilization (playciv.com)",
                             "Hello " + player.getUsername() +
-                                    "\n" + msg);
+                                    "\n" + msg, player.getId());
                 });
     }
 
@@ -600,5 +612,16 @@ public class GameAction extends BaseAction {
         }
 
         return "";
+    }
+
+    public boolean disableEmailForPlayer(String playerId) {
+        Player player = playerCollection.findOneById(playerId);
+        if (player != null && !Strings.isNullOrEmpty(player.getNewPassword())) {
+            log.warn("Player " + player.getEmail() + " no longer wants email");
+            player.setDisableEmail(true);
+            playerCollection.updateById(playerId, player);
+            return true;
+        }
+        return  false;
     }
 }

@@ -227,7 +227,7 @@ public class GameResource {
         Preconditions.checkNotNull(player);
 
         GameAction gameAction = new GameAction(db);
-        gameAction.joinGame(pbfId, player.getId(), Optional.empty());
+        gameAction.joinGame(pbfId, player, Optional.empty());
         return Response.noContent().build();
     }
 
