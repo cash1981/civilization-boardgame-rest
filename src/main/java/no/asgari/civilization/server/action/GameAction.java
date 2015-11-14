@@ -441,7 +441,7 @@ public class GameAction extends BaseAction {
                     .anyMatch(p -> p.getUsername().equals(winner))) {
                 throw new WebApplicationException(Response.Status.NOT_FOUND);
             }
-
+            createInfoLog(pbfId, winner + " won the game! Congratulations!");
             pbf.setWinner(winner);
         }
 
