@@ -30,6 +30,7 @@ import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.dto.TurnDTO;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Player;
+import no.asgari.civilization.server.model.PlayerTurn;
 import no.asgari.civilization.server.model.Tech;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -279,6 +280,13 @@ public class PlayerResource {
         return Response.ok().build();
     }
 
+    @GET
+    @Path("turn")
+    public Set<PlayerTurn> getPlayersturns(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId) {
+        TurnAction turnAction = new TurnAction(db);
+        return turnAction.getPlayersTurns(pbfId, player.getId());
+    }
+
     @PUT
     @Path("/turn/update")
     public Response updateTurn(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId,
@@ -286,19 +294,28 @@ public class PlayerResource {
 
         TurnAction turnAction = new TurnAction(db);
         if("SOT".equalsIgnoreCase(turn.getPhase())) {
-            turnAction.updateAndLockSOT(pbfId, player.getId(), turn);
+            turnAction.updateSOT(pbfId, player.getId(), turn);
         } else if("Trade".equalsIgnoreCase(turn.getPhase())) {
-            turnAction.updateAndLockTrade(pbfId, player.getId(), turn);
+            turnAction.updateTrade(pbfId, player.getId(), turn);
         } else if("CM".equalsIgnoreCase(turn.getPhase())) {
-            turnAction.updateAndLockCM(pbfId, player.getId(), turn);
+            turnAction.updateCM(pbfId, player.getId(), turn);
         } else if("Movement".equalsIgnoreCase(turn.getPhase())) {
-            turnAction.updateAndLockMovement(pbfId, player.getId(), turn);
+            turnAction.updateMovement(pbfId, player.getId(), turn);
         } else if("Research".equalsIgnoreCase(turn.getPhase())) {
-            turnAction.updateAndLockResearch(pbfId, player.getId(), turn);
+            turnAction.updateResearch(pbfId, player.getId(), turn);
         }
 
         return Response.noContent().build();
     }
 
+    @PUT
+    @Path("/turn/lock")
+    public Response lockOrUnlockTurn(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId,
+                               @Valid TurnDTO turn) {
 
+        TurnAction turnAction = new TurnAction(db);
+        turnAction.lockOrUnlockTurn(pbfId, player.getId(), turn);
+
+        return Response.noContent().build();
+    }
 }

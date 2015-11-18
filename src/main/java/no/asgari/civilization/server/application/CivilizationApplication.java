@@ -61,10 +61,9 @@ import static org.eclipse.jetty.servlets.CrossOriginFilter.*;
 public class CivilizationApplication extends Application<CivilizationConfiguration> {
 
     public static void main(String[] args) throws Exception {
-        if(args == null || args.length == 0) {
+        if (args == null || args.length == 0) {
             new CivilizationApplication().run("server", "src/main/resources/config.yml");
-        }
-        else {
+        } else {
             new CivilizationApplication().run(args);
         }
     }
@@ -79,7 +78,7 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
     public void run(CivilizationConfiguration configuration, Environment environment) throws Exception {
         DB db;
         MongoClient mongo;
-        if(!Strings.isNullOrEmpty(configuration.mongodbUser) && !Strings.isNullOrEmpty(configuration.mongodbPassword)) {
+        if (!Strings.isNullOrEmpty(configuration.mongodbUser) && !Strings.isNullOrEmpty(configuration.mongodbPassword)) {
             MongoClientURI clientURI = new MongoClientURI("mongodb://" + configuration.mongodbUser + ":" + configuration.mongodbPassword
                     + "@" + configuration.mongohost + ":" + configuration.mongoport + "/" + configuration.mongodb);
 
@@ -97,7 +96,7 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         JacksonDBCollection<Chat, String> chatCollection = JacksonDBCollection.wrap(db.getCollection(Chat.COL_NAME), Chat.class, String.class);
         createUniqueIndexForPlayer(playerCollection);
         createUsernameCache(playerCollection);
-        createUniqueIndexForPBF(pbfCollection);
+        //createUniqueIndexForPBF(pbfCollection);
         createIndexForChat(chatCollection);
         //createItemCache(); //TODO Have to rewrite the code to make it work, right now everyone gets same number and same draws
 
@@ -157,11 +156,11 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         }
     }
 
-    private void createUniqueIndexForPBF(JacksonDBCollection<PBF, String> pbfCollection) {
+    /*private void createUniqueIndexForPBF(JacksonDBCollection<PBF, String> pbfCollection) {
         if (pbfCollection.getIndexInfo().isEmpty()) {
             pbfCollection.createIndex(new BasicDBObject(PBF.NAME, 1), new BasicDBObject("unique", true));
         }
-    }
+    }*/
 
     private void createIndexForChat(JacksonDBCollection<Chat, String> chatCollection) {
         if (chatCollection.getIndexInfo().isEmpty()) {

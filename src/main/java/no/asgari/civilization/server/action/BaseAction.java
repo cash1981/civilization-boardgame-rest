@@ -141,8 +141,4 @@ public abstract class BaseAction {
                 .build());
     }
 
-    List<Playerhand> getListOfPlayersPlaying(String pbfId) {
-        return findPBFById(pbfId).getPlayers();
-    }
-
 }

@@ -145,7 +145,7 @@ public class AuthResource {
     public Response newPassword(ForgotpassDTO forgotpassDTO) {
         PlayerAction playerAction = new PlayerAction(db);
         boolean yes = playerAction.newPassword(forgotpassDTO);
-        if(yes) {
+        if (yes) {
             return Response.ok().build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -158,7 +158,7 @@ public class AuthResource {
     public Response verifyPassword(@PathParam("playerId") String playerId) {
         PlayerAction playerAction = new PlayerAction(db);
         boolean yes = playerAction.verifyPassword(playerId);
-        if(yes) {
+        if (yes) {
             return Response.ok().entity("<html>Your password was correctly changed. <a href=\"http://playciv.com\">Try to login again </a></html>").build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();

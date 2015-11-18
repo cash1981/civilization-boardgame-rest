@@ -18,11 +18,16 @@ package no.asgari.civilization.server.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -62,7 +67,14 @@ public class Playerhand implements Comparable<Playerhand> {
     private List<Unit> barbarians = new ArrayList<>(3);
     private List<Unit> battlehand = new ArrayList<>();
     private List<SocialPolicy> socialPolicies = new ArrayList<>();
+    /**
+     * Private turns, only made public when they are locked
+     */
     private Set<PlayerTurn> playerTurns = new TreeSet<>();
+
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime emailSent = LocalDateTime.now();
 
     @JsonIgnore
     public static String green() {

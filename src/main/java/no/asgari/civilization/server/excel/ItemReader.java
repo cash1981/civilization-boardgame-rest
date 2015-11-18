@@ -83,7 +83,7 @@ public class ItemReader {
     private static final Predicate<Cell> rowNotZeroPredicate = cell -> cell.getRow().getRowNum() != 0;
     private static final Predicate<Cell> columnIndexZeroPredicate = cell -> cell.getColumnIndex() == 0;
 
-    private static AtomicInteger itemCounter = new AtomicInteger(RandomUtils.nextInt(1,20));
+    private static AtomicInteger itemCounter = new AtomicInteger(RandomUtils.nextInt(1, 20));
 
     @SuppressWarnings("unchecked")
     public void readItemsFromExcel(GameType gameType) throws IOException {
@@ -388,7 +388,7 @@ public class ItemReader {
             if (wonder.toLowerCase().contains(SheetName.WONDERS.getName().toLowerCase())) {
                 break;
             }
-            ancientWonders.add(new Wonder(wonder, desc, Wonder.ANCIENT, SheetName.ANCIENT_WONDERS,itemCounter.incrementAndGet()));
+            ancientWonders.add(new Wonder(wonder, desc, Wonder.ANCIENT, SheetName.ANCIENT_WONDERS, itemCounter.incrementAndGet()));
         }
         Collections.shuffle(ancientWonders);
 
@@ -400,7 +400,7 @@ public class ItemReader {
             if (wonder.toLowerCase().contains(SheetName.WONDERS.getName().toLowerCase())) {
                 break;
             }
-            medievalWonders.add(new Wonder(wonder, desc, Wonder.MEDIEVAL, SheetName.MEDIEVAL_WONDERS,itemCounter.incrementAndGet()));
+            medievalWonders.add(new Wonder(wonder, desc, Wonder.MEDIEVAL, SheetName.MEDIEVAL_WONDERS, itemCounter.incrementAndGet()));
         }
         Collections.shuffle(medievalWonders);
 
@@ -412,7 +412,7 @@ public class ItemReader {
         for (int i = 0; i < remainingSize; i++) {
             String wonder = wondersName.poll();
             String desc = descriptions.poll();
-            modernWonders.add(new Wonder(wonder, desc, Wonder.MODERN, SheetName.MODERN_WONDERS,itemCounter.incrementAndGet()));
+            modernWonders.add(new Wonder(wonder, desc, Wonder.MODERN, SheetName.MODERN_WONDERS, itemCounter.incrementAndGet()));
         }
         Collections.shuffle(modernWonders);
     }
@@ -428,7 +428,7 @@ public class ItemReader {
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
-                .map(tilename -> new Tile(String.format("%d", (int) Double.valueOf(tilename.toString()).doubleValue()),itemCounter.incrementAndGet()))
+                .map(tilename -> new Tile(String.format("%d", (int) Double.valueOf(tilename.toString()).doubleValue()), itemCounter.incrementAndGet()))
                 .collect(Collectors.toList());
 
         Collections.shuffle(tiles);

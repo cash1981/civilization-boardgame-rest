@@ -28,6 +28,7 @@ import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.dto.TechDTO;
 import no.asgari.civilization.server.email.SendEmail;
 import no.asgari.civilization.server.exception.PlayerExistException;
+import no.asgari.civilization.server.misc.CivUtil;
 import no.asgari.civilization.server.misc.SecurityCheck;
 import no.asgari.civilization.server.model.Civ;
 import no.asgari.civilization.server.model.Draw;
@@ -161,15 +162,15 @@ public class PlayerAction extends BaseAction {
                 playerhand.setYourTurn(false);
 
                 //Choose next player in line to be starting player
+                Playerhand nextPlayer;
                 if (pbf.getPlayers().size() == (i + 1)) {
-                    //We are at the end, pick the first player
-                    Playerhand next = pbf.getPlayers().get(0);
-                    next.setYourTurn(true);
-                    sendEmailAsync(pbf, next);
+                    nextPlayer = pbf.getPlayers().get(0);
                 } else {
-                    Playerhand next = pbf.getPlayers().get(i + 1);
-                    next.setYourTurn(true);
-                    sendEmailAsync(pbf, next);
+                    nextPlayer = pbf.getPlayers().get(i + 1);
+                }
+                nextPlayer.setYourTurn(true);
+                if(CivUtil.shouldSendEmail(nextPlayer)) {
+                    sendEmailAsync(pbf, nextPlayer);
                 }
 
                 try {
@@ -185,10 +186,11 @@ public class PlayerAction extends BaseAction {
         return false;
     }
 
-    private void sendEmailAsync(PBF pbf, Playerhand next) {
-        new Thread(() -> {
-            SendEmail.sendYourTurn(pbf.getName(), next.getEmail(), pbf.getId());
-        }).start();
+    private void sendEmailAsync(PBF pbf, Playerhand player) {
+        Thread thread = new Thread(() -> {
+            SendEmail.sendYourTurn(pbf.getName(), player.getEmail(), pbf.getId());
+        });
+        thread.start();
     }
 
     /**
@@ -473,7 +475,7 @@ public class PlayerAction extends BaseAction {
         }
 
         //Find the item, then delete it
-        Optional<Item> itemToDeleteOptional = playerhand.getItems().parallelStream()
+        Optional<Item> itemToDeleteOptional = playerhand.getItems().stream()
                 .filter(item -> item.getSheetName() == dtoSheet.get() && item.getName().equals(itemdto.getName()))
                 .findAny();
 
@@ -481,7 +483,7 @@ public class PlayerAction extends BaseAction {
 
         Item itemToDelete = itemToDeleteOptional.get();
         itemToDelete.setHidden(true);
-        //itemToDelete.setOwnerId(null);
+        //itemToDelete.setOwnerId(null); //I think I need this in case of undo
 
         if (playerhand.getItems().remove(itemToDeleteOptional.get())) {
             pbf.getDiscardedItems().add(itemToDeleteOptional.get());
@@ -565,7 +567,7 @@ public class PlayerAction extends BaseAction {
         return SendEmail.sendMessage(player.getEmail(),
                 "Please verify your email",
                 "Your password was requested to be changed. If you want to change your password then please press this link: "
-                        + SendEmail.REST_URL + "api/auth/verify/" + player.getId());
+                        + SendEmail.REST_URL + "api/auth/verify/" + player.getId(), player.getId());
     }
 
     public boolean verifyPassword(String playerId) {

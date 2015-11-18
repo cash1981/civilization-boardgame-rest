@@ -20,7 +20,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
-import no.asgari.civilization.server.misc.Java8Util;
+import no.asgari.civilization.server.misc.CivUtil;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Item;
@@ -63,7 +63,7 @@ public class UndoAction extends BaseAction {
                 createInfoLog(pbf.getId(), "has removed " + draw.getItem().getName() + " from " + playerhand.getUsername());
                 log.debug("Successfully undoed tech");
             } else if (pbf.getDiscardedItems().remove(item)) {
-                playerhand.getTechsChosen().add((Tech)item);
+                playerhand.getTechsChosen().add((Tech) item);
                 createInfoLog(pbf.getId(), "has added back " + draw.getItem().getName() + " to " + playerhand.getUsername());
             } else {
                 log.error("Didn't find tech to remove from playerhand: " + item);
@@ -75,11 +75,11 @@ public class UndoAction extends BaseAction {
                 pbf.getItems().add(item);
                 Collections.shuffle(pbf.getItems());
                 log.debug("Successfully undoed item");
-            }  else if (pbf.getDiscardedItems().remove(item)) {
+            } else if (pbf.getDiscardedItems().remove(item)) {
                 item.setHidden(true);
                 playerhand.getItems().add(item);
                 createInfoLog(pbf.getId(), "has added back " + draw.getItem().getName() + " to " + playerhand.getUsername());
-            } else if(pbf.getItems().remove(item)) {
+            } else if (pbf.getItems().remove(item)) {
                 //In rare cases the item is put back in the deck by reshuffling
                 item.setHidden(true);
                 playerhand.getItems().add(item);
@@ -160,26 +160,26 @@ public class UndoAction extends BaseAction {
         createLog(draw.getItem(), pbf.getId(), GameLog.LogType.UNDO, playerId);
     }
 
-    //TODO test
     public List<GameLog> getAllActiveUndos(String pbfId) {
-        @Cleanup DBCursor<GameLog> gameLogDBCursor = gameLogCollection.find(DBQuery.is("pbfId", pbfId), new BasicDBObject());
+        List<GameLog> gameLogs = gameLogCollection.find(DBQuery.is("pbfId", pbfId), new BasicDBObject()).toArray();
 
-        return Java8Util.streamFromIterable(gameLogDBCursor)
+        return gameLogs.stream()
                 .filter(GameLog::hasActiveUndo)
                 .collect(Collectors.toList());
     }
 
     public List<GameLog> getPlayersActiveUndoes(String pbfId, String username) {
-        @Cleanup DBCursor<GameLog> gameLogDBCursor = gameLogCollection.find(DBQuery.is("pbfId", pbfId).is("username", username), new BasicDBObject());
-        return Java8Util.streamFromIterable(gameLogDBCursor)
+        List<GameLog> gamelogs = gameLogCollection.find(DBQuery.is("pbfId", pbfId).is("username", username), new BasicDBObject()).toArray();
+
+        return gamelogs.stream()
                 .filter(GameLog::hasActiveUndo)
                 .collect(Collectors.toList());
     }
 
     public List<GameLog> getAllFinishedUndos(String pbfId) {
-        @Cleanup DBCursor<GameLog> gameLogDBCursor = gameLogCollection.find(DBQuery.is("pbfId", pbfId), new BasicDBObject());
+        List<GameLog> gameLogs = gameLogCollection.find(DBQuery.is("pbfId", pbfId), new BasicDBObject()).toArray();
 
-        return Java8Util.streamFromIterable(gameLogDBCursor)
+        return  gameLogs.stream()
                 .filter(log -> log.getDraw() != null && log.getDraw().getUndo() != null && log.getDraw().getUndo().isDone())
                 .collect(Collectors.toList());
     }

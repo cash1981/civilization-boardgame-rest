@@ -316,9 +316,7 @@ public class GameResourceTest extends AbstractCivilizationTest {
         List chats = response.readEntity(List.class);
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
         assertThat(chats).hasSize(1);
-
     }
-
 
     @Test
     public void endGame() throws Exception {
@@ -423,6 +421,28 @@ public class GameResourceTest extends AbstractCivilizationTest {
         assertThat(message.getMessage()).isEqualTo("10-syTLb2i2NdB8T_alH9KeyzT8FTlBK6Csmc_Hjjir8");
         pbf = getApp().pbfCollection.findOneById(pbf.getId());
         assertThat(pbf.getAssetLink()).isEqualToIgnoringCase("10-syTLb2i2NdB8T_alH9KeyzT8FTlBK6Csmc_Hjjir8");
+    }
+
+    @Test
+    public void getSpecificGame() throws Exception {
+        //Response response =
+        Client client = ClientBuilder.newClient();
+        Response response = client.target(BASE_URL + "/game/" + getApp().pbfId)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .get();
+        //By default Jackson creates List<LinkedHashMap<String,String>> with the values
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
+    }
+
+    @Test
+    public void getPublicTurns() throws Exception {
+        //Response response =
+        Client client = ClientBuilder.newClient();
+        Response response = client.target(BASE_URL + "/game/" + getApp().pbfId + "/turns")
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .get();
+        //By default Jackson creates List<LinkedHashMap<String,String>> with the values
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
     }
 
 }

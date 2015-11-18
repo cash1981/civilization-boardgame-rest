@@ -3,24 +3,40 @@ package no.asgari.civilization.server.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
 public class PlayerTurn implements Comparable<PlayerTurn> {
     private int turnNumber = 1;
-    private String username;
-    private Map<String, Boolean> setupMap = new HashMap<>(1);
-    private Map<String, Boolean> sotMap = new HashMap<>(1);
-    private Map<String, Boolean> tradeMap = new HashMap<>(1);
-    private Map<String, Boolean> cmMap = new HashMap<>(1);
-    private Map<String, Boolean> movementMap = new HashMap<>(1);
-    private Map<String, Boolean> researchMap = new HashMap<>(1);
+    private String username = "";
+    private boolean disabled;
+    private Set<String> sotHistory = new HashSet<>();
+    private Set<String> tradeHistory = new HashSet<>();
+    private Set<String> cmHistory = new HashSet<>();
+    private Set<String> movementHistory = new HashSet<>();
+    private Set<String> researchHistory = new HashSet<>();
+
+    private String sot = "";
+    private String trade = "";
+    private String cm = "";
+    private String movement = "";
+    private String research = "";
 
     public PlayerTurn(String username, int turnNumber) {
         this.username = username;
@@ -28,85 +44,40 @@ public class PlayerTurn implements Comparable<PlayerTurn> {
     }
 
     /**
-     * If all orders are finished, turn is ended
+     * Only one instance of username and turnNumber
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PlayerTurn that = (PlayerTurn) o;
+        return Objects.equals(turnNumber, that.turnNumber) &&
+                Objects.equals(username, that.username);
+    }
+
+    /**
+     * Only one instance of username and turnNumber
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(turnNumber, username);
+    }
+
+    /**
+     * If turn locked, then mark as end and increase turnNumber;
      */
     @JsonIgnore
     public boolean endTurn() {
-        if(turnNumber == 1) {
-            if(setupMap.containsValue(true)) {
-                turnNumber++;
-            }
-            return false;
-        }
-
-        if(sotMap.containsValue(true) && tradeMap.containsValue(true)
-                && cmMap.containsValue(true) && movementMap.containsValue(true) && researchMap.containsValue(true)) {
-            turnNumber++;
-            return true;
-        }
-        return false;
-    }
-
-    public String getSetup() {
-        Set<String> strings = setupMap.keySet();
-        if(!strings.isEmpty()) {
-            return strings.iterator().next();
-        }
-
-        return null;
-    }
-
-    public String getSot() {
-        Set<String> strings = sotMap.keySet();
-        if(!strings.isEmpty()) {
-            return strings.iterator().next();
-        }
-
-        return null;
-    }
-
-    public String getTrade() {
-        Set<String> strings = tradeMap.keySet();
-        if(!strings.isEmpty()) {
-            return strings.iterator().next();
-        }
-
-        return null;
-    }
-
-    public String getCm() {
-        Set<String> strings = cmMap.keySet();
-        if(!strings.isEmpty()) {
-            return strings.iterator().next();
-        }
-
-        return null;
-    }
-
-    public String getMovement() {
-        Set<String> strings = movementMap.keySet();
-        if(!strings.isEmpty()) {
-            return strings.iterator().next();
-        }
-
-        return null;
-    }
-
-    public String getResearch() {
-        Set<String> strings = researchMap.keySet();
-        if(!strings.isEmpty()) {
-            return strings.iterator().next();
-        }
-
-        return null;
+        turnNumber++;
+        return true;
     }
 
     @Override
     public int compareTo(PlayerTurn o) {
-        int i = this.username.compareTo(o.getUsername());
-        if(i != 0) {
-            return i;
+        int v = Integer.valueOf(turnNumber).compareTo(o.getTurnNumber());
+        if (v != 0) {
+            return v;
         }
-        return -Integer.valueOf(this.turnNumber).compareTo(o.getTurnNumber());
+        return username.compareTo(o.getUsername());
     }
 }

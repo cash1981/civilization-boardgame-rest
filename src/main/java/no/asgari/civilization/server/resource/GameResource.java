@@ -27,6 +27,7 @@ import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.GameAction;
 import no.asgari.civilization.server.action.GameLogAction;
 import no.asgari.civilization.server.action.PlayerAction;
+import no.asgari.civilization.server.action.TurnAction;
 import no.asgari.civilization.server.action.UndoAction;
 import no.asgari.civilization.server.dto.ChatDTO;
 import no.asgari.civilization.server.dto.CheckNameDTO;
@@ -42,6 +43,7 @@ import no.asgari.civilization.server.model.Chat;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
+import no.asgari.civilization.server.model.PlayerTurn;
 import no.asgari.civilization.server.model.Tech;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.mongojack.DBCursor;
@@ -187,9 +189,9 @@ public class GameResource {
     public Response getAllPlayersForPBF(@NotEmpty @PathParam("pbfId") String pbfId) {
         GameAction gameAction = new GameAction(db);
         List<PlayerDTO> players = gameAction.getAllPlayers(pbfId);
-            return Response.ok()
-                    .entity(players)
-                    .build();
+        return Response.ok()
+                .entity(players)
+                .build();
     }
 
     @POST
@@ -216,7 +218,7 @@ public class GameResource {
 
         log.info("Ending game with id " + pbfId);
         GameAction gameAction = new GameAction(db);
-        gameAction.endGame(pbfId, player.getId(), winner);
+        gameAction.endGame(pbfId, player, winner);
     }
 
     @POST
@@ -227,7 +229,7 @@ public class GameResource {
         Preconditions.checkNotNull(player);
 
         GameAction gameAction = new GameAction(db);
-        gameAction.joinGame(pbfId, player.getId(), Optional.empty());
+        gameAction.joinGame(pbfId, player, Optional.empty());
         return Response.noContent().build();
     }
 
@@ -482,5 +484,13 @@ public class GameResource {
     public List<WinnerDTO> getWinners() {
         GameAction gameAction = new GameAction(db);
         return gameAction.getWinners();
+    }
+
+    @GET
+    @Path("/{pbfId}/turns")
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public List<PlayerTurn> getAllPublicTurns(@PathParam("pbfId") String pbfId) {
+        TurnAction turnAction = new TurnAction(db);
+        return turnAction.getAllPublicTurns(pbfId);
     }
 }

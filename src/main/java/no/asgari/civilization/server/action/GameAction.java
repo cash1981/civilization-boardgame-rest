@@ -35,9 +35,11 @@ import no.asgari.civilization.server.dto.PlayerDTO;
 import no.asgari.civilization.server.dto.WinnerDTO;
 import no.asgari.civilization.server.email.SendEmail;
 import no.asgari.civilization.server.excel.ItemReader;
+import no.asgari.civilization.server.misc.CivUtil;
 import no.asgari.civilization.server.misc.SecurityCheck;
 import no.asgari.civilization.server.model.Chat;
 import no.asgari.civilization.server.model.GameLog;
+import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
@@ -60,6 +62,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -114,11 +117,19 @@ public class GameAction extends BaseAction {
         log.info("PBF game created with id " + pbfInsert.getSavedId());
         joinGame(pbf, playerId, Optional.of(dto.getColor()), true);
 
-        playerCollection.find().toArray().stream()
-                .filter(p -> !p.isDisableEmail())
-                .forEach(p ->
-                        SendEmail.sendMessage(p.getEmail(), "New Civilization game created",
-                                "A new game by the name " + pbf.getName() + " was just created! Visit " + SendEmail.URL + " to join the game."));
+        //Do this in a new thread
+        Thread thread = new Thread(() -> {
+            playerCollection.find().toArray().stream()
+                    .filter(p -> !p.isDisableEmail())
+                    .forEach(p -> {
+                        if (CivUtil.shouldSendEmail(p)) {
+                            SendEmail.sendMessage(p.getEmail(), "New Civilization game created",
+                                    "A new game by the name " + pbf.getName() + " was just created! Visit " + SendEmail.URL + " to join the game.", p.getId());
+                            playerCollection.updateById(p.getId(), p);
+                        }
+                    });
+        });
+        thread.start();
         return pbf.getId();
     }
 
@@ -180,10 +191,13 @@ public class GameAction extends BaseAction {
         return playerhand;
     }
 
-    public void joinGame(String pbfId, String playerId, Optional<String> colorOpt) {
+    public void joinGame(String pbfId, Player player, Optional<String> colorOpt) {
         PBF pbf = pbfCollection.findOneById(pbfId);
-        pbf.getPlayers().stream().forEach(p -> SendEmail.sendMessage(p.getEmail(), "Game update", "Someone joined " + pbf.getName() + ". Go to " + SendEmail.URL + " to find out who!"));
-        joinGame(pbf, playerId, colorOpt, false);
+        joinGame(pbf, player.getId(), colorOpt, false);
+        Thread thread = new Thread(() -> {
+            pbf.getPlayers().stream().forEach(p -> SendEmail.sendMessage(p.getEmail(), "Game update", player.getUsername() + " joined " + pbf.getName() + ". Go to " + SendEmail.URL + " to find out who!", p.getPlayerId()));
+        });
+        thread.start();
     }
 
     /**
@@ -265,7 +279,7 @@ public class GameAction extends BaseAction {
             createInfoLog(pbf.getId(), "Game has now started. Good luck, and have fun!");
 
             StringBuilder sb = new StringBuilder();
-            for(int i=0; i < pbf.getPlayers().size(); i++) {
+            for (int i = 0; i < pbf.getPlayers().size(); i++) {
                 Playerhand player = pbf.getPlayers().get(i);
                 sb.append(getNameForPlayerNumber(i) + " player is " + player.getUsername() + ". ");
             }
@@ -315,6 +329,7 @@ public class GameAction extends BaseAction {
                 dto.setPrivateLogs(privateGamelogDTOs);
             }
         }
+        dto.setRevealedItems(getAllRevealedItems(pbf));
         return dto;
     }
 
@@ -371,18 +386,27 @@ public class GameAction extends BaseAction {
         String id = chatCollection.insert(chat).getSavedId();
         chat.setId(id);
 
+        PBF pbf = findPBFById(pbfId);
+
         if (pbfId != null) {
-            String msg = CivSingleton.instance().getChatCache().getIfPresent(pbfId);
-            if (Strings.isNullOrEmpty(msg)) {
-                CivSingleton.instance().getChatCache().put(pbfId, message);
-                getListOfPlayersPlaying(pbfId)
-                        .stream()
-                        .filter(p -> !p.getUsername().equals(username))
-                        .forEach(
-                                p -> SendEmail.sendMessage(p.getEmail(), "New Chat", username + " wrote in the chat: " + chat.getMessage()
-                                        + ".\nLogin to " + SendEmail.gamelink(pbfId) + " to see the chat")
-                        );
-            }
+            Thread thread = new Thread(() -> {
+                String msg = CivSingleton.instance().getChatCache().getIfPresent(pbfId);
+                if (Strings.isNullOrEmpty(msg)) {
+                    CivSingleton.instance().getChatCache().put(pbfId, message);
+                    pbf.getPlayers()
+                            .stream()
+                            .filter(p -> !p.getUsername().equals(username))
+                            .forEach(p -> {
+                                        if (CivUtil.shouldSendEmail(p)) {
+                                            SendEmail.sendMessage(p.getEmail(), "New Chat", username + " wrote in the chat: " + chat.getMessage()
+                                                    + ".\nLogin to " + SendEmail.gamelink(pbfId) + " to see the chat", p.getPlayerId());
+                                            pbfCollection.updateById(pbfId, pbf);
+                                        }
+                                    }
+                            );
+                }
+            });
+            thread.start();
         }
 
         return chat;
@@ -408,33 +432,39 @@ public class GameAction extends BaseAction {
         return chatDTOs;
     }
 
-    public void endGame(String pbfId, String playerId, String winner) {
+    public void endGame(String pbfId, Player player, String winner) {
         PBF pbf = pbfCollection.findOneById(pbfId);
-        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        //Only game creator can end game
-        if (!playerhand.isGameCreator() || !"admin".equals(playerhand.getUsername())) {
-            Response response = Response.status(Response.Status.FORBIDDEN)
-                    .entity(new MessageDTO("Only game creator can end game"))
-                    .build();
-            throw new WebApplicationException(response);
+        if (!"admin".equals(player.getUsername())) {
+            Playerhand playerhand = getPlayerhandByPlayerId(player.getId(), pbf);
+            //Only game creator can end game
+            if (!playerhand.isGameCreator()) {
+                Response response = Response.status(Response.Status.FORBIDDEN)
+                        .entity(new MessageDTO("Only game creator can end game"))
+                        .build();
+                throw new WebApplicationException(response);
+            }
         }
 
-        if(!Strings.isNullOrEmpty(winner)) {
-            if(!pbf.getPlayers().stream()
+        if (!Strings.isNullOrEmpty(winner)) {
+            if (!pbf.getPlayers().stream()
                     .anyMatch(p -> p.getUsername().equals(winner))) {
                 throw new WebApplicationException(Response.Status.NOT_FOUND);
             }
-
+            createInfoLog(pbfId, winner + " won the game! Congratulations!");
             pbf.setWinner(winner);
         }
 
         pbf.setActive(false);
-        createInfoLog(pbfId, playerhand.getUsername() + " Ended this game");
+        createInfoLog(pbfId, player.getUsername() + " Ended this game");
         createInfoLog(pbfId, "Thank you for playing! Please donate if you liked this game!");
-        pbf.getPlayers().forEach(p -> SendEmail.sendMessage(p.getEmail(), "Game ended", pbf.getName() + " has ended. I hope you enjoyed playing.\n" +
-                "If you like this game, please consider donating. You can find the link at the bottom of the site. It will help keep the lights on, and continue adding more features!" +
-                "\n\nBest regards Shervin Asgari aka Cash"));
         pbfCollection.updateById(pbfId, pbf);
+
+        Thread thread = new Thread(() -> {
+            pbf.getPlayers().forEach(p -> SendEmail.sendMessage(p.getEmail(), "Game ended", pbf.getName() + " has ended. I hope you enjoyed playing.\n" +
+                    "If you like this game, please consider donating. You can find the link at the bottom of the site. It will help keep the lights on, and continue adding more features!" +
+                    "\n\nBest regards Shervin Asgari aka Cash", p.getPlayerId()));
+        });
+        thread.start();
     }
 
     /**
@@ -502,7 +532,7 @@ public class GameAction extends BaseAction {
 
         pbfCollection.updateById(pbf.getId(), pbf);
         createInfoLog(pbf.getId(), newUsername + " is now playing instead of " + oldUsername);
-        SendEmail.sendMessage(playerhandToReplace.getEmail(), "You are now playing in " + pbf.getName(), "Please log in to http://playciv.com and start playing!");
+        SendEmail.sendMessage(playerhandToReplace.getEmail(), "You are now playing in " + pbf.getName(), "Please log in to http://playciv.com and start playing!", playerhandToReplace.getPlayerId());
     }
 
     public boolean deleteGame(String gameid) {
@@ -519,20 +549,22 @@ public class GameAction extends BaseAction {
         playerList.forEach(player -> {
             log.info("Deleting game from " + player.getUsername() + "s collection also");
             player.getGameIds().remove(gameid);
-            SendEmail.sendMessage(player.getEmail(), "Game deleted", "Your game " + pbf.getName() + " was deleted by the admin due to inactivity");
+            SendEmail.sendMessage(player.getEmail(), "Game deleted", "Your game " + pbf.getName() + " was deleted by the admin. " +
+                    "If this was incorrect, please contact the admin.", player.getId());
             playerCollection.save(player);
         });
 
-        return Strings.isNullOrEmpty(writeResult.getWriteResult().toString());
+        return true;
     }
 
     public void sendMailToAll(String msg) {
         playerCollection.find().toArray()
                 .stream()
+                .filter(p -> !p.isDisableEmail())
                 .forEach(player -> {
-                    SendEmail.sendMessage(player.getEmail(), "Update to civilization",
+                    SendEmail.sendMessage(player.getEmail(), "Update to civilization (playciv.com)",
                             "Hello " + player.getUsername() +
-                                    "\n" + msg);
+                                    "\n" + msg, player.getId());
                 });
     }
 
@@ -562,6 +594,20 @@ public class GameAction extends BaseAction {
                 .collect(toList());
     }
 
+    private List<Item> getAllRevealedItems(PBF pbf) {
+        //Had to have comparator inside sort, otherwise weird exception
+        Stream<Item> discardedStream = pbf.getDiscardedItems().stream()
+                .sorted((o1, o2) -> o1.getSheetName().compareTo(o2.getSheetName()));
+
+        Stream<Item> playerStream = pbf.getPlayers().stream()
+                .flatMap(p -> p.getItems().stream())
+                .filter(it -> !it.isHidden())
+                .sorted((o1, o2) -> o1.getSheetName().compareTo(o2.getSheetName()));
+
+        Stream<Item> concatedStream = Stream.concat(discardedStream, playerStream);
+        return concatedStream.collect(toList());
+    }
+
     private String getNameForPlayerNumber(int nr) {
         switch (nr) {
             case 0:
@@ -579,5 +625,16 @@ public class GameAction extends BaseAction {
         }
 
         return "";
+    }
+
+    public boolean disableEmailForPlayer(String playerId) {
+        Player player = playerCollection.findOneById(playerId);
+        if (player != null && !Strings.isNullOrEmpty(player.getNewPassword())) {
+            log.warn("Player " + player.getEmail() + " no longer wants email");
+            player.setDisableEmail(true);
+            playerCollection.updateById(playerId, player);
+            return true;
+        }
+        return false;
     }
 }

@@ -77,11 +77,11 @@ public class DrawResource {
                     .entity(new MessageDTO("Could not find item " + sheetName))
                     .build();
         } else if (!sheetNameOptional.isPresent() && sheetName.equals("Culture Card")) {
-            Item item = drawAction.drawRandomItemAndGiveToPlayer(pbfId, SheetName.CULTURE_CARD, targetPlayerId, player.getId());
+            Item item = drawAction.loot(pbfId, SheetName.CULTURE_CARD, targetPlayerId, player.getId());
             return Response.ok().entity(item).build();
 
         } else {
-            Item item = drawAction.drawRandomItemAndGiveToPlayer(pbfId, EnumSet.of(sheetNameOptional.get()), targetPlayerId, player.getId());
+            Item item = drawAction.loot(pbfId, EnumSet.of(sheetNameOptional.get()), targetPlayerId, player.getId());
             return Response.ok().entity(item).build();
         }
     }

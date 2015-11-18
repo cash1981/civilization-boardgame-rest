@@ -15,6 +15,7 @@
 
 package no.asgari.civilization.server.email;
 
+import com.google.common.base.Strings;
 import com.sendgrid.SendGrid;
 import com.sendgrid.SendGridException;
 import lombok.extern.log4j.Log4j;
@@ -31,14 +32,12 @@ public class SendEmail {
     public static final String URL = "http://playciv.com/";
     public static final String REST_URL = "https://civilization-boardgame.herokuapp.com/";
 
-    public static final String UNSUBSCRIBE = "\n\nIf you wish to unsubscribe from these emails, send an email to cash@playciv.com and ask to be removed";
-
     public static String gamelink(String pbfId) {
         return URL + "#/game/" + pbfId;
     }
 
     public static boolean sendYourTurn(String gamename, String emailToo, String pbfId) {
-        if(System.getenv(SENDGRID_USERNAME) == null || System.getenv(SENDGRID_PASSWORD) == null) {
+        if (System.getenv(SENDGRID_USERNAME) == null || System.getenv(SENDGRID_PASSWORD) == null) {
             log.error("Missing environment variable for SENDGRID_USERNAME or SENDGRID_PASSWORD");
             return false;
         }
@@ -58,8 +57,8 @@ public class SendEmail {
         return false;
     }
 
-    public static boolean sendMessage(String email, String subject, String message) {
-        if(System.getenv(SENDGRID_USERNAME) == null || System.getenv(SENDGRID_PASSWORD) == null) {
+    public static boolean sendMessage(String email, String subject, String message, String playerId) {
+        if (System.getenv(SENDGRID_USERNAME) == null || System.getenv(SENDGRID_PASSWORD) == null) {
             log.error("Missing environment variable for SENDGRID_USERNAME or SENDGRID_PASSWORD");
             return false;
         }
@@ -67,7 +66,7 @@ public class SendEmail {
         sendGridEmail.addTo(email);
         sendGridEmail.setFrom(NOREPLY_PLAYCIV_COM);
         sendGridEmail.setSubject(subject);
-        sendGridEmail.setText(message + UNSUBSCRIBE);
+        sendGridEmail.setText(message + UNSUBSCRIBE(playerId));
 
         try {
             SendGrid.Response response = sendgrid.send(sendGridEmail);
@@ -77,4 +76,12 @@ public class SendEmail {
         }
         return false;
     }
+
+    private static String UNSUBSCRIBE(String playerId) {
+        if(Strings.isNullOrEmpty(playerId)) {
+            return "";
+        }
+        return "\n\nIf you wish to unsubscribe from ALL emails, then push this link: " + REST_URL + "api/admin/email/notification/" + playerId + "/stop";
+    }
+
 }

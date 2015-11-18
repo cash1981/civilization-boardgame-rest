@@ -27,8 +27,6 @@ import java.net.URI;
 import java.util.Optional;
 import java.util.Set;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 

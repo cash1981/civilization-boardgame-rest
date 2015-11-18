@@ -124,31 +124,31 @@ public class GameLog {
                 break;
             case UNDO:
                 privateLog = username + " has requested undo of " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
-                publicLog = username + " has requested undo of " + DELIM + draw.getItem().revealPublic()  + ITEM_NUMBER;
+                publicLog = username + " has requested undo of " + DELIM + draw.getItem().revealPublic() + ITEM_NUMBER;
                 break;
             case SOT:
-                privateLog = username + " has updated and locked start of turn phase";
-                publicLog = username + " has updated and locked start of turn phase";
+                privateLog = username + " has updated start of turn phase";
+                publicLog = username + " has updated start of turn phase";
                 break;
             case SETUP:
-                privateLog = username + " has updated and locked setup phase";
-                publicLog = username + " has updated and locked setup phase";
+                privateLog = username + " has updated setup phase";
+                publicLog = username + " has updated setup phase";
                 break;
             case TRADE:
-                privateLog = username + " has updated and locked trade phase";
-                publicLog = username + " has updated and locked trade phase";
+                privateLog = username + " has updated trade phase";
+                publicLog = username + " has updated trade phase";
                 break;
             case CM:
-                privateLog = username + " has updated and locked city management phase";
-                publicLog = username + " has updated and locked city management phase";
+                privateLog = username + " has updated city management phase";
+                publicLog = username + " has updated city management phase";
                 break;
             case MOVEMENT:
-                privateLog = username + " has updated and locked movement phase";
-                publicLog = username + " has updated and locked movement phase";
+                privateLog = username + " has updated movement phase";
+                publicLog = username + " has updated movement phase";
                 break;
             case RESEARCH:
-                privateLog = username + " has updated and locked research phase";
-                publicLog = username + " has updated and locked research phase";
+                privateLog = username + " has updated research phase";
+                publicLog = username + " has updated research phase";
                 break;
         }
     }

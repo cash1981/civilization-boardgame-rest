@@ -4,18 +4,22 @@ import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.dto.TurnDTO;
 import no.asgari.civilization.server.email.SendEmail;
+import no.asgari.civilization.server.misc.CivUtil;
 import no.asgari.civilization.server.misc.SecurityCheck;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.PlayerTurn;
 import no.asgari.civilization.server.model.Playerhand;
-import no.asgari.civilization.server.model.Turn;
+import no.asgari.civilization.server.model.TurnKey;
 import org.mongojack.JacksonDBCollection;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import static java.util.stream.Collectors.toList;
 
 @Log4j
 public class TurnAction extends BaseAction {
@@ -27,170 +31,121 @@ public class TurnAction extends BaseAction {
         this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
     }
 
-    public void updateAndLockSOT(String pbfId, String playerId, TurnDTO turnDTO) {
+    public void updateSOT(String pbfId, String playerId, TurnDTO turnDTO) {
         PBF pbf = findPBFById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        if (!SecurityCheck.hasUserAccess(pbf, playerId)) {
-            log.error("User with id " + playerId + " has no access to pbf " + pbf.getName());
-            throw new WebApplicationException(Response.Status.FORBIDDEN);
-        }
-        Set<PlayerTurn> playerturns = playerhand.getPlayerTurns();
-        if(playerturns.isEmpty()) {
-            playerhand.getPlayerTurns().add(new PlayerTurn());
-        }
+        updateTurn(playerId, turnDTO, pbf, playerhand);
 
-        PlayerTurn playerTurn = getPlayerTurn(turnDTO, playerturns, playerhand.getUsername());
-        playerTurn.getSotMap().put(turnDTO.getOrder(), turnDTO.isLocked());
-        playerhand.getPlayerTurns().add(playerTurn);
-
-        addTurnInPBF(turnDTO, pbf, playerhand, playerTurn);
-
-        getListOfPlayersPlaying(pbfId)
+        pbf.getPlayers()
                 .stream()
                 .filter(p -> !p.getUsername().equals(playerhand.getUsername()))
-                .forEach(
-                        p -> SendEmail.sendMessage(p.getEmail(), "Start of turn locked", playerhand.getUsername() + " has updated and locked start of turn with " +
-                                "the following order\n:" + turnDTO.getOrder()
-                                + ".\n\nLogin to " + SendEmail.gamelink(pbfId) + " to see the order")
+                .forEach(p -> {
+                            if (CivUtil.shouldSendEmail(p)) {
+                                SendEmail.sendMessage(p.getEmail(), "Start of turn locked", playerhand.getUsername() + " has updated and locked start of turn with " +
+                                        "the following order\n:" + turnDTO.getOrder()
+                                        + ".\n\nLogin to " + SendEmail.gamelink(pbfId) + " to see the order", playerhand.getPlayerId());
+                            }
+                        }
                 );
-
-        pbfCollection.updateById(pbfId, pbf);
-        super.createLog(pbfId, GameLog.LogType.TRADE, playerId);
 
         pbfCollection.updateById(pbfId, pbf);
         super.createLog(pbfId, GameLog.LogType.SOT, playerId);
     }
 
-    public void updateAndLockTrade(String pbfId, String playerId, TurnDTO turnDTO) {
+    public void updateTrade(String pbfId, String playerId, TurnDTO turnDTO) {
         PBF pbf = findPBFById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        if (!SecurityCheck.hasUserAccess(pbf, playerId)) {
-            log.error("User with id " + playerId + " has no access to pbf " + pbf.getName());
-            throw new WebApplicationException(Response.Status.FORBIDDEN);
-        }
-        Set<PlayerTurn> playerturns = playerhand.getPlayerTurns();
-        if(playerturns.isEmpty()) {
-            playerhand.getPlayerTurns().add(new PlayerTurn());
-        }
+        updateTurn(playerId, turnDTO, pbf, playerhand);
 
-        PlayerTurn playerTurn = getPlayerTurn(turnDTO, playerturns, playerhand.getUsername());
-
-        playerTurn.getTradeMap().put(turnDTO.getOrder(), turnDTO.isLocked());
-
-        addTurnInPBF(turnDTO, pbf, playerhand, playerTurn);
-
-        getListOfPlayersPlaying(pbfId)
+        pbf.getPlayers()
                 .stream()
                 .filter(p -> !p.getUsername().equals(playerhand.getUsername()))
-                .forEach(
-                        p -> SendEmail.sendMessage(p.getEmail(), "Trade locked", playerhand.getUsername() + " has updated and locked trade with " +
-                                "the following order:\n" + turnDTO.getOrder()
-                                + ".\n\nLogin to " + SendEmail.gamelink(pbfId) + " to see the order")
+                .forEach(p -> {
+                            if (CivUtil.shouldSendEmail(p)) {
+                                SendEmail.sendMessage(p.getEmail(), "Trade locked", playerhand.getUsername() + " has updated and locked trade with " +
+                                        "the following order:\n" + turnDTO.getOrder()
+                                        + ".\n\nLogin to " + SendEmail.gamelink(pbfId) + " to see the order", playerhand.getPlayerId());
+                            }
+                        }
                 );
 
         pbfCollection.updateById(pbfId, pbf);
         super.createLog(pbfId, GameLog.LogType.TRADE, playerId);
     }
 
-    public void updateAndLockCM(String pbfId, String playerId, TurnDTO turnDTO) {
+    public void updateCM(String pbfId, String playerId, TurnDTO turnDTO) {
         PBF pbf = findPBFById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        if (!SecurityCheck.hasUserAccess(pbf, playerId)) {
-            log.error("User with id " + playerId + " has no access to pbf " + pbf.getName());
-            throw new WebApplicationException(Response.Status.FORBIDDEN);
-        }
-        Set<PlayerTurn> playerturns = playerhand.getPlayerTurns();
-        if(playerturns.isEmpty()) {
-            playerhand.getPlayerTurns().add(new PlayerTurn());
-        }
+        updateTurn(playerId, turnDTO, pbf, playerhand);
 
-        PlayerTurn playerTurn = getPlayerTurn(turnDTO, playerturns, playerhand.getUsername());
-        playerTurn.getCmMap().put(turnDTO.getOrder(), turnDTO.isLocked());
-
-        addTurnInPBF(turnDTO, pbf, playerhand, playerTurn);
-
-        getListOfPlayersPlaying(pbfId)
+        pbf.getPlayers()
                 .stream()
                 .filter(p -> !p.getUsername().equals(playerhand.getUsername()))
-                .forEach(
-                        p -> SendEmail.sendMessage(p.getEmail(), "City management locked", playerhand.getUsername() + " has updated and locked city management with " +
-                                "the following order:\n" + turnDTO.getOrder()
-                                + ".\n\nLogin to " + SendEmail.gamelink(pbfId) + " to see the order")
+                .forEach(p -> {
+                            if (CivUtil.shouldSendEmail(p)) {
+                                SendEmail.sendMessage(p.getEmail(), "City management locked", playerhand.getUsername() + " has updated and locked city management with " +
+                                        "the following order:\n" + turnDTO.getOrder()
+                                        + ".\n\nLogin to " + SendEmail.gamelink(pbfId) + " to see the order", playerhand.getPlayerId());
+                            }
+                        }
                 );
 
         pbfCollection.updateById(pbfId, pbf);
         super.createLog(pbfId, GameLog.LogType.CM, playerId);
     }
 
-    public void updateAndLockMovement(String pbfId, String playerId, TurnDTO turnDTO) {
+    public void updateMovement(String pbfId, String playerId, TurnDTO turnDTO) {
         PBF pbf = findPBFById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        if (!SecurityCheck.hasUserAccess(pbf, playerId)) {
-            log.error("User with id " + playerId + " has no access to pbf " + pbf.getName());
-            throw new WebApplicationException(Response.Status.FORBIDDEN);
-        }
-        Set<PlayerTurn> playerturns = playerhand.getPlayerTurns();
-        if(playerturns.isEmpty()) {
-            playerhand.getPlayerTurns().add(new PlayerTurn());
-        }
+        updateTurn(playerId, turnDTO, pbf, playerhand);
 
-        PlayerTurn playerTurn = getPlayerTurn(turnDTO, playerturns, playerhand.getUsername());
-        playerTurn.getMovementMap().put(turnDTO.getOrder(), turnDTO.isLocked());
-
-        addTurnInPBF(turnDTO, pbf, playerhand, playerTurn);
-
-        getListOfPlayersPlaying(pbfId)
+        pbf.getPlayers()
                 .stream()
                 .filter(p -> !p.getUsername().equals(playerhand.getUsername()))
                 .forEach(
                         p -> SendEmail.sendMessage(p.getEmail(), "Movement locked", playerhand.getUsername() + " has updated and locked movement with " +
                                 "the following order:\n" + turnDTO.getOrder()
-                                + ".\n\nLogin to " + SendEmail.gamelink(pbfId) + " to see the order")
+                                + ".\n\nLogin to " + SendEmail.gamelink(pbfId) + " to see the order", playerhand.getPlayerId())
                 );
 
         pbfCollection.updateById(pbfId, pbf);
-        super.createLog(pbfId, GameLog.LogType.CM, playerId);
+        super.createLog(pbfId, GameLog.LogType.MOVEMENT, playerId);
     }
 
-    public void updateAndLockResearch(String pbfId, String playerId, TurnDTO turnDTO) {
+    public void updateResearch(String pbfId, String playerId, TurnDTO turnDTO) {
         PBF pbf = findPBFById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        if (!SecurityCheck.hasUserAccess(pbf, playerId)) {
-            log.error("User with id " + playerId + " has no access to pbf " + pbf.getName());
-            throw new WebApplicationException(Response.Status.FORBIDDEN);
-        }
-        Set<PlayerTurn> playerturns = playerhand.getPlayerTurns();
-        if(playerturns.isEmpty()) {
-            playerhand.getPlayerTurns().add(new PlayerTurn());
-        }
+        updateTurn(playerId, turnDTO, pbf, playerhand);
 
-        PlayerTurn playerTurn = getPlayerTurn(turnDTO, playerturns, playerhand.getUsername());
-        playerTurn.getResearchMap().put(turnDTO.getOrder(), turnDTO.isLocked());
-
-        addTurnInPBF(turnDTO, pbf, playerhand, playerTurn);
-
-        getListOfPlayersPlaying(pbfId)
+        pbf.getPlayers()
                 .stream()
                 .filter(p -> !p.getUsername().equals(playerhand.getUsername()))
-                .forEach(
-                        p -> SendEmail.sendMessage(p.getEmail(), "Research locked", playerhand.getUsername() + " has updated and locked research with " +
-                                "the following order:\n" + turnDTO.getOrder()
-                                + ".\n\nLogin to " + SendEmail.gamelink(pbfId) + " to see the order")
+                .forEach(p -> {
+                            if (CivUtil.shouldSendEmail(p)) {
+                                SendEmail.sendMessage(p.getEmail(), "Research locked", playerhand.getUsername() + " has updated and locked research with " +
+                                        "the following order:\n" + turnDTO.getOrder()
+                                        + ".\n\nLogin to " + SendEmail.gamelink(pbfId) + " to see the order", playerhand.getPlayerId());
+                            }
+                        }
                 );
 
         pbfCollection.updateById(pbfId, pbf);
-        super.createLog(pbfId, GameLog.LogType.CM, playerId);
+        super.createLog(pbfId, GameLog.LogType.RESEARCH, playerId);
     }
 
-    private void addTurnInPBF(TurnDTO turnDTO, PBF pbf, Playerhand playerhand, PlayerTurn playerTurn) {
-        Optional<Turn> turnOptional = pbf.getTurnByUsernameAndTurnNr(playerhand.getUsername(), turnDTO.getTurnNumber());
-        if(!turnOptional.isPresent()) {
-            Turn turn = new Turn(playerTurn);
-            pbf.getPublicTurns().add(turn);
-        } else {
-            Turn turn = turnOptional.get();
-            turn.copy(playerTurn);
-            pbf.getPublicTurns().add(turn);
+    /**
+     * Each player can add a new turn so they can start new to write new orders
+     */
+    public void addNewTurn(String pbfId, String playerId, int turnNumber) {
+        PBF pbf = findPBFById(pbfId);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+
+        Optional<PlayerTurn> turnOptional = playerhand.getPlayerTurns().stream()
+                .filter(p -> p.getTurnNumber() == turnNumber)
+                .findAny();
+
+        if (!turnOptional.isPresent()) {
+            playerhand.getPlayerTurns().add(new PlayerTurn(playerhand.getUsername(), turnNumber));
         }
     }
 
@@ -203,4 +158,88 @@ public class TurnAction extends BaseAction {
         return playerTurn;
     }
 
+    public List<PlayerTurn> getAllPublicTurns(String pbfId) {
+        PBF pbf = findPBFById(pbfId);
+
+        return pbf.getPublicTurns().values().stream()
+                .sorted()
+                .map(p -> {
+                    //Remove the last order in the history
+                    p.getSotHistory().remove(p.getSot());
+                    p.getTradeHistory().remove(p.getTrade());
+                    p.getCmHistory().remove(p.getCm());
+                    p.getMovementHistory().remove(p.getMovement());
+                    p.getResearchHistory().remove(p.getResearch());
+                    return p;
+                })
+                .collect(toList());
+
+    }
+
+    public Set<PlayerTurn> getPlayersTurns(String pbfId, String playerId) {
+        PBF pbf = findPBFById(pbfId);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+        Set<PlayerTurn> playerTurns = playerhand.getPlayerTurns();
+        if (playerTurns.isEmpty()) {
+            playerhand.getPlayerTurns().add(new PlayerTurn(playerhand.getUsername(), 1));
+            pbfCollection.updateById(pbfId, pbf);
+        }
+
+        return playerTurns;
+    }
+
+    private void updateTurn(String playerId, TurnDTO turnDTO, PBF pbf, Playerhand playerhand) {
+        if (!SecurityCheck.hasUserAccess(pbf, playerId)) {
+            log.error("User with id " + playerId + " has no access to pbf " + pbf.getName());
+            throw new WebApplicationException(Response.Status.FORBIDDEN);
+        }
+        Set<PlayerTurn> playerturns = playerhand.getPlayerTurns();
+        PlayerTurn playerTurn = updatePrivatePlayerturn(turnDTO, playerhand, playerturns);
+
+        addTurnInPBF(pbf, playerTurn);
+    }
+
+    private void addTurnInPBF(PBF pbf, PlayerTurn playerTurn) {
+        // Cant get map serialization to work in jackson
+        // final TurnKey turnKey = new TurnKey(playerTurn.getTurnNumber(), playerTurn.getUsername());
+        pbf.getPublicTurns().put(playerTurn.getUsername() + playerTurn.getTurnNumber(), playerTurn);
+        pbfCollection.updateById(pbf.getId(), pbf);
+    }
+
+    private PlayerTurn updatePrivatePlayerturn(TurnDTO turnDTO, Playerhand playerhand, Set<PlayerTurn> playerturns) {
+        PlayerTurn pt = getPlayerTurn(turnDTO, playerturns, playerhand.getUsername());
+
+        if ("SOT".equalsIgnoreCase(turnDTO.getPhase())) {
+            pt.setSot(turnDTO.getOrder());
+            pt.getSotHistory().add(turnDTO.getOrder());
+        } else if ("Trade".equalsIgnoreCase(turnDTO.getPhase())) {
+            pt.setTrade(turnDTO.getOrder());
+            pt.getTradeHistory().add(turnDTO.getOrder());
+        } else if ("CM".equalsIgnoreCase(turnDTO.getPhase())) {
+            pt.setCm(turnDTO.getOrder());
+            pt.getCmHistory().add(turnDTO.getOrder());
+        } else if ("Movement".equalsIgnoreCase(turnDTO.getPhase())) {
+            pt.setMovement(turnDTO.getOrder());
+            pt.getMovementHistory().add(turnDTO.getOrder());
+        } else if ("Research".equalsIgnoreCase(turnDTO.getPhase())) {
+            pt.setResearch(turnDTO.getOrder());
+            pt.getResearchHistory().add(turnDTO.getOrder());
+        }
+        playerhand.getPlayerTurns().add(pt);
+        return pt;
+    }
+
+    public void lockOrUnlockTurn(String pbfId, String playerId, TurnDTO turnDTO) {
+        PBF pbf = findPBFById(pbfId);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+        PlayerTurn playerTurn = playerhand.getPlayerTurns().stream()
+                .filter(p -> p.getTurnNumber() == turnDTO.getTurnNumber())
+                .findFirst()
+                .orElseThrow(PlayerAction::cannotFindItem);
+
+        playerTurn.setDisabled(turnDTO.isLocked());
+        String message = turnDTO.isLocked() ? " has locked in turn " + turnDTO.getTurnNumber() : " has re-opened turn " + turnDTO.getTurnNumber();
+        createCommonPublicLog(message, pbfId, playerId);
+        pbfCollection.updateById(pbfId, pbf);
+    }
 }

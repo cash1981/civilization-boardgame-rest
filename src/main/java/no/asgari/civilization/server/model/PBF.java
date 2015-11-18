@@ -25,6 +25,8 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.google.common.collect.Lists;
 import lombok.Data;
+import no.asgari.civilization.server.jackson.TurnKeyDeserializer;
+import no.asgari.civilization.server.jackson.TurnKeySerializer;
 import org.hibernate.validator.constraints.NotBlank;
 import org.mongojack.Id;
 import org.mongojack.ObjectId;
@@ -33,9 +35,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.TreeMap;
 
 /**
  * PBF stands for Play By Forum
@@ -73,7 +75,10 @@ public class PBF {
     private List<Playerhand> players = Lists.newArrayList();
     private List<Tech> techs = Lists.newArrayList();
     private List<SocialPolicy> socialPolicies = new ArrayList<>(8);
-    private Set<Turn> publicTurns = new TreeSet<>();
+
+    //@JsonSerialize(keyUsing=TurnKeySerializer.class)
+    //@JsonDeserialize(keyUsing = TurnKeyDeserializer.class)
+    private Map<String, PlayerTurn> publicTurns = new TreeMap<>();
 
     //Will use these to reshuffle items which are discarded and can be drawn again
     private List<Item> discardedItems = new ArrayList<>();
@@ -95,12 +100,6 @@ public class PBF {
         }
 
         return "";
-    }
-
-    public Optional<Turn> getTurnByUsernameAndTurnNr(String username, int turn) {
-        return publicTurns.stream()
-                .filter(t -> t.getUsername().equals(username) && turn == t.getTurnNumber())
-                .findFirst();
     }
 
 }

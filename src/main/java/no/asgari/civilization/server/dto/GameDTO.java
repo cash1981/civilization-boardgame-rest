@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Data;
 import no.asgari.civilization.server.model.GameType;
+import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.Playerhand;
 
 import java.util.List;
@@ -43,5 +44,6 @@ public class GameDTO {
     private List<GameLogDTO> publicLogs;
     private List<GameLogDTO> privateLogs;
     private Playerhand player;
+    private List<Item> revealedItems;
 
 }

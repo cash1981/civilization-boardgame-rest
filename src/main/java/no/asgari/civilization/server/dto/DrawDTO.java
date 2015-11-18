@@ -35,7 +35,7 @@ import java.time.LocalDateTime;
 public class DrawDTO {
 
     public DrawDTO(Draw draw) {
-        if(draw != null) {
+        if (draw != null) {
             this.playerId = draw.getPlayerId();
             this.pbfId = draw.getPbfId();
             this.undo = draw.getUndo();

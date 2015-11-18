@@ -396,7 +396,7 @@ public class DrawActionTest extends AbstractCivilizationTest {
         }
 
         assertThat(nrOfVillagesP1).isGreaterThan(0L);
-        drawAction.drawRandomItemAndGiveToPlayer(getApp().pbfId, EnumSet.of(SheetName.VILLAGES), playerTo.getPlayerId(), getApp().playerId);
+        drawAction.loot(getApp().pbfId, EnumSet.of(SheetName.VILLAGES), playerTo.getPlayerId(), getApp().playerId);
 
         pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
         for (Playerhand players : pbf.getPlayers()) {
