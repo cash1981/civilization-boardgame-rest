@@ -18,9 +18,7 @@ package no.asgari.civilization.server.action;
 import com.google.common.base.Preconditions;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
-import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
-import no.asgari.civilization.server.misc.CivUtil;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Item;
@@ -28,7 +26,6 @@ import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.model.Tech;
 import no.asgari.civilization.server.model.Undo;
-import org.mongojack.DBCursor;
 import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 
@@ -96,7 +93,7 @@ public class UndoAction extends BaseAction {
 
     /**
      * Will perform vote, and if all votes are successfull, item is put back in the deck
-     * <p/>
+     * <p>
      * A vote must have already been initiated
      *
      * @param gameLog
@@ -179,7 +176,7 @@ public class UndoAction extends BaseAction {
     public List<GameLog> getAllFinishedUndos(String pbfId) {
         List<GameLog> gameLogs = gameLogCollection.find(DBQuery.is("pbfId", pbfId), new BasicDBObject()).toArray();
 
-        return  gameLogs.stream()
+        return gameLogs.stream()
                 .filter(log -> log.getDraw() != null && log.getDraw().getUndo() != null && log.getDraw().getUndo().isDone())
                 .collect(Collectors.toList());
     }

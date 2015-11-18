@@ -28,7 +28,6 @@ import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.dto.TechDTO;
 import no.asgari.civilization.server.email.SendEmail;
 import no.asgari.civilization.server.exception.PlayerExistException;
-import no.asgari.civilization.server.misc.CivUtil;
 import no.asgari.civilization.server.misc.SecurityCheck;
 import no.asgari.civilization.server.model.Civ;
 import no.asgari.civilization.server.model.Draw;
@@ -172,9 +171,7 @@ public class PlayerAction extends BaseAction {
                 //TODO make async call
                 //@see https://jersey.java.net/nonav/documentation/latest/async.html#d0e10223
                 nextPlayer.setYourTurn(true);
-                if(CivUtil.shouldSendEmail(nextPlayer)) {
-                    SendEmail.sendYourTurn(pbf.getName(), nextPlayer.getEmail(), pbf.getId());
-                }
+                SendEmail.sendYourTurn(pbf.getName(), nextPlayer.getEmail(), pbf.getId());
 
                 try {
                     pbfCollection.updateById(pbf.getId(), pbf);

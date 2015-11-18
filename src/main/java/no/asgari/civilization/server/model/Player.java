@@ -31,6 +31,7 @@ import org.mongojack.ObjectId;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Data
@@ -65,10 +66,15 @@ public class Player {
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime emailSent = LocalDateTime.now();
+    private LocalDateTime emailSent;
 
     /**
      * Set of unique active games This may be reduntant as it can be calculated by looping through all pbfs.players and finding match.
      */
     private Set<String> gameIds = new HashSet<>();
+
+    @JsonIgnore
+    public Optional<LocalDateTime> getIfEmailSent() {
+        return Optional.ofNullable(emailSent);
+    }
 }

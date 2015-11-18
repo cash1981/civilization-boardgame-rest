@@ -30,6 +30,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -70,7 +71,7 @@ public class Playerhand implements Comparable<Playerhand> {
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime emailSent = LocalDateTime.now();
+    private LocalDateTime emailSent;
 
     @JsonIgnore
     public static String green() {
@@ -95,6 +96,11 @@ public class Playerhand implements Comparable<Playerhand> {
     @JsonIgnore
     public static String blue() {
         return "Blue";
+    }
+
+    @JsonIgnore
+    public Optional<LocalDateTime> getIfEmailSent() {
+        return Optional.ofNullable(emailSent);
     }
 
     @Override

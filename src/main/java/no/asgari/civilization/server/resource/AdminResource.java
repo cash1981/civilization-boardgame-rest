@@ -95,7 +95,7 @@ public class AdminResource {
         if (yes) {
             return Response.ok().entity(
                     "You will no longer get anymore emails. Don't forget to check in once in a while. " +
-                    "If you reconsider and want to get emails again, then you have to manually send a mail to cash@playciv.com and ask to get emails again")
+                            "If you reconsider and want to get emails again, then you have to manually send a mail to cash@playciv.com and ask to get emails again")
                     .build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();

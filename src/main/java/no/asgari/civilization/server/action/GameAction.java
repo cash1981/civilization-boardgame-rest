@@ -120,7 +120,7 @@ public class GameAction extends BaseAction {
         playerCollection.find().toArray().stream()
                 .filter(p -> !p.isDisableEmail())
                 .forEach(p -> {
-                    if(CivUtil.shouldSendEmail(p)) {
+                    if (CivUtil.shouldSendEmail(p)) {
                         SendEmail.sendMessage(p.getEmail(), "New Civilization game created",
                                 "A new game by the name " + pbf.getName() + " was just created! Visit " + SendEmail.URL + " to join the game.", p.getId());
                         playerCollection.updateById(p.getId(), p);
@@ -389,7 +389,7 @@ public class GameAction extends BaseAction {
                         .stream()
                         .filter(p -> !p.getUsername().equals(username))
                         .forEach(p -> {
-                                    if(CivUtil.shouldSendEmail(p)) {
+                                    if (CivUtil.shouldSendEmailInGame(p)) {
                                         SendEmail.sendMessage(p.getEmail(), "New Chat", username + " wrote in the chat: " + chat.getMessage()
                                                 + ".\nLogin to " + SendEmail.gamelink(pbfId) + " to see the chat", p.getPlayerId());
                                         pbfCollection.updateById(pbfId, pbf);
@@ -622,6 +622,6 @@ public class GameAction extends BaseAction {
             playerCollection.updateById(playerId, player);
             return true;
         }
-        return  false;
+        return false;
     }
 }
