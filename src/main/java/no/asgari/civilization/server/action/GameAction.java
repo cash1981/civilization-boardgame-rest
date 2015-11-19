@@ -189,7 +189,9 @@ public class GameAction extends BaseAction {
 
     public void joinGame(String pbfId, Player player, Optional<String> colorOpt) {
         PBF pbf = pbfCollection.findOneById(pbfId);
-        pbf.getPlayers().stream().forEach(p -> SendEmail.sendMessage(p.getEmail(), "Game update", player.getUsername() + " joined " + pbf.getName() + ". Go to " + SendEmail.URL + " to find out who!", p.getPlayerId()));
+        pbf.getPlayers().stream()
+                .filter(p -> !p.getPlayerId().equals(player.getId()))
+                .forEach(p -> SendEmail.sendMessage(p.getEmail(), "Game update", player.getUsername() + " joined " + pbf.getName() + ". Go to " + SendEmail.URL + " to find out who!", p.getPlayerId()));
         joinGame(pbf, player.getId(), colorOpt, false);
     }
 
