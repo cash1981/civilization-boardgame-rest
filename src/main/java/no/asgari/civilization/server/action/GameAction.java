@@ -43,6 +43,7 @@ import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
+import org.apache.commons.lang3.StringUtils;
 import org.mongojack.DBQuery;
 import org.mongojack.DBSort;
 import org.mongojack.JacksonDBCollection;
@@ -193,9 +194,13 @@ public class GameAction extends BaseAction {
 
     public void joinGame(String pbfId, Player player, Optional<String> colorOpt) {
         PBF pbf = pbfCollection.findOneById(pbfId);
+
         joinGame(pbf, player.getId(), colorOpt, false);
+
         Thread thread = new Thread(() -> {
-            pbf.getPlayers().stream().forEach(p -> SendEmail.sendMessage(p.getEmail(), "Game update", player.getUsername() + " joined " + pbf.getName() + ". Go to " + SendEmail.URL + " to find out who!", p.getPlayerId()));
+            pbf.getPlayers().stream()
+                    .filter(p -> !p.getPlayerId().equals(player.getId()))
+                    .forEach(p -> SendEmail.sendMessage(p.getEmail(), "Game update", player.getUsername() + " joined " + pbf.getName() + ". Go to " + SendEmail.URL + " to find out who!", p.getPlayerId()));
         });
         thread.start();
     }
@@ -392,7 +397,7 @@ public class GameAction extends BaseAction {
         if (pbfId != null) {
             Thread thread = new Thread(() -> {
                 String msg = CivSingleton.instance().getChatCache().getIfPresent(pbfId);
-                if (Strings.isNullOrEmpty(msg)) {
+                if (msg != null && msg.trim().length() > 0) {
                     CivSingleton.instance().getChatCache().put(pbfId, message);
                     pbf.getPlayers()
                             .stream()
