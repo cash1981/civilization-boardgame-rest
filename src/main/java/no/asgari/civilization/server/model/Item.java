@@ -20,7 +20,7 @@ package no.asgari.civilization.server.model;
  * Most of them will not have type or description.
  * The @used attribute will determine if the item is available or not
  * ie:
- * <p/>
+ * <p>
  * sheet = GREAT_PERSON
  * name = Leonidas
  * type = General
@@ -28,14 +28,14 @@ package no.asgari.civilization.server.model;
  * your combat bonus is increased by 8 until the end of the battle.
  * used = true
  * hidden = false
- * <p/>
+ * <p>
  * sheet = CIV
  * name = America
  * type = null
  * description = null
  * used = false
  * hidden = false;
- * <p/>
+ * <p>
  * sheet = VILLAGES
  * name = Barbarian Encampment
  * type = null

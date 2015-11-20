@@ -28,7 +28,6 @@ import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.dto.TechDTO;
 import no.asgari.civilization.server.email.SendEmail;
 import no.asgari.civilization.server.exception.PlayerExistException;
-import no.asgari.civilization.server.misc.CivUtil;
 import no.asgari.civilization.server.misc.SecurityCheck;
 import no.asgari.civilization.server.model.Civ;
 import no.asgari.civilization.server.model.Draw;
@@ -169,18 +168,10 @@ public class PlayerAction extends BaseAction {
                     nextPlayer = pbf.getPlayers().get(i + 1);
                 }
                 nextPlayer.setYourTurn(true);
-                if(CivUtil.shouldSendEmail(nextPlayer)) {
-                    sendEmailAsync(pbf, nextPlayer);
-                }
+                sendEmailAsync(pbf, playerhand);
 
-                try {
-                    pbfCollection.updateById(pbf.getId(), pbf);
-                    return true;
-                } catch (Exception ex) {
-                    log.error("Couldn't update pbf " + ex.getMessage(), ex);
-                    throw new WebApplicationException(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                            .build());
-                }
+                pbfCollection.updateById(pbf.getId(), pbf);
+                return true;
             }
         }
         return false;

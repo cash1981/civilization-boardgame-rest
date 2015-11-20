@@ -9,7 +9,17 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class WinnerDTO {
+public class WinnerDTO implements Comparable<WinnerDTO> {
     private String username;
     private int totalWins;
+
+    @Override
+    public int compareTo(WinnerDTO o) {
+        int i = Integer.valueOf(this.getTotalWins()).compareTo(o.getTotalWins());
+        if(i != 0) {
+            return i;
+        }
+
+        return username.compareTo(o.getUsername());
+    }
 }

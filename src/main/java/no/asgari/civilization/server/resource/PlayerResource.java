@@ -72,7 +72,7 @@ public class PlayerResource {
 
     /**
      * Will choose a tech and update the player collection.
-     * <p/>
+     * <p>
      * This method will also check if other players have chosen
      *
      * @param player
@@ -90,7 +90,7 @@ public class PlayerResource {
 
     /**
      * Will choose a social policy and update the player collection.
-     * <p/>
+     * <p>
      * This method will also check if other players have chosen a flipside and throw exception
      *
      * @param player
@@ -199,7 +199,7 @@ public class PlayerResource {
 
     /**
      * Reveals a tech
-     * <p/>
+     * <p>
      * Will throw BAD_REQUEST if undo has already been performed
      *
      * @param player
@@ -244,7 +244,7 @@ public class PlayerResource {
     /**
      * Will end a battle for one player
      * Will set the isBattle = false
-     * <p/>
+     * <p>
      * Both players need to call this method
      *
      * @param player

@@ -78,7 +78,7 @@ public class SendEmail {
     }
 
     private static String UNSUBSCRIBE(String playerId) {
-        if(Strings.isNullOrEmpty(playerId)) {
+        if (Strings.isNullOrEmpty(playerId)) {
             return "";
         }
         return "\n\nIf you wish to unsubscribe from ALL emails, then push this link: " + REST_URL + "api/admin/email/notification/" + playerId + "/stop";

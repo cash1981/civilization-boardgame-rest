@@ -30,10 +30,10 @@ import java.time.LocalDateTime;
 
 /**
  * This class is used in GameLog to show what item have been drawn
- * <p/>
+ * <p>
  * It will support undo of draws, which will put the item back in the deck and shuffle
  * Each draw will have a collection of Undo, which contains information about a possible undo with votes and outcome
- * <p/>
+ * <p>
  * <T> - Typically implementation of Unit, Item, or Tech
  */
 @NoArgsConstructor

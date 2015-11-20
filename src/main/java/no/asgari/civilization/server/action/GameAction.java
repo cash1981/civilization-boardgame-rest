@@ -64,6 +64,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 @Log4j
@@ -121,12 +122,11 @@ public class GameAction extends BaseAction {
         Thread thread = new Thread(() -> {
             playerCollection.find().toArray().stream()
                     .filter(p -> !p.isDisableEmail())
+                    .filter(CivUtil::shouldSendEmail)
                     .forEach(p -> {
-                        if (CivUtil.shouldSendEmail(p)) {
-                            SendEmail.sendMessage(p.getEmail(), "New Civilization game created",
-                                    "A new game by the name " + pbf.getName() + " was just created! Visit " + SendEmail.URL + " to join the game.", p.getId());
-                            playerCollection.updateById(p.getId(), p);
-                        }
+                        SendEmail.sendMessage(p.getEmail(), "New Civilization game created",
+                                "A new game by the name " + pbf.getName() + " was just created! Visit " + SendEmail.URL + " to join the game.", p.getId());
+                        playerCollection.updateById(p.getId(), p);
                     });
         });
         thread.start();
@@ -265,6 +265,7 @@ public class GameAction extends BaseAction {
         PBF pbf = pbfCollection.findOneById(pbfId);
         return pbf.getPlayers().stream()
                 .map(p -> createPlayerDTO(p, pbf.getId()))
+                .sorted((o1, o2) -> o1.getUsername().compareTo(o2.getUsername()))
                 .collect(toList());
     }
 
@@ -396,12 +397,11 @@ public class GameAction extends BaseAction {
                     pbf.getPlayers()
                             .stream()
                             .filter(p -> !p.getUsername().equals(username))
+                            .filter(CivUtil::shouldSendEmailInGame)
                             .forEach(p -> {
-                                        if (CivUtil.shouldSendEmail(p)) {
-                                            SendEmail.sendMessage(p.getEmail(), "New Chat", username + " wrote in the chat: " + chat.getMessage()
-                                                    + ".\nLogin to " + SendEmail.gamelink(pbfId) + " to see the chat", p.getPlayerId());
-                                            pbfCollection.updateById(pbfId, pbf);
-                                        }
+                                        SendEmail.sendMessage(p.getEmail(), "New Chat", username + " wrote in the chat: " + chat.getMessage()
+                                                + ".\nLogin to " + SendEmail.gamelink(pbfId) + " to see the chat", p.getPlayerId());
+                                        pbfCollection.updateById(pbfId, pbf);
                                     }
                             );
                 }
@@ -589,9 +589,19 @@ public class GameAction extends BaseAction {
                 .filter(pbf -> !Strings.isNullOrEmpty(pbf.getWinner()))
                 .forEach(pbf -> multimap.put(pbf.getWinner(), pbf.getId()));
 
-        return multimap.keySet().stream()
+        List<Player> allPlayers = playerCollection.find().toArray();
+        List<WinnerDTO> filteredPlayers = allPlayers.stream()
+                .filter(p -> !multimap.containsKey(p.getUsername()))
+                .map(p -> new WinnerDTO(p.getUsername(), 0))
+                .collect(toList());
+
+        List<WinnerDTO> winners = multimap.keySet().stream()
                 .map(user -> new WinnerDTO(user, multimap.get(user).size()))
                 .collect(toList());
+
+        winners.addAll(filteredPlayers);
+        Collections.sort(winners);
+        return winners;
     }
 
     private List<Item> getAllRevealedItems(PBF pbf) {

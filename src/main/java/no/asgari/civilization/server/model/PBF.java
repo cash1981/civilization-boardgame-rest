@@ -34,6 +34,7 @@ import org.mongojack.ObjectId;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -78,7 +79,7 @@ public class PBF {
 
     //@JsonSerialize(keyUsing=TurnKeySerializer.class)
     //@JsonDeserialize(keyUsing = TurnKeyDeserializer.class)
-    private Map<String, PlayerTurn> publicTurns = new TreeMap<>();
+    private Map<String, PlayerTurn> publicTurns = new HashMap<>();
 
     //Will use these to reshuffle items which are discarded and can be drawn again
     private List<Item> discardedItems = new ArrayList<>();

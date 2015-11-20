@@ -20,6 +20,7 @@ import no.asgari.civilization.server.model.Playerhand;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -29,29 +30,32 @@ public class CivUtil {
         return StreamSupport.stream(in.spliterator(), false);
     }
 
-    public static boolean shouldSendEmail(Playerhand nextPlayer) {
-        long lastEmailSent = nextPlayer.getEmailSent().atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
-        long now = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
-
+    public static boolean shouldSendEmailInGame(Playerhand player) {
         //30 min
         int min = 60 * 30;
-        if(min < (now - lastEmailSent)) {
-            nextPlayer.setEmailSent(LocalDateTime.now());
+        if (shouldSend(player.getIfEmailSent(), min)) {
+            player.setEmailSent(LocalDateTime.now());
             return true;
         }
         return false;
     }
 
     public static boolean shouldSendEmail(Player player) {
-        long lastEmailSent = player.getEmailSent().atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
-        long now = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
-
         //3 hours
         int min = 60 * 180;
-        if(min < (now - lastEmailSent)) {
+        if (shouldSend(player.getIfEmailSent(), min)) {
             player.setEmailSent(LocalDateTime.now());
             return true;
         }
         return false;
+    }
+
+    private static boolean shouldSend(Optional<LocalDateTime> emailSentOpt, int timeToWait) {
+        if (emailSentOpt.isPresent()) {
+            long lastEmailSent = emailSentOpt.get().atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
+            long now = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
+            return timeToWait < (now - lastEmailSent);
+        }
+        return true;
     }
 }

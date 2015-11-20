@@ -54,7 +54,11 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static org.eclipse.jetty.servlets.CrossOriginFilter.*;
+import static org.eclipse.jetty.servlets.CrossOriginFilter.ALLOWED_HEADERS_PARAM;
+import static org.eclipse.jetty.servlets.CrossOriginFilter.ALLOWED_METHODS_PARAM;
+import static org.eclipse.jetty.servlets.CrossOriginFilter.ALLOWED_ORIGINS_PARAM;
+import static org.eclipse.jetty.servlets.CrossOriginFilter.ALLOW_CREDENTIALS_PARAM;
+import static org.eclipse.jetty.servlets.CrossOriginFilter.EXPOSED_HEADERS_PARAM;
 
 @Log4j
 @SuppressWarnings("unchecked")

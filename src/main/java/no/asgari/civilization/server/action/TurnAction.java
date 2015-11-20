@@ -10,7 +10,6 @@ import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.PlayerTurn;
 import no.asgari.civilization.server.model.Playerhand;
-import no.asgari.civilization.server.model.TurnKey;
 import org.mongojack.JacksonDBCollection;
 
 import javax.ws.rs.WebApplicationException;
@@ -36,17 +35,17 @@ public class TurnAction extends BaseAction {
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         updateTurn(playerId, turnDTO, pbf, playerhand);
 
-        pbf.getPlayers()
-                .stream()
-                .filter(p -> !p.getUsername().equals(playerhand.getUsername()))
-                .forEach(p -> {
-                            if (CivUtil.shouldSendEmail(p)) {
-                                SendEmail.sendMessage(p.getEmail(), "Start of turn locked", playerhand.getUsername() + " has updated and locked start of turn with " +
-                                        "the following order\n:" + turnDTO.getOrder()
-                                        + ".\n\nLogin to " + SendEmail.gamelink(pbfId) + " to see the order", playerhand.getPlayerId());
-                            }
-                        }
-                );
+        Thread thread = new Thread(() -> {
+            pbf.getPlayers()
+                    .stream()
+                    .filter(p -> !p.getUsername().equals(playerhand.getUsername()))
+                    .filter(CivUtil::shouldSendEmailInGame)
+                    .forEach(p -> SendEmail.sendMessage(p.getEmail(), "Start of turn updated", playerhand.getUsername() + " has updated start of turn with " +
+                                    "the following order\n:" + turnDTO.getOrder()
+                                    + ".\n\nLogin to " + SendEmail.gamelink(pbfId) + " to see the order", playerhand.getPlayerId())
+                    );
+        });
+        thread.start();
 
         pbfCollection.updateById(pbfId, pbf);
         super.createLog(pbfId, GameLog.LogType.SOT, playerId);
@@ -57,17 +56,17 @@ public class TurnAction extends BaseAction {
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         updateTurn(playerId, turnDTO, pbf, playerhand);
 
-        pbf.getPlayers()
-                .stream()
-                .filter(p -> !p.getUsername().equals(playerhand.getUsername()))
-                .forEach(p -> {
-                            if (CivUtil.shouldSendEmail(p)) {
-                                SendEmail.sendMessage(p.getEmail(), "Trade locked", playerhand.getUsername() + " has updated and locked trade with " +
-                                        "the following order:\n" + turnDTO.getOrder()
-                                        + ".\n\nLogin to " + SendEmail.gamelink(pbfId) + " to see the order", playerhand.getPlayerId());
-                            }
-                        }
-                );
+        Thread thread = new Thread(() -> {
+            pbf.getPlayers()
+                    .stream()
+                    .filter(p -> !p.getUsername().equals(playerhand.getUsername()))
+                    .filter(CivUtil::shouldSendEmailInGame)
+                    .forEach(p -> SendEmail.sendMessage(p.getEmail(), "Trade updated", playerhand.getUsername() + " has updated trade with " +
+                                    "the following order:\n" + turnDTO.getOrder()
+                                    + ".\n\nLogin to " + SendEmail.gamelink(pbfId) + " to see the order", playerhand.getPlayerId())
+                    );
+        });
+        thread.start();
 
         pbfCollection.updateById(pbfId, pbf);
         super.createLog(pbfId, GameLog.LogType.TRADE, playerId);
@@ -78,17 +77,19 @@ public class TurnAction extends BaseAction {
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         updateTurn(playerId, turnDTO, pbf, playerhand);
 
-        pbf.getPlayers()
-                .stream()
-                .filter(p -> !p.getUsername().equals(playerhand.getUsername()))
-                .forEach(p -> {
-                            if (CivUtil.shouldSendEmail(p)) {
-                                SendEmail.sendMessage(p.getEmail(), "City management locked", playerhand.getUsername() + " has updated and locked city management with " +
+        Thread thread = new Thread(() -> {
+            pbf.getPlayers()
+                    .stream()
+                    .filter(p -> !p.getUsername().equals(playerhand.getUsername()))
+                    .filter(CivUtil::shouldSendEmailInGame)
+                    .forEach(p -> {
+                                SendEmail.sendMessage(p.getEmail(), "City management updated", playerhand.getUsername() + " has updated city management with " +
                                         "the following order:\n" + turnDTO.getOrder()
                                         + ".\n\nLogin to " + SendEmail.gamelink(pbfId) + " to see the order", playerhand.getPlayerId());
                             }
-                        }
-                );
+                    );
+        });
+        thread.start();
 
         pbfCollection.updateById(pbfId, pbf);
         super.createLog(pbfId, GameLog.LogType.CM, playerId);
@@ -99,14 +100,18 @@ public class TurnAction extends BaseAction {
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         updateTurn(playerId, turnDTO, pbf, playerhand);
 
-        pbf.getPlayers()
-                .stream()
-                .filter(p -> !p.getUsername().equals(playerhand.getUsername()))
-                .forEach(
-                        p -> SendEmail.sendMessage(p.getEmail(), "Movement locked", playerhand.getUsername() + " has updated and locked movement with " +
-                                "the following order:\n" + turnDTO.getOrder()
-                                + ".\n\nLogin to " + SendEmail.gamelink(pbfId) + " to see the order", playerhand.getPlayerId())
-                );
+        Thread thread = new Thread(() -> {
+            pbf.getPlayers()
+                    .stream()
+                    .filter(p -> !p.getUsername().equals(playerhand.getUsername()))
+                    .filter(CivUtil::shouldSendEmailInGame)
+                    .forEach(
+                            p -> SendEmail.sendMessage(p.getEmail(), "Movement updated", playerhand.getUsername() + " has updated movement with " +
+                                    "the following order:\n" + turnDTO.getOrder()
+                                    + ".\n\nLogin to " + SendEmail.gamelink(pbfId) + " to see the order", playerhand.getPlayerId())
+                    );
+        });
+        thread.start();
 
         pbfCollection.updateById(pbfId, pbf);
         super.createLog(pbfId, GameLog.LogType.MOVEMENT, playerId);
@@ -117,17 +122,17 @@ public class TurnAction extends BaseAction {
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         updateTurn(playerId, turnDTO, pbf, playerhand);
 
-        pbf.getPlayers()
-                .stream()
-                .filter(p -> !p.getUsername().equals(playerhand.getUsername()))
-                .forEach(p -> {
-                            if (CivUtil.shouldSendEmail(p)) {
-                                SendEmail.sendMessage(p.getEmail(), "Research locked", playerhand.getUsername() + " has updated and locked research with " +
-                                        "the following order:\n" + turnDTO.getOrder()
-                                        + ".\n\nLogin to " + SendEmail.gamelink(pbfId) + " to see the order", playerhand.getPlayerId());
-                            }
-                        }
-                );
+        Thread thread = new Thread(() -> {
+            pbf.getPlayers()
+                    .stream()
+                    .filter(p -> !p.getUsername().equals(playerhand.getUsername()))
+                    .filter(CivUtil::shouldSendEmailInGame)
+                    .forEach(p -> SendEmail.sendMessage(p.getEmail(), "Research updated", playerhand.getUsername() + " has updated research with " +
+                                    "the following order:\n" + turnDTO.getOrder()
+                                    + ".\n\nLogin to " + SendEmail.gamelink(pbfId) + " to see the order", playerhand.getPlayerId())
+                    );
+        });
+        thread.start();
 
         pbfCollection.updateById(pbfId, pbf);
         super.createLog(pbfId, GameLog.LogType.RESEARCH, playerId);
@@ -201,8 +206,8 @@ public class TurnAction extends BaseAction {
 
     private void addTurnInPBF(PBF pbf, PlayerTurn playerTurn) {
         // Cant get map serialization to work in jackson
-        // final TurnKey turnKey = new TurnKey(playerTurn.getTurnNumber(), playerTurn.getUsername());
-        pbf.getPublicTurns().put(playerTurn.getUsername() + playerTurn.getTurnNumber(), playerTurn);
+        //final TurnKey turnKey = new TurnKey(playerTurn.getTurnNumber(), playerTurn.getUsername());
+        pbf.getPublicTurns().put(playerTurn.getTurnNumber() + playerTurn.getUsername(), playerTurn);
         pbfCollection.updateById(pbf.getId(), pbf);
     }
 

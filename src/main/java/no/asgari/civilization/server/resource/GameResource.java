@@ -332,7 +332,7 @@ public class GameResource {
 
     /**
      * Initiates undo for an item.
-     * <p/>
+     * <p>
      * Will throw BAD_REQUEST if undo has already been performed
      *
      * @param player
@@ -353,7 +353,7 @@ public class GameResource {
 
     /**
      * Performs yes vote on an undo
-     * <p/>
+     * <p>
      * Returns error if no undo is found
      *
      * @param player
@@ -379,7 +379,7 @@ public class GameResource {
 
     /**
      * Performs no vote on an undo
-     * <p/>
+     * <p>
      * Returns "412 Precondition failed" if no undo is found
      *
      * @param player

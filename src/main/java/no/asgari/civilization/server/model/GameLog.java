@@ -34,13 +34,13 @@ import java.time.ZoneId;
 /**
  * This class will be used to store all the actions performed in the game.
  * It can be creating game, joining game, drawing items
- * <p/>
+ * <p>
  * All private logs/draws can be requested undo
- * <p/>
+ * <p>
  * Private view:
  * 14.04.2014 - 14:24 - cash1981 drew Civ Japan - <hidden button> - <undo button>
  * 14.04.2014 - 14:25 - cash1981 drew Civ Greece - <hidden button> - <undo button>
- * <p/>
+ * <p>
  * Public view:
  * <14.04.2014 - 14:25 - cash1981 drew Infantry
  * <14.04.2014 - 14:25 - cash1981 drew Mounted
