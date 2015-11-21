@@ -14,6 +14,7 @@ import org.mongojack.JacksonDBCollection;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -33,7 +34,7 @@ public class TurnAction extends BaseAction {
     public void updateSOT(String pbfId, String playerId, TurnDTO turnDTO) {
         PBF pbf = findPBFById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        updateTurn(playerId, turnDTO, pbf, playerhand);
+        saveTurn(playerId, turnDTO, pbf, playerhand);
 
         Thread thread = new Thread(() -> {
             pbf.getPlayers()
@@ -54,7 +55,7 @@ public class TurnAction extends BaseAction {
     public void updateTrade(String pbfId, String playerId, TurnDTO turnDTO) {
         PBF pbf = findPBFById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        updateTurn(playerId, turnDTO, pbf, playerhand);
+        saveTurn(playerId, turnDTO, pbf, playerhand);
 
         Thread thread = new Thread(() -> {
             pbf.getPlayers()
@@ -75,7 +76,7 @@ public class TurnAction extends BaseAction {
     public void updateCM(String pbfId, String playerId, TurnDTO turnDTO) {
         PBF pbf = findPBFById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        updateTurn(playerId, turnDTO, pbf, playerhand);
+        saveTurn(playerId, turnDTO, pbf, playerhand);
 
         Thread thread = new Thread(() -> {
             pbf.getPlayers()
@@ -98,7 +99,7 @@ public class TurnAction extends BaseAction {
     public void updateMovement(String pbfId, String playerId, TurnDTO turnDTO) {
         PBF pbf = findPBFById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        updateTurn(playerId, turnDTO, pbf, playerhand);
+        saveTurn(playerId, turnDTO, pbf, playerhand);
 
         Thread thread = new Thread(() -> {
             pbf.getPlayers()
@@ -120,7 +121,7 @@ public class TurnAction extends BaseAction {
     public void updateResearch(String pbfId, String playerId, TurnDTO turnDTO) {
         PBF pbf = findPBFById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        updateTurn(playerId, turnDTO, pbf, playerhand);
+        saveTurn(playerId, turnDTO, pbf, playerhand);
 
         Thread thread = new Thread(() -> {
             pbf.getPlayers()
@@ -154,12 +155,18 @@ public class TurnAction extends BaseAction {
         }
     }
 
-    private PlayerTurn getPlayerTurn(TurnDTO turnDTO, Set<PlayerTurn> playerturns, String username) {
-        PlayerTurn playerTurn = playerturns.stream()
-                .filter(t -> t.getTurnNumber() == turnDTO.getTurnNumber())
+    /**
+     * If none is found, a new one is created but not saved
+     * @param turnNumber
+     * @param playerhand
+     * @return
+     */
+    private PlayerTurn getPlayerTurnByTurnNumber(int turnNumber, Playerhand playerhand) {
+        PlayerTurn playerTurn = playerhand.getPlayerTurns().stream()
+                .filter(t -> t.getTurnNumber() == turnNumber)
                 .findFirst()
-                .orElse(new PlayerTurn(username, turnDTO.getTurnNumber()));
-        playerTurn.setUsername(username);
+                .orElse(new PlayerTurn(playerhand.getUsername(), turnNumber));
+        //playerTurn.setUsername(username);
         return playerTurn;
     }
 
@@ -181,6 +188,13 @@ public class TurnAction extends BaseAction {
 
     }
 
+    /**
+     * Gets all players turns.
+     * If there are none, it will create one with turn number 1
+     * @param pbfId
+     * @param playerId
+     * @return
+     */
     public Set<PlayerTurn> getPlayersTurns(String pbfId, String playerId) {
         PBF pbf = findPBFById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
@@ -193,26 +207,12 @@ public class TurnAction extends BaseAction {
         return playerTurns;
     }
 
-    private void updateTurn(String playerId, TurnDTO turnDTO, PBF pbf, Playerhand playerhand) {
+    private void saveTurn(String playerId, TurnDTO turnDTO, PBF pbf, Playerhand playerhand) {
         if (!SecurityCheck.hasUserAccess(pbf, playerId)) {
             log.error("User with id " + playerId + " has no access to pbf " + pbf.getName());
             throw new WebApplicationException(Response.Status.FORBIDDEN);
         }
-        Set<PlayerTurn> playerturns = playerhand.getPlayerTurns();
-        PlayerTurn playerTurn = updatePrivatePlayerturn(turnDTO, playerhand, playerturns);
-
-        addTurnInPBF(pbf, playerTurn);
-    }
-
-    private void addTurnInPBF(PBF pbf, PlayerTurn playerTurn) {
-        // Cant get map serialization to work in jackson
-        //final TurnKey turnKey = new TurnKey(playerTurn.getTurnNumber(), playerTurn.getUsername());
-        pbf.getPublicTurns().put(playerTurn.getTurnNumber() + playerTurn.getUsername(), playerTurn);
-        pbfCollection.updateById(pbf.getId(), pbf);
-    }
-
-    private PlayerTurn updatePrivatePlayerturn(TurnDTO turnDTO, Playerhand playerhand, Set<PlayerTurn> playerturns) {
-        PlayerTurn pt = getPlayerTurn(turnDTO, playerturns, playerhand.getUsername());
+        PlayerTurn pt = getPlayerTurnByTurnNumber(turnDTO.getTurnNumber(), playerhand);
 
         if ("SOT".equalsIgnoreCase(turnDTO.getPhase())) {
             pt.setSot(turnDTO.getOrder());
@@ -231,10 +231,21 @@ public class TurnAction extends BaseAction {
             pt.getResearchHistory().add(turnDTO.getOrder());
         }
         playerhand.getPlayerTurns().add(pt);
-        return pt;
+        pbfCollection.updateById(pbf.getId(), pbf);
     }
 
-    public void lockOrUnlockTurn(String pbfId, String playerId, TurnDTO turnDTO) {
+    public Collection<PlayerTurn> addTurnInPBF(String pbfId, String playerId, TurnDTO turnDTO) {
+        PBF pbf = findPBFById(pbfId);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+        PlayerTurn playerTurn = getPlayerTurnByTurnNumber(turnDTO.getTurnNumber(), playerhand);
+        // Cant get map serialization to work in jackson
+        //final TurnKey turnKey = new TurnKey(playerTurn.getTurnNumber(), playerTurn.getUsername());
+        pbf.getPublicTurns().put(playerTurn.getTurnNumber() + playerTurn.getUsername(), playerTurn);
+        pbfCollection.updateById(pbf.getId(), pbf);
+        return pbf.getPublicTurns().values();
+    }
+
+    public Set<PlayerTurn> lockOrUnlockTurn(String pbfId, String playerId, TurnDTO turnDTO) {
         PBF pbf = findPBFById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         PlayerTurn playerTurn = playerhand.getPlayerTurns().stream()
@@ -245,6 +256,14 @@ public class TurnAction extends BaseAction {
         playerTurn.setDisabled(turnDTO.isLocked());
         String message = turnDTO.isLocked() ? " has locked in turn " + turnDTO.getTurnNumber() : " has re-opened turn " + turnDTO.getTurnNumber();
         createCommonPublicLog(message, pbfId, playerId);
+
+        if(turnDTO.isLocked() && !playerhand.getPlayerTurns().stream().anyMatch(p -> p.getTurnNumber() == (turnDTO.getTurnNumber()+1))) {
+            //create new turn
+            playerhand.getPlayerTurns().add(new PlayerTurn(playerhand.getUsername(), turnDTO.getTurnNumber() + 1));
+        }
+
         pbfCollection.updateById(pbfId, pbf);
+
+        return getPlayersTurns(pbfId, playerId);
     }
 }

@@ -66,6 +66,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -83,10 +84,12 @@ public class GameResource {
     private UriInfo uriInfo;
 
     private final JacksonDBCollection<PBF, String> pbfCollection;
+    private final JacksonDBCollection<Player, String> playerCollection;
 
     public GameResource(DB db) {
         this.db = db;
         this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
+        this.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
     }
 
     /**
@@ -97,9 +100,14 @@ public class GameResource {
      */
     @GET
     @Timed
-    public Response getAllGames() {
+    public Response getAllGames(@Auth(required = false) Player player) {
         GameAction gameAction = new GameAction(db);
         List<PbfDTO> games = gameAction.getAllGames();
+
+        if(player != null) {
+            player.setLastLogin(LocalDateTime.now());
+            playerCollection.updateById(player.getId(), player);
+        }
 
         return Response.ok()
                 .entity(games)

@@ -48,6 +48,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -288,10 +289,8 @@ public class PlayerResource {
     }
 
     @PUT
-    @Path("/turn/update")
-    public Response updateTurn(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId,
-                              @Valid TurnDTO turn) {
-
+    @Path("/turn/save")
+    public Response saveTurn(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, TurnDTO turn) {
         TurnAction turnAction = new TurnAction(db);
         if("SOT".equalsIgnoreCase(turn.getPhase())) {
             turnAction.updateSOT(pbfId, player.getId(), turn);
@@ -309,13 +308,23 @@ public class PlayerResource {
     }
 
     @PUT
-    @Path("/turn/lock")
-    public Response lockOrUnlockTurn(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId,
-                               @Valid TurnDTO turn) {
+    @Path("/turn/reveal")
+    public Response revealTurn(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId,
+                               TurnDTO turn) {
 
         TurnAction turnAction = new TurnAction(db);
-        turnAction.lockOrUnlockTurn(pbfId, player.getId(), turn);
+        Collection<PlayerTurn> playerTurns = turnAction.addTurnInPBF(pbfId, player.getId(), turn);
+        return Response.ok(playerTurns).build();
+    }
 
-        return Response.noContent().build();
+    @PUT
+    @Path("/turn/lock")
+    public Response lockOrUnlockTurn(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId,
+                               TurnDTO turn) {
+
+        TurnAction turnAction = new TurnAction(db);
+        Set<PlayerTurn> playerTurns = turnAction.lockOrUnlockTurn(pbfId, player.getId(), turn);
+
+        return Response.ok(playerTurns).build();
     }
 }

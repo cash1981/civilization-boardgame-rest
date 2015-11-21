@@ -594,11 +594,14 @@ public class GameAction extends BaseAction {
         List<Player> allPlayers = playerCollection.find().toArray();
         List<WinnerDTO> filteredPlayers = allPlayers.stream()
                 .filter(p -> !multimap.containsKey(p.getUsername()))
-                .map(p -> new WinnerDTO(p.getUsername(), 0))
+                .map(p -> new WinnerDTO(p.getUsername(), p.getLastLoginMillis(), 0))
                 .collect(toList());
 
         List<WinnerDTO> winners = multimap.keySet().stream()
-                .map(user -> new WinnerDTO(user, multimap.get(user).size()))
+                .map(user -> {
+                    Player p = playerCollection.findOne(DBQuery.is(Player.USERNAME, user));
+                    return new WinnerDTO(user, p.getLastLoginMillis(), multimap.get(user).size());
+                })
                 .collect(toList());
 
         winners.addAll(filteredPlayers);

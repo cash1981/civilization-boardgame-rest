@@ -30,6 +30,7 @@ import org.mongojack.Id;
 import org.mongojack.ObjectId;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -68,6 +69,10 @@ public class Player {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime emailSent;
 
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime lastLogin;
+
     /**
      * Set of unique active games This may be reduntant as it can be calculated by looping through all pbfs.players and finding match.
      */
@@ -76,5 +81,12 @@ public class Player {
     @JsonIgnore
     public Optional<LocalDateTime> getIfEmailSent() {
         return Optional.ofNullable(emailSent);
+    }
+
+    @JsonIgnore
+    public long getLastLoginMillis() {
+        if(lastLogin != null)
+            return lastLogin.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        return 0L;
     }
 }
