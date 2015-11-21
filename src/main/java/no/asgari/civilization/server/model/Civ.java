@@ -15,6 +15,7 @@
 
 package no.asgari.civilization.server.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -34,7 +35,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"name", "description", "type"})
-public class Civ implements Item {
+public class Civ implements Item, Image {
     @NotEmpty
     private String name;
     private String type;
@@ -45,6 +46,7 @@ public class Civ implements Item {
     private SheetName sheetName;
     private Tech startingTech;
     private int itemNumber;
+    private String image;
 
     public Civ(String name) {
         this.name = name;
@@ -70,5 +72,12 @@ public class Civ implements Item {
     @Override
     public int compareTo(Spreadsheet o) {
         return getSheetName().compareTo(o.getSheetName());
+    }
+
+    @JsonGetter("image")
+    @Override
+    public String getImage() {
+        image = name + PNG;
+        return image;
     }
 }
