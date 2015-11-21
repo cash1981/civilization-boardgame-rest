@@ -415,7 +415,9 @@ public class GameAction extends BaseAction {
     public List<ChatDTO> getChat(String pbfId) {
         Preconditions.checkNotNull(pbfId);
         List<Chat> chats = chatCollection.find(DBQuery.is("pbfId", pbfId)).sort(DBSort.desc("created")).toArray();
-
+        if(chats == null) {
+            return new ArrayList<>();
+        }
         PBF pbf = findPBFById(pbfId);
         Map<String, String> colorMap = pbf.getPlayers().stream()
                 .collect(Collectors.toMap(Playerhand::getUsername, (playerhand) -> {
