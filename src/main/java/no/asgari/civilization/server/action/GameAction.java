@@ -23,7 +23,6 @@ import com.google.common.collect.Sets;
 import com.mongodb.DB;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
-import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.dto.ChatDTO;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.DrawDTO;
@@ -65,7 +64,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 @Log4j
@@ -392,26 +390,21 @@ public class GameAction extends BaseAction {
         String id = chatCollection.insert(chat).getSavedId();
         chat.setId(id);
 
-        PBF pbf = findPBFById(pbfId);
+        if(pbfId != null) {
+            PBF pbf = findPBFById(pbfId);
 
-        if (pbfId != null) {
-            Thread thread = new Thread(() -> {
-                String msg = CivSingleton.instance().getChatCache().getIfPresent(pbfId);
-                if (msg != null && msg.trim().length() > 0) {
-                    CivSingleton.instance().getChatCache().put(pbfId, message);
-                    pbf.getPlayers()
-                            .stream()
-                            .filter(p -> !p.getUsername().equals(username))
-                            .filter(CivUtil::shouldSendEmailInGame)
-                            .forEach(p -> {
-                                        SendEmail.sendMessage(p.getEmail(), "New Chat", username + " wrote in the chat: " + chat.getMessage()
-                                                + ".\nLogin to " + SendEmail.gamelink(pbfId) + " to see the chat", p.getPlayerId());
-                                        pbfCollection.updateById(pbfId, pbf);
-                                    }
-                            );
-                }
-            });
-            thread.start();
+            if (StringUtils.isNotBlank(message)) {
+                pbf.getPlayers()
+                        .stream()
+                        .filter(p -> !p.getUsername().equals(username))
+                        .filter(CivUtil::shouldSendEmailInGame)
+                        .forEach(p -> {
+                                    SendEmail.sendMessage(p.getEmail(), "New Chat", username + " wrote in the chat: " + chat.getMessage()
+                                            + ".\nLogin to " + SendEmail.gamelink(pbfId) + " to see the chat", p.getPlayerId());
+                                    pbfCollection.updateById(pbfId, pbf);
+                                }
+                        );
+            }
         }
 
         return chat;
@@ -420,7 +413,7 @@ public class GameAction extends BaseAction {
     public List<ChatDTO> getChat(String pbfId) {
         Preconditions.checkNotNull(pbfId);
         List<Chat> chats = chatCollection.find(DBQuery.is("pbfId", pbfId)).sort(DBSort.desc("created")).toArray();
-        if(chats == null) {
+        if (chats == null) {
             return new ArrayList<>();
         }
         PBF pbf = findPBFById(pbfId);
