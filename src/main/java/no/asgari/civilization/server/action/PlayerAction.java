@@ -168,20 +168,13 @@ public class PlayerAction extends BaseAction {
                     nextPlayer = pbf.getPlayers().get(i + 1);
                 }
                 nextPlayer.setYourTurn(true);
-                sendEmailAsync(pbf, playerhand);
+                SendEmail.sendYourTurn(pbf.getName(), player.getEmail(), pbf.getId());
 
                 pbfCollection.updateById(pbf.getId(), pbf);
                 return true;
             }
         }
         return false;
-    }
-
-    private void sendEmailAsync(PBF pbf, Playerhand player) {
-        Thread thread = new Thread(() -> {
-            SendEmail.sendYourTurn(pbf.getName(), player.getEmail(), pbf.getId());
-        });
-        thread.start();
     }
 
     /**

@@ -54,7 +54,7 @@ public class CivUtil {
         if (emailSentOpt.isPresent()) {
             long lastEmailSent = emailSentOpt.get().atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
             long now = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
-            return timeToWait < (now - lastEmailSent);
+            return timeToWait < Math.abs(lastEmailSent - now);
         }
         return true;
     }

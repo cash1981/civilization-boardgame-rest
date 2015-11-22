@@ -1,12 +1,17 @@
 package no.asgari.civilization.server.misc;
 
 import no.asgari.civilization.server.dto.MessageDTO;
+import no.asgari.civilization.server.model.Playerhand;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
 import java.net.URLDecoder;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class MiscTest {
 
@@ -29,5 +34,20 @@ public class MiscTest {
 
         assertThat(((MessageDTO) badReq.getEntity()).getMessage()).isEqualTo("foobar");
     }
+
+    @Test
+    public void checkEpochSecondsForMail() throws Exception {
+        Playerhand playerhand = new Playerhand();
+        playerhand.setEmailSent(LocalDateTime.now().plusMinutes(35));
+        assertTrue(CivUtil.shouldSendEmailInGame(playerhand));
+
+        playerhand.setEmailSent(LocalDateTime.now().plusMinutes(29));
+        assertFalse(CivUtil.shouldSendEmailInGame(playerhand));
+
+        playerhand.setEmailSent(LocalDateTime.now().plusMinutes(31));
+        assertTrue(CivUtil.shouldSendEmailInGame(playerhand));
+    }
+
+
 
 }
