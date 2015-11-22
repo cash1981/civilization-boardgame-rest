@@ -192,9 +192,13 @@ public class GameAction extends BaseAction {
 
     public void joinGame(String pbfId, Player player, Optional<String> colorOpt) {
         PBF pbf = pbfCollection.findOneById(pbfId);
+
         joinGame(pbf, player.getId(), colorOpt, false);
+
         Thread thread = new Thread(() -> {
-            pbf.getPlayers().stream().forEach(p -> SendEmail.sendMessage(p.getEmail(), "Game update", player.getUsername() + " joined " + pbf.getName() + ". Go to " + SendEmail.URL + " to find out who!", p.getPlayerId()));
+            pbf.getPlayers().stream()
+                    .filter(p -> !p.getPlayerId().equals(player.getId()))
+                    .forEach(p -> SendEmail.sendMessage(p.getEmail(), "Game update", player.getUsername() + " joined " + pbf.getName() + ". Go to " + SendEmail.URL + " to find out who!", p.getPlayerId()));
         });
         thread.start();
     }
@@ -386,19 +390,21 @@ public class GameAction extends BaseAction {
         String id = chatCollection.insert(chat).getSavedId();
         chat.setId(id);
 
-        PBF pbf = findPBFById(pbfId);
+        if (pbfId != null) {
+            PBF pbf = findPBFById(pbfId);
 
-        if (StringUtils.isNotBlank(message)) {
-            pbf.getPlayers()
-                    .stream()
-                    .filter(p -> !p.getUsername().equals(username))
-                    .filter(CivUtil::shouldSendEmailInGame)
-                    .forEach(p -> {
-                                SendEmail.sendMessage(p.getEmail(), "New Chat", username + " wrote in the chat: " + chat.getMessage()
-                                        + ".\nLogin to " + SendEmail.gamelink(pbfId) + " to see the chat", p.getPlayerId());
-                                pbfCollection.updateById(pbfId, pbf);
-                            }
-                    );
+            if (StringUtils.isNotBlank(message)) {
+                pbf.getPlayers()
+                        .stream()
+                        .filter(p -> !p.getUsername().equals(username))
+                        .filter(CivUtil::shouldSendEmailInGame)
+                        .forEach(p -> {
+                                    SendEmail.sendMessage(p.getEmail(), "New Chat", username + " wrote in the chat: " + chat.getMessage()
+                                            + ".\nLogin to " + SendEmail.gamelink(pbfId) + " to see the chat", p.getPlayerId());
+                                    pbfCollection.updateById(pbfId, pbf);
+                                }
+                        );
+            }
         }
 
         return chat;

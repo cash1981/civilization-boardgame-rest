@@ -313,7 +313,21 @@ public class PlayerResource {
                                TurnDTO turn) {
 
         TurnAction turnAction = new TurnAction(db);
-        Collection<PlayerTurn> playerTurns = turnAction.addTurnInPBF(pbfId, player.getId(), turn);
+        Collection<PlayerTurn> playerTurns = null;
+        if("SOT".equalsIgnoreCase(turn.getPhase())) {
+            playerTurns = turnAction.revealSOT(pbfId, player.getId(), turn);
+        }
+        //TODO
+        /*else if("Trade".equalsIgnoreCase(turn.getPhase())) {
+            playerTurns = turnAction.revealTrade(pbfId, player.getId(), turn);
+        } else if("CM".equalsIgnoreCase(turn.getPhase())) {
+            playerTurns = turnAction.revealCM(pbfId, player.getId(), turn);
+        } else if("Movement".equalsIgnoreCase(turn.getPhase())) {
+            playerTurns = turnAction.revealMovement(pbfId, player.getId(), turn);
+        } else if("Research".equalsIgnoreCase(turn.getPhase())) {
+            playerTurns = turnAction.revealResearch(pbfId, player.getId(), turn);
+        }*/
+
         return Response.ok(playerTurns).build();
     }
 

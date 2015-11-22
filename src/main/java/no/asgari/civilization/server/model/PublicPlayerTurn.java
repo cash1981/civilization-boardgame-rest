@@ -5,44 +5,38 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Objects;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
-public class PlayerTurn implements Comparable<PlayerTurn> {
+public class PublicPlayerTurn implements Comparable<PublicPlayerTurn> {
     private int turnNumber = 1;
     private String username = "";
-    private boolean disabled;
+    private Set<String> sotHistory = new HashSet<>();
+    private Set<String> tradeHistory = new HashSet<>();
+    private Set<String> cmHistory = new HashSet<>();
+    private Set<String> movementHistory = new HashSet<>();
+    private Set<String> researchHistory = new HashSet<>();
+
     private String sot = "";
     private String trade = "";
     private String cm = "";
     private String movement = "";
     private String research = "";
 
-    public PlayerTurn(String username, int turnNumber) {
+    public PublicPlayerTurn(String username, int turnNumber) {
         this.username = username;
         this.turnNumber = turnNumber;
     }
 
     /**
-     * Only one instance of username and turnNumber
+     * Key is a combination of turn number + username
      */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PlayerTurn that = (PlayerTurn) o;
-        return Objects.equals(turnNumber, that.turnNumber) &&
-                Objects.equals(username, that.username);
-    }
-
-    /**
-     * Only one instance of username and turnNumber
-     */
-    @Override
-    public int hashCode() {
-        return Objects.hash(turnNumber, username);
+    @JsonIgnore
+    public String getKey() {
+        return turnNumber + username;
     }
 
     /**
@@ -55,11 +49,12 @@ public class PlayerTurn implements Comparable<PlayerTurn> {
     }
 
     @Override
-    public int compareTo(PlayerTurn o) {
+    public int compareTo(PublicPlayerTurn o) {
         int v = Integer.valueOf(turnNumber).compareTo(o.getTurnNumber());
         if (v != 0) {
             return v;
         }
         return username.compareTo(o.getUsername());
     }
+
 }

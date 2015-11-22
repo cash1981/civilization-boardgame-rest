@@ -10,14 +10,14 @@ import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.PlayerTurn;
 import no.asgari.civilization.server.model.Playerhand;
+import no.asgari.civilization.server.model.PublicPlayerTurn;
+import org.apache.commons.lang3.StringUtils;
 import org.mongojack.JacksonDBCollection;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
 
@@ -47,9 +47,37 @@ public class TurnAction extends BaseAction {
                     );
         });
         thread.start();
-
-        pbfCollection.updateById(pbfId, pbf);
         super.createLog(pbfId, GameLog.LogType.SOT, playerId);
+        pbfCollection.updateById(pbfId, pbf);
+    }
+
+
+    public Collection<PublicPlayerTurn> revealSOT(String pbfId, String playerId, TurnDTO turnDTO) {
+        PBF pbf = findPBFById(pbfId);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+        if(!playerhand.getPlayerTurns().containsKey(turnDTO.getTurnNumber())) {
+            throw new WebApplicationException("Must save before revealing", Response.Status.BAD_REQUEST);
+        }
+        PlayerTurn playerTurn = playerhand.getPlayerTurns().get(turnDTO.getTurnNumber());
+
+        if(!StringUtils.isBlank(playerTurn.getSot())) {
+            throw new WebApplicationException("Must save before revealing", Response.Status.BAD_REQUEST);
+        }
+
+        //Get public turn, create if not exist and add
+        PublicPlayerTurn pt = new PublicPlayerTurn(playerTurn.getUsername(), playerTurn.getTurnNumber());
+        pt.setSot(playerTurn.getSot());
+        pt.getSotHistory().add(playerTurn.getSot());
+        PublicPlayerTurn publicTurn = pbf.getPublicTurns().getOrDefault(getPublicTurnKey(playerTurn), pt);
+
+        pbf.getPublicTurns().put(getPublicTurnKey(playerTurn), publicTurn);
+        super.createLog(pbfId, GameLog.LogType.SOT_REVEAL, playerId);
+        pbfCollection.updateById(pbf.getId(), pbf);
+        return pbf.getPublicTurns().values();
+    }
+
+    private String getPublicTurnKey(PlayerTurn playerTurn) {
+        return playerTurn.getTurnNumber() + playerTurn.getUsername();
     }
 
     public void updateTrade(String pbfId, String playerId, TurnDTO turnDTO) {
@@ -139,10 +167,12 @@ public class TurnAction extends BaseAction {
         super.createLog(pbfId, GameLog.LogType.RESEARCH, playerId);
     }
 
+
     /**
      * Each player can add a new turn so they can start new to write new orders
      */
     public void addNewTurn(String pbfId, String playerId, int turnNumber) {
+        /*
         PBF pbf = findPBFById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
 
@@ -153,6 +183,7 @@ public class TurnAction extends BaseAction {
         if (!turnOptional.isPresent()) {
             playerhand.getPlayerTurns().add(new PlayerTurn(playerhand.getUsername(), turnNumber));
         }
+        */
     }
 
     /**
@@ -162,15 +193,10 @@ public class TurnAction extends BaseAction {
      * @return
      */
     private PlayerTurn getPlayerTurnByTurnNumber(int turnNumber, Playerhand playerhand) {
-        PlayerTurn playerTurn = playerhand.getPlayerTurns().stream()
-                .filter(t -> t.getTurnNumber() == turnNumber)
-                .findFirst()
-                .orElse(new PlayerTurn(playerhand.getUsername(), turnNumber));
-        //playerTurn.setUsername(username);
-        return playerTurn;
+        return playerhand.getPlayerTurns().getOrDefault(turnNumber, new PlayerTurn(playerhand.getUsername(), turnNumber));
     }
 
-    public List<PlayerTurn> getAllPublicTurns(String pbfId) {
+    public List<PublicPlayerTurn> getAllPublicTurns(String pbfId) {
         PBF pbf = findPBFById(pbfId);
 
         return pbf.getPublicTurns().values().stream()
@@ -195,12 +221,12 @@ public class TurnAction extends BaseAction {
      * @param playerId
      * @return
      */
-    public Set<PlayerTurn> getPlayersTurns(String pbfId, String playerId) {
+    public Collection<PlayerTurn> getPlayersTurns(String pbfId, String playerId) {
         PBF pbf = findPBFById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        Set<PlayerTurn> playerTurns = playerhand.getPlayerTurns();
+        Collection<PlayerTurn> playerTurns = playerhand.getPlayerTurns().values();
         if (playerTurns.isEmpty()) {
-            playerhand.getPlayerTurns().add(new PlayerTurn(playerhand.getUsername(), 1));
+            playerhand.getPlayerTurns().put(1, new PlayerTurn(playerhand.getUsername(), 1));
             pbfCollection.updateById(pbfId, pbf);
         }
 
@@ -216,54 +242,51 @@ public class TurnAction extends BaseAction {
 
         if ("SOT".equalsIgnoreCase(turnDTO.getPhase())) {
             pt.setSot(turnDTO.getOrder());
-            pt.getSotHistory().add(turnDTO.getOrder());
         } else if ("Trade".equalsIgnoreCase(turnDTO.getPhase())) {
             pt.setTrade(turnDTO.getOrder());
-            pt.getTradeHistory().add(turnDTO.getOrder());
         } else if ("CM".equalsIgnoreCase(turnDTO.getPhase())) {
             pt.setCm(turnDTO.getOrder());
-            pt.getCmHistory().add(turnDTO.getOrder());
         } else if ("Movement".equalsIgnoreCase(turnDTO.getPhase())) {
             pt.setMovement(turnDTO.getOrder());
-            pt.getMovementHistory().add(turnDTO.getOrder());
         } else if ("Research".equalsIgnoreCase(turnDTO.getPhase())) {
             pt.setResearch(turnDTO.getOrder());
-            pt.getResearchHistory().add(turnDTO.getOrder());
         }
-        playerhand.getPlayerTurns().add(pt);
+        playerhand.getPlayerTurns().put(turnDTO.getTurnNumber(), pt);
         pbfCollection.updateById(pbf.getId(), pbf);
     }
 
+    /*
     public Collection<PlayerTurn> addTurnInPBF(String pbfId, String playerId, TurnDTO turnDTO) {
         PBF pbf = findPBFById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         PlayerTurn playerTurn = getPlayerTurnByTurnNumber(turnDTO.getTurnNumber(), playerhand);
         // Cant get map serialization to work in jackson
         //final TurnKey turnKey = new TurnKey(playerTurn.getTurnNumber(), playerTurn.getUsername());
-        pbf.getPublicTurns().put(playerTurn.getTurnNumber() + playerTurn.getUsername(), playerTurn);
+        pbf.getPublicTurns().put(getPublicTurnKey(playerTurn), playerTurn);
         pbfCollection.updateById(pbf.getId(), pbf);
         return pbf.getPublicTurns().values();
     }
+    */
 
-    public Set<PlayerTurn> lockOrUnlockTurn(String pbfId, String playerId, TurnDTO turnDTO) {
+    public Collection<PlayerTurn> lockOrUnlockTurn(String pbfId, String playerId, TurnDTO turnDTO) {
         PBF pbf = findPBFById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        PlayerTurn playerTurn = playerhand.getPlayerTurns().stream()
-                .filter(p -> p.getTurnNumber() == turnDTO.getTurnNumber())
-                .findFirst()
-                .orElseThrow(PlayerAction::cannotFindItem);
+        if(!playerhand.getPlayerTurns().containsKey(turnDTO.getTurnNumber())) {
+            throw new WebApplicationException("Must first save an order", Response.Status.BAD_REQUEST);
+        }
+        PlayerTurn playerTurn = playerhand.getPlayerTurns().get(turnDTO.getTurnNumber());
 
         playerTurn.setDisabled(turnDTO.isLocked());
         String message = turnDTO.isLocked() ? " has locked in turn " + turnDTO.getTurnNumber() : " has re-opened turn " + turnDTO.getTurnNumber();
         createCommonPublicLog(message, pbfId, playerId);
 
-        if(turnDTO.isLocked() && !playerhand.getPlayerTurns().stream().anyMatch(p -> p.getTurnNumber() == (turnDTO.getTurnNumber()+1))) {
+        if(turnDTO.isLocked() && !playerhand.getPlayerTurns().containsKey(turnDTO.getTurnNumber()+1)) {
             //create new turn
-            playerhand.getPlayerTurns().add(new PlayerTurn(playerhand.getUsername(), turnDTO.getTurnNumber() + 1));
+            playerhand.getPlayerTurns().put(turnDTO.getTurnNumber()+1, new PlayerTurn(playerhand.getUsername(), turnDTO.getTurnNumber() + 1));
         }
 
         pbfCollection.updateById(pbfId, pbf);
-
-        return getPlayersTurns(pbfId, playerId);
+        return playerhand.getPlayerTurns().values();
     }
+
 }

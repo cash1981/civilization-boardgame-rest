@@ -77,9 +77,7 @@ public class PBF {
     private List<Tech> techs = Lists.newArrayList();
     private List<SocialPolicy> socialPolicies = new ArrayList<>(8);
 
-    //@JsonSerialize(keyUsing=TurnKeySerializer.class)
-    //@JsonDeserialize(keyUsing = TurnKeyDeserializer.class)
-    private Map<String, PlayerTurn> publicTurns = new HashMap<>();
+    private Map<String, PublicPlayerTurn> publicTurns = new HashMap<>();
 
     //Will use these to reshuffle items which are discarded and can be drawn again
     private List<Item> discardedItems = new ArrayList<>();

@@ -30,8 +30,10 @@ import org.hibernate.validator.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
@@ -69,9 +71,10 @@ public class Playerhand implements Comparable<Playerhand> {
     private List<Unit> battlehand = new ArrayList<>();
     private List<SocialPolicy> socialPolicies = new ArrayList<>();
     /**
-     * Private turns, only made public when they are locked
+     * Private turns, only made public when they are revealed.
+     * Key is turn number
      */
-    private Set<PlayerTurn> playerTurns = new TreeSet<>();
+    private Map<Integer, PlayerTurn> playerTurns = new TreeMap<>();
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)

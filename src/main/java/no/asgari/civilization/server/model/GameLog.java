@@ -56,7 +56,8 @@ public class GameLog {
 
     public enum LogType {
         TRADE_BETWEEN_PLAYERS, BATTLE, ITEM, TECH, SHUFFLE, DISCARD, WITHDRAW, JOIN, REVEAL,
-        UNDO, SOCIAL_POLICY, VOTE, SETUP, SOT, TRADE , CM, MOVEMENT, RESEARCH;
+        UNDO, SOCIAL_POLICY, VOTE, SETUP, SOT, TRADE , CM, MOVEMENT, RESEARCH, SOT_REVEAL, TRADE_REVEAL,
+        CM_REVEAL, MOVEMENT_REVEAL, RESEARCH_REVEAL, LOCKED_TURN, UNLOCKED_TURN
     }
 
     @Id
@@ -149,6 +150,34 @@ public class GameLog {
             case RESEARCH:
                 privateLog = username + " has updated research phase";
                 publicLog = username + " has updated research phase";
+                break;
+            case SOT_REVEAL:
+                privateLog = username + " has revealed start of turn phase";
+                publicLog = username + " has revealed start of turn phase";
+                break;
+            case TRADE_REVEAL:
+                privateLog = username + " has revealed trade phase";
+                publicLog = username + " has revealed trade phase";
+                break;
+            case CM_REVEAL:
+                privateLog = username + " has revealed city management phase";
+                publicLog = username + " has revealed city management phase";
+                break;
+            case MOVEMENT_REVEAL:
+                privateLog = username + " has revealed movement phase";
+                publicLog = username + " has revealed movement phase";
+                break;
+            case RESEARCH_REVEAL:
+                privateLog = username + " has revealed research phase";
+                publicLog = username + " has revealed research phase";
+                break;
+            case LOCKED_TURN:
+                privateLog = username + " has locked turn";
+                publicLog = username + " has has locked turn";
+                break;
+            case UNLOCKED_TURN:
+                privateLog = username + " has unlocked turn";
+                publicLog = username + " has has unlocked turn";
                 break;
         }
     }
