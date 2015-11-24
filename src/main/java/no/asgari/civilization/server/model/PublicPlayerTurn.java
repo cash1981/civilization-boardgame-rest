@@ -36,7 +36,7 @@ public class PublicPlayerTurn implements Comparable<PublicPlayerTurn> {
      */
     @JsonIgnore
     public String getKey() {
-        return turnNumber + username;
+        return turnNumber + ":" + username;
     }
 
     /**

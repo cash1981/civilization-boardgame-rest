@@ -44,6 +44,7 @@ import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.PlayerTurn;
+import no.asgari.civilization.server.model.PublicPlayerTurn;
 import no.asgari.civilization.server.model.Tech;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.mongojack.DBCursor;
@@ -497,7 +498,7 @@ public class GameResource {
     @GET
     @Path("/{pbfId}/turns")
     @Produces(value = MediaType.APPLICATION_JSON)
-    public List<PlayerTurn> getAllPublicTurns(@PathParam("pbfId") String pbfId) {
+    public List<PublicPlayerTurn> getAllPublicTurns(@PathParam("pbfId") String pbfId) {
         TurnAction turnAction = new TurnAction(db);
         return turnAction.getAllPublicTurns(pbfId);
     }

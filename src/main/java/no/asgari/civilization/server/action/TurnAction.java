@@ -54,30 +54,26 @@ public class TurnAction extends BaseAction {
 
     public Collection<PublicPlayerTurn> revealSOT(String pbfId, String playerId, TurnDTO turnDTO) {
         PBF pbf = findPBFById(pbfId);
-        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        if(!playerhand.getPlayerTurns().containsKey(turnDTO.getTurnNumber())) {
-            throw new WebApplicationException("Must save before revealing", Response.Status.BAD_REQUEST);
-        }
-        PlayerTurn playerTurn = playerhand.getPlayerTurns().get(turnDTO.getTurnNumber());
+        PlayerTurn playerTurn = getPlayerTurn(playerId, turnDTO, pbf);
 
-        if(!StringUtils.isBlank(playerTurn.getSot())) {
+        if(StringUtils.isBlank(playerTurn.getSot())) {
             throw new WebApplicationException("Must save before revealing", Response.Status.BAD_REQUEST);
         }
 
         //Get public turn, create if not exist and add
         PublicPlayerTurn pt = new PublicPlayerTurn(playerTurn.getUsername(), playerTurn.getTurnNumber());
-        pt.setSot(playerTurn.getSot());
-        pt.getSotHistory().add(playerTurn.getSot());
         PublicPlayerTurn publicTurn = pbf.getPublicTurns().getOrDefault(getPublicTurnKey(playerTurn), pt);
+        publicTurn.setSot(playerTurn.getSot());
+        publicTurn.getSotHistory().add(playerTurn.getSot());
 
-        pbf.getPublicTurns().put(getPublicTurnKey(playerTurn), publicTurn);
-        super.createLog(pbfId, GameLog.LogType.SOT_REVEAL, playerId);
-        pbfCollection.updateById(pbf.getId(), pbf);
-        return pbf.getPublicTurns().values();
+        return getPublicPlayerTurns(pbf, playerId, GameLog.LogType.SOT_REVEAL, playerTurn, publicTurn);
     }
 
-    private String getPublicTurnKey(PlayerTurn playerTurn) {
-        return playerTurn.getTurnNumber() + playerTurn.getUsername();
+    private Collection<PublicPlayerTurn> getPublicPlayerTurns(PBF pbf, String playerId, GameLog.LogType logtype, PlayerTurn playerTurn, PublicPlayerTurn publicTurn) {
+        pbf.getPublicTurns().put(getPublicTurnKey(playerTurn), publicTurn);
+        super.createLog(pbf.getId(), logtype, playerId);
+        pbfCollection.updateById(pbf.getId(), pbf);
+        return pbf.getPublicTurns().values();
     }
 
     public void updateTrade(String pbfId, String playerId, TurnDTO turnDTO) {
@@ -100,6 +96,32 @@ public class TurnAction extends BaseAction {
         pbfCollection.updateById(pbfId, pbf);
         super.createLog(pbfId, GameLog.LogType.TRADE, playerId);
     }
+
+    public Collection<PublicPlayerTurn> revealTrade(String pbfId, String playerId, TurnDTO turnDTO) {
+        PBF pbf = findPBFById(pbfId);
+        PlayerTurn playerTurn = getPlayerTurn(playerId, turnDTO, pbf);
+
+        if(StringUtils.isBlank(playerTurn.getTrade())) {
+            throw new WebApplicationException("Must save before revealing", Response.Status.BAD_REQUEST);
+        }
+
+        //Get public turn, create if not exist and add
+        PublicPlayerTurn pt = new PublicPlayerTurn(playerTurn.getUsername(), playerTurn.getTurnNumber());
+        PublicPlayerTurn publicTurn = pbf.getPublicTurns().getOrDefault(getPublicTurnKey(playerTurn), pt);
+        publicTurn.setTrade(playerTurn.getTrade());
+        publicTurn.getTradeHistory().add(playerTurn.getTrade());
+
+        return getPublicPlayerTurns(pbf, playerId, GameLog.LogType.TRADE_REVEAL, playerTurn, publicTurn);
+    }
+
+    private PlayerTurn getPlayerTurn(String playerId, TurnDTO turnDTO, PBF pbf) {
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+        if(!playerhand.getPlayerTurns().containsKey(turnDTO.getTurnNumber())) {
+            throw new WebApplicationException("Must save before revealing", Response.Status.BAD_REQUEST);
+        }
+        return playerhand.getPlayerTurns().get(turnDTO.getTurnNumber());
+    }
+
 
     public void updateCM(String pbfId, String playerId, TurnDTO turnDTO) {
         PBF pbf = findPBFById(pbfId);
@@ -124,6 +146,23 @@ public class TurnAction extends BaseAction {
         super.createLog(pbfId, GameLog.LogType.CM, playerId);
     }
 
+    public Collection<PublicPlayerTurn> revealCM(String pbfId, String playerId, TurnDTO turnDTO) {
+        PBF pbf = findPBFById(pbfId);
+        PlayerTurn playerTurn = getPlayerTurn(playerId, turnDTO, pbf);
+
+        if(StringUtils.isBlank(playerTurn.getCm())) {
+            throw new WebApplicationException("Must save before revealing", Response.Status.BAD_REQUEST);
+        }
+
+        //Get public turn, create if not exist and add
+        PublicPlayerTurn pt = new PublicPlayerTurn(playerTurn.getUsername(), playerTurn.getTurnNumber());
+        PublicPlayerTurn publicTurn = pbf.getPublicTurns().getOrDefault(getPublicTurnKey(playerTurn), pt);
+        publicTurn.setCm(playerTurn.getCm());
+        publicTurn.getCmHistory().add(playerTurn.getCm());
+
+        return getPublicPlayerTurns(pbf, playerId, GameLog.LogType.CM_REVEAL, playerTurn, publicTurn);
+    }
+
     public void updateMovement(String pbfId, String playerId, TurnDTO turnDTO) {
         PBF pbf = findPBFById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
@@ -146,6 +185,23 @@ public class TurnAction extends BaseAction {
         super.createLog(pbfId, GameLog.LogType.MOVEMENT, playerId);
     }
 
+    public Collection<PublicPlayerTurn> revealMovement(String pbfId, String playerId, TurnDTO turnDTO) {
+        PBF pbf = findPBFById(pbfId);
+        PlayerTurn playerTurn = getPlayerTurn(playerId, turnDTO, pbf);
+
+        if(StringUtils.isBlank(playerTurn.getMovement())) {
+            throw new WebApplicationException("Must save before revealing", Response.Status.BAD_REQUEST);
+        }
+
+        //Get public turn, create if not exist and add
+        PublicPlayerTurn pt = new PublicPlayerTurn(playerTurn.getUsername(), playerTurn.getTurnNumber());
+        PublicPlayerTurn publicTurn = pbf.getPublicTurns().getOrDefault(getPublicTurnKey(playerTurn), pt);
+        publicTurn.setMovement(playerTurn.getMovement());
+        publicTurn.getMovementHistory().add(playerTurn.getMovement());
+
+        return getPublicPlayerTurns(pbf, playerId, GameLog.LogType.MOVEMENT_REVEAL, playerTurn, publicTurn);
+    }
+
     public void updateResearch(String pbfId, String playerId, TurnDTO turnDTO) {
         PBF pbf = findPBFById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
@@ -165,6 +221,23 @@ public class TurnAction extends BaseAction {
 
         pbfCollection.updateById(pbfId, pbf);
         super.createLog(pbfId, GameLog.LogType.RESEARCH, playerId);
+    }
+
+    public Collection<PublicPlayerTurn> revealResearch(String pbfId, String playerId, TurnDTO turnDTO) {
+        PBF pbf = findPBFById(pbfId);
+        PlayerTurn playerTurn = getPlayerTurn(playerId, turnDTO, pbf);
+
+        if(StringUtils.isBlank(playerTurn.getResearch())) {
+            throw new WebApplicationException("Must save before revealing", Response.Status.BAD_REQUEST);
+        }
+
+        //Get public turn, create if not exist and add
+        PublicPlayerTurn pt = new PublicPlayerTurn(playerTurn.getUsername(), playerTurn.getTurnNumber());
+        PublicPlayerTurn publicTurn = pbf.getPublicTurns().getOrDefault(getPublicTurnKey(playerTurn), pt);
+        publicTurn.setResearch(playerTurn.getResearch());
+        publicTurn.getResearchHistory().add(playerTurn.getResearch());
+
+        return getPublicPlayerTurns(pbf, playerId, GameLog.LogType.RESEARCH_REVEAL, playerTurn, publicTurn);
     }
 
 
@@ -255,19 +328,6 @@ public class TurnAction extends BaseAction {
         pbfCollection.updateById(pbf.getId(), pbf);
     }
 
-    /*
-    public Collection<PlayerTurn> addTurnInPBF(String pbfId, String playerId, TurnDTO turnDTO) {
-        PBF pbf = findPBFById(pbfId);
-        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        PlayerTurn playerTurn = getPlayerTurnByTurnNumber(turnDTO.getTurnNumber(), playerhand);
-        // Cant get map serialization to work in jackson
-        //final TurnKey turnKey = new TurnKey(playerTurn.getTurnNumber(), playerTurn.getUsername());
-        pbf.getPublicTurns().put(getPublicTurnKey(playerTurn), playerTurn);
-        pbfCollection.updateById(pbf.getId(), pbf);
-        return pbf.getPublicTurns().values();
-    }
-    */
-
     public Collection<PlayerTurn> lockOrUnlockTurn(String pbfId, String playerId, TurnDTO turnDTO) {
         PBF pbf = findPBFById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
@@ -288,5 +348,10 @@ public class TurnAction extends BaseAction {
         pbfCollection.updateById(pbfId, pbf);
         return playerhand.getPlayerTurns().values();
     }
+
+    private String getPublicTurnKey(PlayerTurn playerTurn) {
+        return playerTurn.getTurnNumber() + ":" + playerTurn.getUsername();
+    }
+
 
 }

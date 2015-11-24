@@ -35,6 +35,7 @@ import no.asgari.civilization.server.resource.AuthResource;
 import no.asgari.civilization.server.resource.DrawResource;
 import no.asgari.civilization.server.resource.GameResource;
 import no.asgari.civilization.server.resource.PlayerResource;
+import no.asgari.civilization.server.resource.TurnResource;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.glassfish.hk2.utilities.Binder;
 import org.mongojack.JacksonDBCollection;
@@ -95,6 +96,7 @@ public class CivilizationIntegrationTestApplication extends Application<Civiliza
         environment.jersey().register(new PlayerResource(db));
         environment.jersey().register(new DrawResource(db));
         environment.jersey().register(new AdminResource(db));
+        environment.jersey().register(new TurnResource(db));
 
         //Authenticator
         CachingAuthenticator<BasicCredentials, Player> cachingAuthenticator = new CachingAuthenticator<>(

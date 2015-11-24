@@ -31,6 +31,7 @@ import no.asgari.civilization.server.dto.TurnDTO;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.PlayerTurn;
+import no.asgari.civilization.server.model.PublicPlayerTurn;
 import no.asgari.civilization.server.model.Tech;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -157,6 +158,7 @@ public class PlayerResource {
         return playerAction.getTechsForAllPlayers(pbfId);
     }
 
+    //TODO move to turn resource
     /**
      * Will end the turn for a given player, and take the next player from the list and
      * make that player current starting player.
@@ -176,6 +178,7 @@ public class PlayerResource {
         return Response.serverError().build();
     }
 
+    //TODO move to turn resource
     /**
      * This method checks whether it is the players turn
      *
@@ -281,64 +284,4 @@ public class PlayerResource {
         return Response.ok().build();
     }
 
-    @GET
-    @Path("turn")
-    public Set<PlayerTurn> getPlayersturns(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId) {
-        TurnAction turnAction = new TurnAction(db);
-        return turnAction.getPlayersTurns(pbfId, player.getId());
-    }
-
-    @PUT
-    @Path("/turn/save")
-    public Response saveTurn(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, TurnDTO turn) {
-        TurnAction turnAction = new TurnAction(db);
-        if("SOT".equalsIgnoreCase(turn.getPhase())) {
-            turnAction.updateSOT(pbfId, player.getId(), turn);
-        } else if("Trade".equalsIgnoreCase(turn.getPhase())) {
-            turnAction.updateTrade(pbfId, player.getId(), turn);
-        } else if("CM".equalsIgnoreCase(turn.getPhase())) {
-            turnAction.updateCM(pbfId, player.getId(), turn);
-        } else if("Movement".equalsIgnoreCase(turn.getPhase())) {
-            turnAction.updateMovement(pbfId, player.getId(), turn);
-        } else if("Research".equalsIgnoreCase(turn.getPhase())) {
-            turnAction.updateResearch(pbfId, player.getId(), turn);
-        }
-
-        return Response.noContent().build();
-    }
-
-    @PUT
-    @Path("/turn/reveal")
-    public Response revealTurn(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId,
-                               TurnDTO turn) {
-
-        TurnAction turnAction = new TurnAction(db);
-        Collection<PlayerTurn> playerTurns = null;
-        if("SOT".equalsIgnoreCase(turn.getPhase())) {
-            playerTurns = turnAction.revealSOT(pbfId, player.getId(), turn);
-        }
-        //TODO
-        /*else if("Trade".equalsIgnoreCase(turn.getPhase())) {
-            playerTurns = turnAction.revealTrade(pbfId, player.getId(), turn);
-        } else if("CM".equalsIgnoreCase(turn.getPhase())) {
-            playerTurns = turnAction.revealCM(pbfId, player.getId(), turn);
-        } else if("Movement".equalsIgnoreCase(turn.getPhase())) {
-            playerTurns = turnAction.revealMovement(pbfId, player.getId(), turn);
-        } else if("Research".equalsIgnoreCase(turn.getPhase())) {
-            playerTurns = turnAction.revealResearch(pbfId, player.getId(), turn);
-        }*/
-
-        return Response.ok(playerTurns).build();
-    }
-
-    @PUT
-    @Path("/turn/lock")
-    public Response lockOrUnlockTurn(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId,
-                               TurnDTO turn) {
-
-        TurnAction turnAction = new TurnAction(db);
-        Set<PlayerTurn> playerTurns = turnAction.lockOrUnlockTurn(pbfId, player.getId(), turn);
-
-        return Response.ok(playerTurns).build();
-    }
 }
