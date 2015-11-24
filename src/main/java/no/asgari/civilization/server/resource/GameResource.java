@@ -106,28 +106,6 @@ public class GameResource {
                 .build();
     }
 
-    @POST
-    @Path("/check/gamename")
-    public Response checkExistingGamename(CheckNameDTO nameDTO) {
-        Preconditions.checkNotNull(nameDTO);
-
-        //If these doesn't match, then the username is unsafe
-        if (!nameDTO.getName().equals(HtmlEscapers.htmlEscaper().escape(nameDTO.getName()))) {
-            log.warn("Unsafe name " + nameDTO.getName());
-            return Response.status(Response.Status.FORBIDDEN).entity("{\"invalidChars\":\"true\"}").build();
-        }
-
-        @Cleanup DBCursor<PBF> pbfdbCursor = pbfCollection.find(
-                DBQuery.is("name", nameDTO.getName().trim()), new BasicDBObject());
-
-        if (pbfdbCursor.hasNext()) {
-            return Response.status(Response.Status.FORBIDDEN).entity("{\"isTaken\":\"true\"}").build();
-        }
-
-        return Response.ok().build();
-    }
-
-
     /**
      * Returns a specific game
      *

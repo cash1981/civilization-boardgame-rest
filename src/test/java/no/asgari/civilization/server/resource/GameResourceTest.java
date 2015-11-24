@@ -227,48 +227,6 @@ public class GameResourceTest extends AbstractCivilizationTest {
     }
 
     @Test
-    public void checkExisitingGameName() throws Exception {
-        PBF pbf = getApp().pbfCollection.findOne();
-
-        CheckNameDTO dto = new CheckNameDTO(pbf.getName());
-
-
-        Response response = client().target(
-                UriBuilder.fromPath(BASE_URL + "/game/check/gamename").build())
-                .request(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .post(Entity.json(dto), Response.class);
-
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.FORBIDDEN_403);
-    }
-
-    @Test
-    public void checkGameName() throws Exception {
-        CheckNameDTO dto = new CheckNameDTO("Something random 123");
-
-        Response response = client().target(
-                UriBuilder.fromPath(BASE_URL + "/game/check/gamename").build())
-                .request(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .post(Entity.json(dto), Response.class);
-
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
-    }
-
-    @Test
-    public void checkBadHTMLGameName() throws Exception {
-        CheckNameDTO dto = new CheckNameDTO("Something<br/>");
-
-        Response response = client().target(
-                UriBuilder.fromPath(BASE_URL + "/game/check/gamename").build())
-                .request(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, getUsernameAndPassEncoded())
-                .post(Entity.json(dto), Response.class);
-
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.FORBIDDEN_403);
-    }
-
-    @Test
     public void chatTest() {
         PBF pbf = getApp().pbfCollection.findOne();
         Form form = new Form("message", "Chat message");
