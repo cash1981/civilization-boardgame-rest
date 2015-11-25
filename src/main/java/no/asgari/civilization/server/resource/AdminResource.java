@@ -89,6 +89,7 @@ public class AdminResource {
     @Path("/email/notification/{playerId}/stop")
     @GET
     @Produces(MediaType.TEXT_HTML)
+    @Consumes(MediaType.TEXT_PLAIN)
     public Response stopEmail(@PathParam("playerId") String playerId) {
 
         boolean yes = gameAction.disableEmailForPlayer(playerId);
