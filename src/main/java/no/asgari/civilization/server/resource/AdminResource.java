@@ -91,7 +91,6 @@ public class AdminResource {
     @Produces(MediaType.TEXT_HTML)
     @Consumes(MediaType.TEXT_PLAIN)
     public Response stopEmail(@PathParam("playerId") String playerId) {
-
         boolean yes = gameAction.disableEmailForPlayer(playerId);
         if (yes) {
             return Response.ok().entity(
@@ -99,7 +98,7 @@ public class AdminResource {
                             "If you reconsider and want to get emails again, then you have to manually send a mail to cash@playciv.com and ask to get emails again")
                     .build();
         } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 
