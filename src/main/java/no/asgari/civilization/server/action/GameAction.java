@@ -638,8 +638,9 @@ public class GameAction extends BaseAction {
     }
 
     public boolean disableEmailForPlayer(String playerId) {
+        Preconditions.checkNotNull(playerId);
         Player player = playerCollection.findOneById(playerId);
-        if (player != null && !Strings.isNullOrEmpty(player.getNewPassword())) {
+        if (player != null) {
             log.warn("Player " + player.getEmail() + " no longer wants email");
             player.setDisableEmail(true);
             playerCollection.updateById(playerId, player);

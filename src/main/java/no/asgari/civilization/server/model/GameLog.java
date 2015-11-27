@@ -28,6 +28,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.mongojack.Id;
 import org.mongojack.ObjectId;
 
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -55,8 +56,8 @@ public class GameLog {
     private static final String DELIM = " - ";
 
     public enum LogType {
-        TRADE_BETWEEN_PLAYERS, BATTLE, ITEM, TECH, SHUFFLE, DISCARD, WITHDRAW, JOIN, REVEAL,
-        UNDO, SOCIAL_POLICY, VOTE, SETUP, SOT, TRADE , CM, MOVEMENT, RESEARCH;
+        TRADE_BETWEEN_PLAYERS, BATTLE, ITEM, TECH, REMOVED_TECH, SHUFFLE, DISCARD, WITHDRAW, JOIN, REVEAL,
+        UNDO, SOCIAL_POLICY, REMOVED_SOCIAL_POLICY, VOTE, SETUP, SOT, TRADE , CM, MOVEMENT, RESEARCH;
     }
 
     @Id
@@ -93,6 +94,8 @@ public class GameLog {
     @JsonIgnore
     public void createAndSetLog(LogType logType, int itemNumber) {
         final String ITEM_NUMBER = ". Item number #" + itemNumber;
+        final BigInteger userNameBigInt = new BigInteger("" + Math.abs(username.hashCode()));
+        final String UNIQUE_ITEM_NUMBER = ". Item number #" + userNameBigInt.longValue() + (long)itemNumber;
         switch (logType) {
             case ITEM:
                 privateLog = username + " drew " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
@@ -107,12 +110,16 @@ public class GameLog {
                 publicLog = username + " has received " + DELIM + draw.getItem().revealPublic();
                 break;
             case SOCIAL_POLICY:
-                privateLog = username + " has chosen " + DELIM + draw.getItem().revealAll();
-                publicLog = username + " has chosen a hidden social policy" + ITEM_NUMBER;
+                privateLog = username + " has chosen " + DELIM + draw.getItem().revealAll() + UNIQUE_ITEM_NUMBER;
+                publicLog = username + " has chosen a hidden social policy" + UNIQUE_ITEM_NUMBER;
                 break;
             case TECH:
-                privateLog = username + " has researched " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
-                publicLog = username + " has researched a hidden technology" + ITEM_NUMBER;
+                privateLog = username + " has researched " + DELIM + draw.getItem().revealAll() + UNIQUE_ITEM_NUMBER;
+                publicLog = username + " has researched a hidden technology" + UNIQUE_ITEM_NUMBER;
+                break;
+            case REMOVED_TECH:
+                privateLog = username + " has removed " + DELIM + draw.getItem().revealAll() + UNIQUE_ITEM_NUMBER;
+                publicLog = username + " has removed a hidden technology" + UNIQUE_ITEM_NUMBER;
                 break;
             case DISCARD:
                 privateLog = username + " has discarded " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
