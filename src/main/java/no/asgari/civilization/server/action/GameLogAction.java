@@ -194,4 +194,13 @@ public class GameLogAction {
         pl.setId(save(pl));
         return pl;
     }
+
+    public boolean updateGameLog(String pbfId, String oldUsername, String newUsername) {
+        List<GameLog> gameLogs = gameLogCollection.find(DBQuery.is("pbfId", pbfId).is("username", oldUsername)).toArray();
+        for(GameLog gl : gameLogs) {
+            gl.setUsername(newUsername);
+            gameLogCollection.updateById(gl.getId(), gl);
+        }
+        return !gameLogs.isEmpty();
+    }
 }
