@@ -232,6 +232,8 @@ public class GameAction extends BaseAction {
         Playerhand playerhand;
         if (!pbf.getWithdrawnPlayers().isEmpty()) {
             playerhand = pbf.getWithdrawnPlayers().remove(0);
+            boolean updated = gameLogAction.updateGameLog(pbf.getId(), playerhand.getUsername(), player.getUsername());
+            log.info("Managed to update gameLog: " + updated);
             playerhand.setEmail(player.getEmail());
             playerhand.setPlayerId(player.getId());
             playerhand.setUsername(player.getUsername());
@@ -367,7 +369,7 @@ public class GameAction extends BaseAction {
                 }
                 pbf.getWithdrawnPlayers().add(playerhand);
                 iterator.remove();
-                gameLogAction.createCommonPublicLog("Withdrew from game", pbfId, playerId);
+                gameLogAction.createCommonPublicLog("withdrew from game", pbfId, playerId);
                 //TODO remove from PlayerCollection also
                 pbfCollection.updateById(pbf.getId(), pbf);
                 return true;
