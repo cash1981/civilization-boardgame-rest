@@ -576,7 +576,7 @@ public class GameAction extends BaseAction {
     public List<ChatDTO> getPublicChat() {
         return chatCollection.find(DBQuery.notExists("pbfId")).sort(DBSort.desc("created")).toArray()
                 .stream()
-                .filter(c -> c.getCreated().isAfter(LocalDateTime.now().minusWeeks(1)))
+                .filter(c -> c.getCreated().isAfter(LocalDateTime.now().minusWeeks(2)))
                 .sorted((a, b) -> a.getCreated().compareTo(b.getCreated()))
                 .map(c -> new ChatDTO(c.getUsername(), c.getMessage(), c.getCreatedInMillis()))
                 .limit(50)

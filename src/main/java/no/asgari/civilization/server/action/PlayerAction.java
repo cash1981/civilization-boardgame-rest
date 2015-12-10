@@ -167,7 +167,7 @@ public class PlayerAction extends BaseAction {
                     nextPlayer = pbf.getPlayers().get(i + 1);
                 }
                 nextPlayer.setYourTurn(true);
-                SendEmail.sendYourTurn(pbf.getName(), player.getEmail(), pbf.getId());
+                SendEmail.sendYourTurn(pbf.getName(), nextPlayer.getEmail(), pbf.getId());
 
                 pbfCollection.updateById(pbf.getId(), pbf);
                 return true;
