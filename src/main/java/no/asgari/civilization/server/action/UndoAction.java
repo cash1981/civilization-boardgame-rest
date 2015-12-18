@@ -19,6 +19,8 @@ import com.google.common.base.Preconditions;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
+import no.asgari.civilization.server.SheetName;
+import no.asgari.civilization.server.dto.ItemDTO;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Item;
@@ -47,40 +49,36 @@ public class UndoAction extends BaseAction {
         this.gameLogCollection = JacksonDBCollection.wrap(db.getCollection(GameLog.COL_NAME), GameLog.class, String.class);
     }
 
-    private boolean putDrawnItemBackInPBF(PBF pbf, Draw draw) {
-        Preconditions.checkNotNull(pbf);
-        Preconditions.checkNotNull(draw);
-        Preconditions.checkNotNull(draw.getItem());
-
-        Item item = draw.getItem();
-        Playerhand playerhand = getPlayerhandByPlayerId(draw.getPlayerId(), pbf);
+    private boolean putDrawnItemBackInPBF(PBF pbf, String playerId, Item item) {
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         if (item instanceof Tech) {
             //Remove from tech
             if (playerhand.getTechsChosen().remove(item)) {
-                createInfoLog(pbf.getId(), "has removed " + draw.getItem().getName() + " from " + playerhand.getUsername());
+                createInfoLog(pbf.getId(), "has removed " + item.getName() + " from " + playerhand.getUsername());
                 log.debug("Successfully undoed tech");
             } else if (pbf.getDiscardedItems().remove(item)) {
                 playerhand.getTechsChosen().add((Tech) item);
-                createInfoLog(pbf.getId(), "has added back " + draw.getItem().getName() + " to " + playerhand.getUsername());
+                createInfoLog(pbf.getId(), "has added back " +item.getName() + " to " + playerhand.getUsername());
             } else {
                 log.error("Didn't find tech to remove from playerhand: " + item);
                 return false;
             }
         } else {
             if (playerhand.getItems().remove(item)) {
-                createInfoLog(pbf.getId(), "has removed " + draw.getItem().getName() + " from " + playerhand.getUsername() + " and put back in the deck. Deck is reshuffled");
+                item.setHidden(true);
+                createInfoLog(pbf.getId(), "has removed " + item.getName() + " from " + playerhand.getUsername() + " and put back in the deck. Deck is reshuffled");
                 pbf.getItems().add(item);
                 Collections.shuffle(pbf.getItems());
                 log.debug("Successfully undoed item");
             } else if (pbf.getDiscardedItems().remove(item)) {
                 item.setHidden(true);
                 playerhand.getItems().add(item);
-                createInfoLog(pbf.getId(), "has added back " + draw.getItem().getName() + " to " + playerhand.getUsername());
+                createInfoLog(pbf.getId(), "has added back " + item.getName() + " to " + playerhand.getUsername());
             } else if (pbf.getItems().remove(item)) {
                 //In rare cases the item is put back in the deck by reshuffling
                 item.setHidden(true);
                 playerhand.getItems().add(item);
-                createInfoLog(pbf.getId(), "has added back " + draw.getItem().getName() + " to " + playerhand.getUsername());
+                createInfoLog(pbf.getId(), "has added back " + item.getName() + " to " + playerhand.getUsername());
             } else {
                 log.error("Didn't find item to remove from playerhand: " + item);
                 return false;
@@ -89,6 +87,15 @@ public class UndoAction extends BaseAction {
 
         pbfCollection.updateById(pbf.getId(), pbf);
         return true;
+    }
+
+    private boolean putDrawnItemBackInPBF(PBF pbf, Draw draw) {
+        Preconditions.checkNotNull(pbf);
+        Preconditions.checkNotNull(draw);
+        Preconditions.checkNotNull(draw.getItem());
+
+        Item item = draw.getItem();
+        return putDrawnItemBackInPBF(pbf, item.getOwnerId(), draw.getItem());
     }
 
     /**
@@ -179,5 +186,31 @@ public class UndoAction extends BaseAction {
         return gameLogs.stream()
                 .filter(log -> log.getDraw() != null && log.getDraw().getUndo() != null && log.getDraw().getUndo().isDone())
                 .collect(Collectors.toList());
+    }
+
+    public void playerPutsItemBackInDeck(String pbfId, String playerId, ItemDTO itemdto) {
+        PBF pbf = pbfCollection.findOneById(pbfId);
+
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+        Optional<SheetName> dtoSheet = SheetName.find(itemdto.getSheetName());
+        if (!dtoSheet.isPresent()) {
+            log.error("Couldn't find sheetname " + itemdto.getSheetName());
+            throw cannotFindItem();
+        }
+
+        //Find the item, then putback to deck
+        Optional<Item> itemToPutBack = playerhand.getItems().stream()
+                .filter(item -> item.getSheetName() == dtoSheet.get() && item.getName().equals(itemdto.getName()))
+                .findAny();
+
+        if (!itemToPutBack.isPresent()) {
+            throw cannotFindItem();
+        }
+
+        Item item = itemToPutBack.get();
+        boolean ok = putDrawnItemBackInPBF(pbf, playerId, item);
+        if(!ok) {
+            throw cannotFindItem();
+        }
     }
 }

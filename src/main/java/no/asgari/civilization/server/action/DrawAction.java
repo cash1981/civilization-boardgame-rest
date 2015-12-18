@@ -271,7 +271,7 @@ public class DrawAction extends BaseAction {
                     addBarbarian(pbf, playerhand, iterator, item);
                     stringBuilder.append(" tried to draw ")
                             .append(originalSheet.getName())
-                            .append("unit. However there are no more in the deck. Will instead draw ")
+                            .append(" barbarian unit. However there are no more in the deck. Will instead draw ")
                             .append(sheetToDraw.getName())
                             .append(" unit instead!");
                     return true;
