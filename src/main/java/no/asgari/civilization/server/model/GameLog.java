@@ -34,13 +34,13 @@ import java.time.ZoneId;
 /**
  * This class will be used to store all the actions performed in the game.
  * It can be creating game, joining game, drawing items
- * <p>
+ * <p/>
  * All private logs/draws can be requested undo
- * <p>
+ * <p/>
  * Private view:
  * 14.04.2014 - 14:24 - cash1981 drew Civ Japan - <hidden button> - <undo button>
  * 14.04.2014 - 14:25 - cash1981 drew Civ Greece - <hidden button> - <undo button>
- * <p>
+ * <p/>
  * Public view:
  * <14.04.2014 - 14:25 - cash1981 drew Infantry
  * <14.04.2014 - 14:25 - cash1981 drew Mounted
@@ -55,8 +55,8 @@ public class GameLog {
     private static final String DELIM = " - ";
 
     public enum LogType {
-        TRADE_BETWEEN_PLAYERS, BATTLE, ITEM, TECH, SHUFFLE, DISCARD, WITHDRAW, JOIN, REVEAL,
-        UNDO, SOCIAL_POLICY, VOTE, SETUP, SOT, TRADE , CM, MOVEMENT, RESEARCH, SOT_REVEAL, TRADE_REVEAL,
+        TRADE_BETWEEN_PLAYERS, BATTLE, ITEM, TECH, REMOVED_TECH, SHUFFLE, DISCARD, WITHDRAW, JOIN, REVEAL,
+        UNDO, SOCIAL_POLICY, REMOVED_SOCIAL_POLICY, VOTE, SETUP, SOT, TRADE, CM, MOVEMENT, RESEARCH, SOT_REVEAL, TRADE_REVEAL,
         CM_REVEAL, MOVEMENT_REVEAL, RESEARCH_REVEAL, LOCKED_TURN, UNLOCKED_TURN
     }
 
@@ -94,6 +94,9 @@ public class GameLog {
     @JsonIgnore
     public void createAndSetLog(LogType logType, int itemNumber) {
         final String ITEM_NUMBER = ". Item number #" + itemNumber;
+        int uniqueNrThreeLetters = Integer.valueOf(("" + Math.abs(username.hashCode())).substring(0, 3));
+
+        final String UNIQUE_ITEM_NUMBER = ". Item number #" + (uniqueNrThreeLetters + itemNumber);
         switch (logType) {
             case ITEM:
                 privateLog = username + " drew " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
@@ -108,20 +111,29 @@ public class GameLog {
                 publicLog = username + " has received " + DELIM + draw.getItem().revealPublic();
                 break;
             case SOCIAL_POLICY:
-                privateLog = username + " has chosen " + DELIM + draw.getItem().revealAll();
-                publicLog = username + " has chosen a hidden social policy" + ITEM_NUMBER;
+                privateLog = username + " has chosen " + DELIM + draw.getItem().revealAll() + UNIQUE_ITEM_NUMBER;
+                publicLog = username + " has chosen a hidden social policy" + UNIQUE_ITEM_NUMBER;
                 break;
             case TECH:
-                privateLog = username + " has researched " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
-                publicLog = username + " has researched a hidden technology" + ITEM_NUMBER;
+                privateLog = username + " has researched " + DELIM + draw.getItem().revealAll() + UNIQUE_ITEM_NUMBER;
+                publicLog = username + " has researched a hidden technology" + UNIQUE_ITEM_NUMBER;
+                break;
+            case REMOVED_TECH:
+                privateLog = username + " has removed " + DELIM + draw.getItem().revealAll() + UNIQUE_ITEM_NUMBER;
+                publicLog = username + " has removed a hidden technology" + UNIQUE_ITEM_NUMBER;
                 break;
             case DISCARD:
                 privateLog = username + " has discarded " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
                 publicLog = username + " has discarded " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
                 break;
             case REVEAL:
-                privateLog = username + " has revealed " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
-                publicLog = username + " has revealed " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
+                if (draw.getItem() instanceof Tech) {
+                    privateLog = username + " has revealed " + DELIM + draw.getItem().revealAll() + UNIQUE_ITEM_NUMBER;
+                    publicLog = username + " has revealed " + DELIM + draw.getItem().revealAll() + UNIQUE_ITEM_NUMBER;
+                } else {
+                    privateLog = username + " has revealed " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
+                    publicLog = username + " has revealed " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
+                }
                 break;
             case UNDO:
                 privateLog = username + " has requested undo of " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;

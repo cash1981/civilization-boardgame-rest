@@ -63,6 +63,7 @@ import java.util.Set;
 public class PlayerResource {
     private final DB db;
     private final PlayerAction playerAction;
+    private final UndoAction undoAction;
 
     @Context
     private UriInfo uriInfo;
@@ -70,6 +71,7 @@ public class PlayerResource {
     public PlayerResource(DB db) {
         this.db = db;
         playerAction = new PlayerAction(db);
+        undoAction = new UndoAction(db);
     }
 
     /**
@@ -227,6 +229,14 @@ public class PlayerResource {
     @Timed
     public Response discardItem(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
         playerAction.discardItem(pbfId, player.getId(), item);
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/item/backtodeck")
+    @Timed
+    public Response itemBackToDeck(@Auth Player player, @PathParam("pbfId") String pbfId, @Valid ItemDTO item) {
+        undoAction.playerPutsItemBackInDeck(pbfId, player.getId(), item);
         return Response.ok().build();
     }
 

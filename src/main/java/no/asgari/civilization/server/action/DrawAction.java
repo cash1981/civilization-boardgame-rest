@@ -262,8 +262,8 @@ public class DrawAction extends BaseAction {
     }
 
     private boolean tryToFindUnit(PBF pbf, Playerhand playerhand, StringBuilder stringBuilder, SheetName sheetToDraw, SheetName originalSheet) {
-        Optional<Item> anyMounted = pbf.getItems().stream().filter(p -> p.getSheetName() == sheetToDraw).findAny();
-        if (anyMounted.isPresent()) {
+        Optional<Item> anyUnit = pbf.getItems().stream().filter(p -> p.getSheetName() == sheetToDraw).findAny();
+        if (anyUnit.isPresent()) {
             Iterator<Item> iterator = pbf.getItems().iterator();
             while (iterator.hasNext()) {
                 Item item = iterator.next();
@@ -271,7 +271,7 @@ public class DrawAction extends BaseAction {
                     addBarbarian(pbf, playerhand, iterator, item);
                     stringBuilder.append(" tried to draw ")
                             .append(originalSheet.getName())
-                            .append("unit. However there are no more in the deck. Will instead draw ")
+                            .append(" barbarian unit. However there are no more in the deck. Will instead draw ")
                             .append(sheetToDraw.getName())
                             .append(" unit instead!");
                     return true;
@@ -288,7 +288,7 @@ public class DrawAction extends BaseAction {
         if (playerhand.getBarbarians().isEmpty()) {
             return;
         }
-
+        playerhand.getBarbarians().forEach(unit -> unit.setOwnerId(null));
         pbf.getDiscardedItems().addAll(playerhand.getBarbarians());
         revealAndDiscardUnits(" as barbarians", playerhand.getBarbarians(), pbfId, playerId);
         pbfCollection.updateById(pbf.getId(), pbf);

@@ -143,8 +143,7 @@ public class PlayerAction extends BaseAction {
         }
         pbfCollection.updateById(pbf.getId(), pbf);
 
-        //No point in creating game log, the techs are for your own information
-        log.debug("Removed tech " + techName + " from player with id " + playerId + " in pbf " + pbf.getName());
+        super.createLog(techToRemove, pbfId, GameLog.LogType.REMOVED_TECH);
         return true;
     }
 
@@ -168,7 +167,7 @@ public class PlayerAction extends BaseAction {
                     nextPlayer = pbf.getPlayers().get(i + 1);
                 }
                 nextPlayer.setYourTurn(true);
-                SendEmail.sendYourTurn(pbf.getName(), player.getEmail(), pbf.getId());
+                SendEmail.sendYourTurn(pbf.getName(), nextPlayer.getEmail(), pbf.getId());
 
                 pbfCollection.updateById(pbf.getId(), pbf);
                 return true;
@@ -609,7 +608,7 @@ public class PlayerAction extends BaseAction {
         pbfCollection.updateById(pbf.getId(), pbf);
         log.debug("Player " + playerId + " chose social policy " + sp.getName());
 
-        return super.createLog(sp, pbfId, GameLog.LogType.TECH, playerId);
+        return super.createLog(sp, pbfId, GameLog.LogType.SOCIAL_POLICY, playerId);
     }
 
     public List<AllTechsDTO> getTechsForAllPlayers(String pbfId) {

@@ -232,6 +232,8 @@ public class GameAction extends BaseAction {
         Playerhand playerhand;
         if (!pbf.getWithdrawnPlayers().isEmpty()) {
             playerhand = pbf.getWithdrawnPlayers().remove(0);
+            boolean updated = gameLogAction.updateGameLog(pbf.getId(), playerhand.getUsername(), player.getUsername());
+            log.info("Managed to update gameLog: " + updated);
             playerhand.setEmail(player.getEmail());
             playerhand.setPlayerId(player.getId());
             playerhand.setUsername(player.getUsername());
@@ -367,7 +369,7 @@ public class GameAction extends BaseAction {
                 }
                 pbf.getWithdrawnPlayers().add(playerhand);
                 iterator.remove();
-                gameLogAction.createCommonPublicLog("Withdrew from game", pbfId, playerId);
+                gameLogAction.createCommonPublicLog("withdrew from game", pbfId, playerId);
                 //TODO remove from PlayerCollection also
                 pbfCollection.updateById(pbf.getId(), pbf);
                 return true;
@@ -574,7 +576,7 @@ public class GameAction extends BaseAction {
     public List<ChatDTO> getPublicChat() {
         return chatCollection.find(DBQuery.notExists("pbfId")).sort(DBSort.desc("created")).toArray()
                 .stream()
-                .filter(c -> c.getCreated().isAfter(LocalDateTime.now().minusWeeks(1)))
+                .filter(c -> c.getCreated().isAfter(LocalDateTime.now().minusWeeks(2)))
                 .sorted((a, b) -> a.getCreated().compareTo(b.getCreated()))
                 .map(c -> new ChatDTO(c.getUsername(), c.getMessage(), c.getCreatedInMillis()))
                 .limit(50)
@@ -641,8 +643,9 @@ public class GameAction extends BaseAction {
     }
 
     public boolean disableEmailForPlayer(String playerId) {
+        Preconditions.checkNotNull(playerId);
         Player player = playerCollection.findOneById(playerId);
-        if (player != null && !Strings.isNullOrEmpty(player.getNewPassword())) {
+        if (player != null) {
             log.warn("Player " + player.getEmail() + " no longer wants email");
             player.setDisableEmail(true);
             playerCollection.updateById(playerId, player);
