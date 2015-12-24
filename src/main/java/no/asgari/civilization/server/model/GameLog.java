@@ -92,11 +92,15 @@ public class GameLog {
     }
 
     @JsonIgnore
+    public String uniqueItemNumber(int itemNumber) {
+        int uniqueNrThreeLetters = Integer.valueOf(("" + Math.abs(username.hashCode())).substring(0, 3));
+        return ". Item number #" + (uniqueNrThreeLetters + itemNumber);
+    }
+
+    @JsonIgnore
     public void createAndSetLog(LogType logType, int itemNumber) {
         final String ITEM_NUMBER = ". Item number #" + itemNumber;
-        int uniqueNrThreeLetters = Integer.valueOf(("" + Math.abs(username.hashCode())).substring(0, 3));
-
-        final String UNIQUE_ITEM_NUMBER = ". Item number #" + (uniqueNrThreeLetters + itemNumber);
+        final String UNIQUE_ITEM_NUMBER = uniqueItemNumber(itemNumber);
         switch (logType) {
             case ITEM:
                 privateLog = username + " drew " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;

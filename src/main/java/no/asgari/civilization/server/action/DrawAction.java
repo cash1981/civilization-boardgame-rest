@@ -127,7 +127,7 @@ public class DrawAction extends BaseAction {
         logShuffle(sheetName, pbf);
     }
 
-    public List<Unit> drawUnitsFromForBattle(String pbfId, String playerId, int numberOfDraws) {
+    public List<Unit> drawUnitsFromBattlehandForBattle(String pbfId, String playerId, int numberOfDraws) {
         PBF pbf = pbfCollection.findOneById(pbfId);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         playerhand.getBattlehand().clear();

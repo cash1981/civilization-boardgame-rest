@@ -203,4 +203,14 @@ public class GameLogAction {
         }
         return !gameLogs.isEmpty();
     }
+
+    public void createUndoLog(String pbfId, String message, Item item) {
+        Preconditions.checkNotNull(message);
+        GameLog log = new GameLog();
+        log.setPublicLog("System: " + message + ". Item number #" + item.getItemNumber());
+        log.setPrivateLog("System: " + message + ". Item number #" + item.getItemNumber());
+        log.setUsername("System");
+        log.setPbfId(pbfId);
+        save(log);
+    }
 }

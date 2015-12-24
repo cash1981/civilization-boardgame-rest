@@ -126,7 +126,7 @@ public class DrawResource {
     @Timed
     public Response drawUnits(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @QueryParam("numOfUnits") int numberOfunits) {
         DrawAction drawAction = new DrawAction(db);
-        List<Unit> units = drawAction.drawUnitsFromForBattle(pbfId, player.getId(), numberOfunits);
+        List<Unit> units = drawAction.drawUnitsFromBattlehandForBattle(pbfId, player.getId(), numberOfunits);
         return Response.ok().entity(units).build();
     }
 

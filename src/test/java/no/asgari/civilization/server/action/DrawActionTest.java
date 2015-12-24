@@ -359,9 +359,9 @@ public class DrawActionTest extends AbstractCivilizationTest {
         drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.MOUNTED);
         drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.MOUNTED);
 
-        assertThat(drawAction.drawUnitsFromForBattle(getApp().pbfId, getApp().playerId, 5)).hasSize(5);
-        assertThat(drawAction.drawUnitsFromForBattle(getApp().pbfId, getApp().playerId, 99)).hasSize(5);
-        assertThat(drawAction.drawUnitsFromForBattle(getApp().pbfId, getApp().playerId, 3)).hasSize(3);
+        assertThat(drawAction.drawUnitsFromBattlehandForBattle(getApp().pbfId, getApp().playerId, 5)).hasSize(5);
+        assertThat(drawAction.drawUnitsFromBattlehandForBattle(getApp().pbfId, getApp().playerId, 99)).hasSize(5);
+        assertThat(drawAction.drawUnitsFromBattlehandForBattle(getApp().pbfId, getApp().playerId, 3)).hasSize(3);
 
         PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
         Playerhand playerhand = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(getApp().playerId)).findFirst().get();

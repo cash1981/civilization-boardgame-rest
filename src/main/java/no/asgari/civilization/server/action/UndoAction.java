@@ -54,11 +54,11 @@ public class UndoAction extends BaseAction {
         if (item instanceof Tech) {
             //Remove from tech
             if (playerhand.getTechsChosen().remove(item)) {
-                createInfoLog(pbf.getId(), "has removed " + item.getName() + " from " + playerhand.getUsername());
+                logAction.createUndoLog(pbf.getId(), "has removed " + item.getName() + " from " + playerhand.getUsername(), item);
                 log.debug("Successfully undoed tech");
             } else if (pbf.getDiscardedItems().remove(item)) {
                 playerhand.getTechsChosen().add((Tech) item);
-                createInfoLog(pbf.getId(), "has added back " +item.getName() + " to " + playerhand.getUsername());
+                logAction.createUndoLog(pbf.getId(), "has added back " + item.getName() + " to " + playerhand.getUsername(), item);
             } else {
                 log.error("Didn't find tech to remove from playerhand: " + item);
                 return false;
@@ -66,19 +66,19 @@ public class UndoAction extends BaseAction {
         } else {
             if (playerhand.getItems().remove(item)) {
                 item.setHidden(true);
-                createInfoLog(pbf.getId(), "has removed " + item.getName() + " from " + playerhand.getUsername() + " and put back in the deck. Deck is reshuffled");
+                logAction.createUndoLog(pbf.getId(), "has removed " + item.getName() + " from " + playerhand.getUsername() + " and put back in the deck. Deck is reshuffled", item);
                 pbf.getItems().add(item);
                 Collections.shuffle(pbf.getItems());
                 log.debug("Successfully undoed item");
             } else if (pbf.getDiscardedItems().remove(item)) {
                 item.setHidden(true);
                 playerhand.getItems().add(item);
-                createInfoLog(pbf.getId(), "has added back " + item.getName() + " to " + playerhand.getUsername());
+                logAction.createUndoLog(pbf.getId(), "has added back " + item.getName() + " to " + playerhand.getUsername(), item);
             } else if (pbf.getItems().remove(item)) {
                 //In rare cases the item is put back to the player
                 item.setHidden(true);
                 playerhand.getItems().add(item);
-                createInfoLog(pbf.getId(), "has added back " + item.getName() + " to " + playerhand.getUsername());
+                logAction.createUndoLog(pbf.getId(), "has added back " + item.getName() + " to " + playerhand.getUsername(), item);
             } else {
                 log.error("Didn't find item to remove from playerhand: " + item);
                 return false;
