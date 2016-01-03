@@ -61,6 +61,10 @@ public class Playerhand implements Comparable<Playerhand> {
      * Determines whos turn it is each round *
      */
     private boolean yourTurn = false;
+    /**
+     * Determines player order (ie: Player 2)
+     */
+    private int playernumber;
     private boolean gameCreator = false;
 
     private List<Item> items = new ArrayList<>();

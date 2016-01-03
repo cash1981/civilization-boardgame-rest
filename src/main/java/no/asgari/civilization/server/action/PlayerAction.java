@@ -153,25 +153,42 @@ public class PlayerAction extends BaseAction {
 
         PBF pbf = pbfCollection.findOneById(pbfId);
 
-        //Loop through the list and find next starting player
-        for (int i = 0; i < pbf.getPlayers().size(); i++) {
-            Playerhand playerhand = pbf.getPlayers().get(i);
-            if (playerhand.getUsername().equals(player.getUsername())) {
-                playerhand.setYourTurn(false);
+        if (pbf.getPlayers().get(0).getPlayernumber() > 0) {
+            Playerhand playerhand = pbf.getPlayers().stream().filter(Playerhand::isYourTurn).findFirst().get();
+            playerhand.setYourTurn(false);
 
-                //Choose next player in line to be starting player
-                Playerhand nextPlayer;
-                if (pbf.getPlayers().size() == (i + 1)) {
-                    nextPlayer = pbf.getPlayers().get(0);
-                } else {
-                    nextPlayer = pbf.getPlayers().get(i + 1);
+            int nextPlayerNumber = playerhand.getPlayernumber() + 1;
+            Playerhand firstPlayer = pbf.getPlayers().stream().filter(p -> p.getPlayernumber() == 1).findFirst().get();
+            Playerhand nextPlayer = pbf.getPlayers().stream().filter(p -> p.getPlayernumber() == nextPlayerNumber).findFirst().orElse(firstPlayer);
+            nextPlayer.setYourTurn(true);
+
+            pbfCollection.updateById(pbf.getId(), pbf);
+            return true;
+
+        } else {
+            //Old way, this else can be deleted once all games after januar 4 is over
+
+            //Loop through the list and find next starting player
+            for (int i = 0; i < pbf.getPlayers().size(); i++) {
+                Playerhand playerhand = pbf.getPlayers().get(i);
+                if (playerhand.getUsername().equals(player.getUsername())) {
+                    playerhand.setYourTurn(false);
+
+                    //Choose next player in line to be starting player
+                    Playerhand nextPlayer;
+                    if (pbf.getPlayers().size() == (i + 1)) {
+                        nextPlayer = pbf.getPlayers().get(0);
+                    } else {
+                        nextPlayer = pbf.getPlayers().get(i + 1);
+                    }
+                    nextPlayer.setYourTurn(true);
+                    SendEmail.sendYourTurn(pbf.getName(), nextPlayer.getEmail(), pbf.getId());
+
+                    pbfCollection.updateById(pbf.getId(), pbf);
+                    return true;
                 }
-                nextPlayer.setYourTurn(true);
-                SendEmail.sendYourTurn(pbf.getName(), nextPlayer.getEmail(), pbf.getId());
-
-                pbfCollection.updateById(pbf.getId(), pbf);
-                return true;
             }
+
         }
         return false;
     }

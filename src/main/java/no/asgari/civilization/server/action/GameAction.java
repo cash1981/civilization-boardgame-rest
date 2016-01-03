@@ -237,7 +237,6 @@ public class GameAction extends BaseAction {
             playerhand.setEmail(player.getEmail());
             playerhand.setPlayerId(player.getId());
             playerhand.setUsername(player.getUsername());
-
         } else {
             String color = colorOpt.orElse(chooseColorForPlayer(pbf));
             playerhand = createPlayerHand(player, color, gameCreator);
@@ -281,12 +280,16 @@ public class GameAction extends BaseAction {
         final int numOfPlayersNeeded = pbf.getNumOfPlayers();
         if (numOfPlayersNeeded == pbf.getPlayers().size()) {
             Collections.shuffle(pbf.getPlayers());
-            pbf.getPlayers().get(0).setYourTurn(true);
+            Playerhand firstplayer = pbf.getPlayers().get(0);
+            firstplayer.setYourTurn(true);
+            firstplayer.setPlayernumber(1);
+
             createInfoLog(pbf.getId(), "Game has now started. Good luck, and have fun!");
 
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < pbf.getPlayers().size(); i++) {
                 Playerhand player = pbf.getPlayers().get(i);
+                player.setPlayernumber(i+1);
                 sb.append(getNameForPlayerNumber(i) + " player is " + player.getUsername() + ". ");
             }
             createInfoLog(pbf.getId(), sb.toString());
