@@ -60,6 +60,12 @@ public class Tech implements Item, Level, Image {
     private SheetName sheetName;
     private int itemNumber;
 
+    public Tech(String name, int level) {
+        this.name = name;
+        this.level = level;
+        hidden = true;
+    }
+
     public Tech(String name, int level, int itemNumber) {
         this.name = name;
         this.level = level;

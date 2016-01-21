@@ -50,14 +50,13 @@ public class Wonder implements Item {
     private SheetName sheetName;
     private int itemNumber;
 
-    public Wonder(String name, String description, String type, SheetName sheetName, int itemNumber) {
+    public Wonder(String name, String description, String type, SheetName sheetName) {
         this.name = name;
         this.description = description;
         this.sheetName = sheetName;
         this.type = type;
         this.used = false;
         this.hidden = true;
-        this.itemNumber = itemNumber;
     }
 
     @Override

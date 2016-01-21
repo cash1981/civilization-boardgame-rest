@@ -45,11 +45,10 @@ public class Tile implements Item, Image {
     private SheetName sheetName;
     private int itemNumber;
 
-    public Tile(String name, int itemNumber) {
+    public Tile(String name) {
         this.name = name;
         this.used = false;
         this.hidden = true;
-        this.itemNumber = itemNumber;
     }
 
     @Override

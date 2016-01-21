@@ -83,7 +83,7 @@ public class ItemReader {
     private static final Predicate<Cell> rowNotZeroPredicate = cell -> cell.getRow().getRowNum() != 0;
     private static final Predicate<Cell> columnIndexZeroPredicate = cell -> cell.getColumnIndex() == 0;
 
-    private static AtomicInteger itemCounter = new AtomicInteger(RandomUtils.nextInt(1, 20));
+    public static AtomicInteger itemCounter = new AtomicInteger(RandomUtils.nextInt(1, 20));
 
     @SuppressWarnings("unchecked")
     public void readItemsFromExcel(GameType gameType) throws IOException {
@@ -157,7 +157,6 @@ public class ItemReader {
         //Description should be in the same order as city states
         for (int i = 0; i < cityStates.size(); i++) {
             Citystate item = cityStates.get(i);
-            item.setItemNumber(itemCounter.incrementAndGet());
             item.setDescription(description.get(i));
         }
 
@@ -198,7 +197,6 @@ public class ItemReader {
         //Description should be in the same order as cultures
         for (int i = 0; i < civs.size(); i++) {
             Civ item = civs.get(i);
-            item.setItemNumber(itemCounter.incrementAndGet());
             item.setDescription(descriptionCells.get(i));
             item.setStartingTech(new Tech(startingTech.get(i), Tech.LEVEL_1, itemCounter.incrementAndGet()));
         }
@@ -233,7 +231,6 @@ public class ItemReader {
         //Description should be in the same order as cultures
         for (int i = 0; i < cultures.size(); i++) {
             CultureI item = cultures.get(i);
-            item.setItemNumber(itemCounter.incrementAndGet());
             item.setDescription(description.get(i));
         }
 
@@ -266,7 +263,6 @@ public class ItemReader {
         //Description should be in the same order as culture2s
         for (int i = 0; i < culture2s.size(); i++) {
             CultureII item = culture2s.get(i);
-            item.setItemNumber(itemCounter.incrementAndGet());
             item.setDescription(description.get(i));
         }
 
@@ -299,7 +295,6 @@ public class ItemReader {
         //Description should be in the same order as culture3s
         for (int i = 0; i < culture3s.size(); i++) {
             CultureIII item = culture3s.get(i);
-            item.setItemNumber(itemCounter.incrementAndGet());
             item.setDescription(description.get(i));
         }
 
@@ -341,7 +336,6 @@ public class ItemReader {
         for (int i = 0; i < gps.size(); i++) {
             GreatPerson item = gps.get(i);
             item.setDescription(description.get(i));
-            item.setItemNumber(itemCounter.incrementAndGet());
             item.setType(tile.get(i));
         }
 
@@ -388,7 +382,7 @@ public class ItemReader {
             if (wonder.toLowerCase().contains(SheetName.WONDERS.getName().toLowerCase())) {
                 break;
             }
-            ancientWonders.add(new Wonder(wonder, desc, Wonder.ANCIENT, SheetName.ANCIENT_WONDERS, itemCounter.incrementAndGet()));
+            ancientWonders.add(new Wonder(wonder, desc, Wonder.ANCIENT, SheetName.ANCIENT_WONDERS));
         }
         Collections.shuffle(ancientWonders);
 
@@ -400,7 +394,7 @@ public class ItemReader {
             if (wonder.toLowerCase().contains(SheetName.WONDERS.getName().toLowerCase())) {
                 break;
             }
-            medievalWonders.add(new Wonder(wonder, desc, Wonder.MEDIEVAL, SheetName.MEDIEVAL_WONDERS, itemCounter.incrementAndGet()));
+            medievalWonders.add(new Wonder(wonder, desc, Wonder.MEDIEVAL, SheetName.MEDIEVAL_WONDERS));
         }
         Collections.shuffle(medievalWonders);
 
@@ -412,7 +406,7 @@ public class ItemReader {
         for (int i = 0; i < remainingSize; i++) {
             String wonder = wondersName.poll();
             String desc = descriptions.poll();
-            modernWonders.add(new Wonder(wonder, desc, Wonder.MODERN, SheetName.MODERN_WONDERS, itemCounter.incrementAndGet()));
+            modernWonders.add(new Wonder(wonder, desc, Wonder.MODERN, SheetName.MODERN_WONDERS));
         }
         Collections.shuffle(modernWonders);
     }
@@ -428,7 +422,7 @@ public class ItemReader {
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
-                .map(tilename -> new Tile(String.format("%d", (int) Double.valueOf(tilename.toString()).doubleValue()), itemCounter.incrementAndGet()))
+                .map(tilename -> new Tile(String.format("%d", (int) Double.valueOf(tilename.toString()).doubleValue())))
                 .collect(Collectors.toList());
 
         Collections.shuffle(tiles);
@@ -446,7 +440,7 @@ public class ItemReader {
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
-                .map(hut -> new Hut(hut.toString(), itemCounter.incrementAndGet()))
+                .map(hut -> new Hut(hut.toString()))
                 .collect(Collectors.toList());
 
         Collections.shuffle(huts);
@@ -464,7 +458,7 @@ public class ItemReader {
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
-                .map(village -> new Village(village.toString(), itemCounter.incrementAndGet()))
+                .map(village -> new Village(village.toString()))
                 .collect(Collectors.toList());
 
         Collections.shuffle(villages);
@@ -488,7 +482,7 @@ public class ItemReader {
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
-                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_1, itemCounter.incrementAndGet()))
+                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_1))
                 .collect(Collectors.toList());
 
         sheet = wb.getSheet(SheetName.LEVEL_2_TECH.getName());
@@ -500,7 +494,7 @@ public class ItemReader {
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
-                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_2, itemCounter.incrementAndGet()))
+                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_2))
                 .collect(Collectors.toList());
 
         sheet = wb.getSheet(SheetName.LEVEL_3_TECH.getName());
@@ -512,7 +506,7 @@ public class ItemReader {
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
-                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_3, itemCounter.incrementAndGet()))
+                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_3))
                 .collect(Collectors.toList());
 
         sheet = wb.getSheet(SheetName.LEVEL_4_TECH.getName());
@@ -524,7 +518,7 @@ public class ItemReader {
                 .filter(notRandomPredicate)
                 .filter(rowNotZeroPredicate)
                 .filter(columnIndexZeroPredicate)
-                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_4, itemCounter.incrementAndGet()))
+                .map(tech -> new Tech(tech.toString(), Tech.LEVEL_4))
                 .collect(Collectors.toList());
 
         List<Tech> allTechs = new ArrayList<>(level1Techs);
@@ -647,7 +641,6 @@ public class ItemReader {
         //Description should be in the same order as flipside
         for (int i = 0; i < sps.size(); i++) {
             SocialPolicy item = sps.get(i);
-            item.setItemNumber(itemCounter.incrementAndGet());
             item.setDescription(descriptionCells.get(i));
             item.setFlipside(flipsideCells.get(i));
         }
@@ -662,7 +655,7 @@ public class ItemReader {
         int attack = Integer.parseInt(Iterables.get(split, 0));
         int health = Integer.parseInt(Iterables.get(split, 1));
 
-        return new Infantry(attack, health, itemCounter.incrementAndGet());
+        return new Infantry(attack, health);
     }
 
     private static Artillery createArtillery(String string) {
@@ -670,7 +663,7 @@ public class ItemReader {
         int attack = Integer.parseInt(Iterables.get(split, 0));
         int health = Integer.parseInt(Iterables.get(split, 1));
 
-        return new Artillery(attack, health, itemCounter.incrementAndGet());
+        return new Artillery(attack, health);
     }
 
     private static Mounted createMounted(String string) {
@@ -678,7 +671,7 @@ public class ItemReader {
         int attack = Integer.parseInt(Iterables.get(split, 0));
         int health = Integer.parseInt(Iterables.get(split, 1));
 
-        return new Mounted(attack, health, itemCounter.incrementAndGet());
+        return new Mounted(attack, health);
     }
 
     private static Aircraft createAircraft(String string) {
@@ -686,7 +679,7 @@ public class ItemReader {
         int attack = Integer.parseInt(Iterables.get(split, 0));
         int health = Integer.parseInt(Iterables.get(split, 1));
 
-        return new Aircraft(attack, health, itemCounter.incrementAndGet());
+        return new Aircraft(attack, health);
     }
 
     private static Iterable<String> split(String string) {

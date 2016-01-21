@@ -112,6 +112,14 @@ public class GameAction extends BaseAction {
         pbf.getTechs().addAll(itemReader.allTechs);
         pbf.getSocialPolicies().addAll(itemReader.socialPolicies);
 
+        Collections.shuffle(pbf.getItems());
+        Collections.shuffle(pbf.getTechs());
+        Collections.shuffle(pbf.getSocialPolicies());
+
+        pbf.getItems().forEach(it -> it.setItemNumber(ItemReader.itemCounter.incrementAndGet()));
+        pbf.getTechs().forEach(it -> it.setItemNumber(ItemReader.itemCounter.incrementAndGet()));
+        pbf.getSocialPolicies().forEach(it -> it.setItemNumber(ItemReader.itemCounter.incrementAndGet()));
+
         WriteResult<PBF, String> pbfInsert = pbfCollection.insert(pbf);
         pbf.setId(pbfInsert.getSavedId());
         log.info("PBF game created with id " + pbfInsert.getSavedId());

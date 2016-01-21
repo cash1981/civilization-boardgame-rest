@@ -44,11 +44,10 @@ public class Village implements Item, Tradable, Image {
     private SheetName sheetName;
     private int itemNumber;
 
-    public Village(String name, int itemNumber) {
+    public Village(String name) {
         this.name = name;
         this.used = false;
         this.hidden = true;
-        this.itemNumber = itemNumber;
     }
 
     @Override

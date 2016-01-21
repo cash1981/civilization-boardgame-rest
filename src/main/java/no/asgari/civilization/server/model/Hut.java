@@ -45,11 +45,10 @@ public class Hut implements Item, Tradable, Image {
     private SheetName sheetName;
     private int itemNumber;
 
-    public Hut(String name, int itemNumber) {
+    public Hut(String name) {
         this.name = name;
         this.used = false;
         this.hidden = true;
-        this.itemNumber = itemNumber;
     }
 
     @Override

@@ -44,10 +44,9 @@ public class Infantry extends Unit implements Image {
     private SheetName sheetName;
     private int itemNumber;
 
-    public Infantry(int attack, int health, int itemNumber) {
+    public Infantry(int attack, int health) {
         this.attack = attack;
         this.health = health;
-        this.itemNumber = itemNumber;
     }
 
     @Override
