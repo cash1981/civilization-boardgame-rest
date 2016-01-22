@@ -25,6 +25,7 @@ import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.dto.AllTechsDTO;
 import no.asgari.civilization.server.dto.ForgotpassDTO;
 import no.asgari.civilization.server.dto.ItemDTO;
+import no.asgari.civilization.server.dto.MessageDTO;
 import no.asgari.civilization.server.dto.TechDTO;
 import no.asgari.civilization.server.email.SendEmail;
 import no.asgari.civilization.server.exception.PlayerExistException;
@@ -634,13 +635,21 @@ public class PlayerAction extends BaseAction {
         PBF pbf = pbfCollection.findOneById(pbfId);
         return pbf.getPlayers().stream()
                 .filter(p -> p.getCivilization() != null)
-                .map(p -> {
-                    return new AllTechsDTO(p.getCivilization().getName(), p.getColor(),
-                            p.getTechsChosen().stream().filter(t -> !t.isHidden())
-                                    .map(t -> new TechDTO(t.getName(), t.getLevel()))
-                                    .collect(Collectors.toList()));
-                })
+                .map(p -> new AllTechsDTO(p.getCivilization().getName(), p.getColor(),
+                        p.getTechsChosen().stream().filter(t -> !t.isHidden())
+                                .map(t -> new TechDTO(t.getName(), t.getLevel()))
+                                .collect(Collectors.toList())))
                 .collect(Collectors.toList());
 
+    }
+
+    public void saveNote(String pbfId, String playerId, MessageDTO messageDTO) {
+        Preconditions.checkNotNull(pbfId);
+        Preconditions.checkNotNull(playerId);
+
+        PBF pbf = pbfCollection.findOneById(pbfId);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+        playerhand.setGamenote(messageDTO.getMessage());
+        pbfCollection.updateById(pbfId, pbf);
     }
 }

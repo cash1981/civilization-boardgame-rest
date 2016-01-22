@@ -27,6 +27,7 @@ import no.asgari.civilization.server.action.TurnAction;
 import no.asgari.civilization.server.action.UndoAction;
 import no.asgari.civilization.server.dto.AllTechsDTO;
 import no.asgari.civilization.server.dto.ItemDTO;
+import no.asgari.civilization.server.dto.MessageDTO;
 import no.asgari.civilization.server.dto.TurnDTO;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Player;
@@ -327,5 +328,12 @@ public class PlayerResource {
         turnAction.lockOrUnlockTurn(pbfId, player.getId(), turn);
 
         return Response.noContent().build();
+    }
+
+    @PUT
+    @Path("/note/save")
+    public Response saveNote(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, MessageDTO messageDTO) {
+        playerAction.saveNote(pbfId, player.getId(), messageDTO);
+        return Response.ok().build();
     }
 }
