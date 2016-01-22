@@ -121,7 +121,7 @@ public abstract class BaseAction {
         }
     }
 
-    Playerhand getPlayerhandByPlayerId(String playerId, PBF pbf) {
+    public Playerhand getPlayerhandByPlayerId(String playerId, PBF pbf) {
         return pbf.getPlayers()
                 .stream().filter(p -> p.getPlayerId().equals(playerId))
                 .findFirst()

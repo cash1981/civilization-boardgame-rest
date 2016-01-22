@@ -32,6 +32,7 @@ import no.asgari.civilization.server.dto.TurnDTO;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.PlayerTurn;
+import no.asgari.civilization.server.model.Playerhand;
 import no.asgari.civilization.server.model.Tech;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -330,10 +331,18 @@ public class PlayerResource {
         return Response.noContent().build();
     }
 
+    @GET
+    @Path("/note")
+    public MessageDTO getnote(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, MessageDTO messageDTO) {
+        Playerhand playerhand = playerAction.getPlayerhandByPlayerId(player.getId(), playerAction.findPBFById(pbfId));
+        return new MessageDTO(playerhand.getGamenote());
+    }
+
     @PUT
     @Path("/note/save")
     public Response saveNote(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, MessageDTO messageDTO) {
         playerAction.saveNote(pbfId, player.getId(), messageDTO);
         return Response.ok().build();
     }
+
 }
