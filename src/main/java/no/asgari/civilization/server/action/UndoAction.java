@@ -33,9 +33,11 @@ import org.mongojack.JacksonDBCollection;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import java.security.SecureRandom;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Log4j
@@ -68,7 +70,8 @@ public class UndoAction extends BaseAction {
                 item.setHidden(true);
                 logAction.createUndoLog(pbf.getId(), "has removed " + item.getName() + " from " + playerhand.getUsername() + " and put back in the deck. Deck is reshuffled", item);
                 pbf.getItems().add(item);
-                Collections.shuffle(pbf.getItems());
+                Collections.shuffle(pbf.getItems(), new Random(System.nanoTime()));
+                Collections.shuffle(pbf.getItems(), new Random(System.nanoTime()));
                 log.debug("Successfully undoed item");
             } else if (pbf.getDiscardedItems().remove(item)) {
                 item.setHidden(true);

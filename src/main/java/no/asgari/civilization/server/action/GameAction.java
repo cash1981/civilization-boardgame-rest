@@ -60,6 +60,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -112,9 +113,9 @@ public class GameAction extends BaseAction {
         pbf.getTechs().addAll(itemReader.allTechs);
         pbf.getSocialPolicies().addAll(itemReader.socialPolicies);
 
-        Collections.shuffle(pbf.getItems());
-        Collections.shuffle(pbf.getTechs());
-        Collections.shuffle(pbf.getSocialPolicies());
+        Collections.shuffle(pbf.getItems(), new Random(System.nanoTime()));
+        Collections.shuffle(pbf.getTechs(), new Random(System.nanoTime()));
+        Collections.shuffle(pbf.getSocialPolicies(), new Random(System.nanoTime()));
 
         pbf.getItems().forEach(it -> it.setItemNumber(ItemReader.itemCounter.incrementAndGet()));
         pbf.getTechs().forEach(it -> it.setItemNumber(ItemReader.itemCounter.incrementAndGet()));
