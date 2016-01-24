@@ -41,9 +41,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import static java.util.stream.Collectors.toList;
-import static no.asgari.civilization.server.SheetName.ARTILLERY;
-import static no.asgari.civilization.server.SheetName.INFANTRY;
-import static no.asgari.civilization.server.SheetName.MOUNTED;
+import static no.asgari.civilization.server.SheetName.*;
 
 /**
  * Class that will perform draws and log them.
@@ -190,21 +188,24 @@ public class DrawAction extends BaseAction {
         if (!anyInfantry) {
             try {
                 reshuffleItems(INFANTRY, pbf);
-                pbf = pbfCollection.findOneById(pbf.getId());
+                drawBarbarianInfantry(pbf, playerhand);
             } catch (NoMoreItemsException e) {
                 StringBuilder stringBuilder = new StringBuilder();
                 if (tryToFindUnit(pbf, playerhand, stringBuilder, ARTILLERY, INFANTRY) || tryToFindUnit(pbf, playerhand, stringBuilder, MOUNTED, INFANTRY)) {
                     gameLogAction.createCommonPrivatePublicLog(stringBuilder.toString(), pbf.getId(), playerhand.getPlayerId());
+                } else {
+                    throw new NoMoreItemsException("units");
                 }
-                return;
+
             }
-        }
-        Iterator<Item> iterator = pbf.getItems().iterator();
-        while (iterator.hasNext()) {
-            Item item = iterator.next();
-            if (item.getSheetName() == SheetName.INFANTRY) {
-                addBarbarian(pbf, playerhand, iterator, item);
-                break;
+        } else {
+            Iterator<Item> iterator = pbf.getItems().iterator();
+            while (iterator.hasNext()) {
+                Item item = iterator.next();
+                if (item.getSheetName() == SheetName.INFANTRY) {
+                    addBarbarian(pbf, playerhand, iterator, item);
+                    return;
+                }
             }
         }
     }
@@ -215,24 +216,26 @@ public class DrawAction extends BaseAction {
         if (!any) {
             try {
                 reshuffleItems(MOUNTED, pbf);
-                pbf = pbfCollection.findOneById(pbf.getId());
+                drawBarbarianMounted(pbf, playerhand);
             } catch (NoMoreItemsException e) {
                 StringBuilder stringBuilder = new StringBuilder();
                 if (tryToFindUnit(pbf, playerhand, stringBuilder, ARTILLERY, MOUNTED) || tryToFindUnit(pbf, playerhand, stringBuilder, INFANTRY, MOUNTED)) {
                     gameLogAction.createCommonPrivatePublicLog(stringBuilder.toString(), pbf.getId(), playerhand.getPlayerId());
+                } else {
+                    throw new NoMoreItemsException("units");
                 }
-                return;
+            }
+        } else {
+            Iterator<Item> iterator = pbf.getItems().iterator();
+            while (iterator.hasNext()) {
+                Item item = iterator.next();
+                if (item.getSheetName() == SheetName.MOUNTED) {
+                    addBarbarian(pbf, playerhand, iterator, item);
+                    return;
+                }
             }
         }
 
-        Iterator<Item> iterator = pbf.getItems().iterator();
-        while (iterator.hasNext()) {
-            Item item = iterator.next();
-            if (item.getSheetName() == SheetName.MOUNTED) {
-                addBarbarian(pbf, playerhand, iterator, item);
-                break;
-            }
-        }
     }
 
     private void drawBarbarianArtillery(PBF pbf, Playerhand playerhand) {
@@ -241,22 +244,23 @@ public class DrawAction extends BaseAction {
         if (!any) {
             try {
                 reshuffleItems(ARTILLERY, pbf);
-                pbf = pbfCollection.findOneById(pbf.getId());
+                drawBarbarianArtillery(pbf, playerhand);
             } catch (NoMoreItemsException e) {
                 StringBuilder stringBuilder = new StringBuilder();
                 if (tryToFindUnit(pbf, playerhand, stringBuilder, MOUNTED, ARTILLERY) || tryToFindUnit(pbf, playerhand, stringBuilder, INFANTRY, ARTILLERY)) {
                     gameLogAction.createCommonPrivatePublicLog(stringBuilder.toString(), pbf.getId(), playerhand.getPlayerId());
+                } else {
+                    throw new NoMoreItemsException("units");
                 }
-                return;
             }
-        }
-
-        Iterator<Item> iterator = pbf.getItems().iterator();
-        while (iterator.hasNext()) {
-            Item item = iterator.next();
-            if (item.getSheetName() == SheetName.ARTILLERY) {
-                addBarbarian(pbf, playerhand, iterator, item);
-                break;
+        } else {
+            Iterator<Item> iterator = pbf.getItems().iterator();
+            while (iterator.hasNext()) {
+                Item item = iterator.next();
+                if (item.getSheetName() == SheetName.ARTILLERY) {
+                    addBarbarian(pbf, playerhand, iterator, item);
+                    return;
+                }
             }
         }
     }
