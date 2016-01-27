@@ -76,6 +76,8 @@ public class Draw<T extends Item> {
      */
     private Undo undo = null;
 
+    private String gameLogId;
+
     /**
      * Returns true if undo has been requested
      */

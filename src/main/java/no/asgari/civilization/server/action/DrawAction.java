@@ -179,7 +179,7 @@ public class DrawAction extends BaseAction {
 
         pbf = pbfCollection.findOneById(pbfId);
         playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        gameLogAction.createCommonPrivatePublicLog("drew " + playerhand.getBarbarians().size() + " barbarian units", pbfId, playerId);
+        gameLogAction.createCommonPrivatePublicLog("has drawn " + playerhand.getBarbarians().size() + " barbarian units", pbfId, playerId);
         return playerhand.getBarbarians();
     }
 

@@ -16,6 +16,7 @@
 package no.asgari.civilization.server.action;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
@@ -70,8 +71,7 @@ public class UndoAction extends BaseAction {
                 item.setHidden(true);
                 logAction.createUndoLog(pbf.getId(), "has removed " + item.getName() + " from " + playerhand.getUsername() + " and put back in the deck. Deck is reshuffled", item);
                 pbf.getItems().add(item);
-                Collections.shuffle(pbf.getItems(), new Random(System.nanoTime()));
-                Collections.shuffle(pbf.getItems(), new Random(System.nanoTime()));
+                shufflePBFTwice(pbf);
                 log.debug("Successfully undoed item");
             } else if (pbf.getDiscardedItems().remove(item)) {
                 item.setHidden(true);
@@ -98,7 +98,86 @@ public class UndoAction extends BaseAction {
         Preconditions.checkNotNull(draw.getItem());
 
         Item item = draw.getItem();
-        return putDrawnItemBackInPBF(pbf, item.getOwnerId(), draw.getItem());
+        return putDrawnItemBackInPBF(pbf, item.getOwnerId(), draw);
+    }
+
+    private boolean putDrawnItemBackInPBF(PBF pbf, String playerId, Draw draw) {
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+        Item item = draw.getItem();
+        if (item instanceof Tech) {
+            //Remove from tech
+            if (playerhand.getTechsChosen().remove(item)) {
+                logAction.createUndoLog(pbf.getId(), "has removed " + item.getName() + " from " + playerhand.getUsername(), item);
+                log.debug("Successfully undoed tech");
+            } else if (pbf.getDiscardedItems().remove(item)) {
+                playerhand.getTechsChosen().add((Tech) item);
+                logAction.createUndoLog(pbf.getId(), "has added back " + item.getName() + " to " + playerhand.getUsername(), item);
+            } else {
+                log.error("Didn't find tech to remove from playerhand: " + item);
+                return false;
+            }
+        } else {
+            if(!Strings.isNullOrEmpty(draw.getGameLogId())) {
+                GameLog gamelog = gameLogCollection.findOneById(draw.getGameLogId());
+                if(gamelog.getPrivateLog().contains("discarded")) {
+                    if(pbf.getDiscardedItems().remove(item)) {
+                        item.setHidden(true);
+                        playerhand.getItems().add(item);
+                        logAction.createUndoLog(pbf.getId(), "has added back " + item.getName() + " to " + playerhand.getUsername(), item);
+                    }
+                } else if(gamelog.getPrivateLog().contains("drew") && !gamelog.getPrivateLog().contains("barbarian")) {
+                    if (playerhand.getItems().remove(item)) {
+                        item.setHidden(true);
+                        logAction.createUndoLog(pbf.getId(), "has removed " + item.getName() + " from " + playerhand.getUsername() + " and put back in the deck. Deck is reshuffled", item);
+                        pbf.getItems().add(item);
+                        shufflePBFTwice(pbf);
+                    }
+                } else if(gamelog.getPrivateLog().contains("drew") && gamelog.getPrivateLog().contains("barbarian")) {
+                    pbf.getItems().addAll(playerhand.getBarbarians());
+                    playerhand.getBarbarians().clear();
+                    logAction.createUndoLog(pbf.getId(), "has removed barbarians from " + playerhand.getUsername() + " and put back in the deck. Deck is reshuffled", item);
+                    shufflePBFTwice(pbf);
+                }  else if (pbf.getItems().remove(item)) {
+                    //In rare cases the item is put back to the player (Not sure if I need this)
+                    item.setHidden(true);
+                    playerhand.getItems().add(item);
+                    logAction.createUndoLog(pbf.getId(), "has added back " + item.getName() + " to " + playerhand.getUsername(), item);
+                } else {
+                    log.error("Didn't find item to remove from playerhand: " + item);
+                    return false;
+                }
+            } else {
+                //Backward compability
+
+                if (playerhand.getItems().remove(item)) {
+                    item.setHidden(true);
+                    logAction.createUndoLog(pbf.getId(), "has removed " + item.getName() + " from " + playerhand.getUsername() + " and put back in the deck. Deck is reshuffled", item);
+                    pbf.getItems().add(item);
+                    shufflePBFTwice(pbf);
+                    log.debug("Successfully undoed item");
+                } else if (pbf.getDiscardedItems().remove(item)) {
+                    item.setHidden(true);
+                    playerhand.getItems().add(item);
+                    logAction.createUndoLog(pbf.getId(), "has added back " + item.getName() + " to " + playerhand.getUsername(), item);
+                } else if (pbf.getItems().remove(item)) {
+                    //In rare cases the item is put back to the player
+                    item.setHidden(true);
+                    playerhand.getItems().add(item);
+                    logAction.createUndoLog(pbf.getId(), "has added back " + item.getName() + " to " + playerhand.getUsername(), item);
+                } else {
+                    log.error("Didn't find item to remove from playerhand: " + item);
+                    return false;
+                }
+            }
+        }
+
+        pbfCollection.updateById(pbf.getId(), pbf);
+        return true;
+    }
+
+    private void shufflePBFTwice(PBF pbf) {
+        Collections.shuffle(pbf.getItems(), new Random(System.nanoTime()));
+        Collections.shuffle(pbf.getItems(), new Random(System.nanoTime()));
     }
 
     /**
@@ -126,6 +205,7 @@ public class UndoAction extends BaseAction {
         }
 
         gameLog.getDraw().getUndo().vote(playerId, vote);
+        gameLog.getDraw().setGameLogId(gameLog.getId());
         createLog(gameLog.getDraw(), pbf.getId(), playerhand.getUsername(), vote);
 
         Optional<Boolean> resultOfVotes = gameLog.getDraw().getUndo().getResultOfVotes();
