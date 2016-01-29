@@ -16,6 +16,7 @@
 package no.asgari.civilization.server.resource;
 
 import com.codahale.metrics.annotation.Timed;
+import com.google.common.base.CharMatcher;
 import com.google.common.base.Preconditions;
 import com.google.common.html.HtmlEscapers;
 import com.mongodb.BasicDBObject;
@@ -121,6 +122,10 @@ public class AuthResource {
     @Path("/register/check/username")
     public Response checkUsername(CheckNameDTO nameDTO) {
         Preconditions.checkNotNull(nameDTO);
+
+        if(CharMatcher.WHITESPACE.matchesAnyOf(nameDTO.getName())) {
+            return Response.status(Response.Status.FORBIDDEN).entity("{\"space\":\"true\"}").build();
+        }
 
         //If these doesn't match, then the username is unsafe
         if (!nameDTO.getName().equals(HtmlEscapers.htmlEscaper().escape(nameDTO.getName()))) {
