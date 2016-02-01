@@ -162,6 +162,7 @@ public class PlayerAction extends BaseAction {
             Playerhand firstPlayer = pbf.getPlayers().stream().filter(p -> p.getPlayernumber() == 1).findFirst().get();
             Playerhand nextPlayer = pbf.getPlayers().stream().filter(p -> p.getPlayernumber() == nextPlayerNumber).findFirst().orElse(firstPlayer);
             nextPlayer.setYourTurn(true);
+            SendEmail.sendYourTurn(pbf.getName(), nextPlayer.getEmail(), pbf.getId());
 
             pbfCollection.updateById(pbf.getId(), pbf);
             return true;
