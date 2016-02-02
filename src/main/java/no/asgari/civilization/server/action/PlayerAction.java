@@ -52,6 +52,8 @@ import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Base64;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -406,8 +408,11 @@ public class PlayerAction extends BaseAction {
         if (playerhand.getCivilization() != null && playerhand.getCivilization().getStartingTech() != null) {
             techsChosen.add(playerhandOptional.get().getCivilization().getStartingTech());
         }
-        pbf.getTechs().removeAll(techsChosen);
-        return pbf.getTechs();
+        List<Tech> techs = pbf.getTechs();
+        techs.removeAll(techsChosen);
+
+        Collections.sort(techs, ((o1, o2) -> Integer.valueOf(o1.getLevel()).compareTo(o2.getLevel())));
+        return techs;
     }
 
     /**
