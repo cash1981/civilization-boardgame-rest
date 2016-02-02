@@ -442,7 +442,7 @@ public class GameAction extends BaseAction {
         }
 
         //Sort newest date first
-        Collections.sort(chatDTOs, (o1, o2) -> -Long.valueOf(o1.getCreated()).compareTo(o2.getCreated()));
+        chatDTOs.sort((o1, o2) -> -Long.valueOf(o1.getCreated()).compareTo(o2.getCreated()));
         return chatDTOs;
     }
 

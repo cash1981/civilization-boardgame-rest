@@ -411,7 +411,7 @@ public class PlayerAction extends BaseAction {
         List<Tech> techs = pbf.getTechs();
         techs.removeAll(techsChosen);
 
-        Collections.sort(techs, ((o1, o2) -> Integer.valueOf(o1.getLevel()).compareTo(o2.getLevel())));
+        techs.sort(((o1, o2) -> Integer.valueOf(o1.getLevel()).compareTo(o2.getLevel())));
         return techs;
     }
 
