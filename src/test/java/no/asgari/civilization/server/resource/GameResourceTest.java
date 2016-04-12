@@ -67,6 +67,15 @@ public class GameResourceTest extends AbstractCivilizationTest {
     }
 
     @Test
+    public void getCivHighscore() throws Exception {
+        URI uri = UriBuilder.fromPath(BASE_URL + "/game/civhighscore").build();
+        Response response = client().target(uri)
+                .request(MediaType.APPLICATION_JSON)
+                .get(Response.class);
+        assertEquals(response.getStatus(), HttpStatus.OK_200);
+    }
+
+    @Test
     public void createGame() throws Exception {
         CreateNewGameDTO dto = new CreateNewGameDTO();
         dto.setNumOfPlayers(4);
