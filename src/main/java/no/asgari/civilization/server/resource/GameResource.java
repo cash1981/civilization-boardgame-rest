@@ -31,6 +31,7 @@ import no.asgari.civilization.server.action.TurnAction;
 import no.asgari.civilization.server.action.UndoAction;
 import no.asgari.civilization.server.dto.ChatDTO;
 import no.asgari.civilization.server.dto.CheckNameDTO;
+import no.asgari.civilization.server.dto.CivHighscoreDTO;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.DrawDTO;
 import no.asgari.civilization.server.dto.GameDTO;
@@ -462,6 +463,14 @@ public class GameResource {
     public List<WinnerDTO> getWinners() {
         GameAction gameAction = new GameAction(db);
         return gameAction.getWinners();
+    }
+
+    @GET
+    @Path("civhighscore")
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public List<CivHighscoreDTO> getCivHighscore() {
+        GameAction gameAction = new GameAction(db);
+        return gameAction.getCivHighscore();
     }
 
     @GET

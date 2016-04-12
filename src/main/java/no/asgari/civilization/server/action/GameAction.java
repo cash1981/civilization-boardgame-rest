@@ -24,6 +24,7 @@ import com.mongodb.DB;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.dto.ChatDTO;
+import no.asgari.civilization.server.dto.CivHighscoreDTO;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.DrawDTO;
 import no.asgari.civilization.server.dto.GameDTO;
@@ -37,6 +38,7 @@ import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.misc.CivUtil;
 import no.asgari.civilization.server.misc.SecurityCheck;
 import no.asgari.civilization.server.model.Chat;
+import no.asgari.civilization.server.model.Civ;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
@@ -56,16 +58,19 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 @Log4j
 public class GameAction extends BaseAction {
@@ -593,6 +598,49 @@ public class GameAction extends BaseAction {
                 .map(c -> new ChatDTO(c.getUsername(), c.getMessage(), c.getCreatedInMillis()))
                 .limit(50)
                 .collect(toList());
+    }
+
+    public List<CivHighscoreDTO> getCivHighscore() {
+        PBF anyPbf = pbfCollection.findOne();
+
+        Set<String> allCivs = new HashSet<>();
+        Set<String> items = anyPbf.getItems().stream().filter(it -> it instanceof Civ).map(Item::getName).collect(toSet());
+        Set<String> discardeditems = anyPbf.getDiscardedItems().stream().filter(it -> it instanceof Civ).map(Item::getName).collect(toSet());
+        allCivs.addAll(items);
+        allCivs.addAll(discardeditems);
+
+        List<PBF> pbfs = pbfCollection.find().toArray();
+
+        try {
+            Map<String, Long> numberOfCivsWinning = pbfs.stream()
+                    .filter(pbf -> !Strings.isNullOrEmpty(pbf.getWinner()))
+                    .filter(pbf -> !pbf.isActive())
+                    .filter(pbf -> {
+                        String playerWhoWon = pbf.getWinner();
+                        return pbf.getPlayers().stream()
+                                .filter(p -> p.getUsername().equals(playerWhoWon))
+                                .filter(p -> p.getCivilization() != null)
+                                .findFirst().isPresent();
+                    })
+                    .map(pbf -> {
+                        String playerWhoWon = pbf.getWinner();
+                        Playerhand playerhand = pbf.getPlayers().stream()
+                                .filter(p -> p.getUsername().equals(playerWhoWon))
+                                .filter(p -> p.getCivilization() != null)
+                                .findFirst()
+                                .get();
+                        return playerhand.getCivilization().getName();
+                    })
+                    .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+
+        return allCivs.stream()
+                .map(civ -> new CivHighscoreDTO(civ, numberOfCivsWinning.get(civ)))
+                .sorted()
+                .collect(toList());
+        } catch (Exception ex) {
+            ex .printStackTrace();
+            return Collections.emptyList();
+        }
     }
 
     public List<WinnerDTO> getWinners() {
