@@ -633,8 +633,16 @@ public class GameAction extends BaseAction {
                     })
                     .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
 
-        return allCivs.stream()
-                .map(civ -> new CivHighscoreDTO(civ, numberOfCivsWinning.get(civ)))
+            Map<String, Long> numberOfCivAttempts = pbfs.stream()
+                    .filter(pbf -> !Strings.isNullOrEmpty(pbf.getWinner()))
+                    .filter(pbf -> !pbf.isActive())
+                    .flatMap(pbf -> pbf.getPlayers().stream())
+                    .filter(p -> p.getCivilization() != null)
+                    .map(p -> p.getCivilization().getName())
+                    .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+
+            return allCivs.stream()
+                .map(civ -> new CivHighscoreDTO(civ, numberOfCivsWinning.get(civ), numberOfCivAttempts.get(civ)))
                 .sorted()
                 .collect(toList());
         } catch (Exception ex) {

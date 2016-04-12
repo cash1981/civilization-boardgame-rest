@@ -11,13 +11,19 @@ import lombok.NoArgsConstructor;
 public class CivHighscoreDTO implements Comparable<CivHighscoreDTO> {
     private String civ;
     private long totalWins;
+    private long totalAttempt;
 
-    public CivHighscoreDTO(String civ, Long totalWins) {
+    public CivHighscoreDTO(String civ, Long totalWins, Long totalAttempt) {
         this.civ = civ;
         if(totalWins == null) {
             this.totalWins = 0;
         } else {
             this.totalWins = totalWins;
+        }
+        if(totalAttempt == null) {
+            this.totalAttempt = 0;
+        } else {
+            this.totalAttempt = totalAttempt;
         }
     }
 
