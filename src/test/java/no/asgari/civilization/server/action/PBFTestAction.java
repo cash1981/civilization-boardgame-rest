@@ -1,14 +1,10 @@
 package no.asgari.civilization.server.action;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.PBF;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 public class PBFTestAction {
 
@@ -24,28 +20,10 @@ public class PBFTestAction {
         pbf.setName(name);
         pbf.setType(GameType.WAW);
 
-        if (CivSingleton.instance().itemsCache() == null) {
-            CivSingleton.instance().setItemsCache(
-                    CacheBuilder.newBuilder()
-                            .maximumSize(4) //1 for each game type
-                            .build(new CacheLoader<GameType, ItemReader>() {
-                                public ItemReader load(GameType type) {
-                                    ItemReader itemReader = new ItemReader();
-                                    try {
-                                        itemReader.readItemsFromExcel(GameType.WAW);
-                                    } catch (IOException e) {
-                                    }
-                                    return itemReader;
-                                }
-                            })
-            );
-        }
-
-        ItemReader items;
+        ItemReader items = new ItemReader();
         try {
-            items = CivSingleton.instance().itemsCache().get(GameType.WAW);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
+            items.readItemsFromExcel(GameType.WAW);
+        } catch (IOException e) {
         }
 
         pbf.getItems().addAll(items.mountedList);
