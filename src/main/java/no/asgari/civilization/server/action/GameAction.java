@@ -70,10 +70,6 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
-<<<<<<<HEAD
-        =======
-        >>>>>>>bugfix/highscore
-
 @Log4j
 public class GameAction extends BaseAction {
     private final JacksonDBCollection<PBF, String> pbfCollection;
