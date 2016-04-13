@@ -52,6 +52,8 @@ import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Base64;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -162,6 +164,7 @@ public class PlayerAction extends BaseAction {
             Playerhand firstPlayer = pbf.getPlayers().stream().filter(p -> p.getPlayernumber() == 1).findFirst().get();
             Playerhand nextPlayer = pbf.getPlayers().stream().filter(p -> p.getPlayernumber() == nextPlayerNumber).findFirst().orElse(firstPlayer);
             nextPlayer.setYourTurn(true);
+            SendEmail.sendYourTurn(pbf.getName(), nextPlayer.getEmail(), pbf.getId());
 
             pbfCollection.updateById(pbf.getId(), pbf);
             return true;
@@ -405,8 +408,11 @@ public class PlayerAction extends BaseAction {
         if (playerhand.getCivilization() != null && playerhand.getCivilization().getStartingTech() != null) {
             techsChosen.add(playerhandOptional.get().getCivilization().getStartingTech());
         }
-        pbf.getTechs().removeAll(techsChosen);
-        return pbf.getTechs();
+        List<Tech> techs = pbf.getTechs();
+        techs.removeAll(techsChosen);
+
+        techs.sort(((o1, o2) -> Integer.valueOf(o1.getLevel()).compareTo(o2.getLevel())));
+        return techs;
     }
 
     /**

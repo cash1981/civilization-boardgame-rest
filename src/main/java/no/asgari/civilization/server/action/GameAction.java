@@ -23,6 +23,7 @@ import com.google.common.collect.Sets;
 import com.mongodb.DB;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
+import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.dto.ChatDTO;
 import no.asgari.civilization.server.dto.CivHighscoreDTO;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
@@ -38,8 +39,8 @@ import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.misc.CivUtil;
 import no.asgari.civilization.server.misc.SecurityCheck;
 import no.asgari.civilization.server.model.Chat;
-import no.asgari.civilization.server.model.Civ;
 import no.asgari.civilization.server.model.GameLog;
+import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
@@ -58,19 +59,20 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
+
+<<<<<<<HEAD
+        =======
+        >>>>>>>bugfix/highscore
 
 @Log4j
 public class GameAction extends BaseAction {
@@ -93,11 +95,7 @@ public class GameAction extends BaseAction {
         pbf.setType(dto.getType());
         pbf.setNumOfPlayers(dto.getNumOfPlayers());
         ItemReader itemReader = new ItemReader();
-        try {
-            itemReader.readItemsFromExcel(dto.getType());
-        } catch (IOException e) {
-            log.error("Couldn't read Excel document " + e.getMessage(), e);
-        }
+        readItemFromExcel(dto.getType(), itemReader);
 
         pbf.getItems().addAll(itemReader.shuffledCivs);
         pbf.getItems().addAll(itemReader.shuffledCultureI);
@@ -144,6 +142,17 @@ public class GameAction extends BaseAction {
         });
         thread.start();
         return pbf.getId();
+    }
+
+    private void readItemFromExcel(GameType gameType, ItemReader itemReader) {
+        try {
+            itemReader.readItemsFromExcel(gameType);
+            if (!CivSingleton.instance().itemsCache().containsKey(gameType)) {
+                CivSingleton.instance().itemsCache().put(gameType, itemReader);
+            }
+        } catch (IOException e) {
+            log.error("Couldn't read Excel document " + e.getMessage(), e);
+        }
     }
 
     /**
@@ -303,7 +312,7 @@ public class GameAction extends BaseAction {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < pbf.getPlayers().size(); i++) {
                 Playerhand player = pbf.getPlayers().get(i);
-                player.setPlayernumber(i+1);
+                player.setPlayernumber(i + 1);
                 sb.append(getNameForPlayerNumber(i) + " player is " + player.getUsername() + ". ");
             }
             createInfoLog(pbf.getId(), sb.toString());
@@ -447,7 +456,7 @@ public class GameAction extends BaseAction {
         }
 
         //Sort newest date first
-        Collections.sort(chatDTOs, (o1, o2) -> -Long.valueOf(o1.getCreated()).compareTo(o2.getCreated()));
+        chatDTOs.sort((o1, o2) -> -Long.valueOf(o1.getCreated()).compareTo(o2.getCreated()));
         return chatDTOs;
     }
 
@@ -601,20 +610,16 @@ public class GameAction extends BaseAction {
     }
 
     public List<CivHighscoreDTO> getCivHighscore() {
-        List<PBF> pbfs = pbfCollection.find().toArray();
+        if (!CivSingleton.instance().itemsCache().containsKey(GameType.WAW)) {
+            readItemFromExcel(GameType.WAW, new ItemReader());
+        }
 
-        //Just give me the second to last
-        int index = pbfs.size() > 2 ? pbfs.size()-2 : 0;
-        PBF anyPbf = pbfs.get(index);
-        if(anyPbf == null) {
+        ItemReader itemReader = CivSingleton.instance().itemsCache().get(GameType.WAW);
+        if (itemReader == null) {
             return Collections.emptyList();
         }
 
-        Set<String> allCivs = new HashSet<>();
-        Set<String> items = anyPbf.getItems().stream().filter(it -> it instanceof Civ).map(Item::getName).collect(toSet());
-        Set<String> discardeditems = anyPbf.getDiscardedItems().stream().filter(it -> it instanceof Civ).map(Item::getName).collect(toSet());
-        allCivs.addAll(items);
-        allCivs.addAll(discardeditems);
+        List<PBF> pbfs = pbfCollection.find().toArray();
 
         try {
             Map<String, Long> numberOfCivsWinning = pbfs.stream()
@@ -646,12 +651,12 @@ public class GameAction extends BaseAction {
                     .map(p -> p.getCivilization().getName())
                     .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
 
-            return allCivs.stream()
-                .map(civ -> new CivHighscoreDTO(civ, numberOfCivsWinning.get(civ), numberOfCivAttempts.get(civ)))
-                .sorted()
-                .collect(toList());
+            return itemReader.shuffledCivs.stream()
+                    .map(civ -> new CivHighscoreDTO(civ.getName(), numberOfCivsWinning.get(civ.getName()), numberOfCivAttempts.get(civ.getName())))
+                    .sorted()
+                    .collect(toList());
         } catch (Exception ex) {
-            ex .printStackTrace();
+            ex.printStackTrace();
             return Collections.emptyList();
         }
     }

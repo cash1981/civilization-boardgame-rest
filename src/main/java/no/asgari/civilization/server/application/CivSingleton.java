@@ -22,6 +22,8 @@ import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.model.GameType;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -36,7 +38,7 @@ public final class CivSingleton {
     //Key is playerId and value is username
     private LoadingCache<String, String> usernameCache;
 
-    private LoadingCache<GameType, ItemReader> itemsCache;
+    private Map<GameType, ItemReader> itemsCache = new ConcurrentHashMap<>();
 
     private Cache<String, String> chatCache;
 
@@ -52,10 +54,6 @@ public final class CivSingleton {
         this.usernameCache = usernameCache;
     }
 
-    public void setItemsCache(LoadingCache<GameType, ItemReader> itemsCache) {
-        this.itemsCache = itemsCache;
-    }
-
     /**
      * Key is playerId and value is username
      */
@@ -68,7 +66,7 @@ public final class CivSingleton {
      *
      * @return
      */
-    public LoadingCache<GameType, ItemReader> itemsCache() {
+    public Map<GameType, ItemReader> itemsCache() {
         return itemsCache;
     }
 

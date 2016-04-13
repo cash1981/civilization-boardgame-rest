@@ -23,10 +23,8 @@ import no.asgari.civilization.server.action.PBFTestAction;
 import no.asgari.civilization.server.application.CivAuthenticator;
 import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.application.MongoManaged;
-import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.model.Chat;
 import no.asgari.civilization.server.model.GameLog;
-import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.Playerhand;
@@ -40,8 +38,6 @@ import org.glassfish.hk2.utilities.Binder;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -87,7 +83,7 @@ public class CivilizationIntegrationTestApplication extends Application<Civiliza
         createIndexForPlayer(playerCollection);
         createUsernameCache(playerCollection);
         createIndexForPBF(pbfCollection);
-        createItemCache();
+//        createItemCache();
 
         //Resources
         environment.jersey().register(new GameResource(db));
@@ -121,25 +117,25 @@ public class CivilizationIntegrationTestApplication extends Application<Civiliza
                 .findFirst().get().getId();
     }
 
-    private void createItemCache() {
-        CivSingleton.instance().setItemsCache(
-                CacheBuilder.newBuilder()
-                        .maximumSize(4) //1 for each game type
-                        .removalListener(lis -> log.debug("Removing " + lis.getKey() + " from the gameCache"))
-                        .build(new CacheLoader<GameType, ItemReader>() {
-                            public ItemReader load(GameType type) {
-                                ItemReader itemReader = new ItemReader();
-                                try {
-                                    itemReader.readItemsFromExcel(type);
-                                } catch (IOException e) {
-                                    log.error("Couldn't read from Excel file " + e.getMessage(), e);
-                                    throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
-                                }
-                                return itemReader;
-                            }
-                        })
-        );
-    }
+//    private void createItemCache() {
+//        CivSingleton.instance().setItemsCache(
+//                CacheBuilder.newBuilder()
+//                        .maximumSize(4) //1 for each game type
+//                        .removalListener(lis -> log.debug("Removing " + lis.getKey() + " from the gameCache"))
+//                        .build(new CacheLoader<GameType, ItemReader>() {
+//                            public ItemReader load(GameType type) {
+//                                ItemReader itemReader = new ItemReader();
+//                                try {
+//                                    itemReader.readItemsFromExcel(type);
+//                                } catch (IOException e) {
+//                                    log.error("Couldn't read from Excel file " + e.getMessage(), e);
+//                                    throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+//                                }
+//                                return itemReader;
+//                            }
+//                        })
+//        );
+//    }
 
     private void createUsernameCache(JacksonDBCollection<Player, String> playerCollection) {
         LoadingCache<String, String> usernameCache = CacheBuilder.newBuilder()
