@@ -17,12 +17,14 @@ package no.asgari.civilization.server.action;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Sets;
 import com.mongodb.DB;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
+import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.dto.ChatDTO;
 import no.asgari.civilization.server.dto.CivHighscoreDTO;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
@@ -40,6 +42,7 @@ import no.asgari.civilization.server.misc.SecurityCheck;
 import no.asgari.civilization.server.model.Chat;
 import no.asgari.civilization.server.model.Civ;
 import no.asgari.civilization.server.model.GameLog;
+import no.asgari.civilization.server.model.GameType;
 import no.asgari.civilization.server.model.Item;
 import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
@@ -66,6 +69,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -93,11 +97,7 @@ public class GameAction extends BaseAction {
         pbf.setType(dto.getType());
         pbf.setNumOfPlayers(dto.getNumOfPlayers());
         ItemReader itemReader = new ItemReader();
-        try {
-            itemReader.readItemsFromExcel(dto.getType());
-        } catch (IOException e) {
-            log.error("Couldn't read Excel document " + e.getMessage(), e);
-        }
+        readItemFromExcel(dto.getType(), itemReader);
 
         pbf.getItems().addAll(itemReader.shuffledCivs);
         pbf.getItems().addAll(itemReader.shuffledCultureI);
@@ -144,6 +144,17 @@ public class GameAction extends BaseAction {
         });
         thread.start();
         return pbf.getId();
+    }
+
+    private void readItemFromExcel(GameType gameType, ItemReader itemReader) {
+        try {
+            itemReader.readItemsFromExcel(gameType);
+            if(!CivSingleton.instance().itemsCache().containsKey(gameType)) {
+                CivSingleton.instance().itemsCache().put(gameType, itemReader);
+            }
+        } catch (IOException e) {
+            log.error("Couldn't read Excel document " + e.getMessage(), e);
+        }
     }
 
     /**
@@ -601,20 +612,21 @@ public class GameAction extends BaseAction {
     }
 
     public List<CivHighscoreDTO> getCivHighscore() {
-        List<PBF> pbfs = pbfCollection.find().toArray();
+        if(!CivSingleton.instance().itemsCache().containsKey(GameType.WAW)) {
+            readItemFromExcel(GameType.WAW, new ItemReader());
+        }
 
-        //Just give me the second to last
-        int index = pbfs.size() > 2 ? pbfs.size()-2 : 0;
-        PBF anyPbf = pbfs.get(index);
-        if(anyPbf == null) {
+        ItemReader itemReader = CivSingleton.instance().itemsCache().get(GameType.WAW);
+        if(itemReader == null) {
             return Collections.emptyList();
         }
 
-        Set<String> allCivs = new HashSet<>();
-        Set<String> items = anyPbf.getItems().stream().filter(it -> it instanceof Civ).map(Item::getName).collect(toSet());
-        Set<String> discardeditems = anyPbf.getDiscardedItems().stream().filter(it -> it instanceof Civ).map(Item::getName).collect(toSet());
-        allCivs.addAll(items);
-        allCivs.addAll(discardeditems);
+        itemReader.shuffledCivs.forEach(c -> {
+            log.info("Civ: " + c.getName());
+            System.out.println("Civ: " + c.getName());
+        });
+
+        List<PBF> pbfs = pbfCollection.find().toArray();
 
         try {
             Map<String, Long> numberOfCivsWinning = pbfs.stream()
@@ -646,8 +658,8 @@ public class GameAction extends BaseAction {
                     .map(p -> p.getCivilization().getName())
                     .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
 
-            return allCivs.stream()
-                .map(civ -> new CivHighscoreDTO(civ, numberOfCivsWinning.get(civ), numberOfCivAttempts.get(civ)))
+            return itemReader.shuffledCivs.stream()
+                .map(civ -> new CivHighscoreDTO(civ.getName(), numberOfCivsWinning.get(civ.getName()), numberOfCivAttempts.get(civ.getName())))
                 .sorted()
                 .collect(toList());
         } catch (Exception ex) {
