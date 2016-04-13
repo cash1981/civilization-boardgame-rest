@@ -601,15 +601,20 @@ public class GameAction extends BaseAction {
     }
 
     public List<CivHighscoreDTO> getCivHighscore() {
-        PBF anyPbf = pbfCollection.findOne();
+        List<PBF> pbfs = pbfCollection.find().toArray();
+
+        //Just give me the second to last
+        int index = pbfs.size() > 2 ? pbfs.size()-2 : 0;
+        PBF anyPbf = pbfs.get(index);
+        if(anyPbf == null) {
+            return Collections.emptyList();
+        }
 
         Set<String> allCivs = new HashSet<>();
         Set<String> items = anyPbf.getItems().stream().filter(it -> it instanceof Civ).map(Item::getName).collect(toSet());
         Set<String> discardeditems = anyPbf.getDiscardedItems().stream().filter(it -> it instanceof Civ).map(Item::getName).collect(toSet());
         allCivs.addAll(items);
         allCivs.addAll(discardeditems);
-
-        List<PBF> pbfs = pbfCollection.find().toArray();
 
         try {
             Map<String, Long> numberOfCivsWinning = pbfs.stream()
