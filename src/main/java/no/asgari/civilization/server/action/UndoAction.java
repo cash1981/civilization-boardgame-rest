@@ -126,7 +126,7 @@ public class UndoAction extends BaseAction {
                         logAction.createUndoLog(pbf.getId(), "has added back " + item.getName() + " to " + playerhand.getUsername(), item);
                     }
                 } else if(gamelog.getPrivateLog().contains("drew") && !gamelog.getPrivateLog().contains("barbarian")) {
-                    if (playerhand.getItems().remove(item)) {
+                    if (playerhand.getItems().remove(item) || pbf.getDiscardedItems().remove(item)) {
                         item.setHidden(true);
                         logAction.createUndoLog(pbf.getId(), "has removed " + item.getName() + " from " + playerhand.getUsername() + " and put back in the deck. Deck is reshuffled", item);
                         pbf.getItems().add(item);
@@ -148,7 +148,6 @@ public class UndoAction extends BaseAction {
                 }
             } else {
                 //Backward compability
-
                 if (playerhand.getItems().remove(item)) {
                     item.setHidden(true);
                     logAction.createUndoLog(pbf.getId(), "has removed " + item.getName() + " from " + playerhand.getUsername() + " and put back in the deck. Deck is reshuffled", item);
