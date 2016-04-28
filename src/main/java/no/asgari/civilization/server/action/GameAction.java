@@ -665,14 +665,25 @@ public class GameAction extends BaseAction {
                 .filter(pbf -> !Strings.isNullOrEmpty(pbf.getWinner()))
                 .forEach(pbf -> multimap.put(pbf.getWinner(), pbf.getId()));
 
+        Map<String, Long> attemptsPerUsername = pbfs.stream()
+                .filter(pbf -> !Strings.isNullOrEmpty(pbf.getWinner()))
+                .filter(pbf -> !pbf.isActive())
+                .flatMap(pbf -> pbf.getPlayers().stream())
+                .map(Playerhand::getUsername)
+                .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+
         List<Player> allPlayers = playerCollection.find().toArray();
         List<WinnerDTO> filteredPlayers = allPlayers.stream()
-                .filter(p -> !multimap.containsKey(p.getUsername()))
-                .map(p -> new WinnerDTO(p.getUsername(), 0))
+                .filter(p -> !multimap.containsKey(p.getUsername()) && p.getUsername() != null)
+                .map(p -> {
+                    long attempts = attemptsPerUsername.get(p.getUsername()) == null ? 0L : attemptsPerUsername.get(p.getUsername());
+                    WinnerDTO winner = new WinnerDTO(p.getUsername(), 0, attempts);
+                    return winner;
+                })
                 .collect(toList());
 
         List<WinnerDTO> winners = multimap.keySet().stream()
-                .map(user -> new WinnerDTO(user, multimap.get(user).size()))
+                .map(user -> new WinnerDTO(user, multimap.get(user).size(), attemptsPerUsername.get(user)))
                 .collect(toList());
 
         winners.addAll(filteredPlayers);

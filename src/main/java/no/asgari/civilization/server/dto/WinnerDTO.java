@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class WinnerDTO implements Comparable<WinnerDTO> {
     private String username;
     private int totalWins;
+    private long attempts;
 
     @Override
     public int compareTo(WinnerDTO o) {
