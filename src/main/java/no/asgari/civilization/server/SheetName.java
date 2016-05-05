@@ -53,7 +53,7 @@ public enum SheetName {
     public static final EnumSet<SheetName> ALL_WONDERS = EnumSet.of(ANCIENT_WONDERS, MEDIEVAL_WONDERS, MODERN_WONDERS);
 
     public static final EnumSet<SheetName> SHUFFLABLE_ITEMS = EnumSet.of(AIRCRAFT, ARTILLERY, INFANTRY, MOUNTED,
-            GREAT_PERSON, CULTURE_1, CULTURE_2, CULTURE_3);
+            GREAT_PERSON, CULTURE_1, CULTURE_2, CULTURE_3, CIV);
 
     public static Optional<SheetName> find(String name) {
         String spacesRemovedName = name.replaceAll("\\s", "");
