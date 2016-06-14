@@ -140,7 +140,7 @@ public class GameLog {
                 }
                 break;
             case UNDO:
-                privateLog = username + " has requested undo of " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
+                privateLog = username + " has requested undo of " + DELIM + draw.getItem().revealPublic() + ITEM_NUMBER;
                 publicLog = username + " has requested undo of " + DELIM + draw.getItem().revealPublic() + ITEM_NUMBER;
                 break;
             case SOT:
