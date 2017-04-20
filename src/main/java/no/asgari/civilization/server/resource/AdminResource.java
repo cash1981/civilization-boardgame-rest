@@ -28,8 +28,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 /**
  * Resource for admin stuff
@@ -47,6 +49,9 @@ public class AdminResource {
         gameAction = new GameAction(db);
         adminAction = new AdminAction(db);
     }
+
+    @Context
+    private UriInfo uriInfo;
 
     /**
      * Since this will go in production, for now only I am allowed to change this
@@ -96,9 +101,27 @@ public class AdminResource {
     public Response stopEmail(@PathParam("playerId") String playerId) {
         boolean yes = gameAction.disableEmailForPlayer(playerId);
         if (yes) {
+            String startEmailUrl = uriInfo.getAbsolutePath().toString().replaceAll("stop", "start");
+
             return Response.ok().entity(
-                    "You will no longer get anymore emails. Don't forget to check in once in a while. " +
-                            "If you reconsider and want to get emails again, then you have to manually send a mail to cash@playciv.com and ask to get emails again")
+                    "<h1>You will no longer get anymore emails. Don't forget to check in once in a while</h1> " +
+                            "<h3>If you reconsider and want to get emails again, then push <a href\""
+                            + startEmailUrl +"\">here</a></h3>")
+                    .build();
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+
+    @Path("/email/notification/{playerId}/start")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Consumes(MediaType.TEXT_PLAIN)
+    public Response startEmail(@PathParam("playerId") String playerId) {
+        boolean yes = gameAction.startEmailForPlayer(playerId);
+        if (yes) {
+            return Response.ok().entity(
+                    "<h1>Your email has started again</h1>")
                     .build();
         } else {
             return Response.status(Response.Status.BAD_REQUEST).build();

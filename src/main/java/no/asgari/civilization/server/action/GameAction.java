@@ -737,4 +737,16 @@ public class GameAction extends BaseAction {
         }
         return false;
     }
+
+    public boolean startEmailForPlayer(String playerId) {
+        Preconditions.checkNotNull(playerId);
+        Player player = playerCollection.findOneById(playerId);
+        if (player != null) {
+            log.warn("Player " + player.getEmail() + " no longer wants email");
+            player.setDisableEmail(false);
+            playerCollection.updateById(playerId, player);
+            return true;
+        }
+        return false;
+    }
 }
