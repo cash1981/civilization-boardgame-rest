@@ -17,6 +17,7 @@ package no.asgari.civilization.server.resource;
 import com.mongodb.DB;
 import io.dropwizard.auth.Auth;
 import lombok.extern.log4j.Log4j;
+import no.asgari.civilization.server.action.AdminAction;
 import no.asgari.civilization.server.action.GameAction;
 import no.asgari.civilization.server.model.Player;
 
@@ -40,9 +41,11 @@ import javax.ws.rs.core.Response;
 public class AdminResource {
 
     private final GameAction gameAction;
+    private final AdminAction adminAction;
 
     public AdminResource(DB db) {
         gameAction = new GameAction(db);
+        adminAction = new AdminAction(db);
     }
 
     /**
@@ -100,6 +103,12 @@ public class AdminResource {
         } else {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
+    }
+
+    @Path("/cleanup")
+    @POST
+    public void deleteUnusedLogs() {
+        adminAction.cleanup();
     }
 
     /*

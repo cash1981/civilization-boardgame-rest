@@ -30,6 +30,7 @@ import javax.validation.constraints.NotNull;
 @ToString(of = "name")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ItemDTO {
+    private int itemNumber;
     /**
      * ie: Leonidas *
      */
