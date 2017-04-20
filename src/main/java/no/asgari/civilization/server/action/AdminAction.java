@@ -10,8 +10,10 @@ import org.mongojack.JacksonDBCollection;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 @Log4j
 public class AdminAction extends BaseAction {
@@ -37,10 +39,10 @@ public class AdminAction extends BaseAction {
                 .filter(gl -> !allGames.contains(gl.getPbfId()))
                 .collect(toList());
 
-        List<String> oldPbfIds = allLogs.stream()
+        Set<String> oldPbfIds = allLogs.stream()
                 .filter(gl -> !allGames.contains(gl.getPbfId()))
                 .map(GameLog::getPbfId)
-                .collect(toList());
+                .collect(toSet());
 
         log.info("Found " + allOldLogs.size() + " old logs that will be deleted");
         log.info("Found " + oldPbfIds.size() + " old pbfIds that doesn't exist\n." + Arrays.toString(oldPbfIds.toArray()));
