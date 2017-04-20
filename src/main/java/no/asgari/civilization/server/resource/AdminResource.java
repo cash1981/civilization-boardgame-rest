@@ -104,9 +104,11 @@ public class AdminResource {
             String startEmailUrl = uriInfo.getAbsolutePath().toString().replaceAll("stop", "start");
 
             return Response.ok().entity(
-                    "<h1>You will no longer get anymore emails. Don't forget to check in once in a while</h1> " +
-                            "<h3>If you reconsider and want to get emails again, then push <a href\""
-                            + startEmailUrl +"\">here</a></h3>")
+                    "<html><body>" +
+                            "<h1>You will no longer get anymore emails. Don't forget to check in once in a while</h1> " +
+                            "If you reconsider and want to get emails again, then push <a href=\""
+                            + startEmailUrl +"\">here</a>" +
+                            "</body></html>")
                     .build();
         } else {
             return Response.status(Response.Status.BAD_REQUEST).build();
