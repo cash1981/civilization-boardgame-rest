@@ -40,6 +40,6 @@ public class AdminResourceTest extends AbstractCivilizationTest {
                 .request()
                 .header(HttpHeaders.AUTHORIZATION, getAdminEncoded())
                 .post(null);
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT_204);
     }
 }
