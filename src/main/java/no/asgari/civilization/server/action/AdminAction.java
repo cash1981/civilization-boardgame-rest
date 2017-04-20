@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.model.Chat;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
+import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
 
@@ -31,10 +32,13 @@ public class AdminAction extends BaseAction {
     }
 
     public void cleanup() {
-        log.info("Running cleanup. Finding all unused chat and gamelogs from old deleted games");
+        log.info("Running cleanup. Finding all aborted games, chat and gamelogs from old deleted games");
+
+        List<PBF> abortedGames = pbfCollection.find(DBQuery.is("active", false).is("winner", null)).toArray();
+        log.info("Found " + abortedGames.size() + " aborted games. Deleting those.");
+        //abortedGames.forEach(pbf -> pbfCollection.removeById(pbf.getId()));
 
         List<GameLog> allLogs = gameLogCollection.find().toArray();
-        log.info("Before deleting, size of all game logs is " + allLogs.size());
 
         List<String> allGames = pbfCollection.find().toArray().stream().map(PBF::getId).collect(toList());
 
@@ -49,6 +53,7 @@ public class AdminAction extends BaseAction {
 
         log.info("Found " + allOldLogs.size() + " old logs that will be deleted");
 
+        log.info("Before deleting, size of all game logs is " + allLogs.size());
         allOldLogs.forEach(gamelog -> gameLogCollection.removeById(gamelog.getId()));
         log.info("After deleting, size of gamelog is " + gameLogCollection.find().length());
 
@@ -60,11 +65,7 @@ public class AdminAction extends BaseAction {
 
         log.info("Found " + chatIdsToBeDeleted.size() + " old chat ids that will be deleted");
 
-
-        chatIdsToBeDeleted.stream().limit(10).forEach(c -> log.info(c));
-
-
-
-
+        chatIdsToBeDeleted.forEach(id -> chatCollection.removeById(id));
+        log.info("After deleting, size of chat is " + chatCollection.find().length());
     }
 }
