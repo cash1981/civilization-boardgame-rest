@@ -33,7 +33,7 @@ public class AdminAction extends BaseAction {
 
         List<PBF> abortedGames = pbfCollection.find(DBQuery.is("active", false).is("winner", null)).toArray();
         log.info("Found " + abortedGames.size() + " aborted games. Deleting those.");
-        //abortedGames.forEach(pbf -> pbfCollection.removeById(pbf.getId()));
+        abortedGames.forEach(pbf -> pbfCollection.removeById(pbf.getId()));
 
         List<GameLog> allLogs = gameLogCollection.find().toArray();
         List<Chat> allChats = chatCollection.find().toArray();
