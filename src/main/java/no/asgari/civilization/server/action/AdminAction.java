@@ -7,6 +7,7 @@ import no.asgari.civilization.server.model.Chat;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import org.mongojack.JacksonDBCollection;
+import org.mongojack.WriteResult;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +34,8 @@ public class AdminAction extends BaseAction {
         log.info("Running cleanup. Finding all unused chat and gamelogs from old deleted games");
 
         List<GameLog> allLogs = gameLogCollection.find().toArray();
+        log.info("Before deleting, size of all game logs is " + allLogs.size());
+
         List<String> allGames = pbfCollection.find().toArray().stream().map(PBF::getId).collect(toList());
 
         List<GameLog> allOldLogs = allLogs.stream()
@@ -45,8 +48,9 @@ public class AdminAction extends BaseAction {
                 .collect(toSet());
 
         log.info("Found " + allOldLogs.size() + " old logs that will be deleted");
-        log.info("Found " + oldPbfIds.size() + " old pbfIds that doesn't exist\n." + Arrays.toString(oldPbfIds.toArray()));
 
+        allOldLogs.forEach(gamelog -> gameLogCollection.removeById(gamelog.getId()));
+        log.info("After deleting, size of gamelog is " + gameLogCollection.find().length());
 
         List<String> chatIdsToBeDeleted = chatCollection.find().toArray()
                 .stream()
@@ -56,8 +60,11 @@ public class AdminAction extends BaseAction {
 
         log.info("Found " + chatIdsToBeDeleted.size() + " old chat ids that will be deleted");
 
-        allOldLogs.stream().map(GameLog::getId)
-                .limit(5)
-                .forEach(gl -> log.info("Id til gamelog som ikke finnes er " + gl));
+
+        chatIdsToBeDeleted.stream().limit(10).forEach(c -> log.info(c));
+
+
+
+
     }
 }
