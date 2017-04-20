@@ -33,4 +33,13 @@ public class AdminResourceTest extends AbstractCivilizationTest {
         long count = pbf.getPlayers().stream().filter(p -> p.getUsername().equals("DaveLuca")).count();
         assertThat(count).isEqualTo(1L);
     }
+
+    @Test
+    public void cleanup() {
+        Response response = client().target(UriBuilder.fromPath(BASE_URL + "/admin/cleanup").build())
+                .request()
+                .header(HttpHeaders.AUTHORIZATION, getAdminEncoded())
+                .post(null);
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
+    }
 }

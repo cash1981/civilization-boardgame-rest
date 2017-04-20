@@ -96,7 +96,7 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         environment.lifecycle().manage(mongoManaged);
 
         JacksonDBCollection<Player, String> playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
-        JacksonDBCollection<PBF, String> pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
+        //JacksonDBCollection<PBF, String> pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
         JacksonDBCollection<Chat, String> chatCollection = JacksonDBCollection.wrap(db.getCollection(Chat.COL_NAME), Chat.class, String.class);
         createUniqueIndexForPlayer(playerCollection);
         createUsernameCache(playerCollection);

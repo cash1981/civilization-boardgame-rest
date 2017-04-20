@@ -454,7 +454,7 @@ public class PlayerAction extends BaseAction {
         Item itemToTrade = fromPlayer.getItems().stream()
                 .filter(it -> it instanceof Tradable)
                 .filter(it -> it.getSheetName() == dtoSheet.get())
-                .filter(it -> it.getName().equals(item.getName()))
+                .filter(it -> it.getItemNumber() == item.getItemNumber())
                 .findFirst()
                 .orElseThrow(PlayerAction::cannotFindItem);
 
@@ -483,8 +483,8 @@ public class PlayerAction extends BaseAction {
 
         //Find the item, then delete it
         Optional<Item> itemToDeleteOptional = playerhand.getItems().stream()
-                .filter(item -> item.getSheetName() == dtoSheet.get() && item.getName().equals(itemdto.getName()))
-                .findAny();
+                .filter(item -> item.getSheetName() == dtoSheet.get() && item.getItemNumber() == itemdto.getItemNumber())
+                .findFirst();
 
         if (!itemToDeleteOptional.isPresent()) throw cannotFindItem();
 
