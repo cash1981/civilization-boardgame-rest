@@ -1,5 +1,6 @@
 package no.asgari.civilization.server.action;
 
+import com.google.common.collect.Lists;
 import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.model.Chat;
@@ -7,6 +8,7 @@ import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
 import org.mongojack.JacksonDBCollection;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -41,6 +43,7 @@ public class AdminAction extends BaseAction {
                 .collect(toList());
 
         log.info("Found " + allOldLogs.size() + " old logs that will be deleted");
+        log.info("Found " + oldPbfIds.size() + " old pbfIds that doesn't exist\n." + Arrays.toString(oldPbfIds.toArray()));
 
 
         List<String> chatIdsToBeDeleted = chatCollection.find().toArray()
@@ -50,5 +53,9 @@ public class AdminAction extends BaseAction {
                 .collect(toList());
 
         log.info("Found " + chatIdsToBeDeleted.size() + " old chat ids that will be deleted");
+
+        allOldLogs.stream().map(GameLog::getId)
+                .limit(5)
+                .forEach(gl -> log.info("Id til gamelog som ikke finnes er " + gl));
     }
 }
