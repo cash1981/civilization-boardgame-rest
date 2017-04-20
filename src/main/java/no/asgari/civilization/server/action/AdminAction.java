@@ -31,7 +31,7 @@ public class AdminAction extends BaseAction {
     public void cleanup() {
         log.info("Running cleanup. Finding all aborted games, chat and gamelogs from old deleted games");
 
-        List<PBF> abortedGames = pbfCollection.find(DBQuery.is("active", false).notExists("winner")).toArray();
+        List<PBF> abortedGames = pbfCollection.find(DBQuery.is("active", false).is("winner", null)).toArray();
         log.info("Found " + abortedGames.size() + " aborted games. Deleting those.");
         //abortedGames.forEach(pbf -> pbfCollection.removeById(pbf.getId()));
 
