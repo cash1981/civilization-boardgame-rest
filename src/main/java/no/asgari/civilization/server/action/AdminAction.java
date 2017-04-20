@@ -9,10 +9,8 @@ import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 
 import java.util.List;
-import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 
 @Log4j
 public class AdminAction extends BaseAction {

@@ -76,6 +76,7 @@ public class GameAction extends BaseAction {
     private final JacksonDBCollection<Player, String> playerCollection;
     private final GameLogAction gameLogAction;
     private final JacksonDBCollection<Chat, String> chatCollection;
+    private final DrawAction drawAction;
 
     public GameAction(DB db) {
         super(db);
@@ -83,6 +84,7 @@ public class GameAction extends BaseAction {
         this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
         this.chatCollection = JacksonDBCollection.wrap(db.getCollection(Chat.COL_NAME), Chat.class, String.class);
         this.gameLogAction = new GameLogAction(db);
+        this.drawAction = new DrawAction(db);
     }
 
     public String createNewGame(CreateNewGameDTO dto, String playerId) {

@@ -52,8 +52,6 @@ import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Base64;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -232,8 +230,9 @@ public class PlayerAction extends BaseAction {
         Optional<Item> itemToRevealOptional = items.stream()
                 .filter(it -> it.getName().equals(itemDTO.getName()))
                 .filter(it -> it.getSheetName() == sheetName.get())
+                .filter(it -> it.getItemNumber() == itemDTO.getItemNumber())
                 .filter(Item::isHidden)
-                .findAny();
+                .findFirst();
 
         if (!itemToRevealOptional.isPresent()) {
             log.warn("Item " + itemDTO.getName() + " already revealed");
@@ -247,12 +246,7 @@ public class PlayerAction extends BaseAction {
         Item itemToReveal = itemToRevealOptional.get();
         itemToReveal.setHidden(false);
         if (isCiv) {
-            Civ civ = (Civ) itemToReveal;
-            playerhand.setCivilization(civ);
-            Tech startingTech = civ.getStartingTech();
-            startingTech.setHidden(false);
-            startingTech.setOwnerId(playerId);
-            playerhand.getTechsChosen().add(startingTech);
+            Civ civ = setStartingTech(playerId, playerhand, (Civ) itemToReveal);
             pbfCollection.updateById(pbf.getId(), pbf);
             //Create a new log entry
             logAction.createGameLog(itemToReveal, pbf.getId(), GameLog.LogType.REVEAL);
@@ -264,6 +258,11 @@ public class PlayerAction extends BaseAction {
             }
 
             deleteTheOtherCivs(pbfId, playerId, civ);
+
+            if (shouldDrawWonders(pbf)) {
+                drawStartingWonders(pbf, playerhand.getPlayerId());
+            }
+
         } else {
             pbfCollection.updateById(pbf.getId(), pbf);
             //Create a new log entry
@@ -271,6 +270,28 @@ public class PlayerAction extends BaseAction {
             log.debug("item to be reveal " + itemToReveal);
         }
 
+    }
+
+    private boolean shouldDrawWonders(PBF pbf) {
+        return pbf.getNumOfPlayers() == pbf.getPlayers().size() &&
+                pbf.getPlayers().stream().allMatch(p -> p.getCivilization() != null) &&
+                pbf.getDiscardedItems().stream()
+                        .filter(item -> SheetName.ALL_WONDERS.contains(item.getSheetName()))
+                        .count() == 0 &&
+                pbf.getPlayers()
+                        .stream()
+                        .flatMap(p -> p.getItems().stream())
+                        .filter(it -> SheetName.ALL_WONDERS.contains(it.getSheetName()))
+                        .count() == 0;
+    }
+
+    private Civ setStartingTech(String playerId, Playerhand playerhand, Civ civ) {
+        playerhand.setCivilization(civ);
+        Tech startingTech = civ.getStartingTech();
+        startingTech.setHidden(false);
+        startingTech.setOwnerId(playerId);
+        playerhand.getTechsChosen().add(startingTech);
+        return civ;
     }
 
     private void deleteTheOtherCivs(String pbfId, String playerId, Civ civ) {
@@ -292,6 +313,14 @@ public class PlayerAction extends BaseAction {
         if (deleted) {
             pbfCollection.updateById(pbf.getId(), pbf);
         }
+    }
+
+    private void drawStartingWonders(PBF pbf, String playerId) {
+        createInfoLog(pbf.getId(), "Drawing 4 ancient wonders");
+        drawAction.draw(pbf.getId(), playerId, SheetName.ANCIENT_WONDERS);
+        drawAction.draw(pbf.getId(), playerId, SheetName.ANCIENT_WONDERS);
+        drawAction.draw(pbf.getId(), playerId, SheetName.ANCIENT_WONDERS);
+        drawAction.draw(pbf.getId(), playerId, SheetName.ANCIENT_WONDERS);
     }
 
     private boolean isCivilization(Playerhand playerhand, Optional<SheetName> sheetName) {

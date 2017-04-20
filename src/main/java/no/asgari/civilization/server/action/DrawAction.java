@@ -41,7 +41,9 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import static java.util.stream.Collectors.toList;
-import static no.asgari.civilization.server.SheetName.*;
+import static no.asgari.civilization.server.SheetName.ARTILLERY;
+import static no.asgari.civilization.server.SheetName.INFANTRY;
+import static no.asgari.civilization.server.SheetName.MOUNTED;
 
 /**
  * Class that will perform draws and log them.

@@ -34,7 +34,6 @@ import org.mongojack.JacksonDBCollection;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import java.security.SecureRandom;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -117,27 +116,27 @@ public class UndoAction extends BaseAction {
                 return false;
             }
         } else {
-            if(!Strings.isNullOrEmpty(draw.getGameLogId())) {
+            if (!Strings.isNullOrEmpty(draw.getGameLogId())) {
                 GameLog gamelog = gameLogCollection.findOneById(draw.getGameLogId());
-                if(gamelog.getPrivateLog().contains("discarded")) {
-                    if(pbf.getDiscardedItems().remove(item)) {
+                if (gamelog.getPrivateLog().contains("discarded")) {
+                    if (pbf.getDiscardedItems().remove(item)) {
                         item.setHidden(true);
                         playerhand.getItems().add(item);
                         logAction.createUndoLog(pbf.getId(), "has added back " + item.getName() + " to " + playerhand.getUsername(), item);
                     }
-                } else if(gamelog.getPrivateLog().contains("drew") && !gamelog.getPrivateLog().contains("barbarian")) {
+                } else if (gamelog.getPrivateLog().contains("drew") && !gamelog.getPrivateLog().contains("barbarian")) {
                     if (playerhand.getItems().remove(item) || pbf.getDiscardedItems().remove(item)) {
                         item.setHidden(true);
                         logAction.createUndoLog(pbf.getId(), "has removed " + item.getName() + " from " + playerhand.getUsername() + " and put back in the deck. Deck is reshuffled", item);
                         pbf.getItems().add(item);
                         shufflePBFTwice(pbf);
                     }
-                } else if(gamelog.getPrivateLog().contains("drew") && gamelog.getPrivateLog().contains("barbarian")) {
+                } else if (gamelog.getPrivateLog().contains("drew") && gamelog.getPrivateLog().contains("barbarian")) {
                     pbf.getItems().addAll(playerhand.getBarbarians());
                     playerhand.getBarbarians().clear();
                     logAction.createUndoLog(pbf.getId(), "has removed barbarians from " + playerhand.getUsername() + " and put back in the deck. Deck is reshuffled", item);
                     shufflePBFTwice(pbf);
-                }  else if (pbf.getItems().remove(item)) {
+                } else if (pbf.getItems().remove(item)) {
                     //In rare cases the item is put back to the player (Not sure if I need this)
                     item.setHidden(true);
                     playerhand.getItems().add(item);
@@ -291,7 +290,7 @@ public class UndoAction extends BaseAction {
 
         Item item = itemToPutBack.get();
         boolean ok = putDrawnItemBackInPBF(pbf, playerId, item);
-        if(!ok) {
+        if (!ok) {
             throw cannotFindItem();
         }
     }
