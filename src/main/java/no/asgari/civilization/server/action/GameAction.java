@@ -588,7 +588,7 @@ public class GameAction extends BaseAction {
                 .stream()
                 .filter(p -> !p.isDisableEmail())
                 .forEach(player -> {
-                    SendEmail.sendMessage(player.getEmail(), "Update to civilization (playciv.com)",
+                    SendEmail.sendMessage(player.getEmail(), "Message from cash at playciv.com",
                             "Hello " + player.getUsername() +
                                     "\n" + msg, player.getId());
                 });
