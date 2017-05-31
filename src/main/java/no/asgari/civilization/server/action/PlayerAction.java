@@ -228,11 +228,17 @@ public class PlayerAction extends BaseAction {
         }
 
         Optional<Item> itemToRevealOptional = items.stream()
-                .filter(it -> it.getName().equals(itemDTO.getName()))
-                .filter(it -> it.getSheetName() == sheetName.get())
                 .filter(it -> it.getItemNumber() == itemDTO.getItemNumber())
                 .filter(Item::isHidden)
                 .findFirst();
+
+        if (!itemToRevealOptional.isPresent()) {
+            itemToRevealOptional =  items.stream()
+                    .filter(it -> it.getName().equals(itemDTO.getName()))
+                    .filter(it -> it.getSheetName() == sheetName.get())
+                    .filter(Item::isHidden)
+                    .findFirst();
+        }
 
         if (!itemToRevealOptional.isPresent()) {
             log.warn("Item " + itemDTO.getName() + " already revealed");
@@ -480,12 +486,23 @@ public class PlayerAction extends BaseAction {
             throw cannotFindItem();
         }
 
-        Item itemToTrade = fromPlayer.getItems().stream()
+        Optional<Item> tradableItem = fromPlayer.getItems().stream()
                 .filter(it -> it instanceof Tradable)
-                .filter(it -> it.getSheetName() == dtoSheet.get())
                 .filter(it -> it.getItemNumber() == item.getItemNumber())
-                .findFirst()
-                .orElseThrow(PlayerAction::cannotFindItem);
+                .findFirst();
+
+        if(!tradableItem.isPresent()) {
+            tradableItem = fromPlayer.getItems().stream()
+                    .filter(it -> it instanceof Tradable)
+                    .filter(it -> it.getSheetName() == dtoSheet.get())
+                    .findFirst();
+        }
+
+        if(!tradableItem.isPresent()) {
+            throw cannotFindItem();
+        }
+
+        Item itemToTrade = tradableItem.get();
 
         boolean remove = fromPlayer.getItems().remove(itemToTrade);
         if (!remove) {
@@ -504,17 +521,22 @@ public class PlayerAction extends BaseAction {
         PBF pbf = pbfCollection.findOneById(pbfId);
 
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
-        Optional<SheetName> dtoSheet = SheetName.find(itemdto.getSheetName());
-        if (!dtoSheet.isPresent()) {
-            log.error("Couldn't find sheetname " + itemdto.getSheetName());
-            throw cannotFindItem();
-        }
 
         //Find the item, then delete it
         Optional<Item> itemToDeleteOptional = playerhand.getItems().stream()
-                .filter(item -> item.getSheetName() == dtoSheet.get() && item.getItemNumber() == itemdto.getItemNumber())
+                .filter(item -> item.getItemNumber() == itemdto.getItemNumber())
                 .findFirst();
 
+        if (!itemToDeleteOptional.isPresent()) {
+            Optional<SheetName> dtoSheet = SheetName.find(itemdto.getSheetName());
+            if (!dtoSheet.isPresent()) {
+                log.error("Couldn't find sheetname " + itemdto.getSheetName());
+                throw cannotFindItem();
+            }
+            itemToDeleteOptional = playerhand.getItems().stream()
+                    .filter(item -> item.getSheetName() == dtoSheet.get())
+                    .findFirst();
+        }
         if (!itemToDeleteOptional.isPresent()) throw cannotFindItem();
 
         Item itemToDelete = itemToDeleteOptional.get();
