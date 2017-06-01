@@ -59,6 +59,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -337,6 +338,7 @@ public class GameAction extends BaseAction {
         List<GameLogDTO> publicGamelogDTOs = allPublicLogs.stream()
                 .filter(log -> !Strings.isNullOrEmpty(log.getPublicLog()))
                 .map(log -> new GameLogDTO(log.getId(), log.getPublicLog(), log.getCreatedInMillis(), new DrawDTO(log.getDraw())))
+                .sorted(Comparator.comparing(GameLogDTO::getCreated))
                 .collect(toList());
         dto.setPublicLogs(publicGamelogDTOs);
 
@@ -353,6 +355,7 @@ public class GameAction extends BaseAction {
                 List<GameLogDTO> privateGamelogDTOs = allPrivateLogs.stream()
                         .filter(log -> !Strings.isNullOrEmpty(log.getPrivateLog()))
                         .map(log -> new GameLogDTO(log.getId(), log.getPrivateLog(), log.getCreatedInMillis(), new DrawDTO(log.getDraw())))
+                        .sorted(Comparator.comparing(GameLogDTO::getCreated))
                         .collect(toList());
 
                 dto.setPlayer(playerhand.get());
