@@ -229,6 +229,7 @@ public class PlayerAction extends BaseAction {
 
         Optional<Item> itemToRevealOptional = items.stream()
                 .filter(it -> it.getItemNumber() == itemDTO.getItemNumber())
+                .filter(it -> it.getSheetName() == sheetName.get())
                 .filter(Item::isHidden)
                 .findFirst();
 
