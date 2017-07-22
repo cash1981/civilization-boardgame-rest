@@ -19,6 +19,7 @@ import com.google.common.base.Strings;
 import com.sendgrid.SendGrid;
 import com.sendgrid.SendGridException;
 import lombok.extern.log4j.Log4j;
+import no.asgari.civilization.server.model.Player;
 
 /**
  * Class that will send emails
@@ -31,6 +32,7 @@ public class SendEmail {
     public static final String NOREPLY_PLAYCIV_COM = "noreply@playciv.com";
     public static final String URL = "http://playciv.com/";
     public static final String REST_URL = "https://civilization-boardgame.herokuapp.com/";
+    public static final String CASH_EMAIL = "cash@playciv.com";
 
     public static String gamelink(String pbfId) {
         return URL + "#/game/" + pbfId;
@@ -75,6 +77,45 @@ public class SendEmail {
             log.error("Error sending sendGridEmail: " + e.getMessage(), e);
         }
         return false;
+    }
+
+    public static boolean someoneJoinedTournament(Player player) {
+        if (System.getenv(SENDGRID_USERNAME) == null || System.getenv(SENDGRID_PASSWORD) == null) {
+            log.error("Missing environment variable for SENDGRID_USERNAME or SENDGRID_PASSWORD");
+            return false;
+        }
+
+        SendGrid.Email sendGridEmail = new SendGrid.Email();
+        sendGridEmail.addTo(CASH_EMAIL);
+        sendGridEmail.setFrom(NOREPLY_PLAYCIV_COM);
+        sendGridEmail.setSubject(player.getUsername() + " joined tournament");
+        sendGridEmail.setText(player.getUsername() + " with email " + player.getEmail() + " joined the tournament");
+
+        try {
+            SendGrid.Response response = sendgrid.send(sendGridEmail);
+            sendConfirmationToPlayer(player);
+            return response.getStatus();
+        } catch (SendGridException e) {
+            log.error("Error sending sendGridEmail: " + e.getMessage(), e);
+        }
+
+        return false;
+    }
+
+    private static void sendConfirmationToPlayer(Player player) {
+        SendGrid.Email sendGridEmail = new SendGrid.Email();
+        sendGridEmail.addTo(player.getEmail());
+        sendGridEmail.setFrom(CASH_EMAIL);
+        sendGridEmail.setSubject("You joined the tournament");
+        sendGridEmail.setText("You have just entered the 1vs1 tournament. " +
+                "To confirm your participation please donate the appropriate amount. You can find the donate link on playciv.com website. " +
+                "Afterwards please reply to this email and let me know that you have donated. Good luck and have fun!");
+
+        try {
+            sendgrid.send(sendGridEmail);
+        } catch (SendGridException e) {
+            log.error("Error sending sendGridEmail: " + e.getMessage(), e);
+        }
     }
 
     private static String UNSUBSCRIBE(String playerId) {

@@ -18,11 +18,8 @@ package no.asgari.civilization.server.resource;
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
-import com.google.common.html.HtmlEscapers;
-import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import io.dropwizard.auth.Auth;
-import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.action.GameAction;
 import no.asgari.civilization.server.action.GameLogAction;
@@ -30,7 +27,6 @@ import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.action.TurnAction;
 import no.asgari.civilization.server.action.UndoAction;
 import no.asgari.civilization.server.dto.ChatDTO;
-import no.asgari.civilization.server.dto.CheckNameDTO;
 import no.asgari.civilization.server.dto.CivHighscoreDTO;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.DrawDTO;
@@ -47,9 +43,6 @@ import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.PlayerTurn;
 import no.asgari.civilization.server.model.Tech;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.mongojack.DBCursor;
-import org.mongojack.DBQuery;
-import org.mongojack.JacksonDBCollection;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -83,11 +76,9 @@ public class GameResource {
     @Context
     private UriInfo uriInfo;
 
-    private final JacksonDBCollection<PBF, String> pbfCollection;
 
     public GameResource(DB db) {
         this.db = db;
-        this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
     }
 
     /**
@@ -209,7 +200,12 @@ public class GameResource {
 
         GameAction gameAction = new GameAction(db);
         gameAction.joinGame(pbfId, player, Optional.empty());
-        return Response.noContent().build();
+
+        URI location = URI.create("/" + pbfId);
+        log.debug("location for new game is " + location);
+        return Response.status(Response.Status.OK)
+                .location(location)
+                .build();
     }
 
     /**

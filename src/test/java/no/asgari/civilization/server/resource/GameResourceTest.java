@@ -189,7 +189,7 @@ public class GameResourceTest extends AbstractCivilizationTest {
                 .header(HttpHeaders.AUTHORIZATION, getAdminEncoded())
                 .post(null);
 
-        assertThat(response.getStatus()).isEqualTo(204);
+        assertThat(response.getStatus()).isEqualTo(200);
 
         Response secondResponse = client().target(
                 UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/withdraw", getApp().pbfId_3))

@@ -87,6 +87,8 @@ public class PBF {
     //If a player leaves, his items and stuff will be put here
     private List<Playerhand> withdrawnPlayers = new ArrayList<>();
 
+    private boolean tournament = false;
+
     /**
      * Returns the username of the player who is start of turn
      */
