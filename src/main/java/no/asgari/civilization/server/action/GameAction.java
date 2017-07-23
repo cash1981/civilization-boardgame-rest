@@ -586,7 +586,7 @@ public class GameAction extends BaseAction {
 
     public void sendMailToAll(String msg) {
         playerCollection.find().toArray()
-                .stream()
+                .parallelStream()
                 .filter(p -> !p.isDisableEmail())
                 .forEach(player -> {
                     SendEmail.sendMessage(player.getEmail(), "Message from cash at playciv.com",
