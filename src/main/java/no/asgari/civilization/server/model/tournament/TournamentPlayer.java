@@ -13,7 +13,6 @@ public class TournamentPlayer {
     private String username;
     private boolean paid;
 
-
     public TournamentPlayer(Player player) {
         this.playerId = player.getId();
         this.username = player.getUsername();
