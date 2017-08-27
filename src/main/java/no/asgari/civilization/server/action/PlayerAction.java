@@ -260,7 +260,7 @@ public class PlayerAction extends BaseAction {
             log.debug("item to be reveal " + itemToReveal);
 
             //If player has no units, then no need to call this
-            if (!playerhand.getItems().stream().anyMatch(p -> p instanceof Unit)) {
+            if (playerhand.getItems().stream().noneMatch(p -> p instanceof Unit)) {
                 drawStartingItems(pbfId, playerId, civ);
             }
 
