@@ -526,6 +526,7 @@ public class PlayerAction extends BaseAction {
         //Find the item, then delete it
         Optional<Item> itemToDeleteOptional = playerhand.getItems().stream()
                 .filter(item -> item.getItemNumber() == itemdto.getItemNumber())
+                .filter(item -> item.getName().equalsIgnoreCase(itemdto.getName()))
                 .findFirst();
 
         if (!itemToDeleteOptional.isPresent()) {
@@ -534,8 +535,10 @@ public class PlayerAction extends BaseAction {
                 log.error("Couldn't find sheetname " + itemdto.getSheetName());
                 throw cannotFindItem();
             }
+            //Find the item, then delete it
             itemToDeleteOptional = playerhand.getItems().stream()
                     .filter(item -> item.getSheetName() == dtoSheet.get())
+                    .filter(item -> item.getName().equalsIgnoreCase(itemdto.getName()))
                     .findFirst();
         }
         if (!itemToDeleteOptional.isPresent()) throw cannotFindItem();
