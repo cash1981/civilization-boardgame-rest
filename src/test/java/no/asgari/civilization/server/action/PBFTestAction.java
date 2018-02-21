@@ -45,6 +45,11 @@ public class PBFTestAction {
         pbf.getItems().addAll(items.modernWonders);
         pbf.getTechs().addAll(items.allTechs);
         pbf.getSocialPolicies().addAll(items.socialPolicies);
+
+        pbf.getItems().forEach(it -> it.setItemNumber(ItemReader.itemCounter.incrementAndGet()));
+        pbf.getTechs().forEach(it -> it.setItemNumber(ItemReader.itemCounter.incrementAndGet()));
+        pbf.getSocialPolicies().forEach(it -> it.setItemNumber(ItemReader.itemCounter.incrementAndGet()));
+
         return pbf;
     }
 }

@@ -490,12 +490,14 @@ public class PlayerAction extends BaseAction {
         Optional<Item> tradableItem = fromPlayer.getItems().stream()
                 .filter(it -> it instanceof Tradable)
                 .filter(it -> it.getItemNumber() == item.getItemNumber())
+                .filter(it -> it.getName().equalsIgnoreCase(item.getName()))
                 .findFirst();
 
         if(!tradableItem.isPresent()) {
             tradableItem = fromPlayer.getItems().stream()
                     .filter(it -> it instanceof Tradable)
                     .filter(it -> it.getSheetName() == dtoSheet.get())
+                    .filter(it -> it.getName().equalsIgnoreCase(item.getName()))
                     .findFirst();
         }
 
