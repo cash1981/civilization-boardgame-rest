@@ -462,6 +462,38 @@ public class GameResource {
     }
 
     @GET
+    @Path("fivewinners")
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public List<WinnerDTO> getFiveWinners() {
+        GameAction gameAction = new GameAction(db);
+        return gameAction.getWinners(5);
+    }
+
+    @GET
+    @Path("fourwinners")
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public List<WinnerDTO> getFourWinners() {
+        GameAction gameAction = new GameAction(db);
+        return gameAction.getWinners(4);
+    }
+
+    @GET
+    @Path("threewinners")
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public List<WinnerDTO> getThreeWinners() {
+        GameAction gameAction = new GameAction(db);
+        return gameAction.getWinners(3);
+    }
+
+    @GET
+    @Path("twowinners")
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public List<WinnerDTO> getTwoWinners() {
+        GameAction gameAction = new GameAction(db);
+        return gameAction.getWinners(2);
+    }
+
+    @GET
     @Path("civhighscore")
     @Produces(value = MediaType.APPLICATION_JSON)
     public List<CivHighscoreDTO> getCivHighscore() {
