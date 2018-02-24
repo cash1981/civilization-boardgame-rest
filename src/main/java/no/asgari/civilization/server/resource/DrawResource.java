@@ -50,11 +50,14 @@ import java.util.Optional;
 public class DrawResource {
 
     private final DB db;
+    private final DrawAction drawAction;
+    
     @Context
     private UriInfo uriInfo;
 
     public DrawResource(DB db) {
         this.db = db;
+        this.drawAction = new DrawAction(db);
     }
 
     /**
@@ -69,7 +72,6 @@ public class DrawResource {
     @Timed
     @Path("/{sheetName}/loot/{targetPlayerId}")
     public Response loot(@PathParam("pbfId") String pbfId, @PathParam("sheetName") String sheetName, @PathParam("targetPlayerId") String targetPlayerId, @Auth Player player) {
-        DrawAction drawAction = new DrawAction(db);
         //Check that it is tradable
         Optional<SheetName> sheetNameOptional = SheetName.find(sheetName);
         if (!sheetNameOptional.isPresent() && !sheetName.equals("Culture Card")) {
@@ -90,7 +92,6 @@ public class DrawResource {
     @Timed
     @Path("/battlehand/reveal")
     public Response revealAndDiscardBattlehand(@PathParam("pbfId") String pbfId, @Auth Player player) {
-        DrawAction drawAction = new DrawAction(db);
         drawAction.revealAndDiscardBattlehand(pbfId, player.getId());
         return Response.ok().build();
     }
@@ -99,8 +100,6 @@ public class DrawResource {
     @Path("/{sheetName}")
     @Timed
     public Response drawItem(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @PathParam("sheetName") String sheetNameString) {
-        DrawAction drawAction = new DrawAction(db);
-
         Optional<SheetName> sheetNameOptional = SheetName.find(sheetNameString);
         if (!sheetNameOptional.isPresent()) {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -125,7 +124,6 @@ public class DrawResource {
     @Path("/battle")
     @Timed
     public Response drawUnits(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @QueryParam("numOfUnits") int numberOfunits) {
-        DrawAction drawAction = new DrawAction(db);
         List<Unit> units = drawAction.drawUnitsFromBattlehandForBattle(pbfId, player.getId(), numberOfunits);
         return Response.ok().entity(units).build();
     }
@@ -141,7 +139,6 @@ public class DrawResource {
     @Path("/battle/barbarians")
     @Timed
     public Response drawBarbarians(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId) {
-        DrawAction drawAction = new DrawAction(db);
         List<Unit> units = drawAction.drawBarbarians(pbfId, player.getId());
         return Response.ok().entity(units).build();
     }
@@ -157,7 +154,6 @@ public class DrawResource {
     @Path("/battle/discard/barbarians")
     @Timed
     public Response discardBarbarians(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId) {
-        DrawAction drawAction = new DrawAction(db);
         drawAction.discardBarbarians(pbfId, player.getId());
         return Response.noContent().build();
     }

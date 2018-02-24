@@ -64,14 +64,16 @@ public class PlayerResource {
     private final DB db;
     private final PlayerAction playerAction;
     private final UndoAction undoAction;
+    private final DrawAction drawAction;
 
     @Context
     private UriInfo uriInfo;
 
     public PlayerResource(DB db) {
         this.db = db;
-        playerAction = new PlayerAction(db);
-        undoAction = new UndoAction(db);
+        this.playerAction = new PlayerAction(db);
+        this.undoAction = new UndoAction(db);
+        this.drawAction = new DrawAction(db);
     }
 
     /**
@@ -268,8 +270,6 @@ public class PlayerResource {
     @Path("/battle/end")
     @Timed
     public Response endBattle(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId, @NotEmpty @QueryParam("numOfUnits") int numberOfunits) {
-        DrawAction drawAction = new DrawAction(db);
-
         drawAction.endBattle(pbfId, player.getId());
         return Response.ok().build();
     }
