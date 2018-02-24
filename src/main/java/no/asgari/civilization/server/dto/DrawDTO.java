@@ -34,20 +34,9 @@ import java.time.LocalDateTime;
 @Data
 public class DrawDTO {
 
-    public DrawDTO(Draw draw) {
-        if (draw != null) {
-            this.playerId = draw.getPlayerId();
-            this.pbfId = draw.getPbfId();
-            this.undo = draw.getUndo();
-            this.created = draw.getCreated();
-            this.hidden = draw.getItem() == null || draw.getItem().isHidden();
-        }
-    }
-
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime created;
-
     /**
      * The user that made the draw. Its always a player that initiates a draw, so this cannot be blank.
      */
@@ -58,13 +47,21 @@ public class DrawDTO {
      */
     @NotBlank
     private String pbfId;
-
     /**
      * If null, then no undo has been performed
      */
     private Undo undo = null;
-
     private boolean hidden;
+
+    public DrawDTO(Draw draw) {
+        if (draw != null) {
+            this.playerId = draw.getPlayerId();
+            this.pbfId = draw.getPbfId();
+            this.undo = draw.getUndo();
+            this.created = draw.getCreated();
+            this.hidden = draw.getItem() == null || draw.getItem().isHidden();
+        }
+    }
 
     /**
      * Returns true if undo has been requested

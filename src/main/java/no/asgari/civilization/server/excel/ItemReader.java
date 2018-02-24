@@ -56,6 +56,11 @@ import java.util.stream.Collectors;
 
 @Log4j
 public class ItemReader {
+    private static final Predicate<Cell> notEmptyPredicate = cell -> !cell.toString().isEmpty();
+    private static final Predicate<Cell> notRandomPredicate = cell -> !cell.toString().equals("RAND()");
+    private static final Predicate<Cell> rowNotZeroPredicate = cell -> cell.getRow().getRowNum() != 0;
+    private static final Predicate<Cell> columnIndexZeroPredicate = cell -> cell.getColumnIndex() == 0;
+    public static AtomicInteger itemCounter = new AtomicInteger(RandomUtils.nextInt(1, 20));
     public LinkedList<Civ> shuffledCivs;
     public LinkedList<CultureI> shuffledCultureI;
     public LinkedList<CultureII> shuffledCultureII;
@@ -69,21 +74,49 @@ public class ItemReader {
     public LinkedList<Tile> shuffledTiles;
     public LinkedList<Citystate> shuffledCityStates;
     public List<Tech> allTechs; //Not linked list because all players can choose the same tech
-
     public LinkedList<Aircraft> aircraftList;
     public LinkedList<Artillery> artilleryList;
     public LinkedList<Mounted> mountedList;
     public LinkedList<Infantry> infantryList;
     public List<SocialPolicy> socialPolicies;
-
     public ImmutableList<Item> redrawableItems;
 
-    private static final Predicate<Cell> notEmptyPredicate = cell -> !cell.toString().isEmpty();
-    private static final Predicate<Cell> notRandomPredicate = cell -> !cell.toString().equals("RAND()");
-    private static final Predicate<Cell> rowNotZeroPredicate = cell -> cell.getRow().getRowNum() != 0;
-    private static final Predicate<Cell> columnIndexZeroPredicate = cell -> cell.getColumnIndex() == 0;
+    private static Infantry createInfantry(String string) {
+        Iterable<String> split = split(string);
 
-    public static AtomicInteger itemCounter = new AtomicInteger(RandomUtils.nextInt(1, 20));
+        int attack = Integer.parseInt(Iterables.get(split, 0));
+        int health = Integer.parseInt(Iterables.get(split, 1));
+
+        return new Infantry(attack, health);
+    }
+
+    private static Artillery createArtillery(String string) {
+        Iterable<String> split = split(string);
+        int attack = Integer.parseInt(Iterables.get(split, 0));
+        int health = Integer.parseInt(Iterables.get(split, 1));
+
+        return new Artillery(attack, health);
+    }
+
+    private static Mounted createMounted(String string) {
+        Iterable<String> split = split(string);
+        int attack = Integer.parseInt(Iterables.get(split, 0));
+        int health = Integer.parseInt(Iterables.get(split, 1));
+
+        return new Mounted(attack, health);
+    }
+
+    private static Aircraft createAircraft(String string) {
+        Iterable<String> split = split(string);
+        int attack = Integer.parseInt(Iterables.get(split, 0));
+        int health = Integer.parseInt(Iterables.get(split, 1));
+
+        return new Aircraft(attack, health);
+    }
+
+    private static Iterable<String> split(String string) {
+        return Splitter.onPattern(",|\\.").omitEmptyStrings().trimResults().split(string);
+    }
 
     @SuppressWarnings("unchecked")
     public void readItemsFromExcel(GameType gameType) throws IOException {
@@ -647,42 +680,5 @@ public class ItemReader {
 
         Collections.shuffle(sps);
         return new LinkedList<>(sps);
-    }
-
-    private static Infantry createInfantry(String string) {
-        Iterable<String> split = split(string);
-
-        int attack = Integer.parseInt(Iterables.get(split, 0));
-        int health = Integer.parseInt(Iterables.get(split, 1));
-
-        return new Infantry(attack, health);
-    }
-
-    private static Artillery createArtillery(String string) {
-        Iterable<String> split = split(string);
-        int attack = Integer.parseInt(Iterables.get(split, 0));
-        int health = Integer.parseInt(Iterables.get(split, 1));
-
-        return new Artillery(attack, health);
-    }
-
-    private static Mounted createMounted(String string) {
-        Iterable<String> split = split(string);
-        int attack = Integer.parseInt(Iterables.get(split, 0));
-        int health = Integer.parseInt(Iterables.get(split, 1));
-
-        return new Mounted(attack, health);
-    }
-
-    private static Aircraft createAircraft(String string) {
-        Iterable<String> split = split(string);
-        int attack = Integer.parseInt(Iterables.get(split, 0));
-        int health = Integer.parseInt(Iterables.get(split, 1));
-
-        return new Aircraft(attack, health);
-    }
-
-    private static Iterable<String> split(String string) {
-        return Splitter.onPattern(",|\\.").omitEmptyStrings().trimResults().split(string);
     }
 }

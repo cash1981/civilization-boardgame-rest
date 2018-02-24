@@ -28,32 +28,22 @@ public enum SheetName {
     MODERN_WONDERS("Modern Wonders"), TILES("Tiles"), CITY_STATES("City-states"), LEVEL_1_TECH("Level 1 Tech"), LEVEL_2_TECH("Level 2 Tech"),
     LEVEL_3_TECH("Level 3 Tech"), LEVEL_4_TECH("Level 4 Tech"), LEVEL_5_TECH("Level 5 Tech"), SOCIAL_POLICY("Social Policy");
 
-    private String label;
-
-    SheetName(String name) {
-        this.label = name;
-    }
-
-    public String getName() {
-        return label;
-    }
-
     public static final EnumSet<SheetName> SHEETS =
             EnumSet.of(CIV, CULTURE_1, CULTURE_2, CULTURE_3,
                     GREAT_PERSON, INFANTRY, ARTILLERY, MOUNTED, AIRCRAFT,
                     VILLAGES, HUTS, WONDERS, ANCIENT_WONDERS, MEDIEVAL_WONDERS, MODERN_WONDERS, TILES, CITY_STATES,
                     LEVEL_1_TECH, LEVEL_2_TECH, LEVEL_3_TECH, LEVEL_4_TECH, LEVEL_5_TECH, SOCIAL_POLICY);
-
     public static final EnumSet<SheetName> TECHS = EnumSet.of(LEVEL_1_TECH, LEVEL_2_TECH, LEVEL_3_TECH, LEVEL_4_TECH, LEVEL_5_TECH);
-
     public static final EnumSet<SheetName> UNITS = EnumSet.of(AIRCRAFT, ARTILLERY, INFANTRY, MOUNTED);
-
     public static final EnumSet<SheetName> CULTURE_CARD = EnumSet.of(CULTURE_1, CULTURE_2, CULTURE_3);
-
     public static final EnumSet<SheetName> ALL_WONDERS = EnumSet.of(ANCIENT_WONDERS, MEDIEVAL_WONDERS, MODERN_WONDERS);
-
     public static final EnumSet<SheetName> SHUFFLABLE_ITEMS = EnumSet.of(AIRCRAFT, ARTILLERY, INFANTRY, MOUNTED,
             GREAT_PERSON, CULTURE_1, CULTURE_2, CULTURE_3, CIV);
+    private String label;
+
+    SheetName(String name) {
+        this.label = name;
+    }
 
     public static Optional<SheetName> find(String name) {
         String spacesRemovedName = name.replaceAll("\\s", "");
@@ -68,5 +58,9 @@ public enum SheetName {
             }
         }
         return found;
+    }
+
+    public String getName() {
+        return label;
     }
 }

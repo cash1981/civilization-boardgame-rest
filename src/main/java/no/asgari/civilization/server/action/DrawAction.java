@@ -63,6 +63,13 @@ public class DrawAction extends BaseAction {
         gameLogAction = new GameLogAction(db);
     }
 
+    private static Draw<Item> createDraw(String pbfId, String playerId, Item item) {
+        Draw<Item> draw = new Draw<>(pbfId, playerId);
+        item.setHidden(true);
+        draw.setItem(item);
+        return draw;
+    }
+
     public Optional<GameLog> draw(String pbfId, String playerId, SheetName sheetName) {
         Preconditions.checkNotNull(pbfId);
         Preconditions.checkNotNull(playerId);
@@ -156,7 +163,6 @@ public class DrawAction extends BaseAction {
         createCommonPublicLog("has drawn " + drawnUnitsList.size() + " units from his battlehand", pbfId, playerId);
         return drawnUnitsList;
     }
-
 
     /**
      * Draws up to three barbarians.
@@ -286,7 +292,6 @@ public class DrawAction extends BaseAction {
         }
         return false;
     }
-
 
     public void discardBarbarians(String pbfId, String playerId) {
         PBF pbf = pbfCollection.findOneById(pbfId);
@@ -422,12 +427,5 @@ public class DrawAction extends BaseAction {
     private void putItemToPlayer(Item item, PBF pbf, String playerId) {
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         playerhand.getItems().add(item);
-    }
-
-    private static Draw<Item> createDraw(String pbfId, String playerId, Item item) {
-        Draw<Item> draw = new Draw<>(pbfId, playerId);
-        item.setHidden(true);
-        draw.setItem(item);
-        return draw;
     }
 }

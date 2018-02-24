@@ -20,8 +20,6 @@ import lombok.Setter;
 
 @Setter
 public abstract class Unit implements Item, Level, Type {
-    private String name;
-
     @JsonIgnore
     static final int LEVEL_1 = 1;
     @JsonIgnore
@@ -30,6 +28,7 @@ public abstract class Unit implements Item, Level, Type {
     static final int LEVEL_3 = 3;
     @JsonIgnore
     static final int LEVEL_4 = 4;
+    private String name;
 
     public abstract boolean isKilled();
 

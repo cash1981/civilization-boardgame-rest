@@ -7,7 +7,6 @@ import no.asgari.civilization.server.model.tournament.Tournament;
 import no.asgari.civilization.server.model.tournament.TournamentPlayer;
 import org.mongojack.JacksonDBCollection;
 
-import java.util.Collections;
 import java.util.List;
 
 public class TournamentAction extends BaseAction {
@@ -23,14 +22,14 @@ public class TournamentAction extends BaseAction {
 
     public boolean signup(Player player, int tournamentNumber) {
         List<Tournament> tournaments = tournamentCol.find().toArray();
-        if(tournaments == null || tournaments.isEmpty()) {
+        if (tournaments == null || tournaments.isEmpty()) {
             Tournament tournament = createTournament(tournamentNumber);
             tournament.getPlayers().add(new TournamentPlayer(player));
             return SendEmail.someoneJoinedTournament(player);
         }
 
         Tournament tournament = tournaments.get(tournamentNumber - 1);
-        if(tournament.getPlayers().contains(new TournamentPlayer(player))) {
+        if (tournament.getPlayers().contains(new TournamentPlayer(player))) {
             return false;
         }
 

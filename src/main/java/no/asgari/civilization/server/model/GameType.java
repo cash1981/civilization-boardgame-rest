@@ -27,11 +27,6 @@ public enum GameType {
         this.label = name;
     }
 
-    @Override
-    public String toString() {
-        return label;
-    }
-
     public static Optional<GameType> find(String name) {
         String spacesRemovedName = name.replaceAll("\\s", "");
         Optional<GameType> found = Stream.of(BASE, FAF, WAW, DOC)
@@ -45,6 +40,11 @@ public enum GameType {
             }
         }
         return found;
+    }
+
+    @Override
+    public String toString() {
+        return label;
     }
 
 }

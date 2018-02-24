@@ -123,7 +123,7 @@ public class AuthResource {
     public Response checkUsername(CheckNameDTO nameDTO) {
         Preconditions.checkNotNull(nameDTO);
 
-        if(CharMatcher.WHITESPACE.matchesAnyOf(nameDTO.getName())) {
+        if (CharMatcher.WHITESPACE.matchesAnyOf(nameDTO.getName())) {
             return Response.status(Response.Status.FORBIDDEN).entity("{\"space\":\"true\"}").build();
         }
 

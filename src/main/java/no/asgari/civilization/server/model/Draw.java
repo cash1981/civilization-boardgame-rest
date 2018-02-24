@@ -48,18 +48,9 @@ public class Draw<T extends Item> {
      */
     @NotNull
     private T item;
-
-    public Draw(String pbfId, String playerId) {
-        this.pbfId = pbfId;
-        this.playerId = playerId;
-
-        created = LocalDateTime.now();
-    }
-
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime created;
-
     /**
      * The user that made the draw. Its always a player that initiates a draw, so this cannot be blank.
      */
@@ -70,13 +61,18 @@ public class Draw<T extends Item> {
      */
     @NotBlank
     private String pbfId;
-
     /**
      * If null, then no undo has been performed
      */
     private Undo undo = null;
-
     private String gameLogId;
+
+    public Draw(String pbfId, String playerId) {
+        this.pbfId = pbfId;
+        this.playerId = playerId;
+
+        created = LocalDateTime.now();
+    }
 
     /**
      * Returns true if undo has been requested

@@ -24,7 +24,7 @@ public class WinnerDTO implements Comparable<WinnerDTO> {
     @Override
     public int compareTo(WinnerDTO o) {
         int i = Integer.valueOf(this.getTotalWins()).compareTo(o.getTotalWins());
-        if(i != 0) {
+        if (i != 0) {
             return i;
         }
 
@@ -33,9 +33,9 @@ public class WinnerDTO implements Comparable<WinnerDTO> {
 
     @JsonIgnore
     private String percentWin() {
-        if(totalWins == 0 || attempts == 0)
+        if (totalWins == 0 || attempts == 0)
             return "0 %";
-        double percent = ((double)totalWins / (double)attempts) * 100;
+        double percent = ((double) totalWins / (double) attempts) * 100;
         double twoDecimals = (double) Math.round(percent * 100) / 100;
         return twoDecimals + " %";
     }

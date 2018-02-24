@@ -25,7 +25,7 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.application.CivSingleton;
 import no.asgari.civilization.server.dto.ChatDTO;
-import no.asgari.civilization.server.dto.CivHighscoreDTO;
+import no.asgari.civilization.server.dto.CivWinnerDTO;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.DrawDTO;
 import no.asgari.civilization.server.dto.GameDTO;
@@ -33,6 +33,7 @@ import no.asgari.civilization.server.dto.GameLogDTO;
 import no.asgari.civilization.server.dto.MessageDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
 import no.asgari.civilization.server.dto.PlayerDTO;
+import no.asgari.civilization.server.dto.PlayerHighscoreDTO;
 import no.asgari.civilization.server.dto.WinnerDTO;
 import no.asgari.civilization.server.email.SendEmail;
 import no.asgari.civilization.server.excel.ItemReader;
@@ -84,6 +85,47 @@ public class GameAction extends BaseAction {
         this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
         this.chatCollection = JacksonDBCollection.wrap(db.getCollection(Chat.COL_NAME), Chat.class, String.class);
         this.gameLogAction = new GameLogAction(db);
+    }
+
+    /**
+     * Creating PbfDTO so to not include every players Ghand and information
+     *
+     * @param pbf - the PBF
+     * @return PbfDto
+     */
+    private static PbfDTO createPbfDTO(PBF pbf) {
+        PbfDTO dto = new PbfDTO();
+        dto.setType(pbf.getType());
+        dto.setId(pbf.getId());
+        dto.setName(pbf.getName());
+        dto.setActive(pbf.isActive());
+        long created = pbf.getCreated().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        dto.setCreated(created);
+        dto.setNumOfPlayers(pbf.getNumOfPlayers());
+        dto.setPlayers(pbf.getPlayers().stream()
+                .map(p -> createPlayerDTO(p, pbf.getId()))
+                .collect(toList()));
+        dto.setNameOfUsersTurn(pbf.getNameOfUsersTurn());
+        return dto;
+    }
+
+    private static PlayerDTO createPlayerDTO(Playerhand player, String pbfId) {
+        PlayerDTO dto = new PlayerDTO();
+        dto.setUsername(player.getUsername());
+        dto.setPlayerId(player.getPlayerId());
+        dto.setPbfId(pbfId);
+        return dto;
+    }
+
+    private static Playerhand createPlayerHand(Player player, String color, boolean gameCreator) {
+        Playerhand playerhand = new Playerhand();
+        playerhand.setUsername(player.getUsername());
+        playerhand.setPlayerId(player.getId());
+        playerhand.setYourTurn(false);
+        playerhand.setColor(color);
+        playerhand.setGameCreator(gameCreator);
+        playerhand.setEmail(player.getEmail());
+        return playerhand;
     }
 
     public String createNewGame(CreateNewGameDTO dto, String playerId) {
@@ -167,47 +209,6 @@ public class GameAction extends BaseAction {
                     return Long.valueOf(o1.getCreated()).compareTo(o2.getCreated());
                 })
                 .collect(toList());
-    }
-
-    /**
-     * Creating PbfDTO so to not include every players Ghand and information
-     *
-     * @param pbf - the PBF
-     * @return PbfDto
-     */
-    private static PbfDTO createPbfDTO(PBF pbf) {
-        PbfDTO dto = new PbfDTO();
-        dto.setType(pbf.getType());
-        dto.setId(pbf.getId());
-        dto.setName(pbf.getName());
-        dto.setActive(pbf.isActive());
-        long created = pbf.getCreated().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        dto.setCreated(created);
-        dto.setNumOfPlayers(pbf.getNumOfPlayers());
-        dto.setPlayers(pbf.getPlayers().stream()
-                .map(p -> createPlayerDTO(p, pbf.getId()))
-                .collect(toList()));
-        dto.setNameOfUsersTurn(pbf.getNameOfUsersTurn());
-        return dto;
-    }
-
-    private static PlayerDTO createPlayerDTO(Playerhand player, String pbfId) {
-        PlayerDTO dto = new PlayerDTO();
-        dto.setUsername(player.getUsername());
-        dto.setPlayerId(player.getPlayerId());
-        dto.setPbfId(pbfId);
-        return dto;
-    }
-
-    private static Playerhand createPlayerHand(Player player, String color, boolean gameCreator) {
-        Playerhand playerhand = new Playerhand();
-        playerhand.setUsername(player.getUsername());
-        playerhand.setPlayerId(player.getId());
-        playerhand.setYourTurn(false);
-        playerhand.setColor(color);
-        playerhand.setGameCreator(gameCreator);
-        playerhand.setEmail(player.getEmail());
-        return playerhand;
     }
 
     public void joinGame(String pbfId, Player player, Optional<String> colorOpt) {
@@ -608,7 +609,7 @@ public class GameAction extends BaseAction {
                 .collect(toList());
     }
 
-    public List<CivHighscoreDTO> getCivHighscore() {
+    public List<CivWinnerDTO> getCivHighscore() {
         if (!CivSingleton.instance().itemsCache().containsKey(GameType.WAW)) {
             readItemFromExcel(GameType.WAW, new ItemReader());
         }
@@ -651,87 +652,13 @@ public class GameAction extends BaseAction {
                     .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
 
             return itemReader.shuffledCivs.stream()
-                    .map(civ -> new CivHighscoreDTO(civ.getName(), numberOfCivsWinning.get(civ.getName()), numberOfCivAttempts.get(civ.getName())))
+                    .map(civ -> new CivWinnerDTO(civ.getName(), numberOfCivsWinning.get(civ.getName()), numberOfCivAttempts.get(civ.getName())))
                     .sorted()
                     .collect(toList());
         } catch (Exception ex) {
             ex.printStackTrace();
             return Collections.emptyList();
         }
-    }
-
-    public List<WinnerDTO> getWinners() {
-        List<PBF> pbfs = pbfCollection.find().toArray();
-        ListMultimap<String, String> multimap = ArrayListMultimap.create();
-
-        pbfs.stream()
-                .filter(pbf -> !Strings.isNullOrEmpty(pbf.getWinner()))
-                .forEach(pbf -> multimap.put(pbf.getWinner(), pbf.getId()));
-
-        Map<String, Long> attemptsPerUsername = pbfs.stream()
-                .filter(pbf -> !Strings.isNullOrEmpty(pbf.getWinner()))
-                .filter(pbf -> !pbf.isActive())
-                .flatMap(pbf -> pbf.getPlayers().stream())
-                .map(Playerhand::getUsername)
-                .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
-
-        List<WinnerDTO> filteredPlayers = getWinnerDTOs(multimap, attemptsPerUsername);
-
-        List<WinnerDTO> winners = multimap.keySet().stream()
-                .map(user -> {
-                    Long attempts = attemptsPerUsername.get(user);
-                    return new WinnerDTO(user, multimap.get(user).size(), attempts == null ? 0L : attempts);
-                })
-                .collect(toList());
-
-        winners.addAll(filteredPlayers);
-        Collections.sort(winners);
-        return winners;
-    }
-
-
-    public List<WinnerDTO> getWinners(int numberOfPlayers) {
-        List<PBF> pbfs = pbfCollection.find().toArray();
-
-        ListMultimap<String, String> multimap = ArrayListMultimap.create();
-
-        pbfs.stream()
-                .filter(pbf -> !Strings.isNullOrEmpty(pbf.getWinner()))
-                .filter(pbf -> pbf.getNumOfPlayers() == numberOfPlayers)
-                .forEach(pbf -> multimap.put(pbf.getWinner(), pbf.getId()));
-
-        Map<String, Long> attemptsPerUsername = pbfs.stream()
-                .filter(pbf -> !pbf.isActive())
-                .filter(pbf -> !Strings.isNullOrEmpty(pbf.getWinner()))
-                .filter(pbf -> pbf.getNumOfPlayers() == numberOfPlayers)
-                .flatMap(pbf -> pbf.getPlayers().stream())
-                .map(Playerhand::getUsername)
-                .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
-
-        List<WinnerDTO> filteredPlayers = getWinnerDTOs(multimap, attemptsPerUsername);
-
-        List<WinnerDTO> winners = multimap.keySet().stream()
-                .map(user -> {
-                    Long attempts = attemptsPerUsername.get(user);
-                    return new WinnerDTO(user, multimap.get(user).size(), attempts == null ? 0L : attempts);
-                })
-                .collect(toList());
-
-        winners.addAll(filteredPlayers);
-        Collections.sort(winners);
-        return winners;
-
-    }
-
-    private List<WinnerDTO> getWinnerDTOs(ListMultimap<String, String> multimap, Map<String, Long> attemptsPerUsername) {
-        List<Player> allPlayers = playerCollection.find().toArray();
-        return allPlayers.stream()
-                .filter(p -> !multimap.containsKey(p.getUsername()) && p.getUsername() != null)
-                .map(p -> {
-                    long attempts = attemptsPerUsername.get(p.getUsername()) == null ? 0L : attemptsPerUsername.get(p.getUsername());
-                    return new WinnerDTO(p.getUsername(), 0, attempts);
-                })
-                .collect(toList());
     }
 
     private List<Item> getAllRevealedItems(PBF pbf) {
@@ -791,4 +718,90 @@ public class GameAction extends BaseAction {
         return false;
     }
 
+    public PlayerHighscoreDTO getPlayerHighScore() {
+        ListMultimap<String, Integer> winnersByNumOfPlayers = ArrayListMultimap.create();
+        PlayerHighscoreDTO dto = new PlayerHighscoreDTO();
+        List<Player> allPlayers = playerCollection.find().toArray();
+        dto.setTotalNumberOfPlayers(allPlayers.size());
+        //key == username, value = num of players
+
+        List<PBF> finishedGames = pbfCollection.find().toArray().stream()
+                .filter(pbf -> !pbf.isActive())
+                .filter(pbf -> !Strings.isNullOrEmpty(pbf.getWinner()))
+                .collect(toList());
+        dto.setTotalNumberOfGames(finishedGames.size());
+
+        finishedGames.forEach(pbf -> winnersByNumOfPlayers.put(pbf.getWinner(), pbf.getNumOfPlayers()));
+        dto.setWinners(getAllWinners(winnersByNumOfPlayers, allPlayers, finishedGames));
+        dto.setFiveWinners(getWinners(winnersByNumOfPlayers, finishedGames, 5));
+        dto.setFourWinners(getWinners(winnersByNumOfPlayers, finishedGames, 4));
+        dto.setThreeWinners(getWinners(winnersByNumOfPlayers, finishedGames, 3));
+        dto.setTwoWinners(getWinners(winnersByNumOfPlayers, finishedGames, 2));
+
+        dto.setFivePlayerGamesTotal(finishedGames.stream().filter(pbf -> pbf.getNumOfPlayers() == 5).count());
+        dto.setFourPlayerGamesTotal(finishedGames.stream().filter(pbf -> pbf.getNumOfPlayers() == 4).count());
+        dto.setThreePlayerGamesTotal(finishedGames.stream().filter(pbf -> pbf.getNumOfPlayers() == 3).count());
+        dto.setTwoPlayerGamesTotal(finishedGames.stream().filter(pbf -> pbf.getNumOfPlayers() == 2).count());
+        return dto;
+    }
+
+    private List<WinnerDTO> getAllWinners(ListMultimap<String, Integer> winnersByNumOfPlayers, List<Player> allPlayers, List<PBF> finishedGames) {
+        Map<String, Long> attemptsPerUserAllGames = finishedGames.stream()
+                .flatMap(pbf -> pbf.getPlayers().stream())
+                .map(Playerhand::getUsername)
+                .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+
+
+        List<WinnerDTO> filteredPlayers = allPlayers.stream()
+                .filter(p -> !winnersByNumOfPlayers.containsKey(p.getUsername()) && p.getUsername() != null)
+                .map(p -> {
+                    long attempts = attemptsPerUserAllGames.get(p.getUsername()) == null ? 0L : attemptsPerUserAllGames.get(p.getUsername());
+                    return new WinnerDTO(p.getUsername(), 0, attempts);
+                })
+                .collect(toList());
+
+
+        List<WinnerDTO> allWinners = winnersByNumOfPlayers.keySet().stream()
+                .map(user -> {
+                    Long attempts = attemptsPerUserAllGames.get(user);
+                    return new WinnerDTO(user, winnersByNumOfPlayers.get(user).size(), attempts == null ? 0L : attempts);
+                })
+                .collect(toList());
+
+        allWinners.addAll(filteredPlayers);
+        Collections.sort(allWinners);
+        Collections.reverse(allWinners);
+        return allWinners;
+    }
+
+    private List<WinnerDTO> getWinners(ListMultimap<String, Integer> winnersByNumOfPlayers, List<PBF> finishedGames, int numOfPlayers) {
+        Map<String, Long> attemptsPerUser = attemptsPerUser(finishedGames, numOfPlayers);
+        return finishedGames.stream()
+                .filter(pbf -> pbf.getNumOfPlayers() == numOfPlayers)
+                .flatMap(pbf -> pbf.getPlayers().stream())
+                .distinct()
+                        //.filter(p -> !winnersByNumOfPlayers.containsKey(p.getUsername()) && p.getUsername() != null)
+                .map(p -> {
+                    List<Integer> winner = winnersByNumOfPlayers.get(p.getUsername());
+                    int totalWins = 0;
+                    long attempts = attemptsPerUser.get(p.getUsername());
+                    if (winner != null && !winner.isEmpty()) {
+                        totalWins = (int) winner
+                                .stream()
+                                .filter(num -> num == numOfPlayers)
+                                .count();
+                    }
+                    return new WinnerDTO(p.getUsername(), totalWins, attempts);
+                })
+                .sorted(((o1, o2) -> o2.compareTo(o1)))
+                .collect(toList());
+    }
+
+    private Map<String, Long> attemptsPerUser(List<PBF> finishedGames, int numOfPlayers) {
+        return finishedGames.stream()
+                .filter(pbf -> pbf.getNumOfPlayers() == numOfPlayers)
+                .flatMap(pbf -> pbf.getPlayers().stream())
+                .map(Playerhand::getUsername)
+                .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+    }
 }

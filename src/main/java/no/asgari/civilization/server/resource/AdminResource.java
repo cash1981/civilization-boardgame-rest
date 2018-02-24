@@ -45,14 +45,13 @@ public class AdminResource {
 
     private final GameAction gameAction;
     private final AdminAction adminAction;
+    @Context
+    private UriInfo uriInfo;
 
     public AdminResource(DB db) {
         gameAction = new GameAction(db);
         adminAction = new AdminAction(db);
     }
-
-    @Context
-    private UriInfo uriInfo;
 
     /**
      * Since this will go in production, for now only I am allowed to change this
@@ -108,7 +107,7 @@ public class AdminResource {
                     "<html><body>" +
                             "<h1>You will no longer get anymore emails. Don't forget to check in once in a while</h1> " +
                             "If you reconsider and want to get emails again, then push <a href=\""
-                            + startEmailUrl +"\">here</a>" +
+                            + startEmailUrl + "\">here</a>" +
                             "</body></html>")
                     .build();
         } else {
@@ -136,7 +135,6 @@ public class AdminResource {
     public void deleteUnusedLogs() {
         adminAction.cleanup();
     }
-
 
 
     @PUT

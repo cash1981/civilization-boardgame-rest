@@ -28,7 +28,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.mongojack.Id;
 import org.mongojack.ObjectId;
 
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -54,33 +53,21 @@ import java.time.ZoneId;
 public class GameLog {
     public static final String COL_NAME = "gamelog";
     private static final String DELIM = " - ";
-
-    public enum LogType {
-        TRADE_BETWEEN_PLAYERS, BATTLE, ITEM, TECH, REMOVED_TECH, SHUFFLE, DISCARD, WITHDRAW, JOIN, REVEAL,
-        UNDO, SOCIAL_POLICY, REMOVED_SOCIAL_POLICY, VOTE, SETUP, SOT, TRADE , CM, MOVEMENT, RESEARCH;
-    }
-
     @Id
     @ObjectId
     private String id;
-
     private String privateLog;
-
     private String publicLog;
-
     /**
      * Each log belongs to a pbf
      */
     @NotEmpty
     private String pbfId;
-
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime created = LocalDateTime.now();
-
     @NotEmpty
     private String username;
-
     /**
      * If log is from a draw
      */
@@ -131,7 +118,7 @@ public class GameLog {
                 publicLog = username + " has discarded " + DELIM + draw.getItem().revealAll() + ITEM_NUMBER;
                 break;
             case REVEAL:
-                if(draw.getItem() instanceof Tech) {
+                if (draw.getItem() instanceof Tech) {
                     privateLog = username + " has revealed " + DELIM + draw.getItem().revealAll() + UNIQUE_ITEM_NUMBER;
                     publicLog = username + " has revealed " + DELIM + draw.getItem().revealAll() + UNIQUE_ITEM_NUMBER;
                 } else {
@@ -178,5 +165,10 @@ public class GameLog {
     @JsonIgnore
     public boolean hasActiveUndo() {
         return draw != null && draw.getUndo() != null && !draw.getUndo().isDone();
+    }
+
+    public enum LogType {
+        TRADE_BETWEEN_PLAYERS, BATTLE, ITEM, TECH, REMOVED_TECH, SHUFFLE, DISCARD, WITHDRAW, JOIN, REVEAL,
+        UNDO, SOCIAL_POLICY, REMOVED_SOCIAL_POLICY, VOTE, SETUP, SOT, TRADE, CM, MOVEMENT, RESEARCH;
     }
 }

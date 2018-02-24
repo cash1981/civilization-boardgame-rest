@@ -43,6 +43,18 @@ public abstract class BaseAction {
         this.logAction = new GameLogAction(db);
     }
 
+    public static WebApplicationException cannotFindItem() {
+        throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+                .entity(Entity.json(new MessageDTO("Could not find item")))
+                .build());
+    }
+
+    static WebApplicationException cannotFindPlayer() {
+        throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+                .entity(Entity.json(new MessageDTO("Could not find player")))
+                .build());
+    }
+
     /**
      * Creates public and private logs of draws *
      */
@@ -126,18 +138,6 @@ public abstract class BaseAction {
                 .stream().filter(p -> p.getPlayerId().equals(playerId))
                 .findFirst()
                 .orElseThrow(PlayerAction::cannotFindPlayer);
-    }
-
-    public static WebApplicationException cannotFindItem() {
-        throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                .entity(Entity.json(new MessageDTO("Could not find item")))
-                .build());
-    }
-
-    static WebApplicationException cannotFindPlayer() {
-        throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                .entity(Entity.json(new MessageDTO("Could not find player")))
-                .build());
     }
 
 }

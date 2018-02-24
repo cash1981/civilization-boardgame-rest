@@ -27,7 +27,7 @@ import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.action.TurnAction;
 import no.asgari.civilization.server.action.UndoAction;
 import no.asgari.civilization.server.dto.ChatDTO;
-import no.asgari.civilization.server.dto.CivHighscoreDTO;
+import no.asgari.civilization.server.dto.CivWinnerDTO;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.DrawDTO;
 import no.asgari.civilization.server.dto.GameDTO;
@@ -35,7 +35,7 @@ import no.asgari.civilization.server.dto.GameLogDTO;
 import no.asgari.civilization.server.dto.MessageDTO;
 import no.asgari.civilization.server.dto.PbfDTO;
 import no.asgari.civilization.server.dto.PlayerDTO;
-import no.asgari.civilization.server.dto.WinnerDTO;
+import no.asgari.civilization.server.dto.PlayerHighscoreDTO;
 import no.asgari.civilization.server.model.Chat;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.PBF;
@@ -76,15 +76,13 @@ public class GameResource {
     private final GameAction gameAction;
     private final GameLogAction gameLogAction;
 
-
     @Context
     private UriInfo uriInfo;
-
 
     public GameResource(DB db) {
         this.db = db;
         this.gameAction = new GameAction(db);
-        this. gameLogAction = new GameLogAction(db);
+        this.gameLogAction = new GameLogAction(db);
     }
 
     /**
@@ -97,7 +95,6 @@ public class GameResource {
     @Timed
     public Response getAllGames() {
         List<PbfDTO> games = gameAction.getAllGames();
-
         return Response.ok()
                 .entity(games)
                 .build();
@@ -144,7 +141,6 @@ public class GameResource {
     @GET
     @Path("/{pbfId}/players")
     public Response getAllPlayersForPBF(@NotEmpty @PathParam("pbfId") String pbfId, @Auth(required = false) Player player) {
-
         List<PlayerDTO> players = gameAction.getAllPlayers(pbfId);
         if (player != null) {
             return Response.ok()
@@ -262,7 +258,6 @@ public class GameResource {
     @Timed
     @Path("/{pbfId}/privatelog")
     public List<GameLogDTO> getPrivateLog(@NotEmpty @PathParam("pbfId") String pbfId, @Auth Player player) {
-
         List<GameLog> allPrivateLogs = gameLogAction.getGameLogsBelongingToPlayer(pbfId, player.getUsername());
         List<GameLogDTO> gameLogDTOs = new ArrayList<>();
         if (!allPrivateLogs.isEmpty()) {
@@ -381,8 +376,6 @@ public class GameResource {
     @Produces(value = MediaType.APPLICATION_JSON)
     public Response chat(@Auth Player player, @FormParam("message") String message, @PathParam("pbfId") String pbfId) {
         Preconditions.checkNotNull(message);
-
-
         Chat chat = gameAction.chat(pbfId, message, player.getUsername());
         return Response.created(URI.create(chat.getId())).entity(gameAction.getChat(pbfId)).build();
     }
@@ -394,8 +387,6 @@ public class GameResource {
     @Produces(value = MediaType.APPLICATION_JSON)
     public Response publicChat(@Auth Player player, @FormParam("message") String message) {
         Preconditions.checkNotNull(message);
-
-
         Chat chat = gameAction.chat(null, message, player.getUsername());
         return Response.created(URI.create(chat.getId())).entity(gameAction.getPublicChat()).build();
     }
@@ -405,7 +396,6 @@ public class GameResource {
     @Path("/{pbfId}/chat")
     @Produces(value = MediaType.APPLICATION_JSON)
     public Response getChatList(@PathParam("pbfId") String pbfId) {
-
         List<ChatDTO> chats = gameAction.getChat(pbfId);
         return Response.ok().entity(chats).build();
     }
@@ -430,8 +420,6 @@ public class GameResource {
     @Produces(value = MediaType.APPLICATION_JSON)
     public Response updateMap(@Auth Player player, @FormParam("link") String link, @PathParam("pbfId") String pbfId) {
         Preconditions.checkNotNull(link);
-
-
         String linkId = gameAction.addMapLink(pbfId, link, player.getId());
         return Response.ok().entity(new MessageDTO(linkId)).build();
     }
@@ -450,50 +438,16 @@ public class GameResource {
     }
 
     @GET
-    @Path("winners")
+    @Path("playerhighscore")
     @Produces(value = MediaType.APPLICATION_JSON)
-    public List<WinnerDTO> getWinners() {
-
-        return gameAction.getWinners();
-    }
-
-    @GET
-    @Path("fivewinners")
-    @Produces(value = MediaType.APPLICATION_JSON)
-    public List<WinnerDTO> getFiveWinners() {
-
-        return gameAction.getWinners(5);
-    }
-
-    @GET
-    @Path("fourwinners")
-    @Produces(value = MediaType.APPLICATION_JSON)
-    public List<WinnerDTO> getFourWinners() {
-
-        return gameAction.getWinners(4);
-    }
-
-    @GET
-    @Path("threewinners")
-    @Produces(value = MediaType.APPLICATION_JSON)
-    public List<WinnerDTO> getThreeWinners() {
-
-        return gameAction.getWinners(3);
-    }
-
-    @GET
-    @Path("twowinners")
-    @Produces(value = MediaType.APPLICATION_JSON)
-    public List<WinnerDTO> getTwoWinners() {
-
-        return gameAction.getWinners(2);
+    public PlayerHighscoreDTO getPlayerHighscores() {
+        return gameAction.getPlayerHighScore();
     }
 
     @GET
     @Path("civhighscore")
     @Produces(value = MediaType.APPLICATION_JSON)
-    public List<CivHighscoreDTO> getCivHighscore() {
-
+    public List<CivWinnerDTO> getCivHighscore() {
         return gameAction.getCivHighscore();
     }
 

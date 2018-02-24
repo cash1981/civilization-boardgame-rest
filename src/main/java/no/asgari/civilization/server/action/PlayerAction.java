@@ -234,7 +234,7 @@ public class PlayerAction extends BaseAction {
                 .findFirst();
 
         if (!itemToRevealOptional.isPresent()) {
-            itemToRevealOptional =  items.stream()
+            itemToRevealOptional = items.stream()
                     .filter(it -> it.getName().equals(itemDTO.getName()))
                     .filter(it -> it.getSheetName() == sheetName.get())
                     .filter(Item::isHidden)
@@ -493,7 +493,7 @@ public class PlayerAction extends BaseAction {
                 .filter(it -> it.getName().equalsIgnoreCase(item.getName()))
                 .findFirst();
 
-        if(!tradableItem.isPresent()) {
+        if (!tradableItem.isPresent()) {
             tradableItem = fromPlayer.getItems().stream()
                     .filter(it -> it instanceof Tradable)
                     .filter(it -> it.getSheetName() == dtoSheet.get())
@@ -501,7 +501,7 @@ public class PlayerAction extends BaseAction {
                     .findFirst();
         }
 
-        if(!tradableItem.isPresent()) {
+        if (!tradableItem.isPresent()) {
             throw cannotFindItem();
         }
 

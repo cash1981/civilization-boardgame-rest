@@ -56,7 +56,9 @@ public class Playerhand implements Comparable<Playerhand> {
 
     private Civ civilization; //The chosen civilization
 
-    /** Save personal gamenotes **/
+    /**
+     * Save personal gamenotes
+     **/
     private String gamenote;
 
     //Only one starting player each turn

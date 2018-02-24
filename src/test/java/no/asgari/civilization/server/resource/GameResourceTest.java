@@ -58,44 +58,8 @@ public class GameResourceTest extends AbstractCivilizationTest {
     }
 
     @Test
-    public void getWinners() throws Exception {
-        URI uri = UriBuilder.fromPath(BASE_URL + "/game/winners").build();
-        Response response = client().target(uri)
-                .request(MediaType.APPLICATION_JSON)
-                .get(Response.class);
-        assertEquals(response.getStatus(), HttpStatus.OK_200);
-    }
-
-    @Test
-    public void getFiveWinners() throws Exception {
-        URI uri = UriBuilder.fromPath(BASE_URL + "/game/fivewinners").build();
-        Response response = client().target(uri)
-                .request(MediaType.APPLICATION_JSON)
-                .get(Response.class);
-        assertEquals(response.getStatus(), HttpStatus.OK_200);
-    }
-
-    @Test
-    public void getFourWinners() throws Exception {
-        URI uri = UriBuilder.fromPath(BASE_URL + "/game/fourwinners").build();
-        Response response = client().target(uri)
-                .request(MediaType.APPLICATION_JSON)
-                .get(Response.class);
-        assertEquals(response.getStatus(), HttpStatus.OK_200);
-    }
-
-    @Test
-    public void getThreeWinners() throws Exception {
-        URI uri = UriBuilder.fromPath(BASE_URL + "/game/threewinners").build();
-        Response response = client().target(uri)
-                .request(MediaType.APPLICATION_JSON)
-                .get(Response.class);
-        assertEquals(response.getStatus(), HttpStatus.OK_200);
-    }
-
-    @Test
-    public void getTwoWinners() throws Exception {
-        URI uri = UriBuilder.fromPath(BASE_URL + "/game/twowinners").build();
+    public void getPlayerhigscore() throws Exception {
+        URI uri = UriBuilder.fromPath(BASE_URL + "/game/playerhighscore").build();
         Response response = client().target(uri)
                 .request(MediaType.APPLICATION_JSON)
                 .get(Response.class);

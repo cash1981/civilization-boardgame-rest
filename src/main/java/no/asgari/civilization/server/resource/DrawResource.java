@@ -51,7 +51,7 @@ public class DrawResource {
 
     private final DB db;
     private final DrawAction drawAction;
-    
+
     @Context
     private UriInfo uriInfo;
 

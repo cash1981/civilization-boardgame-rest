@@ -37,7 +37,6 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.model.Chat;
-import no.asgari.civilization.server.model.PBF;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.resource.AdminResource;
 import no.asgari.civilization.server.resource.AuthResource;

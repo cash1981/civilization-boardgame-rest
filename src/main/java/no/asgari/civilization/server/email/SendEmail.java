@@ -28,11 +28,11 @@ import no.asgari.civilization.server.model.Player;
 public class SendEmail {
     public static final String SENDGRID_USERNAME = "SENDGRID_USERNAME";
     public static final String SENDGRID_PASSWORD = "SENDGRID_PASSWORD";
-    private static final SendGrid sendgrid = new SendGrid(System.getenv(SENDGRID_USERNAME), System.getenv(SENDGRID_PASSWORD));
     public static final String NOREPLY_PLAYCIV_COM = "noreply@playciv.com";
     public static final String URL = "http://playciv.com/";
     public static final String REST_URL = "https://civilization-boardgame.herokuapp.com/";
     public static final String CASH_EMAIL = "cash@playciv.com";
+    private static final SendGrid sendgrid = new SendGrid(System.getenv(SENDGRID_USERNAME), System.getenv(SENDGRID_PASSWORD));
 
     public static String gamelink(String pbfId) {
         return URL + "#/game/" + pbfId;
