@@ -1,5 +1,6 @@
 package no.asgari.civilization.server.action;
 
+import com.google.common.base.Strings;
 import com.mongodb.DB;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.model.Chat;
@@ -29,26 +30,25 @@ public class AdminAction extends BaseAction {
     public void cleanup() {
         log.info("Running cleanup. Finding all aborted games, chat and gamelogs from old deleted games");
 
-        List<PBF> abortedGames = pbfCollection.find(DBQuery.is("active", false).is("winner", null)).toArray();
+        List<String> abortedGames = pbfCollection.find(DBQuery.is("active", false).is("winner", null)).toArray().stream().map(PBF::getId).collect(toList());
         log.info("Found " + abortedGames.size() + " aborted games. Deleting those.");
-        abortedGames.forEach(pbf -> pbfCollection.removeById(pbf.getId()));
+        abortedGames.forEach(pbfId -> pbfCollection.removeById(pbfId));
 
         List<GameLog> allLogs = gameLogCollection.find().toArray();
         List<Chat> allChats = chatCollection.find().toArray();
 
-        List<String> allGames = pbfCollection.find().toArray().stream().map(PBF::getId).collect(toList());
-
         log.info("Before deleting, size of all game logs is " + allLogs.size());
-        allLogs.stream()
-                .filter(gl -> !allGames.contains(gl.getPbfId()))
+        allLogs.parallelStream()
+                .filter(gl -> abortedGames.contains(gl.getPbfId()))
                 .forEach(gamelog -> gameLogCollection.removeById(gamelog.getId()));
         log.info("After deleting, size of gamelog is " + gameLogCollection.find().length());
 
 
         log.info("Before deleting chat size is " + allChats.size());
-        allChats.stream()
-                .filter(gl -> !allGames.contains(gl.getPbfId()))
-                .forEach(chat -> chatCollection.removeById(chat.getId()));
+
+        allChats.parallelStream()
+                .filter(chat -> abortedGames.contains(chat.getPbfId()) || Strings.isNullOrEmpty(chat.getPbfId()))
+                .forEach(c -> chatCollection.removeById(c.getId()));
 
         log.info("After deleting, size of chat is " + chatCollection.find().length());
 
