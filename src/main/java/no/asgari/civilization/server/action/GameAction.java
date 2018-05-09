@@ -52,6 +52,7 @@ import org.mongojack.DBSort;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -803,5 +804,22 @@ public class GameAction extends BaseAction {
                 .flatMap(pbf -> pbf.getPlayers().stream())
                 .map(Playerhand::getUsername)
                 .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+    }
+
+    public void takeTurn(String gameid, String fromUsername) {
+        PBF pbf = findPBFById(gameid);
+        if(pbf != null) {
+            boolean found = pbf.getPlayers().stream().anyMatch(p -> p.getUsername().equals(fromUsername));
+            if(found) {
+                Playerhand playerTurn = pbf.getPlayers().stream().filter(Playerhand::isYourTurn).findFirst().get();
+                playerTurn.setYourTurn(false);
+
+                Playerhand player = pbf.getPlayers().stream().filter(p -> p.getUsername().equals(fromUsername)).findFirst().get();
+                player.setYourTurn(true);
+                pbfCollection.updateById(gameid, pbf);
+            }
+        }
+        throw new BadRequestException();
+
     }
 }

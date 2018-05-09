@@ -142,9 +142,18 @@ public class AdminResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public Response sendMail(@QueryParam("msg") String msg) {
-        gameAction.sendMailToAll(msg);
+        //gameAction.sendMailToAll(msg);
         return Response.noContent().build();
     }
 
+    @POST
+    @Path("/taketurn")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public void takeTurn(@QueryParam("gameid") String gameid,
+                      @QueryParam("username") String fromUsername) {
 
+        gameAction.takeTurn(gameid, fromUsername);
+
+    }
 }
