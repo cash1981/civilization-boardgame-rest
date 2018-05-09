@@ -809,17 +809,18 @@ public class GameAction extends BaseAction {
     public void takeTurn(String gameid, String fromUsername) {
         PBF pbf = findPBFById(gameid);
         if(pbf != null) {
-            boolean found = pbf.getPlayers().stream().anyMatch(p -> p.getUsername().equals(fromUsername));
-            if(found) {
+            Optional<Playerhand> player = pbf.getPlayers().stream().filter(p -> p.getUsername().equals(fromUsername)).findFirst();
+
+            if(player.isPresent()) {
                 Playerhand playerTurn = pbf.getPlayers().stream().filter(Playerhand::isYourTurn).findFirst().get();
                 playerTurn.setYourTurn(false);
 
-                Playerhand player = pbf.getPlayers().stream().filter(p -> p.getUsername().equals(fromUsername)).findFirst().get();
-                player.setYourTurn(true);
+                player.get().setYourTurn(true);
                 pbfCollection.updateById(gameid, pbf);
             }
+            throw new BadRequestException("Player not found");
         }
-        throw new BadRequestException();
+        throw new BadRequestException("Game not found");
 
     }
 }
