@@ -817,6 +817,7 @@ public class GameAction extends BaseAction {
 
                 player.get().setYourTurn(true);
                 pbfCollection.updateById(gameid, pbf);
+                return;
             }
             throw new BadRequestException("Player not found");
         }
