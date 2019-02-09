@@ -29,15 +29,15 @@ import org.mongojack.JacksonDBCollection;
 import java.util.Optional;
 
 public class CivAuthenticator implements Authenticator<BasicCredentials, Player> {
-    private final JacksonDBCollection<Player, String> playerCollection;
+    private final JacksonDBCollection<Player, String> playerRepository;
 
     public CivAuthenticator(DB db) {
-        this.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
+        this.playerRepository = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
     }
 
     @Override
     public Optional<Player> authenticate(BasicCredentials credentials) {
-        @Cleanup DBCursor<Player> dbPlayer = playerCollection.find(
+        @Cleanup DBCursor<Player> dbPlayer = playerRepository.find(
                 DBQuery.is("username", credentials.getUsername()), new BasicDBObject());
 
         if (dbPlayer == null || !dbPlayer.hasNext()) {

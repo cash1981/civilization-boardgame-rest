@@ -24,10 +24,9 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.mongojack.Id;
-import org.mongojack.ObjectId;
+import org.springframework.data.annotation.Id;
 
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -54,7 +53,6 @@ public class GameLog {
     public static final String COL_NAME = "gamelog";
     private static final String DELIM = " - ";
     @Id
-    @ObjectId
     private String id;
     private String privateLog;
     private String publicLog;

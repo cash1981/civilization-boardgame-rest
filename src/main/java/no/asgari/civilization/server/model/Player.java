@@ -24,11 +24,11 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
-import org.mongojack.Id;
-import org.mongojack.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
@@ -46,15 +46,16 @@ public class Player {
     @JsonIgnore
     public static final String EMAIL = "email";
 
-    @ObjectId
     @Id
     private String id;
 
     @NotBlank
     //Unique
+    @Indexed(unique = true)
     private String username;
 
     @Email
+    @Indexed(unique = true)
     private String email;
 
     private boolean disableEmail = false;

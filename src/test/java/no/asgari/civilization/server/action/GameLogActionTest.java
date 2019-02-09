@@ -18,7 +18,7 @@ public class GameLogActionTest extends AbstractCivilizationTest {
     public void checkThatPublicLogIsSaved() {
         DrawAction drawAction = new DrawAction(getApp().db);
 
-        long beforeInsert = getApp().gameLogCollection.count();
+        long beforeInsert = getApp().gameLogRepository.count();
         //Make a draw
         Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.ARTILLERY);
         assertTrue(gameLogOptional.isPresent());
@@ -26,7 +26,7 @@ public class GameLogActionTest extends AbstractCivilizationTest {
         assertThat(gameLogOptional.get().getDraw()).isNotNull();
         assertThat(gameLogOptional.get().getDraw().getPlayerId()).isEqualToIgnoringCase(getApp().playerId);
         assertThat(gameLogOptional.get().getDraw().getItem()).isInstanceOf(Artillery.class);
-        long afterInsert = getApp().gameLogCollection.count();
+        long afterInsert = getApp().gameLogRepository.count();
         assertThat(beforeInsert).isLessThan(afterInsert);
     }
 
@@ -34,13 +34,13 @@ public class GameLogActionTest extends AbstractCivilizationTest {
     public void checkThatPrivateLogIsSaved() {
         DrawAction drawAction = new DrawAction(getApp().db);
 
-        long beforeInsert = getApp().gameLogCollection.count();
+        long beforeInsert = getApp().gameLogRepository.count();
         //Make a draw
         Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.GREAT_PERSON);
         assertThat(gameLogOptional.get().getDraw()).isNotNull();
         assertThat(gameLogOptional.get().getDraw().getPlayerId()).isEqualToIgnoringCase(getApp().playerId);
         assertThat(gameLogOptional.get().getDraw().getItem()).isInstanceOf(GreatPerson.class);
-        long afterInsert = getApp().gameLogCollection.count();
+        long afterInsert = getApp().gameLogRepository.count();
         assertThat(beforeInsert).isLessThan(afterInsert);
     }
 

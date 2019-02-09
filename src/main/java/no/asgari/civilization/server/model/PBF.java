@@ -23,13 +23,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.google.common.collect.Lists;
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
-import org.mongojack.Id;
-import org.mongojack.ObjectId;
+import org.springframework.data.annotation.Id;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +39,6 @@ import java.util.Optional;
  */
 @Data
 @JsonRootName(value = "pbf")
-@XmlRootElement
 @JsonInclude
 @JsonIgnoreProperties(ignoreUnknown = true)
 //Perhaps use this when the object keep getting changed, otherwise jackson throws exception when it cannot map
@@ -52,7 +48,6 @@ public class PBF {
     @JsonIgnore
     public static final String NAME = "name";
 
-    @ObjectId
     @Id
     private String id;
 
@@ -69,9 +64,9 @@ public class PBF {
     private int numOfPlayers;
     private boolean active = true;
     private String winner; //username
-    private List<Item> items = Lists.newArrayList();
-    private List<Playerhand> players = Lists.newArrayList();
-    private List<Tech> techs = Lists.newArrayList();
+    private List<Item> items = new ArrayList<>();
+    private List<Playerhand> players = new ArrayList<>();
+    private List<Tech> techs = new ArrayList<>();
     private List<SocialPolicy> socialPolicies = new ArrayList<>(8);
 
     //@JsonSerialize(keyUsing=TurnKeySerializer.class)

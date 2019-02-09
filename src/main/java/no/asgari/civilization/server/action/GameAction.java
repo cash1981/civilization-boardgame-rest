@@ -20,73 +20,43 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Sets;
-import com.mongodb.DB;
 import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import no.asgari.civilization.server.application.CivSingleton;
-import no.asgari.civilization.server.dto.ChatDTO;
-import no.asgari.civilization.server.dto.CivWinnerDTO;
-import no.asgari.civilization.server.dto.CreateNewGameDTO;
-import no.asgari.civilization.server.dto.DrawDTO;
-import no.asgari.civilization.server.dto.GameDTO;
-import no.asgari.civilization.server.dto.GameLogDTO;
-import no.asgari.civilization.server.dto.MessageDTO;
-import no.asgari.civilization.server.dto.PbfDTO;
-import no.asgari.civilization.server.dto.PlayerDTO;
-import no.asgari.civilization.server.dto.PlayerHighscoreDTO;
-import no.asgari.civilization.server.dto.WinnerDTO;
+import no.asgari.civilization.server.dto.*;
 import no.asgari.civilization.server.email.SendEmail;
 import no.asgari.civilization.server.excel.ItemReader;
-import no.asgari.civilization.server.misc.CivUtil;
+import no.asgari.civilization.server.exception.BadRequestException;
+import no.asgari.civilization.server.exception.ForbiddenException;
+import no.asgari.civilization.server.exception.NotFoundException;
 import no.asgari.civilization.server.misc.SecurityCheck;
-import no.asgari.civilization.server.model.Chat;
-import no.asgari.civilization.server.model.GameLog;
-import no.asgari.civilization.server.model.GameType;
-import no.asgari.civilization.server.model.Item;
-import no.asgari.civilization.server.model.PBF;
-import no.asgari.civilization.server.model.Player;
-import no.asgari.civilization.server.model.Playerhand;
-import org.apache.commons.lang3.StringUtils;
-import org.mongojack.DBQuery;
-import org.mongojack.DBSort;
-import org.mongojack.JacksonDBCollection;
-import org.mongojack.WriteResult;
+import no.asgari.civilization.server.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
-@Log4j
+@Slf4j
+@Component
 public class GameAction extends BaseAction {
-    private final JacksonDBCollection<PBF, String> pbfCollection;
-    private final JacksonDBCollection<Player, String> playerCollection;
     private final GameLogAction gameLogAction;
-    private final JacksonDBCollection<Chat, String> chatCollection;
+    private final EmailAction emailAction;
 
-    public GameAction(DB db) {
-        super(db);
-        this.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
-        this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
-        this.chatCollection = JacksonDBCollection.wrap(db.getCollection(Chat.COL_NAME), Chat.class, String.class);
-        this.gameLogAction = new GameLogAction(db);
+    @Autowired
+    public GameAction(GameLogAction gameLogAction, EmailAction emailAction) {
+        this.gameLogAction = gameLogAction;
+        this.emailAction = emailAction;
     }
+
 
     /**
      * Creating PbfDTO so to not include every players Ghand and information
@@ -164,25 +134,14 @@ public class GameAction extends BaseAction {
         pbf.getTechs().forEach(it -> it.setItemNumber(ItemReader.itemCounter.incrementAndGet()));
         pbf.getSocialPolicies().forEach(it -> it.setItemNumber(ItemReader.itemCounter.incrementAndGet()));
 
-        WriteResult<PBF, String> pbfInsert = pbfCollection.insert(pbf);
-        pbf.setId(pbfInsert.getSavedId());
-        log.info("PBF game created with id " + pbfInsert.getSavedId());
+        pbf = pbfRepository.save(pbf);
+        log.info("PBF game created with id " + pbf.getId());
         joinGame(pbf, playerId, Optional.of(dto.getColor()), true);
 
-        //Do this in a new thread
-        Thread thread = new Thread(() -> {
-            playerCollection.find().toArray().stream()
-                    .filter(p -> !p.isDisableEmail())
-                    .filter(CivUtil::shouldSendEmail)
-                    .forEach(p -> {
-                        SendEmail.sendMessage(p.getEmail(), "New Civilization game created",
-                                "A new game by the name " + pbf.getName() + " was just created! Visit " + SendEmail.URL + " to join the game.", p.getId());
-                        playerCollection.updateById(p.getId(), p);
-                    });
-        });
-        thread.start();
+        emailAction.sendEmailNewGameCreated(pbf.getName());
         return pbf.getId();
     }
+
 
     private void readItemFromExcel(GameType gameType, ItemReader itemReader) {
         try {
@@ -201,7 +160,7 @@ public class GameAction extends BaseAction {
      * @return
      */
     public List<PbfDTO> getAllGames() {
-        List<PBF> pbfs = pbfCollection.find().toArray();
+        List<PBF> pbfs = pbfRepository.findAll();
         return pbfs.stream()
                 .map(GameAction::createPbfDTO)
                 .sorted((o1, o2) -> {
@@ -213,7 +172,7 @@ public class GameAction extends BaseAction {
     }
 
     public void joinGame(String pbfId, Player player, Optional<String> colorOpt) {
-        PBF pbf = pbfCollection.findOneById(pbfId);
+        PBF pbf = pbfRepository.findById(pbfId).orElseThrow(NotFoundException::new);
 
         joinGame(pbf, player.getId(), colorOpt, false);
 
@@ -231,26 +190,20 @@ public class GameAction extends BaseAction {
     private void joinGame(PBF pbf, String playerId, Optional<String> colorOpt, boolean gameCreator) {
         if (pbf.getNumOfPlayers() == pbf.getPlayers().size()) {
             log.warn("Cannot join the game. Its full");
-            Response badReq = Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new MessageDTO("Cannot join the game. Its full!"))
-                    .build();
-            throw new WebApplicationException(badReq);
+            throw new BadRequestException();
         }
 
-        Player player = playerCollection.findOneById(playerId);
+        Player player = playerRepository.findById(playerId).orElseThrow(NotFoundException::new);
 
         boolean playerAlreadyJoined = pbf.getPlayers().stream()
-                .anyMatch(p -> p.getPlayerId().equals(player.getId()));
+                .anyMatch(p -> p.getPlayerId().equals(playerId));
         if (playerAlreadyJoined) {
             log.warn("Cannot join the game. Player has already joined it");
-            Response badReq = Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new MessageDTO("Cannot join the game. You have already joined!"))
-                    .build();
-            throw new WebApplicationException(badReq);
+            throw new ForbiddenException();
         }
 
         player.getGameIds().add(pbf.getId());
-        playerCollection.updateById(player.getId(), player);
+        player = playerRepository.save(player);
         Playerhand playerhand;
         if (!pbf.getWithdrawnPlayers().isEmpty()) {
             playerhand = pbf.getWithdrawnPlayers().remove(0);
@@ -268,7 +221,7 @@ public class GameAction extends BaseAction {
             pbf.getPlayers().add(playerhand);
         }
         pbf = startIfAllPlayers(pbf);
-        pbfCollection.updateById(pbf.getId(), pbf);
+        pbfRepository.save(pbf);
     }
 
     private String chooseColorForPlayer(PBF pbf) {
@@ -288,10 +241,10 @@ public class GameAction extends BaseAction {
 
     public List<PlayerDTO> getAllPlayers(String pbfId) {
         Preconditions.checkNotNull(pbfId);
-        PBF pbf = pbfCollection.findOneById(pbfId);
+        PBF pbf = pbfRepository.findById(pbfId).orElseThrow(NotFoundException::new);
         return pbf.getPlayers().stream()
                 .map(p -> createPlayerDTO(p, pbf.getId()))
-                .sorted((o1, o2) -> o1.getUsername().compareTo(o2.getUsername()))
+                .sorted(Comparator.comparing(PlayerDTO::getUsername))
                 .collect(toList());
     }
 
@@ -367,14 +320,11 @@ public class GameAction extends BaseAction {
     }
 
     public boolean withdrawFromGame(String pbfId, String playerId) {
-        PBF pbf = pbfCollection.findOneById(pbfId);
+        PBF pbf = pbfRepository.findById(pbfId).orElseThrow(NotFoundException::new);
 
         if (!SecurityCheck.hasUserAccess(pbf, playerId)) {
             log.warn("User with id " + playerId + " is not player of this game, and cannot withdraw");
-            Response badReq = Response.status(Response.Status.FORBIDDEN)
-                    .entity(new MessageDTO("User is not player of this game, and cannot withdraw"))
-                    .build();
-            throw new WebApplicationException(badReq);
+            throw new ForbiddenException();
         }
 
         Iterator<Playerhand> iterator = pbf.getPlayers().iterator();
@@ -388,17 +338,14 @@ public class GameAction extends BaseAction {
                         nextPlayer.setGameCreator(true);
                         gameLogAction.createCommonPrivatePublicLog("Is now game creator", pbfId, nextPlayer.getPlayerId());
                     } else {
-                        Response badReq = Response.status(Response.Status.FORBIDDEN)
-                                .entity(new MessageDTO("As game creator, you must end game not withdraw from it"))
-                                .build();
-                        throw new WebApplicationException(badReq);
+                        throw new ForbiddenException();
                     }
                 }
                 pbf.getWithdrawnPlayers().add(playerhand);
                 iterator.remove();
                 gameLogAction.createCommonPublicLog("withdrew from game", pbfId, playerId);
                 //TODO remove from PlayerCollection also
-                pbfCollection.updateById(pbf.getId(), pbf);
+                pbfRepository.save(pbf);
                 return true;
             }
         }
@@ -414,34 +361,18 @@ public class GameAction extends BaseAction {
     public Chat chat(String pbfId, String message, String username) {
         Chat chat = new Chat();
         chat.setPbfId(pbfId);
-        chat.setMessage(URLDecoder.decode(message, "UTF-8"));
+        chat.setMessage(URLDecoder.decode(message, StandardCharsets.UTF_8));
         chat.setUsername(username);
-        String id = chatCollection.insert(chat).getSavedId();
-        chat.setId(id);
+        chatRepository.save(chat);
 
-        if (pbfId != null) {
-            PBF pbf = findPBFById(pbfId);
-
-            if (StringUtils.isNotBlank(message)) {
-                pbf.getPlayers()
-                        .stream()
-                        .filter(p -> !p.getUsername().equals(username))
-                        .filter(CivUtil::shouldSendEmailInGame)
-                        .forEach(p -> {
-                                    SendEmail.sendMessage(p.getEmail(), "New Chat", username + " wrote in the chat: " + chat.getMessage()
-                                            + ".\nLogin to " + SendEmail.gamelink(pbfId) + " to see the chat", p.getPlayerId());
-                                    pbfCollection.updateById(pbfId, pbf);
-                                }
-                        );
-            }
-        }
+        emailAction.sendChat(pbfId, message, username, chat.getMessage());
 
         return chat;
     }
 
     public List<ChatDTO> getChat(String pbfId) {
         Preconditions.checkNotNull(pbfId);
-        List<Chat> chats = chatCollection.find(DBQuery.is("pbfId", pbfId)).sort(DBSort.desc("created")).toArray();
+        List<Chat> chats = chatRepository.findAllByPbfIdOrderByCreated(pbfId);
         if (chats == null) {
             return new ArrayList<>();
         }
@@ -457,27 +388,24 @@ public class GameAction extends BaseAction {
         }
 
         //Sort newest date first
-        chatDTOs.sort((o1, o2) -> -Long.valueOf(o1.getCreated()).compareTo(o2.getCreated()));
+        chatDTOs.sort((o1, o2) -> -Long.compare(o1.getCreated(), o2.getCreated()));
         return chatDTOs;
     }
 
     public void endGame(String pbfId, Player player, String winner) {
-        PBF pbf = pbfCollection.findOneById(pbfId);
+        PBF pbf = pbfRepository.findById(pbfId).orElseThrow(NotFoundException::new);
         if (!"admin".equals(player.getUsername())) {
             Playerhand playerhand = getPlayerhandByPlayerId(player.getId(), pbf);
             //Only game creator can end game
             if (!playerhand.isGameCreator()) {
-                Response response = Response.status(Response.Status.FORBIDDEN)
-                        .entity(new MessageDTO("Only game creator can end game"))
-                        .build();
-                throw new WebApplicationException(response);
+                throw new ForbiddenException();
             }
         }
 
         if (!Strings.isNullOrEmpty(winner)) {
             if (!pbf.getPlayers().stream()
                     .anyMatch(p -> p.getUsername().equals(winner))) {
-                throw new WebApplicationException(Response.Status.NOT_FOUND);
+                throw new NotFoundException();
             }
             createInfoLog(pbfId, winner + " won the game! Congratulations!");
             pbf.setWinner(winner);
@@ -486,15 +414,11 @@ public class GameAction extends BaseAction {
         pbf.setActive(false);
         createInfoLog(pbfId, player.getUsername() + " Ended this game");
         createInfoLog(pbfId, "Thank you for playing! Please donate if you liked this game!");
-        pbfCollection.updateById(pbfId, pbf);
+        pbf = pbfRepository.save(pbf);
 
-        Thread thread = new Thread(() -> {
-            pbf.getPlayers().forEach(p -> SendEmail.sendMessage(p.getEmail(), "Game ended", pbf.getName() + " has ended. I hope you enjoyed playing.\n" +
-                    "If you like this game, please consider donating. You can find the link at the bottom of the site. It will help keep the lights on, and continue adding more features!" +
-                    "\n\nBest regards Shervin Asgari aka Cash", p.getPlayerId()));
-        });
-        thread.start();
+        emailAction.gameEnd(pbf);
     }
+
 
     /**
      * Will return the id from the google presentation
@@ -507,10 +431,10 @@ public class GameAction extends BaseAction {
             String id = removedPart.split("/")[0];
             log.info("Id from google presentation is: " + id);
 
-            PBF pbf = pbfCollection.findOneById(pbfId);
+            PBF pbf = pbfRepository.findById(pbfId).orElseThrow(NotFoundException::new);
 
             pbf.setMapLink(id);
-            pbfCollection.updateById(pbfId, pbf);
+            pbf = pbfRepository.save(pbf);
             Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
             createInfoLog(pbfId, playerhand.getUsername() + " Added map link");
             return id;
@@ -529,9 +453,9 @@ public class GameAction extends BaseAction {
             String id = removedPart.split("/")[0];
             log.info("Id from google presentation is: " + id);
 
-            PBF pbf = pbfCollection.findOneById(pbfId);
+            PBF pbf = pbfRepository.findById(pbfId).orElseThrow(NotFoundException::new);
             pbf.setAssetLink(id);
-            pbfCollection.updateById(pbfId, pbf);
+            pbf = pbfRepository.save(pbf);
             Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
             createInfoLog(pbfId, playerhand.getUsername() + " Added asset link");
             return id;
@@ -544,8 +468,8 @@ public class GameAction extends BaseAction {
         Preconditions.checkNotNull(oldUsername);
         Preconditions.checkNotNull(newUsername);
 
-        PBF pbf = pbfCollection.findOneById(gameid);
-        Player toPlayer = playerCollection.find(DBQuery.is("username", newUsername)).toArray(1).get(0);
+        PBF pbf = pbfRepository.findById(gameid).orElseThrow(NotFoundException::new);
+        Player toPlayer = playerRepository.findOneByUsername(newUsername);
 
         //Find all instance of ownerid, and replace with newUsername
         Playerhand playerhandToReplace = pbf.getPlayers().stream().filter(p -> p.getUsername().equals(oldUsername)).findFirst().orElseThrow(PlayerAction::cannotFindPlayer);
@@ -559,7 +483,7 @@ public class GameAction extends BaseAction {
         playerhandToReplace.getTechsChosen().forEach(b -> b.setOwnerId(toPlayer.getId()));
         playerhandToReplace.getItems().forEach(b -> b.setOwnerId(toPlayer.getId()));
 
-        pbfCollection.updateById(pbf.getId(), pbf);
+        pbfRepository.save(pbf);
         createInfoLog(pbf.getId(), newUsername + " is now playing instead of " + oldUsername);
         SendEmail.sendMessage(playerhandToReplace.getEmail(), "You are now playing in " + pbf.getName(), "Please log in to http://playciv.com and start playing!", playerhandToReplace.getPlayerId());
     }
@@ -567,11 +491,10 @@ public class GameAction extends BaseAction {
     public boolean deleteGame(String gameid) {
         Preconditions.checkNotNull(gameid);
 
-        final PBF pbf = findPBFById(gameid);
-        WriteResult<PBF, String> writeResult = pbfCollection.removeById(gameid);
-        log.warn("Managed to delete game: " + Strings.isNullOrEmpty(writeResult.getWriteResult().toString()));
+        PBF pbf = findPBFById(gameid);
+        pbfRepository.deleteById(gameid);
 
-        List<Player> playerList = playerCollection.find().toArray().stream()
+        List<Player> playerList = playerRepository.findAll().stream()
                 .filter(p -> p.getGameIds().contains(gameid))
                 .collect(toList());
 
@@ -580,14 +503,14 @@ public class GameAction extends BaseAction {
             player.getGameIds().remove(gameid);
             SendEmail.sendMessage(player.getEmail(), "Game deleted", "Your game " + pbf.getName() + " was deleted by the admin. " +
                     "If this was incorrect, please contact the admin.", player.getId());
-            playerCollection.save(player);
+            playerRepository.save(player);
         });
 
         return true;
     }
 
     public void sendMailToAll(String msg) {
-        playerCollection.find().toArray()
+        playerRepository.findAll()
                 .parallelStream()
                 .filter(p -> !p.isDisableEmail())
                 .forEach(player -> {
@@ -598,13 +521,13 @@ public class GameAction extends BaseAction {
     }
 
     /**
-     * Gets public chat which is 1 week old and maximum 50 entries, sorted on created
+     * Gets public chat which is 1 month old and maximum 50 entries, sorted on created
      */
     public List<ChatDTO> getPublicChat() {
-        return chatCollection.find(DBQuery.notExists("pbfId")).sort(DBSort.desc("created")).toArray()
+        return chatRepository.findTop50ByPbfIdIsNullOrderByCreated()
                 .stream()
-                .filter(c -> c.getCreated().isAfter(LocalDateTime.now().minusWeeks(2)))
-                .sorted((a, b) -> a.getCreated().compareTo(b.getCreated()))
+                .filter(c -> c.getCreated().isAfter(LocalDateTime.now().minusMonths(1)))
+                .sorted(Comparator.comparing(Chat::getCreated))
                 .map(c -> new ChatDTO(c.getUsername(), c.getMessage(), c.getCreatedInMillis()))
                 .limit(50)
                 .collect(toList());
@@ -620,7 +543,7 @@ public class GameAction extends BaseAction {
             return Collections.emptyList();
         }
 
-        List<PBF> pbfs = pbfCollection.find().toArray();
+        List<PBF> pbfs = pbfRepository.findAll();
 
         try {
             Map<String, Long> numberOfCivsWinning = pbfs.stream()
@@ -630,8 +553,7 @@ public class GameAction extends BaseAction {
                         String playerWhoWon = pbf.getWinner();
                         return pbf.getPlayers().stream()
                                 .filter(p -> p.getUsername().equals(playerWhoWon))
-                                .filter(p -> p.getCivilization() != null)
-                                .findFirst().isPresent();
+                                .anyMatch(p -> p.getCivilization() != null);
                     })
                     .map(pbf -> {
                         String playerWhoWon = pbf.getWinner();
@@ -665,12 +587,12 @@ public class GameAction extends BaseAction {
     private List<Item> getAllRevealedItems(PBF pbf) {
         //Had to have comparator inside sort, otherwise weird exception
         Stream<Item> discardedStream = pbf.getDiscardedItems().stream()
-                .sorted((o1, o2) -> o1.getSheetName().compareTo(o2.getSheetName()));
+                .sorted(Comparator.comparing(Spreadsheet::getSheetName));
 
         Stream<Item> playerStream = pbf.getPlayers().stream()
                 .flatMap(p -> p.getItems().stream())
                 .filter(it -> !it.isHidden())
-                .sorted((o1, o2) -> o1.getSheetName().compareTo(o2.getSheetName()));
+                .sorted(Comparator.comparing(Spreadsheet::getSheetName));
 
         Stream<Item> concatedStream = Stream.concat(discardedStream, playerStream);
         return concatedStream.collect(toList());
@@ -697,36 +619,30 @@ public class GameAction extends BaseAction {
 
     public boolean disableEmailForPlayer(String playerId) {
         Preconditions.checkNotNull(playerId);
-        Player player = playerCollection.findOneById(playerId);
-        if (player != null) {
-            log.warn("Player " + player.getEmail() + " no longer wants email");
-            player.setDisableEmail(true);
-            playerCollection.updateById(playerId, player);
-            return true;
-        }
-        return false;
+        Player player = playerRepository.findById(playerId).orElseThrow(NotFoundException::new);
+        log.warn("Player " + player.getEmail() + " no longer wants email");
+        player.setDisableEmail(true);
+        playerRepository.save(player);
+        return true;
     }
 
     public boolean startEmailForPlayer(String playerId) {
         Preconditions.checkNotNull(playerId);
-        Player player = playerCollection.findOneById(playerId);
-        if (player != null) {
-            log.warn("Player " + player.getEmail() + " no longer wants email");
-            player.setDisableEmail(false);
-            playerCollection.updateById(playerId, player);
-            return true;
-        }
-        return false;
+        Player player = playerRepository.findById(playerId).orElseThrow(NotFoundException::new);
+        log.warn("Player " + player.getEmail() + " no longer wants email");
+        player.setDisableEmail(false);
+        playerRepository.save(player);
+        return true;
     }
 
     public PlayerHighscoreDTO getPlayerHighScore() {
         ListMultimap<String, Integer> winnersByNumOfPlayers = ArrayListMultimap.create();
         PlayerHighscoreDTO dto = new PlayerHighscoreDTO();
-        List<Player> allPlayers = playerCollection.find().toArray();
+        List<Player> allPlayers = playerRepository.findAll();
         dto.setTotalNumberOfPlayers(allPlayers.size());
         //key == username, value = num of players
 
-        List<PBF> finishedGames = pbfCollection.find().toArray().stream()
+        List<PBF> finishedGames = pbfRepository.findAll().stream()
                 .filter(pbf -> !pbf.isActive())
                 .filter(pbf -> !Strings.isNullOrEmpty(pbf.getWinner()))
                 .collect(toList());
@@ -781,7 +697,7 @@ public class GameAction extends BaseAction {
                 .filter(pbf -> pbf.getNumOfPlayers() == numOfPlayers)
                 .flatMap(pbf -> pbf.getPlayers().stream())
                 .distinct()
-                        //.filter(p -> !winnersByNumOfPlayers.containsKey(p.getUsername()) && p.getUsername() != null)
+                //.filter(p -> !winnersByNumOfPlayers.containsKey(p.getUsername()) && p.getUsername() != null)
                 .map(p -> {
                     List<Integer> winner = winnersByNumOfPlayers.get(p.getUsername());
                     int totalWins = 0;
@@ -808,20 +724,17 @@ public class GameAction extends BaseAction {
 
     public void takeTurn(String gameid, String fromUsername) {
         PBF pbf = findPBFById(gameid);
-        if(pbf != null) {
-            Optional<Playerhand> player = pbf.getPlayers().stream().filter(p -> p.getUsername().equals(fromUsername)).findFirst();
+        Optional<Playerhand> player = pbf.getPlayers().stream().filter(p -> p.getUsername().equals(fromUsername)).findFirst();
 
-            if(player.isPresent()) {
-                Playerhand playerTurn = pbf.getPlayers().stream().filter(Playerhand::isYourTurn).findFirst().get();
-                playerTurn.setYourTurn(false);
+        if (player.isPresent()) {
+            Playerhand playerTurn = pbf.getPlayers().stream().filter(Playerhand::isYourTurn).findFirst().get();
+            playerTurn.setYourTurn(false);
 
-                player.get().setYourTurn(true);
-                pbfCollection.updateById(gameid, pbf);
-                return;
-            }
-            throw new BadRequestException("Player not found");
+            player.get().setYourTurn(true);
+            pbfRepository.save(pbf);
+            return;
         }
-        throw new BadRequestException("Game not found");
+        throw new NotFoundException("Player not found");
 
     }
 }

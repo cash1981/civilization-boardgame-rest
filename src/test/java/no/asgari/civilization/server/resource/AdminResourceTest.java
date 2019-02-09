@@ -16,7 +16,7 @@ public class AdminResourceTest extends AbstractCivilizationTest {
 
     @Test
     public void adminCanChangeUser() {
-        PBF pbf = getApp().pbfCollection.findOne();
+        PBF pbf = getApp().pbfRepository.findOne();
 
         Response response = client().target(UriBuilder.fromPath(BASE_URL + "/admin/changeuser").build())
                 .queryParam("gameid", pbf.getId())
@@ -29,7 +29,7 @@ public class AdminResourceTest extends AbstractCivilizationTest {
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
 
 
-        pbf = getApp().pbfCollection.findOne();
+        pbf = getApp().pbfRepository.findOne();
         long count = pbf.getPlayers().stream().filter(p -> p.getUsername().equals("DaveLuca")).count();
         assertThat(count).isEqualTo(1L);
     }

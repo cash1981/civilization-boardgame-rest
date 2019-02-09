@@ -10,7 +10,7 @@ public class ParallelStreamTest extends AbstractCivilizationTest {
 /*
     @Test
     public void testNormalStream() throws Exception {
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfRepository.findById(getApp().pbfId);
 
         List<Item> list = new ArrayList<>();
 
@@ -31,7 +31,7 @@ public class ParallelStreamTest extends AbstractCivilizationTest {
 
     @Test
     public void testNormalParallelStream() throws Exception {
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfRepository.findById(getApp().pbfId);
 
         List<Item> list = new ArrayList<>();
 

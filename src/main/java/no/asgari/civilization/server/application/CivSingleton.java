@@ -18,7 +18,7 @@ package no.asgari.civilization.server.application;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.LoadingCache;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import no.asgari.civilization.server.excel.ItemReader;
 import no.asgari.civilization.server.model.GameType;
 
@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
  * Application singleton
  */
 @SuppressWarnings("unchecked")
-@Log4j
+@Slf4j
 //This class is a @Singleton
 public final class CivSingleton {
 

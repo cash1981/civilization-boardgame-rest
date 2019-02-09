@@ -1,0 +1,8 @@
+server:
+  servlet:
+    context-path: /api
+
+spring.data.mongodb:
+  host: localhost
+  database: civilization
+  port: 27017

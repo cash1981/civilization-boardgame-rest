@@ -35,7 +35,7 @@ import io.dropwizard.java8.auth.CachingAuthenticator;
 import io.dropwizard.java8.auth.basic.BasicAuthFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import no.asgari.civilization.server.model.Chat;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.resource.AdminResource;
@@ -60,7 +60,7 @@ import static org.eclipse.jetty.servlets.CrossOriginFilter.ALLOWED_ORIGINS_PARAM
 import static org.eclipse.jetty.servlets.CrossOriginFilter.ALLOW_CREDENTIALS_PARAM;
 import static org.eclipse.jetty.servlets.CrossOriginFilter.EXPOSED_HEADERS_PARAM;
 
-@Log4j
+@Slf4j
 @SuppressWarnings("unchecked")
 public class CivilizationApplication extends Application<CivilizationConfiguration> {
 
@@ -95,13 +95,13 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         MongoManaged mongoManaged = new MongoManaged(mongo);
         environment.lifecycle().manage(mongoManaged);
 
-        JacksonDBCollection<Player, String> playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
-        //JacksonDBCollection<PBF, String> pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
-        JacksonDBCollection<Chat, String> chatCollection = JacksonDBCollection.wrap(db.getCollection(Chat.COL_NAME), Chat.class, String.class);
-        createUniqueIndexForPlayer(playerCollection);
-        createUsernameCache(playerCollection);
-        //createUniqueIndexForPBF(pbfCollection);
-        createIndexForChat(chatCollection);
+        JacksonDBCollection<Player, String> playerRepository = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
+        //JacksonDBCollection<PBF, String> pbfRepository = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
+        JacksonDBCollection<Chat, String> chatRepository = JacksonDBCollection.wrap(db.getCollection(Chat.COL_NAME), Chat.class, String.class);
+        createUniqueIndexForPlayer(playerRepository);
+        createUsernameCache(playerRepository);
+        //createUniqueIndexForPBF(pbfRepository);
+        createIndexForChat(chatRepository);
         //createItemCache(); //TODO Have to rewrite the code to make it work, right now everyone gets same number and same draws
 
         //healtcheck
@@ -139,37 +139,37 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         filter.setInitParameter(EXPOSED_HEADERS_PARAM, "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,Location,Accept-Content-Encoding");
     }
 
-    private void createUsernameCache(JacksonDBCollection<Player, String> playerCollection) {
+    private void createUsernameCache(JacksonDBCollection<Player, String> playerRepository) {
         LoadingCache<String, String> usernameCache = CacheBuilder.newBuilder()
                 .expireAfterWrite(2, TimeUnit.HOURS)
                 .maximumSize(100)
                 .removalListener(lis -> log.debug("Removing " + lis.toString() + " from the usernameCache"))
                 .build(new CacheLoader<String, String>() {
                     public String load(String playerId) {
-                        return playerCollection.findOneById(playerId).getUsername();
+                        return playerRepository.findById(playerId).getUsername();
                     }
                 });
 
         CivSingleton.instance().setPlayerCache(usernameCache);
     }
 
-    private void createUniqueIndexForPlayer(JacksonDBCollection<Player, String> playerCollection) {
-        List<DBObject> indexInfos = playerCollection.getIndexInfo();
+    private void createUniqueIndexForPlayer(JacksonDBCollection<Player, String> playerRepository) {
+        List<DBObject> indexInfos = playerRepository.getIndexInfo();
         if (indexInfos.isEmpty()) {
-            playerCollection.createIndex(new BasicDBObject(Player.USERNAME, 1), new BasicDBObject("unique", true));
-            playerCollection.createIndex(new BasicDBObject(Player.EMAIL, 1), new BasicDBObject("unique", true));
+            playerRepository.createIndex(new BasicDBObject(Player.USERNAME, 1), new BasicDBObject("unique", true));
+            playerRepository.createIndex(new BasicDBObject(Player.EMAIL, 1), new BasicDBObject("unique", true));
         }
     }
 
-    /*private void createUniqueIndexForPBF(JacksonDBCollection<PBF, String> pbfCollection) {
-        if (pbfCollection.getIndexInfo().isEmpty()) {
-            pbfCollection.createIndex(new BasicDBObject(PBF.NAME, 1), new BasicDBObject("unique", true));
+    /*private void createUniqueIndexForPBF(JacksonDBCollection<PBF, String> pbfRepository) {
+        if (pbfRepository.getIndexInfo().isEmpty()) {
+            pbfRepository.createIndex(new BasicDBObject(PBF.NAME, 1), new BasicDBObject("unique", true));
         }
     }*/
 
-    private void createIndexForChat(JacksonDBCollection<Chat, String> chatCollection) {
-        if (chatCollection.getIndexInfo().isEmpty()) {
-            chatCollection.createIndex(new BasicDBObject(Chat.PBFID, 1));
+    private void createIndexForChat(JacksonDBCollection<Chat, String> chatRepository) {
+        if (chatRepository.getIndexInfo().isEmpty()) {
+            chatRepository.createIndex(new BasicDBObject(Chat.PBFID, 1));
         }
     }
 }

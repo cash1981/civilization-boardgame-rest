@@ -22,7 +22,7 @@ public class MongoDBTest extends AbstractCivilizationTest {
         player.setPassword(DigestUtils.sha1Hex("foo"));
         player.getGameIds().add(pbfId);
 
-        WriteResult<Player, String> writeResult = getApp().playerCollection.insert(player);
+        WriteResult<Player, String> writeResult = getApp().playerRepository.insert(player);
         System.out.println("Saved player " + writeResult.toString());
         assertNotNull(writeResult.getSavedId());
         return player;
@@ -30,7 +30,7 @@ public class MongoDBTest extends AbstractCivilizationTest {
 
     @Test
     public void printAllPBFGames() throws IOException {
-        @Cleanup DBCursor<PBF> cursor = getApp().pbfCollection.find();
+        @Cleanup DBCursor<PBF> cursor = getApp().pbfRepository.find();
         while (cursor.hasNext()) {
             PBF pbf = cursor.next();
             assertNotNull(pbf);

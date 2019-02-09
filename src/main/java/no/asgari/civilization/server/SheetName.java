@@ -50,7 +50,7 @@ public enum SheetName {
         Optional<SheetName> found = SHEETS.stream()
                 .filter(sheet -> sheet.label.replaceAll("\\s", "").equalsIgnoreCase(spacesRemovedName))
                 .findFirst();
-        if (!found.isPresent()) {
+        if (found.isEmpty()) {
             try {
                 return Optional.of(valueOf(name.toUpperCase()));
             } catch (Exception ex) {

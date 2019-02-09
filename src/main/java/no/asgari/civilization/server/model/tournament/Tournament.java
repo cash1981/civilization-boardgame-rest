@@ -13,7 +13,7 @@ import java.util.List;
 public class Tournament {
     public static final String COL_NAME = "tournament";
 
-    @ObjectId
+
     @Id
     private String id;
 

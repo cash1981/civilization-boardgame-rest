@@ -35,12 +35,12 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
 
     @Before
     public void ensureCurrentPlayer() {
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfRepository.findById(getApp().pbfId);
         Playerhand playerhand = pbf.getPlayers().stream()
                 .filter(p -> p.getPlayerId().equals(getApp().playerId))
                 .findFirst().get();
         playerhand.setYourTurn(true);
-        getApp().pbfCollection.updateById(getApp().pbfId, pbf);
+        getApp().pbfRepository.updateById(getApp().pbfId, pbf);
     }
 
     @Test
@@ -55,7 +55,7 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
                 .post(null);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT_204);
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfRepository.findById(getApp().pbfId);
         Optional<Playerhand> cash1981 = pbf.getPlayers().stream()
                 .filter(p -> p.getUsername().equals("cash1981"))
                 .findFirst();
@@ -64,7 +64,7 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
         assertThat(cash1981.get().getTechsChosen()).contains(new Tech("Pottery", Tech.LEVEL_1, 0));
 
         //reveal it
-        DBCursor<GameLog> gameLogs = getApp().gameLogCollection.find(DBQuery.is("pbfId", getApp().pbfId));
+        DBCursor<GameLog> gameLogs = getApp().gameLogRepository.find(DBQuery.is("pbfId", getApp().pbfId));
         if (!gameLogs.hasNext()) {
             fail("Should have gamelog");
         }
@@ -93,7 +93,7 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
 
     @Test
     public void endTurnAndChooseNextPlayer() throws Exception {
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfRepository.findById(getApp().pbfId);
 
         int i = -1;
         Playerhand nextPlayer = null;
@@ -117,7 +117,7 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT_204);
 
-        pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        pbf = getApp().pbfRepository.findById(getApp().pbfId);
         found = false;
         for (Playerhand p : pbf.getPlayers()) {
             if (p.equals(nextPlayer)) {
@@ -132,7 +132,7 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
     @Test
     public void testThatYouCanTradeItems() throws Exception {
         //Find another player
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfRepository.findById(getApp().pbfId);
         String anotherPlayerId = getAnotherplayerId(pbf);
         assertNotNull(anotherPlayerId);
 
@@ -154,7 +154,7 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
         assertEquals(HttpStatus.OK_200, response.getStatus());
 
         //Check
-        pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        pbf = getApp().pbfRepository.findById(getApp().pbfId);
         Playerhand cash1981 = pbf.getPlayers().stream()
                 .filter(p -> p.getUsername().equals("cash1981"))
                 .findFirst().get();
@@ -177,7 +177,7 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
         testDrawArtilleryCard();
 
         //Find another player
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfRepository.findById(getApp().pbfId);
         String anotherPlayerId = getAnotherplayerId(pbf);
         assertNotNull(anotherPlayerId);
 
@@ -223,7 +223,7 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Infantry.class);
         assertTrue(gameLogOptional.get().getDraw().getItem().isHidden());
 
-        GameLog gameLog = getApp().gameLogCollection.findOneById(gameLogOptional.get().getId());
+        GameLog gameLog = getApp().gameLogRepository.findById(gameLogOptional.get().getId());
         if (gameLog.getDraw() != null && gameLog.getDraw().getItem() != null && gameLog.getPbfId().equals(getApp().pbfId)) {
             ItemDTO itemDTO = new ItemDTO();
             itemDTO.setSheetName(SheetName.INFANTRY.name());
@@ -329,7 +329,7 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
     public void discardItem() throws Exception {
         testDrawVillage();
 
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfRepository.findById(getApp().pbfId);
         assertThat(pbf.getDiscardedItems()).isEmpty();
         Item village = getItemFromPlayerhand(pbf, SheetName.VILLAGES).get();
         assertNotNull(village);
@@ -343,14 +343,14 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
                 .post(Entity.json(itemDTO), Response.class);
         assertEquals(HttpStatus.OK_200, response.getStatus());
 
-        pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        pbf = getApp().pbfRepository.findById(getApp().pbfId);
         assertThat(pbf.getDiscardedItems()).isNotEmpty();
     }
 
     @Test
     public void discardUnit() throws Exception {
         testDrawInfantryCard();
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfRepository.findById(getApp().pbfId);
         Item infantry = getItemFromPlayerhand(pbf, SheetName.INFANTRY).get();
         assertNotNull(infantry);
 
@@ -366,7 +366,7 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
 
     @Test
     public void chooseSocialPolicyThenFlipside() throws Exception {
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfRepository.findById(getApp().pbfId);
         long socialPolicies = pbf.getPlayers()
                 .stream()
                 .flatMap(p -> p.getSocialPolicies().stream())
@@ -382,7 +382,7 @@ public class PlayerResourceTest extends AbstractCivilizationTest {
                 .post(null);
         assertEquals(HttpStatus.NO_CONTENT_204, response.getStatus());
 
-        pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        pbf = getApp().pbfRepository.findById(getApp().pbfId);
         socialPolicies = pbf.getPlayers()
                 .stream()
                 .flatMap(p -> p.getSocialPolicies().stream())

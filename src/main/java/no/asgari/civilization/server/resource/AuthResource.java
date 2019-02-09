@@ -23,7 +23,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import io.dropwizard.auth.basic.BasicCredentials;
 import lombok.Cleanup;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.application.CivAuthenticator;
 import no.asgari.civilization.server.dto.CheckNameDTO;
@@ -51,20 +51,20 @@ import java.net.URI;
 import java.util.Optional;
 
 @Path("auth")
-@Log4j
+@Slf4j
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class AuthResource {
 
     private final DB db;
-    private final JacksonDBCollection<Player, String> playerCollection;
+    private final JacksonDBCollection<Player, String> playerRepository;
 
     @Context
     private UriInfo uriInfo;
 
     public AuthResource(DB db) {
         this.db = db;
-        this.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
+        this.playerRepository = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
     }
 
     @POST
@@ -133,7 +133,7 @@ public class AuthResource {
             return Response.status(Response.Status.FORBIDDEN).entity("{\"invalidChars\":\"true\"}").build();
         }
 
-        @Cleanup DBCursor<Player> dbPlayer = playerCollection.find(
+        @Cleanup DBCursor<Player> dbPlayer = playerRepository.find(
                 DBQuery.is("username", nameDTO.getName().trim()), new BasicDBObject());
 
         if (dbPlayer.hasNext()) {

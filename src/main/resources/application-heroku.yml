@@ -1,0 +1,6 @@
+spring.data.mongodb:
+  host: ds061371.mongolab.com
+  database: heroku_app35355040
+  port: 61371
+  username: heroku_app35355040
+  password: ${MONGO_PASS}

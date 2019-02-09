@@ -20,7 +20,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.mongodb.DB;
 import io.dropwizard.auth.Auth;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import no.asgari.civilization.server.action.GameAction;
 import no.asgari.civilization.server.action.GameLogAction;
 import no.asgari.civilization.server.action.PlayerAction;
@@ -70,7 +70,7 @@ import static java.util.stream.Collectors.toList;
 @Path("game")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Log4j
+@Slf4j
 public class GameResource {
     private final DB db;
     private final GameAction gameAction;

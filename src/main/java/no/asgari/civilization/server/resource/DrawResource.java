@@ -18,7 +18,7 @@ package no.asgari.civilization.server.resource;
 import com.codahale.metrics.annotation.Timed;
 import com.mongodb.DB;
 import io.dropwizard.auth.Auth;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.action.DrawAction;
 import no.asgari.civilization.server.dto.MessageDTO;
@@ -46,7 +46,7 @@ import java.util.Optional;
 @Path("draw/{pbfId}")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Log4j
+@Slf4j
 public class DrawResource {
 
     private final DB db;

@@ -28,7 +28,7 @@ public class UndoActionTest extends AbstractCivilizationTest {
 
     @Before
     public void before() {
-        if (getApp().gameLogCollection.findOne() == null || getApp().gameLogCollection.findOne().getDraw() == null) {
+        if (getApp().gameLogRepository.findOne() == null || getApp().gameLogRepository.findOne().getDraw() == null) {
             createADrawAndInitiateAVoteForUndo();
         }
     }
@@ -37,7 +37,7 @@ public class UndoActionTest extends AbstractCivilizationTest {
         //First create one UndoAction
 
         //Pick one item
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfRepository.findById(getApp().pbfId);
         assertThat(pbf).isNotNull();
         assertThat(pbf.getItems()).isNotEmpty();
 
@@ -46,24 +46,24 @@ public class UndoActionTest extends AbstractCivilizationTest {
         assertTrue(gameLogOptional.isPresent());
         undoAction.initiateUndo(gameLogOptional.get(), getApp().playerId);
 
-        assertThat(getApp().gameLogCollection.findOneById(gameLogOptional.get().getId()).getDraw().getUndo().getVotes().size()).isEqualTo(1);
+        assertThat(getApp().gameLogRepository.findById(gameLogOptional.get().getId()).getDraw().getUndo().getVotes().size()).isEqualTo(1);
         return gameLogOptional.get().getId();
     }
 
     @Test
     public void performAVoteAndCheckIt() throws Exception {
-        String gamelogId = getApp().gameLogCollection.findOne().getId();
-        if (getApp().gameLogCollection.findOne().getDraw().getUndo() == null || getApp().gameLogCollection.findOne().getDraw().getUndo().isDone()) {
+        String gamelogId = getApp().gameLogRepository.findOne().getId();
+        if (getApp().gameLogRepository.findOne().getDraw().getUndo() == null || getApp().gameLogRepository.findOne().getDraw().getUndo().isDone()) {
             gamelogId = createADrawAndInitiateAVoteForUndo();
         }
 
-        final GameLog gameLog = getApp().gameLogCollection.findOneById(gamelogId);
+        final GameLog gameLog = getApp().gameLogRepository.findById(gamelogId);
         assertThat(gameLog.getDraw().getUndo()).isNotNull();
 
         int votes = gameLog.getDraw().getUndo().getVotes().size();
         assertThat(gameLog.getDraw().getUndo().isDone()).isFalse();
 
-        List<Playerhand> players = getApp().pbfCollection.findOneById(gameLog.getDraw().getPbfId()).getPlayers();
+        List<Playerhand> players = getApp().pbfRepository.findById(gameLog.getDraw().getPbfId()).getPlayers();
 
         Optional<Playerhand> anotherPlayer = players.stream()
                 .filter(p -> !gameLog.getDraw().getUndo().getVotes().keySet().contains(p.getPlayerId()))
@@ -75,20 +75,20 @@ public class UndoActionTest extends AbstractCivilizationTest {
         assertThat(anotherPlayer.isPresent()).isTrue();
         GameLog vote = undoAction.vote(gameLog, anotherPlayer.get().getPlayerId(), Boolean.TRUE);
         assertThat(vote.getDraw().getUndo().getVotes().size()).isEqualTo(votes);
-        assertThat(getApp().gameLogCollection.findOneById(gameLog.getId()).getDraw().getUndo().getVotes().size()).isEqualTo(votes);
+        assertThat(getApp().gameLogRepository.findById(gameLog.getId()).getDraw().getUndo().getVotes().size()).isEqualTo(votes);
     }
 
     @Test
     public void allPlayersVoteYesThenPerformUndo() throws Exception {
-        GameLog gameLog = getApp().gameLogCollection.findOne();
+        GameLog gameLog = getApp().gameLogRepository.findOne();
         if (gameLog.getDraw().getUndo() == null || gameLog.getDraw().getUndo().isDone()) {
             String gamelogId = createADrawAndInitiateAVoteForUndo();
-            gameLog = getApp().gameLogCollection.findOneById(gamelogId);
+            gameLog = getApp().gameLogRepository.findById(gamelogId);
         }
 
-        PBF pbf = getApp().pbfCollection.findOneById(gameLog.getPbfId());
+        PBF pbf = getApp().pbfRepository.findById(gameLog.getPbfId());
         assertFalse(pbf.getItems().contains(gameLog.getDraw().getItem()));
-        pbf = getApp().pbfCollection.findOneById(gameLog.getPbfId());
+        pbf = getApp().pbfRepository.findById(gameLog.getPbfId());
 
         List<Item> items = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(getApp().playerId)).findFirst().get().getItems();
         assertTrue(items.contains(gameLog.getDraw().getItem()));
@@ -98,7 +98,7 @@ public class UndoActionTest extends AbstractCivilizationTest {
                 .filter(p -> !finalGameLog.getDraw().getUndo().getVotes().keySet().contains(p.getUsername()))
                 .forEach(p -> undoAction.vote(finalGameLog, p.getPlayerId(), Boolean.TRUE));
 
-        Undo undo = getApp().gameLogCollection.findOneById(gameLog.getId()).getDraw().getUndo();
+        Undo undo = getApp().gameLogRepository.findById(gameLog.getId()).getDraw().getUndo();
         assertThat(undo.getVotes()).doesNotContainValue(Boolean.FALSE);
         assertThat(undo.getResultOfVotes().get()).isTrue();
 
@@ -107,13 +107,13 @@ public class UndoActionTest extends AbstractCivilizationTest {
         assertThat(item).isInstanceOf(Civ.class);
 
         //check that its in the pbf
-        assertTrue(getApp().pbfCollection.findOneById(gameLog.getPbfId()).getItems().contains(item));
+        assertTrue(getApp().pbfRepository.findById(gameLog.getPbfId()).getItems().contains(item));
     }
 
     @Test
     public void checkThatYouCanUndoTech() throws Exception {
         //Pick one item
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfRepository.findById(getApp().pbfId);
         assertThat(pbf).isNotNull();
         assertThat(pbf.getItems()).isNotEmpty();
 
@@ -122,13 +122,13 @@ public class UndoActionTest extends AbstractCivilizationTest {
 
         assertThat(gameLog.getDraw().getUndo()).isNull();
         undoAction.initiateUndo(gameLog, getApp().playerId);
-        gameLog = getApp().gameLogCollection.findOneById(gameLog.getId());
+        gameLog = getApp().gameLogRepository.findById(gameLog.getId());
         assertThat(gameLog.getDraw().getUndo()).isNotNull();
     }
 
     @Test
     public void voteAndCountRemaingVotes() throws Exception {
-        GameLog gameLog = getApp().gameLogCollection.findOne();
+        GameLog gameLog = getApp().gameLogRepository.findOne();
         //make another vote
 
         assertThat(gameLog.getDraw().getUndo()).isNotNull();
@@ -151,8 +151,8 @@ public class UndoActionTest extends AbstractCivilizationTest {
     }
 
     private String getAnotherPlayerId() {
-        //Player anotherPlayer = getApp().playerCollection.findOne(DBQuery.notEquals("_id", getApp().playerId));
-        Player anotherPlayer = getApp().playerCollection.findOne(DBQuery.is("username", "Itchi"));
+        //Player anotherPlayer = getApp().playerRepository.findOne(DBQuery.notEquals("_id", getApp().playerId));
+        Player anotherPlayer = getApp().playerRepository.findOne(DBQuery.is("username", "Itchi"));
         assertThat(anotherPlayer).isNotNull();
         assertThat(anotherPlayer.getId()).isNotEqualTo(getApp().playerId);
         return anotherPlayer.getId();

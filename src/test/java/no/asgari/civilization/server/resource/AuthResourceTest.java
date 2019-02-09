@@ -49,7 +49,7 @@ public class AuthResourceTest extends AbstractCivilizationTest {
 
     @Test
     public void createExistingPlayer() throws JsonProcessingException {
-        Player one = getApp().playerCollection.findOne();
+        Player one = getApp().playerRepository.findOne();
         Form form = new Form();
         form.param("username", one.getUsername());
         form.param("password", one.getPassword());
@@ -65,9 +65,9 @@ public class AuthResourceTest extends AbstractCivilizationTest {
 
     @Test
     public void createPlayer() throws JsonProcessingException {
-        @Cleanup DBCursor<Player> foobar = getApp().playerCollection.find(DBQuery.is("username", "foobar"));
+        @Cleanup DBCursor<Player> foobar = getApp().playerRepository.find(DBQuery.is("username", "foobar"));
         if (foobar.hasNext()) {
-            getApp().playerCollection.removeById(foobar.next().getId());
+            getApp().playerRepository.deleteById(foobar.next().getId());
         }
 
         Form form = new Form();
@@ -93,7 +93,7 @@ public class AuthResourceTest extends AbstractCivilizationTest {
         URI uri = UriBuilder.fromPath(BASE_URL + "/auth/newpassword").build();
         client().target(uri).request().put(Entity.json(dto));
 
-        Player cash = getApp().playerCollection.findOneById(getApp().playerId);
+        Player cash = getApp().playerRepository.findById(getApp().playerId);
         assertThat(cash.getNewPassword()).isEqualTo("baz");
 
         Response response = client().target(BASE_URL + "/auth/verify/" + getApp().playerId)
@@ -102,7 +102,7 @@ public class AuthResourceTest extends AbstractCivilizationTest {
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
 
-        cash = getApp().playerCollection.findOneById(getApp().playerId);
+        cash = getApp().playerRepository.findById(getApp().playerId);
         assertThat(cash.getNewPassword()).isNull();
         assertThat(cash.getPassword()).isEqualTo(DigestUtils.sha1Hex("baz"));
     }

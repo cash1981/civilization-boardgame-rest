@@ -25,8 +25,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.mongojack.Id;
-import org.mongojack.ObjectId;
+import org.springframework.data.annotation.Id;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -41,7 +40,6 @@ public class Chat {
     public static final String PBFID = "pbfId";
 
     @Id
-    @ObjectId
     private String id;
 
     private String pbfId;

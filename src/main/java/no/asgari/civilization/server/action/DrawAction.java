@@ -16,51 +16,35 @@
 package no.asgari.civilization.server.action;
 
 import com.google.common.base.Preconditions;
-import com.mongodb.DB;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import no.asgari.civilization.server.SheetName;
-import no.asgari.civilization.server.dto.MessageDTO;
-import no.asgari.civilization.server.exception.NoMoreItemsException;
-import no.asgari.civilization.server.model.Draw;
-import no.asgari.civilization.server.model.GameLog;
-import no.asgari.civilization.server.model.Item;
-import no.asgari.civilization.server.model.PBF;
-import no.asgari.civilization.server.model.Playerhand;
-import no.asgari.civilization.server.model.Tradable;
-import no.asgari.civilization.server.model.Unit;
-import org.mongojack.JacksonDBCollection;
+import no.asgari.civilization.server.exception.GoneException;
+import no.asgari.civilization.server.exception.NotAcceptableException;
+import no.asgari.civilization.server.exception.NotFoundException;
+import no.asgari.civilization.server.exception.PreConditionFailedException;
+import no.asgari.civilization.server.model.*;
+import org.springframework.stereotype.Component;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Response;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static java.util.stream.Collectors.toList;
-import static no.asgari.civilization.server.SheetName.ARTILLERY;
-import static no.asgari.civilization.server.SheetName.INFANTRY;
-import static no.asgari.civilization.server.SheetName.MOUNTED;
+import static no.asgari.civilization.server.SheetName.*;
 
 /**
  * Class that will perform draws and log them.
  * Draws will be saved in the gamelog collection
  */
-@Log4j
+@Slf4j
+@Component
 public class DrawAction extends BaseAction {
-    private final JacksonDBCollection<PBF, String> pbfCollection;
     private final GameLogAction gameLogAction;
 
     private final StringBuilder sb = new StringBuilder();
     private final Consumer<Unit> revealUnitConsumer = unit -> sb.append(unit.revealAll()).append(", ");
 
-    public DrawAction(DB db) {
-        super(db);
-        this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
-        gameLogAction = new GameLogAction(db);
+    public DrawAction(GameLogAction gameLogAction) {
+        this.gameLogAction = gameLogAction;
     }
 
     private static Draw<Item> createDraw(String pbfId, String playerId, Item item) {
@@ -76,7 +60,7 @@ public class DrawAction extends BaseAction {
         Preconditions.checkNotNull(sheetName);
 
         checkYourTurn(pbfId, playerId);
-        PBF pbf = pbfCollection.findOneById(pbfId);
+        PBF pbf = pbfRepository.findById(pbfId).orElseThrow(NotFoundException::new);
 
         if (SheetName.TECHS.contains(sheetName)) {
             log.warn("Drawing of techs is not possible. Techs are supposed to be chosen, not drawn.");
@@ -90,7 +74,7 @@ public class DrawAction extends BaseAction {
                     putItemToPlayer(item, pbf, playerId);
                     iterator.remove();
                     item.setOwnerId(playerId);
-                    pbfCollection.updateById(pbf.getId(), pbf);
+                    pbfRepository.save(pbf);
                     log.debug("Drew item " + item + " and updated pbf");
                     Draw<Item> draw = createDraw(pbfId, playerId, item);
                     GameLog gamelog = createLog(draw, GameLog.LogType.ITEM);
@@ -106,7 +90,7 @@ public class DrawAction extends BaseAction {
         return draw(pbfId, playerId, sheetName);
     }
 
-    private void reshuffleItems(SheetName sheetName, PBF pbf) throws NoMoreItemsException {
+    private void reshuffleItems(SheetName sheetName, PBF pbf) throws GoneException {
         if (!SheetName.SHUFFLABLE_ITEMS.contains(sheetName)) {
             log.warn("Tried to reshuffle " + sheetName.getName() + " but not a shufflable type");
             throw new IllegalArgumentException();
@@ -118,7 +102,7 @@ public class DrawAction extends BaseAction {
 
         if (itemsToPutBackInDeck.isEmpty()) {
             log.warn("All items are still in use, cannot make a shuffle. Nothing to draw!");
-            throw new NoMoreItemsException(sheetName.getName());
+            throw new GoneException();
         }
 
         List<Item> itemsToKeep = pbf.getDiscardedItems().stream()
@@ -130,12 +114,12 @@ public class DrawAction extends BaseAction {
         pbf.getItems().addAll(itemsToPutBackInDeck);
         pbf.setDiscardedItems(itemsToKeep);
 
-        pbfCollection.updateById(pbf.getId(), pbf);
+        pbfRepository.save(pbf);
         logShuffle(sheetName, pbf);
     }
 
     public List<Unit> drawUnitsFromBattlehandForBattle(String pbfId, String playerId, int numberOfDraws) {
-        PBF pbf = pbfCollection.findOneById(pbfId);
+        PBF pbf = pbfRepository.findById(pbfId).orElseThrow(NotFoundException::new);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         playerhand.getBattlehand().clear();
         List<Unit> unitsInHand = playerhand.getItems().stream()
@@ -150,7 +134,7 @@ public class DrawAction extends BaseAction {
         if (unitsInHand.size() <= numberOfDraws) {
             //username has drawn X units from his battlehand
             playerhand.setBattlehand(unitsInHand);
-            pbfCollection.updateById(pbfId, pbf);
+            pbfRepository.save(pbf);
             createCommonPublicLog("has drawn " + unitsInHand.size() + " units his battlehand", pbfId, playerId);
             return unitsInHand;
         }
@@ -159,7 +143,7 @@ public class DrawAction extends BaseAction {
         List<Unit> drawnUnitsList = unitsInHand.stream().limit(numberOfDraws).collect(toList());
 
         playerhand.setBattlehand(drawnUnitsList);
-        pbfCollection.updateById(pbfId, pbf);
+        pbfRepository.save(pbf);
         createCommonPublicLog("has drawn " + drawnUnitsList.size() + " units from his battlehand", pbfId, playerId);
         return drawnUnitsList;
     }
@@ -173,19 +157,18 @@ public class DrawAction extends BaseAction {
      * @return
      */
     public List<Unit> drawBarbarians(String pbfId, String playerId) {
-        PBF pbf = pbfCollection.findOneById(pbfId);
+        PBF pbf = pbfRepository.findById(pbfId).orElseThrow(NotFoundException::new);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         if (!playerhand.getBarbarians().isEmpty()) {
             log.warn("Cannot draw more barbarians until they are discarded");
-            throw new WebApplicationException(Response.status(Response.Status.PRECONDITION_FAILED)
-                    .entity(Entity.json(new MessageDTO("Cannot draw more barbarians until they are discarded"))).build());
+            throw new PreConditionFailedException();
         }
 
         drawBarbarianInfantry(pbf, playerhand);
         drawBarbarianArtillery(pbf, playerhand);
         drawBarbarianMounted(pbf, playerhand);
 
-        pbf = pbfCollection.findOneById(pbfId);
+        pbf = pbfRepository.findById(pbfId).orElseThrow(NotFoundException::new);
         playerhand = getPlayerhandByPlayerId(playerId, pbf);
         gameLogAction.createCommonPrivatePublicLog("has drawn " + playerhand.getBarbarians().size() + " barbarian units", pbfId, playerId);
         return playerhand.getBarbarians();
@@ -197,12 +180,12 @@ public class DrawAction extends BaseAction {
             try {
                 reshuffleItems(INFANTRY, pbf);
                 drawBarbarianInfantry(pbf, playerhand);
-            } catch (NoMoreItemsException e) {
+            } catch (GoneException e) {
                 StringBuilder stringBuilder = new StringBuilder();
                 if (tryToFindUnit(pbf, playerhand, stringBuilder, ARTILLERY, INFANTRY) || tryToFindUnit(pbf, playerhand, stringBuilder, MOUNTED, INFANTRY)) {
                     gameLogAction.createCommonPrivatePublicLog(stringBuilder.toString(), pbf.getId(), playerhand.getPlayerId());
                 } else {
-                    throw new NoMoreItemsException("units");
+                    throw new GoneException();
                 }
 
             }
@@ -225,12 +208,12 @@ public class DrawAction extends BaseAction {
             try {
                 reshuffleItems(MOUNTED, pbf);
                 drawBarbarianMounted(pbf, playerhand);
-            } catch (NoMoreItemsException e) {
+            } catch (GoneException e) {
                 StringBuilder stringBuilder = new StringBuilder();
                 if (tryToFindUnit(pbf, playerhand, stringBuilder, ARTILLERY, MOUNTED) || tryToFindUnit(pbf, playerhand, stringBuilder, INFANTRY, MOUNTED)) {
                     gameLogAction.createCommonPrivatePublicLog(stringBuilder.toString(), pbf.getId(), playerhand.getPlayerId());
                 } else {
-                    throw new NoMoreItemsException("units");
+                    throw new GoneException();
                 }
             }
         } else {
@@ -253,12 +236,12 @@ public class DrawAction extends BaseAction {
             try {
                 reshuffleItems(ARTILLERY, pbf);
                 drawBarbarianArtillery(pbf, playerhand);
-            } catch (NoMoreItemsException e) {
+            } catch (GoneException e) {
                 StringBuilder stringBuilder = new StringBuilder();
                 if (tryToFindUnit(pbf, playerhand, stringBuilder, MOUNTED, ARTILLERY) || tryToFindUnit(pbf, playerhand, stringBuilder, INFANTRY, ARTILLERY)) {
                     gameLogAction.createCommonPrivatePublicLog(stringBuilder.toString(), pbf.getId(), playerhand.getPlayerId());
                 } else {
-                    throw new NoMoreItemsException("units");
+                    throw new GoneException();
                 }
             }
         } else {
@@ -294,7 +277,7 @@ public class DrawAction extends BaseAction {
     }
 
     public void discardBarbarians(String pbfId, String playerId) {
-        PBF pbf = pbfCollection.findOneById(pbfId);
+        PBF pbf = pbfRepository.findById(pbfId).orElseThrow(NotFoundException::new);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         if (playerhand.getBarbarians().isEmpty()) {
             return;
@@ -302,11 +285,11 @@ public class DrawAction extends BaseAction {
         playerhand.getBarbarians().forEach(unit -> unit.setOwnerId(null));
         pbf.getDiscardedItems().addAll(playerhand.getBarbarians());
         revealAndDiscardUnits(" as barbarians", playerhand.getBarbarians(), pbfId, playerId);
-        pbfCollection.updateById(pbf.getId(), pbf);
+        pbfRepository.save(pbf);
     }
 
     public void revealAndDiscardBattlehand(String pbfId, String playerId) {
-        PBF pbf = pbfCollection.findOneById(pbfId);
+        PBF pbf = pbfRepository.findById(pbfId).orElseThrow(NotFoundException::new);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         if (playerhand.getBattlehand().isEmpty()) {
             log.warn("Tried to reveal playerhand, but was empty");
@@ -314,7 +297,7 @@ public class DrawAction extends BaseAction {
         }
 
         revealAndDiscardUnits(" from their battlehand", playerhand.getBattlehand(), pbfId, playerId);
-        pbfCollection.updateById(pbfId, pbf);
+        pbfRepository.save(pbf);
     }
 
     private void revealAndDiscardUnits(String message, List<Unit> units, String pbfId, String playerId) {
@@ -337,7 +320,7 @@ public class DrawAction extends BaseAction {
      * @param playerId
      */
     public void endBattle(String pbfId, String playerId) {
-        PBF pbf = pbfCollection.findOneById(pbfId);
+        PBF pbf = pbfRepository.findById(pbfId).orElseThrow(NotFoundException::new);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
 
         playerhand.getItems().stream()
@@ -347,7 +330,7 @@ public class DrawAction extends BaseAction {
                     unit.setInBattle(false);
                 });
 
-        pbfCollection.updateById(pbfId, pbf);
+        pbfRepository.save(pbf);
     }
 
     /**
@@ -373,19 +356,11 @@ public class DrawAction extends BaseAction {
                 .filter(it -> sheetNames.contains(it.getSheetName()))
                 .collect(toList());
         if (itemToShuffle.isEmpty()) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.NOT_FOUND)
-                            .entity(new MessageDTO("You have nothing to draw"))
-                            .build()
-            );
+            throw new NotFoundException();
         }
 
         if (!(itemToShuffle.get(0) instanceof Tradable)) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.NOT_ACCEPTABLE)
-                            .entity(new MessageDTO("Item is not lootable"))
-                            .build()
-            );
+            throw new NotAcceptableException();
         }
 
         Collections.shuffle(itemToShuffle);
@@ -401,7 +376,7 @@ public class DrawAction extends BaseAction {
             createCommonPublicLog(" is randomly looted " + itemToGive.revealPublic() + " and gives to " + playerTo.getUsername(), pbfId, playerFrom.getPlayerId());
             createCommonPublicLog(" receives as loot " + itemToGive.revealPublic() + " from " + playerFrom.getUsername(), pbfId, playerTo.getPlayerId());
 
-            pbfCollection.updateById(pbf.getId(), pbf);
+            pbfRepository.save(pbf);
             return itemToGive;
         } else {
             throw cannotFindItem();
@@ -413,7 +388,7 @@ public class DrawAction extends BaseAction {
         playerhand.getBarbarians().add((Unit) item);
         iterator.remove();
         item.setOwnerId(playerhand.getPlayerId());
-        pbfCollection.updateById(pbf.getId(), pbf);
+        pbfRepository.save(pbf);
     }
 
     private void logShuffle(SheetName sheetName, PBF pbf) {

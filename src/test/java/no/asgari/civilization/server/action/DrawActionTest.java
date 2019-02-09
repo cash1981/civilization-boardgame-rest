@@ -1,7 +1,7 @@
 package no.asgari.civilization.server.action;
 
 import no.asgari.civilization.server.SheetName;
-import no.asgari.civilization.server.exception.NoMoreItemsException;
+import no.asgari.civilization.server.exception.GoneException;
 import no.asgari.civilization.server.model.Aircraft;
 import no.asgari.civilization.server.model.Artillery;
 import no.asgari.civilization.server.model.Citystate;
@@ -46,7 +46,7 @@ public class DrawActionTest extends AbstractCivilizationTest {
         assertThat(gameLog.getPrivateLog()).matches(".+drew.*Civ.+");
         assertTrue(gameLog.getPublicLog().matches(".+drew.*Civ..*"));
 
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfRepository.findById(getApp().pbfId);
         assertThat(pbf).isNotNull();
         assertThat(pbf.getItems()).doesNotContain(gameLog.getDraw().getItem());
     }
@@ -55,13 +55,13 @@ public class DrawActionTest extends AbstractCivilizationTest {
     public void drawAircraftAndMakeSureItsNoLongerInPBFCollection() throws Exception {
         DrawAction drawAction = new DrawAction(getApp().db);
         //Before draw
-        long aircrafts = getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        long aircrafts = getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.AIRCRAFT)
                 .count();
 
         Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.AIRCRAFT);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts - 1, getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.AIRCRAFT)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Aircraft.class);
@@ -71,13 +71,13 @@ public class DrawActionTest extends AbstractCivilizationTest {
     public void drawArtilleryAndMakeSureItsNoLongerInPBFCollection() throws Exception {
         DrawAction drawAction = new DrawAction(getApp().db);
         //Before draw
-        long aircrafts = getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        long aircrafts = getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.ARTILLERY)
                 .count();
 
         Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.ARTILLERY);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts - 1, getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.ARTILLERY)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Artillery.class);
@@ -91,13 +91,13 @@ public class DrawActionTest extends AbstractCivilizationTest {
     public void drawCitystateAndMakeSureItsNoLongerInPBFCollection() throws Exception {
         DrawAction drawAction = new DrawAction(getApp().db);
         //Before draw
-        long aircrafts = getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        long aircrafts = getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.CITY_STATES)
                 .count();
 
         Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.CITY_STATES);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts - 1, getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.CITY_STATES)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Citystate.class);
@@ -107,13 +107,13 @@ public class DrawActionTest extends AbstractCivilizationTest {
     public void drawCulture1AndMakeSureItsNoLongerInPBFCollection() throws Exception {
         DrawAction drawAction = new DrawAction(getApp().db);
         //Before draw
-        long aircrafts = getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        long aircrafts = getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.CULTURE_1)
                 .count();
 
         Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.CULTURE_1);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts - 1, getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.CULTURE_1)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(CultureI.class);
@@ -123,13 +123,13 @@ public class DrawActionTest extends AbstractCivilizationTest {
     public void drawCulture2AndMakeSureItsNoLongerInPBFCollection() throws Exception {
         DrawAction drawAction = new DrawAction(getApp().db);
         //Before draw
-        long aircrafts = getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        long aircrafts = getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.CULTURE_2)
                 .count();
 
         Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.CULTURE_2);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts - 1, getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.CULTURE_2)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(CultureII.class);
@@ -139,13 +139,13 @@ public class DrawActionTest extends AbstractCivilizationTest {
     public void drawCulture3AndMakeSureItsNoLongerInPBFCollection() throws Exception {
         DrawAction drawAction = new DrawAction(getApp().db);
         //Before draw
-        long aircrafts = getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        long aircrafts = getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.CULTURE_3)
                 .count();
 
         Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.CULTURE_3);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts - 1, getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.CULTURE_3)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(CultureIII.class);
@@ -155,13 +155,13 @@ public class DrawActionTest extends AbstractCivilizationTest {
     public void drawGPAndMakeSureItsNoLongerInPBFCollection() throws Exception {
         DrawAction drawAction = new DrawAction(getApp().db);
         //Before draw
-        long aircrafts = getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        long aircrafts = getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.GREAT_PERSON)
                 .count();
 
         Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.GREAT_PERSON);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts - 1, getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.GREAT_PERSON)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(GreatPerson.class);
@@ -171,13 +171,13 @@ public class DrawActionTest extends AbstractCivilizationTest {
     public void drawHutAndMakeSureItsNoLongerInPBFCollection() throws Exception {
         DrawAction drawAction = new DrawAction(getApp().db);
         //Before draw
-        long hut = getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        long hut = getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.HUTS)
                 .count();
 
         Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.HUTS);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(hut - 1, getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        assertEquals(hut - 1, getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.HUTS)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Hut.class);
@@ -187,13 +187,13 @@ public class DrawActionTest extends AbstractCivilizationTest {
     public void drawInfantryAndMakeSureItsNoLongerInPBFCollection() throws Exception {
         DrawAction drawAction = new DrawAction(getApp().db);
         //Before draw
-        long infantries = getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        long infantries = getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.INFANTRY)
                 .count();
 
         Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.INFANTRY);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(infantries - 1, getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        assertEquals(infantries - 1, getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.INFANTRY)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Infantry.class);
@@ -203,13 +203,13 @@ public class DrawActionTest extends AbstractCivilizationTest {
     public void drawMountedAndMakeSureItsNoLongerInPBFCollection() throws Exception {
         DrawAction drawAction = new DrawAction(getApp().db);
         //Before draw
-        long aircrafts = getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        long aircrafts = getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.MOUNTED)
                 .count();
 
         Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.MOUNTED);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts - 1, getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.MOUNTED)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Mounted.class);
@@ -219,13 +219,13 @@ public class DrawActionTest extends AbstractCivilizationTest {
     public void drawTileAndMakeSureItsNoLongerInPBFCollection() throws Exception {
         DrawAction drawAction = new DrawAction(getApp().db);
         //Before draw
-        long aircrafts = getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        long aircrafts = getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.TILES)
                 .count();
 
         Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.TILES);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts - 1, getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.TILES)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Tile.class);
@@ -235,13 +235,13 @@ public class DrawActionTest extends AbstractCivilizationTest {
     public void drawVillageAndMakeSureItsNoLongerInPBFCollection() throws Exception {
         DrawAction drawAction = new DrawAction(getApp().db);
         //Before draw
-        long aircrafts = getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        long aircrafts = getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.VILLAGES)
                 .count();
 
         Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.VILLAGES);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts - 1, getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.VILLAGES)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Village.class);
@@ -251,13 +251,13 @@ public class DrawActionTest extends AbstractCivilizationTest {
     public void drawAncientWonderAndMakeSureItsNoLongerInPBFCollection() throws Exception {
         DrawAction drawAction = new DrawAction(getApp().db);
         //Before draw
-        long aircrafts = getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        long aircrafts = getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.ANCIENT_WONDERS)
                 .count();
 
         Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.ANCIENT_WONDERS);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts - 1, getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.ANCIENT_WONDERS)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Wonder.class);
@@ -267,13 +267,13 @@ public class DrawActionTest extends AbstractCivilizationTest {
     public void drawMedievalWonderAndMakeSureItsNoLongerInPBFCollection() throws Exception {
         DrawAction drawAction = new DrawAction(getApp().db);
         //Before draw
-        long aircrafts = getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        long aircrafts = getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.MEDIEVAL_WONDERS)
                 .count();
 
         Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.MEDIEVAL_WONDERS);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts - 1, getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.MEDIEVAL_WONDERS)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Wonder.class);
@@ -283,13 +283,13 @@ public class DrawActionTest extends AbstractCivilizationTest {
     public void drawModernWonderAndMakeSureItsNoLongerInPBFCollection() throws Exception {
         DrawAction drawAction = new DrawAction(getApp().db);
         //Before draw
-        long aircrafts = getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        long aircrafts = getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.MODERN_WONDERS)
                 .count();
 
         Optional<GameLog> gameLogOptional = drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.MODERN_WONDERS);
         assertTrue(gameLogOptional.isPresent());
-        assertEquals(aircrafts - 1, getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        assertEquals(aircrafts - 1, getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.MODERN_WONDERS)
                 .count());
         assertThat(gameLogOptional.get().getDraw().getItem()).isExactlyInstanceOf(Wonder.class);
@@ -297,17 +297,17 @@ public class DrawActionTest extends AbstractCivilizationTest {
 
     @Test
     public void drawItemAndMakeSureLogsAreStored() throws Exception {
-        long privateLog = getApp().gameLogCollection.count();
+        long privateLog = getApp().gameLogRepository.count();
         DrawAction drawAction = new DrawAction(getApp().db);
         drawAction.draw(getApp().pbfId, getApp().playerId, SheetName.GREAT_PERSON);
-        assertThat(getApp().gameLogCollection.count()).isEqualTo(++privateLog);
+        assertThat(getApp().gameLogRepository.count()).isEqualTo(++privateLog);
     }
 
-    @Test(expected = NoMoreItemsException.class)
+    @Test(expected = GoneException.class)
     public void makeSureSystemCorrectlyThrowsExceptionWhenNothingToShuffle() throws Exception {
         DrawAction drawAction = new DrawAction(getApp().db);
         //Before draw
-        long aircrafts = getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        long aircrafts = getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.AIRCRAFT)
                 .count();
 
@@ -316,7 +316,7 @@ public class DrawActionTest extends AbstractCivilizationTest {
             assertThat(draw.isPresent());
         }
 
-        long newCount = getApp().pbfCollection.findOneById(getApp().pbfId).getItems().parallelStream()
+        long newCount = getApp().pbfRepository.findById(getApp().pbfId).getItems().parallelStream()
                 .filter(p -> p.getSheetName() == SheetName.AIRCRAFT)
                 .count();
 
@@ -330,21 +330,21 @@ public class DrawActionTest extends AbstractCivilizationTest {
     public void drawAndDiscardBarbarians() throws Exception {
         DrawAction drawAction = new DrawAction(getApp().db);
 
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfRepository.findById(getApp().pbfId);
         Playerhand playerhand = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(getApp().playerId)).findFirst().get();
         assertThat(playerhand.getBarbarians().isEmpty());
 
         List<Unit> units = drawAction.drawBarbarians(getApp().pbfId, getApp().playerId);
         assertThat(units).hasSize(3);
 
-        pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        pbf = getApp().pbfRepository.findById(getApp().pbfId);
         playerhand = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(getApp().playerId)).findFirst().get();
         assertThat(playerhand.getBarbarians()).hasSize(3);
 
         //Finally discard the barbs
         drawAction.discardBarbarians(getApp().pbfId, getApp().playerId);
 
-        pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        pbf = getApp().pbfRepository.findById(getApp().pbfId);
         playerhand = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(getApp().playerId)).findFirst().get();
         assertThat(playerhand.getBarbarians()).isEmpty();
     }
@@ -363,13 +363,13 @@ public class DrawActionTest extends AbstractCivilizationTest {
         assertThat(drawAction.drawUnitsFromBattlehandForBattle(getApp().pbfId, getApp().playerId, 99)).hasSize(5);
         assertThat(drawAction.drawUnitsFromBattlehandForBattle(getApp().pbfId, getApp().playerId, 3)).hasSize(3);
 
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfRepository.findById(getApp().pbfId);
         Playerhand playerhand = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(getApp().playerId)).findFirst().get();
         assertThat(playerhand.getBattlehand()).hasSize(3);
 
         drawAction.revealAndDiscardBattlehand(getApp().pbfId, getApp().playerId);
 
-        pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        pbf = getApp().pbfRepository.findById(getApp().pbfId);
         playerhand = pbf.getPlayers().stream().filter(p -> p.getPlayerId().equals(getApp().playerId)).findFirst().get();
         assertThat(playerhand.getBattlehand()).hasSize(0);
     }
@@ -380,7 +380,7 @@ public class DrawActionTest extends AbstractCivilizationTest {
 
         DrawAction drawAction = new DrawAction(getApp().db);
 
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfRepository.findById(getApp().pbfId);
         long nrOfVillagesP1 = 0L, nrOfVIlagesP2 = 0L;
 
         Playerhand playerTo = null;
@@ -398,7 +398,7 @@ public class DrawActionTest extends AbstractCivilizationTest {
         assertThat(nrOfVillagesP1).isGreaterThan(0L);
         drawAction.loot(getApp().pbfId, EnumSet.of(SheetName.VILLAGES), playerTo.getPlayerId(), getApp().playerId);
 
-        pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        pbf = getApp().pbfRepository.findById(getApp().pbfId);
         for (Playerhand players : pbf.getPlayers()) {
             if (players.getPlayerId().equals(getApp().playerId)) {
                 long newVal = players.getItems().stream().filter(p -> p.getSheetName() == SheetName.VILLAGES).count();

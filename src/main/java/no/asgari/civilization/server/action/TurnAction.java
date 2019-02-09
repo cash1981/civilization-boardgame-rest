@@ -1,7 +1,7 @@
 package no.asgari.civilization.server.action;
 
 import com.mongodb.DB;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import no.asgari.civilization.server.dto.TurnDTO;
 import no.asgari.civilization.server.email.SendEmail;
 import no.asgari.civilization.server.misc.CivUtil;
@@ -20,14 +20,14 @@ import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
 
-@Log4j
+@Slf4j
 public class TurnAction extends BaseAction {
 
-    private final JacksonDBCollection<PBF, String> pbfCollection;
+    private final JacksonDBCollection<PBF, String> pbfRepository;
 
     public TurnAction(DB db) {
         super(db);
-        this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
+        this.pbfRepository = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
     }
 
     public void updateSOT(String pbfId, String playerId, TurnDTO turnDTO) {
@@ -47,7 +47,7 @@ public class TurnAction extends BaseAction {
         });
         thread.start();
 
-        pbfCollection.updateById(pbfId, pbf);
+        pbfRepository.save(pbf);
         super.createLog(pbfId, GameLog.LogType.SOT, playerId);
     }
 
@@ -68,7 +68,7 @@ public class TurnAction extends BaseAction {
         });
         thread.start();
 
-        pbfCollection.updateById(pbfId, pbf);
+        pbfRepository.save(pbf);
         super.createLog(pbfId, GameLog.LogType.TRADE, playerId);
     }
 
@@ -91,7 +91,7 @@ public class TurnAction extends BaseAction {
         });
         thread.start();
 
-        pbfCollection.updateById(pbfId, pbf);
+        pbfRepository.save(pbf);
         super.createLog(pbfId, GameLog.LogType.CM, playerId);
     }
 
@@ -113,7 +113,7 @@ public class TurnAction extends BaseAction {
         });
         thread.start();
 
-        pbfCollection.updateById(pbfId, pbf);
+        pbfRepository.save(pbf);
         super.createLog(pbfId, GameLog.LogType.MOVEMENT, playerId);
     }
 
@@ -134,7 +134,7 @@ public class TurnAction extends BaseAction {
         });
         thread.start();
 
-        pbfCollection.updateById(pbfId, pbf);
+        pbfRepository.save(pbf);
         super.createLog(pbfId, GameLog.LogType.RESEARCH, playerId);
     }
 
@@ -187,7 +187,7 @@ public class TurnAction extends BaseAction {
         Set<PlayerTurn> playerTurns = playerhand.getPlayerTurns();
         if (playerTurns.isEmpty()) {
             playerhand.getPlayerTurns().add(new PlayerTurn(playerhand.getUsername(), 1));
-            pbfCollection.updateById(pbfId, pbf);
+            pbfRepository.save(pbf);
         }
 
         return playerTurns;
@@ -208,7 +208,7 @@ public class TurnAction extends BaseAction {
         // Cant get map serialization to work in jackson
         //final TurnKey turnKey = new TurnKey(playerTurn.getTurnNumber(), playerTurn.getUsername());
         pbf.getPublicTurns().put(playerTurn.getTurnNumber() + playerTurn.getUsername(), playerTurn);
-        pbfCollection.updateById(pbf.getId(), pbf);
+        pbfRepository.save(pbf);
     }
 
     private PlayerTurn updatePrivatePlayerturn(TurnDTO turnDTO, Playerhand playerhand, Set<PlayerTurn> playerturns) {
@@ -245,6 +245,6 @@ public class TurnAction extends BaseAction {
         playerTurn.setDisabled(turnDTO.isLocked());
         String message = turnDTO.isLocked() ? " has locked in turn " + turnDTO.getTurnNumber() : " has re-opened turn " + turnDTO.getTurnNumber();
         createCommonPublicLog(message, pbfId, playerId);
-        pbfCollection.updateById(pbfId, pbf);
+        pbfRepository.save(pbf);
     }
 }

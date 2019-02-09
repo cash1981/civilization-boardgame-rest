@@ -19,7 +19,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Strings;
 import com.mongodb.DB;
 import io.dropwizard.auth.Auth;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import no.asgari.civilization.server.action.DrawAction;
 import no.asgari.civilization.server.action.GameLogAction;
 import no.asgari.civilization.server.action.PlayerAction;
@@ -59,7 +59,7 @@ import java.util.Set;
 @Path("player/{pbfId}")
 @Produces(value = MediaType.APPLICATION_JSON)
 @Consumes(value = MediaType.APPLICATION_JSON)
-@Log4j
+@Slf4j
 public class PlayerResource {
     private final DB db;
     private final PlayerAction playerAction;

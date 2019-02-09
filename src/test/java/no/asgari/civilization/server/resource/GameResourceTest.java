@@ -99,7 +99,7 @@ public class GameResourceTest extends AbstractCivilizationTest {
         String id = location.getPath().split(BASE_URL)[0];
         assertThat(id.charAt(0)).isEqualTo('/');
 
-        assertThat(getApp().pbfCollection.findOneById(id.substring(1)).getPlayers().size()).isEqualTo(1);
+        assertThat(getApp().pbfRepository.findById(id.substring(1)).getPlayers().size()).isEqualTo(1);
     }
 
     @Test
@@ -114,7 +114,7 @@ public class GameResourceTest extends AbstractCivilizationTest {
                 .get(ArrayList.class);
 
         assertThat(list).isNotEmpty();
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfRepository.findById(getApp().pbfId);
         assertThat(list.size()).isEqualTo(pbf.getTechs().size() - 1);
     }
 
@@ -152,7 +152,7 @@ public class GameResourceTest extends AbstractCivilizationTest {
                 .post(null);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT_204);
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfRepository.findById(getApp().pbfId);
         Optional<Playerhand> cash1981 = pbf.getPlayers().stream()
                 .filter(p -> p.getUsername().equals("cash1981"))
                 .findFirst();
@@ -169,7 +169,7 @@ public class GameResourceTest extends AbstractCivilizationTest {
 
     @Test
     public void getGameAsPublicUser() throws Exception {
-        PBF pbf = getApp().pbfCollection.findOne();
+        PBF pbf = getApp().pbfRepository.findOne();
 
         Response response = client().target(
                 UriBuilder.fromPath(String.format(BASE_URL + "/game/%s", pbf.getId()))
@@ -203,7 +203,7 @@ public class GameResourceTest extends AbstractCivilizationTest {
 
     @Test
     public void getListOfPlayersInGame() throws Exception {
-        PBF pbf = getApp().pbfCollection.findOne();
+        PBF pbf = getApp().pbfRepository.findOne();
 
         Response response = client().target(
                 UriBuilder.fromPath(String.format(BASE_URL + "/game/%s/players", pbf.getId()))
@@ -219,7 +219,7 @@ public class GameResourceTest extends AbstractCivilizationTest {
 
     @Test
     public void getListOfPlayersInGameExceptCurrentLoggedIn() throws Exception {
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfRepository.findById(getApp().pbfId);
         int players = pbf.getPlayers().size() - 1;
 
         Response response = client().target(
@@ -237,7 +237,7 @@ public class GameResourceTest extends AbstractCivilizationTest {
 
     @Test
     public void chatTest() {
-        PBF pbf = getApp().pbfCollection.findOne();
+        PBF pbf = getApp().pbfRepository.findOne();
         Form form = new Form("message", "Chat message");
         Response response = client().target(
                 UriBuilder.fromPath(BASE_URL + String.format("/game/%s/chat", pbf.getId())).build())
@@ -322,12 +322,12 @@ public class GameResourceTest extends AbstractCivilizationTest {
     @Test
     public void withdrawShouldPutInWithdrawInPBF() throws Exception {
         //First ensure its your turn
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfRepository.findById(getApp().pbfId);
         Playerhand playerhand = pbf.getPlayers().stream()
                 .filter(p -> p.getUsername().equals("Itchi"))
                 .findFirst().get();
         playerhand.setYourTurn(true);
-        getApp().pbfCollection.updateById(getApp().pbfId, pbf);
+        getApp().pbfRepository.updateById(getApp().pbfId, pbf);
 
         //Må draw noe først, også teste den etterpå
         URI uri = UriBuilder.fromPath(String.format(BASE_URL + "/draw/%s/%s", getApp().pbfId, SheetName.ARTILLERY)).build();
@@ -337,7 +337,7 @@ public class GameResourceTest extends AbstractCivilizationTest {
                 .post(null);
         assertEquals(HttpStatus.OK_200, response.getStatus());
 
-        pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        pbf = getApp().pbfRepository.findById(getApp().pbfId);
         assertThat(pbf.getWithdrawnPlayers()).isEmpty();
 
         Response post = client().target(
@@ -347,7 +347,7 @@ public class GameResourceTest extends AbstractCivilizationTest {
                 .header(HttpHeaders.AUTHORIZATION, getItchiEncoded())
                 .post(null);
 
-        pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        pbf = getApp().pbfRepository.findById(getApp().pbfId);
         assertThat(pbf.getWithdrawnPlayers()).isNotEmpty();
 
         assertThat(post.getStatus()).isEqualTo(HttpStatus.NO_CONTENT_204);
@@ -355,7 +355,7 @@ public class GameResourceTest extends AbstractCivilizationTest {
 
     @Test
     public void addMapLink() throws Exception {
-        PBF pbf = getApp().pbfCollection.findOne();
+        PBF pbf = getApp().pbfRepository.findOne();
         assertThat(pbf.getMapLink()).isNullOrEmpty();
         Form form = new Form("link", "https://docs.google.com/presentation/d/1hgP0f6hj4-lU6ysdOb02gd7oC5gXo8zAAke4RhgIt54/edit?usp=sharing");
         Response response = client().target(
@@ -368,13 +368,13 @@ public class GameResourceTest extends AbstractCivilizationTest {
         MessageDTO message = response.readEntity(MessageDTO.class);
         assertThat(message.getMessage()).isEqualTo("1hgP0f6hj4-lU6ysdOb02gd7oC5gXo8zAAke4RhgIt54");
 
-        pbf = getApp().pbfCollection.findOneById(pbf.getId());
+        pbf = getApp().pbfRepository.findById(pbf.getId());
         assertThat(pbf.getMapLink()).isEqualToIgnoringCase("1hgP0f6hj4-lU6ysdOb02gd7oC5gXo8zAAke4RhgIt54");
     }
 
     @Test
     public void addAssetLink() throws Exception {
-        PBF pbf = getApp().pbfCollection.findOne();
+        PBF pbf = getApp().pbfRepository.findOne();
         assertThat(pbf.getAssetLink()).isNullOrEmpty();
         Form form = new Form("link", "https://docs.google.com/spreadsheets/d/10-syTLb2i2NdB8T_alH9KeyzT8FTlBK6Csmc_Hjjir8/pubhtml?widget=true&amp;headers=false");
         Response response = client().target(
@@ -386,7 +386,7 @@ public class GameResourceTest extends AbstractCivilizationTest {
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK_200);
         MessageDTO message = response.readEntity(MessageDTO.class);
         assertThat(message.getMessage()).isEqualTo("10-syTLb2i2NdB8T_alH9KeyzT8FTlBK6Csmc_Hjjir8");
-        pbf = getApp().pbfCollection.findOneById(pbf.getId());
+        pbf = getApp().pbfRepository.findById(pbf.getId());
         assertThat(pbf.getAssetLink()).isEqualToIgnoringCase("10-syTLb2i2NdB8T_alH9KeyzT8FTlBK6Csmc_Hjjir8");
     }
 

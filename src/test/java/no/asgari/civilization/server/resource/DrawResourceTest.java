@@ -159,7 +159,7 @@ public class DrawResourceTest extends AbstractCivilizationTest {
     }
 
     private String getAnotherPlayerId() {
-        PBF pbf = getApp().pbfCollection.findOneById(getApp().pbfId);
+        PBF pbf = getApp().pbfRepository.findById(getApp().pbfId);
         String pid = "";
         for(Playerhand pl : pbf.getPlayers()) {
             if(!pl.getPlayerId().equals(getApp().playerId)) {

@@ -18,13 +18,13 @@ package no.asgari.civilization.server.email;
 import com.google.common.base.Strings;
 import com.sendgrid.SendGrid;
 import com.sendgrid.SendGridException;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import no.asgari.civilization.server.model.Player;
 
 /**
  * Class that will send emails
  */
-@Log4j
+@Slf4j
 public class SendEmail {
     public static final String SENDGRID_USERNAME = "SENDGRID_USERNAME";
     public static final String SENDGRID_PASSWORD = "SENDGRID_PASSWORD";

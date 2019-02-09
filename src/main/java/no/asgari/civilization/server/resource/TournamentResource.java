@@ -2,7 +2,7 @@ package no.asgari.civilization.server.resource;
 
 import com.mongodb.DB;
 import io.dropwizard.auth.Auth;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import no.asgari.civilization.server.action.TournamentAction;
 import no.asgari.civilization.server.model.Player;
 import no.asgari.civilization.server.model.tournament.Tournament;
@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("tournament")
-@Log4j
+@Slf4j
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class TournamentResource {

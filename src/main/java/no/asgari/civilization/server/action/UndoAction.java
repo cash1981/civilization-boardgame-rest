@@ -17,39 +17,22 @@ package no.asgari.civilization.server.action;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.dto.ItemDTO;
-import no.asgari.civilization.server.model.Draw;
-import no.asgari.civilization.server.model.GameLog;
-import no.asgari.civilization.server.model.Item;
-import no.asgari.civilization.server.model.PBF;
-import no.asgari.civilization.server.model.Playerhand;
-import no.asgari.civilization.server.model.Tech;
-import no.asgari.civilization.server.model.Undo;
-import org.mongojack.DBQuery;
-import org.mongojack.JacksonDBCollection;
+import no.asgari.civilization.server.exception.BadRequestException;
+import no.asgari.civilization.server.exception.NotFoundException;
+import no.asgari.civilization.server.exception.PreConditionFailedException;
+import no.asgari.civilization.server.model.*;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-@Log4j
+@Slf4j
 public class UndoAction extends BaseAction {
-    private final JacksonDBCollection<PBF, String> pbfCollection;
-    private final JacksonDBCollection<GameLog, String> gameLogCollection;
-
-    public UndoAction(DB db) {
-        super(db);
-        this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
-        this.gameLogCollection = JacksonDBCollection.wrap(db.getCollection(GameLog.COL_NAME), GameLog.class, String.class);
-    }
 
     private boolean putDrawnItemBackInPBF(PBF pbf, String playerId, Item item) {
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
@@ -87,7 +70,7 @@ public class UndoAction extends BaseAction {
             }
         }
 
-        pbfCollection.updateById(pbf.getId(), pbf);
+        pbfRepository.save(pbf);
         return true;
     }
 
@@ -117,7 +100,7 @@ public class UndoAction extends BaseAction {
             }
         } else {
             if (!Strings.isNullOrEmpty(draw.getGameLogId())) {
-                GameLog gamelog = gameLogCollection.findOneById(draw.getGameLogId());
+                GameLog gamelog = gameLogRepository.findById(draw.getGameLogId()).orElseThrow(NotFoundException::new);
                 if (gamelog.getPrivateLog().contains("discarded")) {
                     if (pbf.getDiscardedItems().remove(item)) {
                         item.setHidden(true);
@@ -169,7 +152,7 @@ public class UndoAction extends BaseAction {
             }
         }
 
-        pbfCollection.updateById(pbf.getId(), pbf);
+        pbfRepository.save(pbf);
         return true;
     }
 
@@ -193,13 +176,12 @@ public class UndoAction extends BaseAction {
         Preconditions.checkNotNull(gameLog.getDraw());
         Preconditions.checkNotNull(gameLog.getDraw().getUndo());
 
-        PBF pbf = pbfCollection.findOneById(gameLog.getPbfId());
+        PBF pbf = pbfRepository.findById(gameLog.getPbfId()).orElseThrow(NotFoundException::new);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
 
         if (gameLog.getDraw() == null || gameLog.getDraw().getUndo() == null) {
             log.error("This item cannot be undone. Nothing to undo.");
-            throw new WebApplicationException(Response.status(Response.Status.PRECONDITION_FAILED)
-                    .build());
+            throw new PreConditionFailedException();
         }
 
         gameLog.getDraw().getUndo().vote(playerId, vote);
@@ -212,7 +194,7 @@ public class UndoAction extends BaseAction {
             gameLog.getDraw().getUndo().setDone(true);
             putDrawnItemBackInPBF(pbf, gameLog.getDraw());
         }
-        gameLogCollection.updateById(gameLog.getId(), gameLog);
+        gameLogRepository.save(gameLog);
         return gameLog;
     }
 
@@ -230,23 +212,22 @@ public class UndoAction extends BaseAction {
         Draw<?> draw = logContainingItemToUndo.getDraw();
         if (draw.getUndo() != null) {
             log.error("Cannot initiate a undo. Its already been initiated");
-            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-                    .build());
+            throw new BadRequestException();
         }
-        PBF pbf = pbfCollection.findOneById(logContainingItemToUndo.getPbfId());
+        PBF pbf = pbfRepository.findById(logContainingItemToUndo.getPbfId()).orElseThrow();
         if (!pbf.getPlayers().stream().anyMatch(p -> p.getPlayerId().equals(playerId))) {
             log.error("Couldn't find playerId " + playerId + " in PBF's players");
             throw PlayerAction.cannotFindPlayer();
         }
 
         draw.setUndo(new Undo(pbf.getNumOfPlayers(), playerId));
-        gameLogCollection.updateById(logContainingItemToUndo.getId(), logContainingItemToUndo);
+        gameLogRepository.save(logContainingItemToUndo);
 
         createLog(draw.getItem(), pbf.getId(), GameLog.LogType.UNDO, playerId);
     }
 
     public List<GameLog> getAllActiveUndos(String pbfId) {
-        List<GameLog> gameLogs = gameLogCollection.find(DBQuery.is("pbfId", pbfId), new BasicDBObject()).toArray();
+        List<GameLog> gameLogs = gameLogRepository.findAllByPbfId(pbfId);
 
         return gameLogs.stream()
                 .filter(GameLog::hasActiveUndo)
@@ -254,7 +235,7 @@ public class UndoAction extends BaseAction {
     }
 
     public List<GameLog> getPlayersActiveUndoes(String pbfId, String username) {
-        List<GameLog> gamelogs = gameLogCollection.find(DBQuery.is("pbfId", pbfId).is("username", username), new BasicDBObject()).toArray();
+        List<GameLog> gamelogs = gameLogRepository.findAllByPbfIdAndUsername(pbfId, username);
 
         return gamelogs.stream()
                 .filter(GameLog::hasActiveUndo)
@@ -262,7 +243,7 @@ public class UndoAction extends BaseAction {
     }
 
     public List<GameLog> getAllFinishedUndos(String pbfId) {
-        List<GameLog> gameLogs = gameLogCollection.find(DBQuery.is("pbfId", pbfId), new BasicDBObject()).toArray();
+        List<GameLog> gameLogs = gameLogRepository.findAllByPbfId(pbfId);
 
         return gameLogs.stream()
                 .filter(log -> log.getDraw() != null && log.getDraw().getUndo() != null && log.getDraw().getUndo().isDone())
@@ -270,7 +251,7 @@ public class UndoAction extends BaseAction {
     }
 
     public void playerPutsItemBackInDeck(String pbfId, String playerId, ItemDTO itemdto) {
-        PBF pbf = pbfCollection.findOneById(pbfId);
+        PBF pbf = pbfRepository.findById(pbfId).orElseThrow(NotFoundException::new);
 
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         Optional<SheetName> dtoSheet = SheetName.find(itemdto.getSheetName());

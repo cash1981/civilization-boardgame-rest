@@ -16,43 +16,42 @@
 package no.asgari.civilization.server.action;
 
 import com.google.common.base.Preconditions;
-import com.mongodb.DB;
-import lombok.extern.log4j.Log4j;
-import no.asgari.civilization.server.dto.MessageDTO;
-import no.asgari.civilization.server.model.Draw;
-import no.asgari.civilization.server.model.GameLog;
-import no.asgari.civilization.server.model.Item;
-import no.asgari.civilization.server.model.PBF;
-import no.asgari.civilization.server.model.Playerhand;
-import no.asgari.civilization.server.model.SocialPolicy;
-import no.asgari.civilization.server.model.Spreadsheet;
-import no.asgari.civilization.server.model.Tech;
-import org.mongojack.JacksonDBCollection;
+import lombok.extern.slf4j.Slf4j;
+import no.asgari.civilization.server.exception.ForbiddenException;
+import no.asgari.civilization.server.exception.NotFoundException;
+import no.asgari.civilization.server.model.*;
+import no.asgari.civilization.server.repository.ChatRepository;
+import no.asgari.civilization.server.repository.GameLogRepository;
+import no.asgari.civilization.server.repository.PBFRepository;
+import no.asgari.civilization.server.repository.PlayerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Response;
 
-@Log4j
+@Slf4j
+@Component
 public abstract class BaseAction {
-    protected final GameLogAction logAction;
-    private final JacksonDBCollection<PBF, String> pbfCollection;
+    @Autowired
+    protected GameLogAction logAction;
 
-    protected BaseAction(DB db) {
-        this.pbfCollection = JacksonDBCollection.wrap(db.getCollection(PBF.COL_NAME), PBF.class, String.class);
-        this.logAction = new GameLogAction(db);
+    @Autowired
+    protected GameLogRepository gameLogRepository;
+
+    @Autowired
+    protected PBFRepository pbfRepository;
+
+    @Autowired
+    protected ChatRepository chatRepository;
+
+    @Autowired
+    protected PlayerRepository playerRepository;
+
+    public static NotFoundException cannotFindItem() {
+        throw new NotFoundException();
     }
 
-    public static WebApplicationException cannotFindItem() {
-        throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                .entity(Entity.json(new MessageDTO("Could not find item")))
-                .build());
-    }
-
-    static WebApplicationException cannotFindPlayer() {
-        throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                .entity(Entity.json(new MessageDTO("Could not find player")))
-                .build());
+    static NotFoundException cannotFindPlayer() {
+        throw new NotFoundException();
     }
 
     /**
@@ -100,15 +99,7 @@ public abstract class BaseAction {
     }
 
     public PBF findPBFById(String pbfId) {
-        try {
-            return pbfCollection.findOneById(pbfId);
-        } catch (Exception ex) {
-            log.error("Couldn't find pbf");
-            Response badReq = Response.status(Response.Status.BAD_REQUEST)
-                    .entity(Entity.json(new MessageDTO("Could not find game by id")))
-                    .build();
-            throw new WebApplicationException(badReq);
-        }
+        return pbfRepository.findById(pbfId).orElseThrow(NotFoundException::new);
     }
 
     /**
@@ -116,20 +107,16 @@ public abstract class BaseAction {
      *
      * @param pbfId
      * @param playerId
-     * @throws WebApplicationException(Response) - Throws Response.FORBIDDEN if not your turn
      */
-    //TODO Perhaps its best to have this in a filter, but its not always intended to be run
     void checkYourTurn(String pbfId, String playerId) {
-        PBF pbf = pbfCollection.findOneById(pbfId);
+        PBF pbf = pbfRepository.findById(pbfId).orElseThrow(NotFoundException::new);
         Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         checkYourTurn(playerhand);
     }
 
     void checkYourTurn(Playerhand playerhand) {
         if (!playerhand.isYourTurn()) {
-            throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN)
-                    .entity(Entity.json(new MessageDTO("Its not your turn!")))
-                    .build());
+            throw new ForbiddenException();
         }
     }
 

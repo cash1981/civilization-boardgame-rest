@@ -16,16 +16,13 @@
 package no.asgari.civilization.server.action;
 
 import com.google.common.base.Preconditions;
-import com.mongodb.DB;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import no.asgari.civilization.server.application.CivSingleton;
+import no.asgari.civilization.server.exception.NotFoundException;
 import no.asgari.civilization.server.model.Draw;
 import no.asgari.civilization.server.model.GameLog;
 import no.asgari.civilization.server.model.Item;
-import no.asgari.civilization.server.model.Player;
-import org.mongojack.DBQuery;
-import org.mongojack.JacksonDBCollection;
-import org.mongojack.WriteResult;
+import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -35,22 +32,15 @@ import java.util.concurrent.ExecutionException;
 /**
  * Action class responsible for logging private and public logs
  */
-@Log4j
-public class GameLogAction {
-    private final JacksonDBCollection<GameLog, String> gameLogCollection;
-    private final JacksonDBCollection<Player, String> playerCollection;
-
-    public GameLogAction(DB db) {
-        this.gameLogCollection = JacksonDBCollection.wrap(db.getCollection(GameLog.COL_NAME), GameLog.class, String.class);
-        this.playerCollection = JacksonDBCollection.wrap(db.getCollection(Player.COL_NAME), Player.class, String.class);
-    }
+@Slf4j
+@Component
+public class GameLogAction extends BaseAction {
 
     String save(@NotNull @Valid GameLog gameLog) {
         Preconditions.checkNotNull(gameLog);
 
-        WriteResult<GameLog, String> insert = this.gameLogCollection.insert(gameLog);
-        log.debug("Saved Gamelog with _id " + insert.getSavedId());
-        return insert.getSavedId();
+        GameLog insert = gameLogRepository.save(gameLog);
+        return insert.getId();
     }
 
     public GameLog createGameLog(Draw draw, GameLog.LogType logType) {
@@ -139,23 +129,23 @@ public class GameLogAction {
     }
 
     public GameLog findGameLogById(String id) {
-        return gameLogCollection.findOneById(id);
+        return gameLogRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
-    public WriteResult<GameLog, String> updateGameLogById(GameLog gameLog) {
-        return gameLogCollection.updateById(gameLog.getId(), gameLog);
+    public GameLog updateGameLogById(GameLog gameLog) {
+        return gameLogRepository.save(gameLog);
     }
 
     private String getUsernameFromPlayerId(String playerId) {
-        return playerCollection.findOneById(playerId).getUsername();
+        return playerRepository.findById(playerId).orElseThrow(NotFoundException::new).getUsername();
     }
 
     public List<GameLog> getGameLogs(String pbfId) {
-        return gameLogCollection.find(DBQuery.is("pbfId", pbfId)).toArray();
+        return gameLogRepository.findAllByPbfId(pbfId);
     }
 
     public List<GameLog> getGameLogsBelongingToPlayer(String pbfId, String username) {
-        return gameLogCollection.find(DBQuery.is("pbfId", pbfId).is("username", username)).toArray();
+        return gameLogRepository.findAllByPbfIdAndUsername(pbfId, username);
     }
 
     public void createTradeGameLog(Item item, String pbfId, GameLog.LogType logType, String username) {
@@ -196,10 +186,10 @@ public class GameLogAction {
     }
 
     public boolean updateGameLog(String pbfId, String oldUsername, String newUsername) {
-        List<GameLog> gameLogs = gameLogCollection.find(DBQuery.is("pbfId", pbfId).is("username", oldUsername)).toArray();
+        List<GameLog> gameLogs = gameLogRepository.findAllByPbfIdAndUsername(pbfId, oldUsername);
         for (GameLog gl : gameLogs) {
             gl.setUsername(newUsername);
-            gameLogCollection.updateById(gl.getId(), gl);
+            gameLogRepository.save(gl);
         }
         return !gameLogs.isEmpty();
     }

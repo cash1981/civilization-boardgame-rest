@@ -18,7 +18,7 @@ package no.asgari.civilization.server.excel;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import no.asgari.civilization.server.SheetName;
 import no.asgari.civilization.server.model.Aircraft;
 import no.asgari.civilization.server.model.Artillery;
@@ -54,7 +54,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-@Log4j
+@Slf4j
 public class ItemReader {
     private static final Predicate<Cell> notEmptyPredicate = cell -> !cell.toString().isEmpty();
     private static final Predicate<Cell> notRandomPredicate = cell -> !cell.toString().equals("RAND()");
