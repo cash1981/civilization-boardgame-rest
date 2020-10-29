@@ -21,11 +21,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheBuilderSpec;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
+import com.mongodb.*;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.basic.BasicCredentials;
@@ -38,12 +34,7 @@ import io.dropwizard.setup.Environment;
 import lombok.extern.log4j.Log4j;
 import no.asgari.civilization.server.model.Chat;
 import no.asgari.civilization.server.model.Player;
-import no.asgari.civilization.server.resource.AdminResource;
-import no.asgari.civilization.server.resource.AuthResource;
-import no.asgari.civilization.server.resource.DrawResource;
-import no.asgari.civilization.server.resource.GameResource;
-import no.asgari.civilization.server.resource.PlayerResource;
-import no.asgari.civilization.server.resource.TournamentResource;
+import no.asgari.civilization.server.resource.*;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.glassfish.hk2.utilities.Binder;
 import org.mongojack.JacksonDBCollection;
@@ -52,13 +43,10 @@ import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import static org.eclipse.jetty.servlets.CrossOriginFilter.ALLOWED_HEADERS_PARAM;
-import static org.eclipse.jetty.servlets.CrossOriginFilter.ALLOWED_METHODS_PARAM;
-import static org.eclipse.jetty.servlets.CrossOriginFilter.ALLOWED_ORIGINS_PARAM;
-import static org.eclipse.jetty.servlets.CrossOriginFilter.ALLOW_CREDENTIALS_PARAM;
-import static org.eclipse.jetty.servlets.CrossOriginFilter.EXPOSED_HEADERS_PARAM;
+import static org.eclipse.jetty.servlets.CrossOriginFilter.*;
 
 @Log4j
 @SuppressWarnings("unchecked")
@@ -82,12 +70,12 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
     public void run(CivilizationConfiguration configuration, Environment environment) throws Exception {
         DB db;
         MongoClient mongo;
-        if (!Strings.isNullOrEmpty(configuration.mongodbUser) && !Strings.isNullOrEmpty(configuration.mongodbPassword)) {
-            MongoClientURI clientURI = new MongoClientURI("mongodb://" + configuration.mongodbUser + ":" + configuration.mongodbPassword
-                    + "@" + configuration.mongohost + ":" + configuration.mongoport + "/" + configuration.mongodb);
+
+        if (!Strings.isNullOrEmpty(configuration.mongouri)) {
+            MongoClientURI clientURI = new MongoClientURI(configuration.mongouri);
 
             mongo = new MongoClient(clientURI);
-            db = mongo.getDB(clientURI.getDatabase());
+            db = mongo.getDB(Objects.requireNonNull(clientURI.getDatabase()));
         } else {
             mongo = new MongoClient(configuration.mongohost, configuration.mongoport);
             db = mongo.getDB(configuration.mongodb);
