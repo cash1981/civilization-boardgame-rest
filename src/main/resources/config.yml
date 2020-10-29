@@ -1,6 +1,6 @@
 mongohost: localhost
 mongoport: 27017
-mongodb: civilization
+mongodb: playciv
 
 #Application config
 server:

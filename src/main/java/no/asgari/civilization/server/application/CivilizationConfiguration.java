@@ -19,26 +19,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-
 public class CivilizationConfiguration extends Configuration {
-    public static final String CIVILIZATION = "civilization";
+    public static final String CIVILIZATION = "playciv";
 
     @JsonProperty
     @NotEmpty
+    public String mongouri = System.getenv("ATLAS_URI") == null ? "localhost" : System.getenv("ATLAS_URI");
+
+    @JsonProperty
     public String mongohost = System.getenv("MONGODB_HOST") == null ? "localhost" : System.getenv("MONGODB_HOST");
 
     @JsonProperty
-    @Min(1)
-    @Max(65535)
     public int mongoport = System.getenv("MONGODB_PORT") == null ? 27017 : Integer.parseInt(System.getenv("MONGODB_PORT"));
 
     @JsonProperty
-    @NotEmpty
     public String mongodb = System.getenv("MONGODB_NAME") == null ? CIVILIZATION : System.getenv("MONGODB_NAME");
 
-    public String mongodbUser = System.getenv("MONGODB_USER") == null ? null : System.getenv("MONGODB_USER");
-
-    public String mongodbPassword = System.getenv("MONGODB_PASS") == null ? null : System.getenv("MONGODB_PASS");
 }
