@@ -71,16 +71,10 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         DB db;
         MongoClient mongo;
 
-
         if (!Strings.isNullOrEmpty(configuration.mongouri)) {
             MongoClientURI clientURI = new MongoClientURI(configuration.mongouri);
 
-            ServerAddress serverAddress = new ServerAddress(configuration.mongohost, configuration.mongoport);
-            MongoClientOptions mongoClientOptions = MongoClientOptions.builder()
-                    .maxConnectionLifeTime(9000) //TODO setter på pga timeout i heroku
-                    .build();
-            mongo = new MongoClient(serverAddress, mongoClientOptions);
-
+            mongo = new MongoClient(clientURI);
             db = mongo.getDB(Objects.requireNonNull(clientURI.getDatabase()));
         } else {
             mongo = new MongoClient(configuration.mongohost, configuration.mongoport);
@@ -131,8 +125,6 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         filter.setInitParameter(ALLOWED_HEADERS_PARAM, "X-Requested-With,Content-Type,Accept,Origin,authorization");
         filter.setInitParameter(ALLOW_CREDENTIALS_PARAM, "true");
         filter.setInitParameter(EXPOSED_HEADERS_PARAM, "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,Location,Accept-Content-Encoding");
-
-        MongoClientOptions.builder().build();
     }
 
     private void createUsernameCache(JacksonDBCollection<Player, String> playerCollection) {
