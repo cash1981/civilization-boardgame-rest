@@ -657,6 +657,10 @@ public class GameAction extends BaseAction {
     public CivHighscoreDTO getCivHighscore() {
         CivHighscoreDTO dto = new CivHighscoreDTO();
         ListMultimap<String, Integer> civWinnersByNumberOfPlayers = ArrayListMultimap.create();
+        ListMultimap<String, Integer> twoPlayerWinner = ArrayListMultimap.create();
+        ListMultimap<String, Integer> threePlayerWinner = ArrayListMultimap.create();
+        ListMultimap<String, Integer> fourPlayerWinner = ArrayListMultimap.create();
+        ListMultimap<String, Integer> fivePlayerWinner = ArrayListMultimap.create();
         List<Player> allPlayers = playerCollection.find().toArray();
         dto.setTotalNumberOfPlayers(allPlayers.size());
 
@@ -673,19 +677,37 @@ public class GameAction extends BaseAction {
                     .filter(p -> p.getUsername().equals(pbf.getWinner()))
                     .map(p -> p.getCivilization().getName())
                     .findFirst().orElse("");
-            civWinnersByNumberOfPlayers.put(winningCiv
-                    , pbf.getNumOfPlayers());
+
+
+            civWinnersByNumberOfPlayers.put(winningCiv, pbf.getNumOfPlayers());
+
+            switch (pbf.getNumOfPlayers()) {
+                case 2:
+                    twoPlayerWinner.put(winningCiv, 2);
+                    break;
+                case 3:
+                    threePlayerWinner.put(winningCiv, 3);
+                    break;
+                case 4:
+                    fourPlayerWinner.put(winningCiv, 4);
+                    break;
+                case 5:
+                    fivePlayerWinner.put(winningCiv, 5);
+                    break;
+            }
+
         });
         dto.setWinners(getAllCivWinners(civWinnersByNumberOfPlayers, finishedGames));
-        dto.setFiveWinners(getCivWinners(civWinnersByNumberOfPlayers, finishedGames, 5));
-        dto.setFourWinners(getCivWinners(civWinnersByNumberOfPlayers, finishedGames, 4));
-        dto.setThreeWinners(getCivWinners(civWinnersByNumberOfPlayers, finishedGames, 3));
-        dto.setTwoWinners(getCivWinners(civWinnersByNumberOfPlayers, finishedGames, 2));
+        dto.setFiveWinners(getCivWinners(fivePlayerWinner, finishedGames, 5));
+        dto.setFourWinners(getCivWinners(fourPlayerWinner, finishedGames, 4));
+        dto.setThreeWinners(getCivWinners(threePlayerWinner, finishedGames, 3));
+        dto.setTwoWinners(getCivWinners(twoPlayerWinner, finishedGames, 2));
 
-        dto.setFivePlayerGamesTotal(finishedGames.stream().filter(pbf -> pbf.getNumOfPlayers() == 5).count());
-        dto.setFourPlayerGamesTotal(finishedGames.stream().filter(pbf -> pbf.getNumOfPlayers() == 4).count());
-        dto.setThreePlayerGamesTotal(finishedGames.stream().filter(pbf -> pbf.getNumOfPlayers() == 3).count());
-        dto.setTwoPlayerGamesTotal(finishedGames.stream().filter(pbf -> pbf.getNumOfPlayers() == 2).count());
+        dto.setFivePlayerGamesTotal(fivePlayerWinner.size());
+        //dto.setFourPlayerGamesTotal(finishedGames.stream().filter(pbf -> pbf.getNumOfPlayers() == 4).count());
+        dto.setFourPlayerGamesTotal(fourPlayerWinner.size());
+        dto.setThreePlayerGamesTotal(threePlayerWinner.size());
+        dto.setTwoPlayerGamesTotal(twoPlayerWinner.size());
         return dto;
     }
 
@@ -755,6 +777,7 @@ public class GameAction extends BaseAction {
                     Long attempts = attemptsPerUserAllGames.get(user);
                     return new WinnerDTO(user, winnersByNumOfPlayers.get(user).size(), attempts == null ? 0L : attempts);
                 })
+                .distinct()
                 .collect(toList());
 
         allWinners.addAll(filteredPlayers);
@@ -771,11 +794,8 @@ public class GameAction extends BaseAction {
      * @return
      */
     private List<WinnerDTO> getCivWinners(ListMultimap<String, Integer> civWinners, List<PBF> finishedGames, int numOfPlayers) {
-        Map<String, Long> attemptsPerCivAllGames = finishedGames.stream()
-                .flatMap(pbf -> pbf.getPlayers().stream())
-                .map(Playerhand::getCivilization)
-                .map(Civ::getName)
-                .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+
+
 
         return finishedGames.stream()
                 .filter(pbf -> pbf.getNumOfPlayers() == numOfPlayers)
@@ -785,16 +805,20 @@ public class GameAction extends BaseAction {
                             .map(Playerhand::getCivilization)
                             .map(Civ::getName)
                             .findFirst().orElse("");
-                    long attempts = attemptsPerCivAllGames.get(winnerCiv);
-
-                    int totalWins = Optional.ofNullable(civWinners.get(winnerCiv))
-                            .map(civs -> civs.stream().filter(num -> num == numOfPlayers).count())
-                            .orElse(0L).intValue();
+                    long attempts = findAllGamesCivHasPlayed(finishedGames, winnerCiv, numOfPlayers);
+                    int totalWins = civWinners.get(winnerCiv).size();
                     return new WinnerDTO(winnerCiv, totalWins, attempts);
                 })
                 .sorted((Comparator.reverseOrder()))
                 .distinct()
                 .collect(toList());
+    }
+
+    private long findAllGamesCivHasPlayed(List<PBF> finishedGames, String winnerCiv, int numOfPlayers) {
+        return finishedGames.stream()
+                .filter(pbf -> pbf.getNumOfPlayers() == numOfPlayers)
+                .filter(pbf -> pbf.getPlayers().stream().anyMatch(p -> p.getCivilization().getName().equals(winnerCiv)))
+                .count();
     }
 
     private List<WinnerDTO> getWinners(ListMultimap<String, Integer> winnersByNumOfPlayers, List<PBF> finishedGames, int numOfPlayers) {
