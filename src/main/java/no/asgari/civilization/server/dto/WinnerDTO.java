@@ -23,7 +23,7 @@ public class WinnerDTO implements Comparable<WinnerDTO> {
 
     @Override
     public int compareTo(WinnerDTO o) {
-        int i = Integer.valueOf(this.getTotalWins()).compareTo(o.getTotalWins());
+        int i = Integer.compare(this.getTotalWins(), o.getTotalWins());
         if (i != 0) {
             return i;
         }
