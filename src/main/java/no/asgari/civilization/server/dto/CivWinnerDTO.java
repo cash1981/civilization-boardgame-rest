@@ -31,7 +31,7 @@ public class CivWinnerDTO implements Comparable<CivWinnerDTO> {
 
     @Override
     public int compareTo(CivWinnerDTO o) {
-        int i = Long.valueOf(this.getTotalWins()).compareTo(o.getTotalWins());
+        int i = Long.compare(this.getTotalWins(), o.getTotalWins());
         if (i != 0) {
             return i;
         }
