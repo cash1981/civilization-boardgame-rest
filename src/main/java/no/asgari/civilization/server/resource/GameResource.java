@@ -27,7 +27,7 @@ import no.asgari.civilization.server.action.PlayerAction;
 import no.asgari.civilization.server.action.TurnAction;
 import no.asgari.civilization.server.action.UndoAction;
 import no.asgari.civilization.server.dto.ChatDTO;
-import no.asgari.civilization.server.dto.CivWinnerDTO;
+import no.asgari.civilization.server.dto.CivHighscoreDTO;
 import no.asgari.civilization.server.dto.CreateNewGameDTO;
 import no.asgari.civilization.server.dto.DrawDTO;
 import no.asgari.civilization.server.dto.GameDTO;
@@ -447,7 +447,7 @@ public class GameResource {
     @GET
     @Path("civhighscore")
     @Produces(value = MediaType.APPLICATION_JSON)
-    public List<CivWinnerDTO> getCivHighscore() {
+    public CivHighscoreDTO getCivHighscore() {
         return gameAction.getCivHighscore();
     }
 
