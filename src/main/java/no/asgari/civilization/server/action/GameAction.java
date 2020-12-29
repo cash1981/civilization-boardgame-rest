@@ -787,16 +787,12 @@ public class GameAction extends BaseAction {
     }
 
     /**
-     *
-     * @param civWinners - List<WinnerCiv, num of players>
+     * @param civWinners    - List<WinnerCiv, num of players>
      * @param finishedGames
      * @param numOfPlayers
      * @return
      */
     private List<WinnerDTO> getCivWinners(ListMultimap<String, Integer> civWinners, List<PBF> finishedGames, int numOfPlayers) {
-
-
-
         return finishedGames.stream()
                 .filter(pbf -> pbf.getNumOfPlayers() == numOfPlayers)
                 .map(p -> {

@@ -2,10 +2,6 @@
 #mongoport: 61371
 mongodb: playciv
 
-#mongouri: mongodb://uedpt8zicq3wq9pmufbb:Sl73pBNcaQvy4rhLEAjx@bsgmvikhtnhzjez-mongodb.services.clever-cloud.com:27017/bsgmvikhtnhzjez
-#mongodb://<username>:<password>@playciv-shard-00-00.4cayc.mongodb.net:27017,playciv-shard-00-01.4cayc.mongodb.net:27017,playciv-shard-00-02.4cayc.mongodb.net:27017/heroku_app35355040?ssl=true&replicaSet=atlas-13uywy-shard-0&authSource=admin&retryWrites=true&w=majority
-
-
 #Application config
 server:
   #applicationConnectors:
