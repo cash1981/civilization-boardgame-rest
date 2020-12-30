@@ -715,17 +715,25 @@ public class GameAction extends BaseAction {
         ListMultimap<String, Integer> winnersByNumOfPlayers = ArrayListMultimap.create();
         PlayerHighscoreDTO dto = new PlayerHighscoreDTO();
         List<Player> allPlayers = playerCollection.find().toArray();
-        dto.setTotalNumberOfPlayers(allPlayers.size());
+       dto.setTotalPlayerAccountsCreated(allPlayers.size());
         //key == username, value = num of players
 
         List<PBF> finishedGames = pbfCollection.find().toArray().stream()
                 .filter(pbf -> !pbf.isActive())
                 .filter(pbf -> !Strings.isNullOrEmpty(pbf.getWinner()))
                 .collect(toList());
+
+        Map<String, Long> attemptsPerUserAllGames = finishedGames.stream()
+                .flatMap(pbf -> pbf.getPlayers().stream())
+                .map(Playerhand::getUsername)
+                .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+
         dto.setTotalNumberOfGames(finishedGames.size());
+        //Add only players who have played a game
+        dto.setTotalNumberOfPlayers(attemptsPerUserAllGames.keySet().size());
 
         finishedGames.forEach(pbf -> winnersByNumOfPlayers.put(pbf.getWinner(), pbf.getNumOfPlayers()));
-        dto.setWinners(getAllWinners(winnersByNumOfPlayers, allPlayers, finishedGames));
+        dto.setWinners(getAllWinners(winnersByNumOfPlayers, allPlayers, finishedGames, attemptsPerUserAllGames));
         dto.setFiveWinners(getWinners(winnersByNumOfPlayers, finishedGames, 5));
         dto.setFourWinners(getWinners(winnersByNumOfPlayers, finishedGames, 4));
         dto.setThreeWinners(getWinners(winnersByNumOfPlayers, finishedGames, 3));
@@ -756,15 +764,9 @@ public class GameAction extends BaseAction {
     }
 
 
-    private List<WinnerDTO> getAllWinners(ListMultimap<String, Integer> winnersByNumOfPlayers, List<Player> allPlayers, List<PBF> finishedGames) {
-        Map<String, Long> attemptsPerUserAllGames = finishedGames.stream()
-                .flatMap(pbf -> pbf.getPlayers().stream())
-                .map(Playerhand::getUsername)
-                .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
-
-
+    private List<WinnerDTO> getAllWinners(ListMultimap<String, Integer> winnersByNumOfPlayers, List<Player> allPlayers, List<PBF> finishedGames, Map<String, Long> attemptsPerUserAllGames) {
         List<WinnerDTO> filteredPlayers = allPlayers.stream()
-                .filter(p -> !winnersByNumOfPlayers.containsKey(p.getUsername()) && p.getUsername() != null)
+                .filter(p -> !winnersByNumOfPlayers.containsKey(p.getUsername()) && p.getUsername() != null && attemptsPerUserAllGames.containsKey(p.getUsername()))
                 .map(p -> {
                     long attempts = attemptsPerUserAllGames.get(p.getUsername()) == null ? 0L : attemptsPerUserAllGames.get(p.getUsername());
                     return new WinnerDTO(p.getUsername(), 0, attempts);

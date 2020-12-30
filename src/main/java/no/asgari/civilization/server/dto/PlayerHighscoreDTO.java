@@ -17,9 +17,11 @@ public class PlayerHighscoreDTO {
     private List<WinnerDTO> threeWinners = new ArrayList<>();
     private List<WinnerDTO> twoWinners = new ArrayList<>();
     private int totalNumberOfPlayers;
+    private int totalNumberOfActivePlayers;
     private int totalNumberOfGames;
     private long fivePlayerGamesTotal;
     private long fourPlayerGamesTotal;
     private long threePlayerGamesTotal;
     private long twoPlayerGamesTotal;
+    private long totalPlayerAccountsCreated;
 }
