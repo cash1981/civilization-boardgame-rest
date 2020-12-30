@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Shervin Asgari
+ * Copyright (c) 2015-2021 Shervin Asgari
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,10 +16,15 @@
 package no.asgari.civilization.server.email;
 
 import com.google.common.base.Strings;
+import com.sendgrid.Content;
+import com.sendgrid.Email;
+import com.sendgrid.Mail;
+import com.sendgrid.Method;
+import com.sendgrid.Request;
 import com.sendgrid.SendGrid;
-import com.sendgrid.SendGridException;
 import lombok.extern.log4j.Log4j;
-import no.asgari.civilization.server.model.Player;
+
+import java.io.IOException;
 
 /**
  * Class that will send emails
@@ -31,8 +36,7 @@ public class SendEmail {
     public static final String NOREPLY_PLAYCIV_COM = "noreply@playciv.com";
     public static final String URL = "http://playciv.com/";
     public static final String REST_URL = "https://civilization-boardgame.herokuapp.com/";
-    public static final String CASH_EMAIL = "cash@playciv.com";
-    private static final SendGrid sendgrid = new SendGrid(System.getenv(SENDGRID_USERNAME), System.getenv(SENDGRID_PASSWORD));
+    private static final String SENDGRID_API_KEY = "SENDGRID_API_KEY";
 
     public static String gamelink(String pbfId) {
         return URL + "#/game/" + pbfId;
@@ -43,18 +47,22 @@ public class SendEmail {
             log.error("Missing environment variable for SENDGRID_USERNAME or SENDGRID_PASSWORD");
             return false;
         }
-        SendGrid.Email email = new SendGrid.Email();
-        email.addTo(emailToo);
-        email.setFrom(NOREPLY_PLAYCIV_COM);
-        email.setSubject("It is your turn");
-        email.setText("It's your turn to play in " + gamename + "!\n\n" +
-                "Go to " + gamelink(pbfId) + " to start your turn");
 
+        Email from = new Email(NOREPLY_PLAYCIV_COM);
+        Email to = new Email(emailToo);
+        Content content = new Content("text/html", "It's your turn to play in " + gamename + "!\n\n" +
+                "Go to " + gamelink(pbfId) + " to start your turn");
+        Mail mail = new Mail(from, "It is your turn", to, content);
+
+        SendGrid sg = new SendGrid(System.getenv(SENDGRID_API_KEY));
+        Request request = new Request();
         try {
-            SendGrid.Response response = sendgrid.send(email);
-            return response.getStatus();
-        } catch (SendGridException e) {
-            log.error("Error sending email: " + e.getMessage(), e);
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+            sg.api(request);
+        } catch (IOException ex) {
+            log.error("Error sending email: " + ex.getMessage(), ex);
         }
         return false;
     }
@@ -64,58 +72,24 @@ public class SendEmail {
             log.error("Missing environment variable for SENDGRID_USERNAME or SENDGRID_PASSWORD");
             return false;
         }
-        SendGrid.Email sendGridEmail = new SendGrid.Email();
-        sendGridEmail.addTo(email);
-        sendGridEmail.setFrom(NOREPLY_PLAYCIV_COM);
-        sendGridEmail.setSubject(subject);
-        sendGridEmail.setText(message + UNSUBSCRIBE(playerId));
 
+        Email from = new Email(NOREPLY_PLAYCIV_COM);
+        Email to = new Email(email);
+        Content content = new Content("text/plain", message + UNSUBSCRIBE(playerId));
+        Mail mail = new Mail(from, subject, to, content);
+
+        SendGrid sg = new SendGrid(System.getenv(SENDGRID_API_KEY));
+        Request request = new Request();
         try {
-            SendGrid.Response response = sendgrid.send(sendGridEmail);
-            return response.getStatus();
-        } catch (SendGridException e) {
-            log.error("Error sending sendGridEmail: " + e.getMessage(), e);
-        }
-        return false;
-    }
-
-    public static boolean someoneJoinedTournament(Player player) {
-        if (System.getenv(SENDGRID_USERNAME) == null || System.getenv(SENDGRID_PASSWORD) == null) {
-            log.error("Missing environment variable for SENDGRID_USERNAME or SENDGRID_PASSWORD");
-            return false;
-        }
-
-        SendGrid.Email sendGridEmail = new SendGrid.Email();
-        sendGridEmail.addTo(CASH_EMAIL);
-        sendGridEmail.setFrom(NOREPLY_PLAYCIV_COM);
-        sendGridEmail.setSubject(player.getUsername() + " joined tournament");
-        sendGridEmail.setText(player.getUsername() + " with email " + player.getEmail() + " joined the tournament");
-
-        try {
-            SendGrid.Response response = sendgrid.send(sendGridEmail);
-            sendConfirmationToPlayer(player);
-            return response.getStatus();
-        } catch (SendGridException e) {
-            log.error("Error sending sendGridEmail: " + e.getMessage(), e);
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+            sg.api(request);
+        } catch (IOException ex) {
+            log.error("Error sending email: " + ex.getMessage(), ex);
         }
 
         return false;
-    }
-
-    private static void sendConfirmationToPlayer(Player player) {
-        SendGrid.Email sendGridEmail = new SendGrid.Email();
-        sendGridEmail.addTo(player.getEmail());
-        sendGridEmail.setFrom(CASH_EMAIL);
-        sendGridEmail.setSubject("You joined the tournament");
-        sendGridEmail.setText("You have just entered the 1vs1 tournament. " +
-                "To confirm your participation please donate the appropriate amount. You can find the donate link on playciv.com website. " +
-                "Afterwards please reply to this email and let me know that you have donated. Good luck and have fun!");
-
-        try {
-            sendgrid.send(sendGridEmail);
-        } catch (SendGridException e) {
-            log.error("Error sending sendGridEmail: " + e.getMessage(), e);
-        }
     }
 
     private static String UNSUBSCRIBE(String playerId) {

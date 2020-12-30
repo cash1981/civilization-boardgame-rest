@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Shervin Asgari
+ * Copyright (c) 2015-2021 Shervin Asgari
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -93,7 +93,7 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         //createItemCache(); //TODO Have to rewrite the code to make it work, right now everyone gets same number and same draws
 
         //healtcheck
-        environment.healthChecks().register("MongoHealthCheck", new MongoHealthCheck(mongo));
+        //environment.healthChecks().register("MongoHealthCheck", new MongoHealthCheck(mongo));
 
         //Resources
         environment.jersey().register(new GameResource(db));
@@ -101,7 +101,7 @@ public class CivilizationApplication extends Application<CivilizationConfigurati
         environment.jersey().register(new PlayerResource(db));
         environment.jersey().register(new DrawResource(db));
         environment.jersey().register(new AdminResource(db));
-        environment.jersey().register(new TournamentResource(db));
+        //environment.jersey().register(new TournamentResource(db));
 
         //Authenticator
         CachingAuthenticator<BasicCredentials, Player> cachingAuthenticator = new CachingAuthenticator<>(
