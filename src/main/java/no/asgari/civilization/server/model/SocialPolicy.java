@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @ToString()
 @JsonTypeName("socialpolicy")
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"name"})
+@EqualsAndHashCode(of = {"name", "itemNumber"})
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SocialPolicy implements Item, Image {
     @NotEmpty

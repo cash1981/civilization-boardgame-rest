@@ -31,7 +31,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @ToString(of = "name")
 @JsonTypeName("hut")
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"ownerId", "hidden", "used"})
+@EqualsAndHashCode(exclude = {"ownerId", "hidden", "used", "itemNumber"})
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Hut implements Item, Tradable, Image {
     @NotEmpty

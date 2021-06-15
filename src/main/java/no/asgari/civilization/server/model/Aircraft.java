@@ -29,7 +29,7 @@ import no.asgari.civilization.server.SheetName;
 @JsonTypeName("aircraft")
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-@EqualsAndHashCode(of = {"attack", "health", "sheetName"}, callSuper = false)
+@EqualsAndHashCode(of = {"attack", "health", "sheetName", "itemNumber"}, callSuper = false)
 public class Aircraft extends Unit implements Image {
     private String ownerId; // id of the player which owns this item
     private boolean hidden = true;

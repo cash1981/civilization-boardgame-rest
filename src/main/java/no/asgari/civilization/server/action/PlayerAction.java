@@ -547,7 +547,7 @@ public class PlayerAction extends BaseAction {
 
         Item itemToDelete = itemToDeleteOptional.get();
         itemToDelete.setHidden(true);
-        //itemToDelete.setOwnerId(null); //I think I need this in case of undo
+        itemToDelete.setOwnerId(null); //I think I need this in case of undo
 
         if (playerhand.getItems().remove(itemToDeleteOptional.get())) {
             pbf.getDiscardedItems().add(itemToDeleteOptional.get());

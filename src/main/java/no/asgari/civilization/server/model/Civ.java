@@ -34,7 +34,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "objectType")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"name", "description", "type"})
+@EqualsAndHashCode(of = {"name", "type", "itemNumber"})
 public class Civ implements Item, Image {
     @NotEmpty
     private String name;

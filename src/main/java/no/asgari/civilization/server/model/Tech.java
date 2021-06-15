@@ -32,7 +32,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"name"})
+@EqualsAndHashCode(of = {"name", "itemNumber"})
 public class Tech implements Item, Level, Image {
     @JsonIgnore
     public static final int LEVEL_1 = 1;
