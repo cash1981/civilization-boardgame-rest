@@ -166,32 +166,8 @@ public class PlayerAction extends BaseAction {
 
             pbfCollection.updateById(pbf.getId(), pbf);
             return true;
-
-        } else {
-            //Old way, this else can be deleted once all games after januar 4 is over
-
-            //Loop through the list and find next starting player
-            for (int i = 0; i < pbf.getPlayers().size(); i++) {
-                Playerhand playerhand = pbf.getPlayers().get(i);
-                if (playerhand.getUsername().equals(player.getUsername())) {
-                    playerhand.setYourTurn(false);
-
-                    //Choose next player in line to be starting player
-                    Playerhand nextPlayer;
-                    if (pbf.getPlayers().size() == (i + 1)) {
-                        nextPlayer = pbf.getPlayers().get(0);
-                    } else {
-                        nextPlayer = pbf.getPlayers().get(i + 1);
-                    }
-                    nextPlayer.setYourTurn(true);
-                    SendEmail.sendYourTurn(pbf.getName(), nextPlayer.getEmail(), pbf.getId());
-
-                    pbfCollection.updateById(pbf.getId(), pbf);
-                    return true;
-                }
-            }
-
         }
+        log.error("Do we need to revert the old code back? Look in git history");
         return false;
     }
 
@@ -248,7 +224,7 @@ public class PlayerAction extends BaseAction {
                     .build());
         }
 
-        boolean isCiv = isCivilization(playerhand, sheetName);
+        boolean isCiv = isCivilization(playerhand, sheetName.get());
 
         Item itemToReveal = itemToRevealOptional.get();
         itemToReveal.setHidden(false);
@@ -259,15 +235,18 @@ public class PlayerAction extends BaseAction {
             logAction.createGameLog(itemToReveal, pbf.getId(), GameLog.LogType.REVEAL);
             log.debug("item to be reveal " + itemToReveal);
 
-            //If player has no units, then no need to call this
+            //If player has already drawn  units, then no need to call this
             if (playerhand.getItems().stream().noneMatch(p -> p instanceof Unit)) {
                 drawStartingItems(pbfId, playerId, civ);
+                pbf = pbfCollection.findOneById(pbfId); //Need to do this so that Egypts wonder is being updated
             }
 
             deleteTheOtherCivs(pbfId, playerId, civ);
 
             if (shouldDrawWonders(pbf)) {
                 drawStartingWonders(pbf, playerhand.getPlayerId());
+            } else if(shouldDrawWondersWithEgypt(pbf)) {
+                drawStartingWondersEgypt(pbf, playerhand.getPlayerId());
             }
 
         } else {
@@ -279,17 +258,41 @@ public class PlayerAction extends BaseAction {
 
     }
 
+    private boolean shouldDrawWondersWithEgypt(PBF pbf) {
+        return pbf.getNumOfPlayers() == pbf.getPlayers().size() &&
+                pbf.getPlayers().stream().allMatch(p -> p.getCivilization() != null) &&
+                pbf.getDiscardedItems().stream().noneMatch(item -> SheetName.ALL_WONDERS.contains(item.getSheetName())) &&
+                pbf.getPlayers().stream()
+                        .filter(p -> "Egyptians".equalsIgnoreCase(p.getCivilization().getName()))
+                        .flatMap(p -> p.getItems().stream())
+                        .filter(it -> SheetName.ALL_WONDERS.contains(it.getSheetName()))
+                        .count() == 1;
+
+    }
+
     private boolean shouldDrawWonders(PBF pbf) {
         return pbf.getNumOfPlayers() == pbf.getPlayers().size() &&
                 pbf.getPlayers().stream().allMatch(p -> p.getCivilization() != null) &&
-                pbf.getDiscardedItems().stream()
-                        .filter(item -> SheetName.ALL_WONDERS.contains(item.getSheetName()))
-                        .count() == 0 &&
-                pbf.getPlayers()
-                        .stream()
+                pbf.getDiscardedItems().stream().noneMatch(item -> SheetName.ALL_WONDERS.contains(item.getSheetName())) &&
+                pbf.getPlayers().stream()
                         .flatMap(p -> p.getItems().stream())
-                        .filter(it -> SheetName.ALL_WONDERS.contains(it.getSheetName()))
-                        .count() == 0;
+                        .noneMatch(it -> SheetName.ALL_WONDERS.contains(it.getSheetName()));
+    }
+
+    private void drawStartingWondersEgypt(PBF pbf, String playerId) {
+        createInfoLog(pbf.getId(), "Drawing 3 ancient wonders and 1 medieval wonder");
+        drawAction.draw(pbf.getId(), playerId, SheetName.ANCIENT_WONDERS);
+        drawAction.draw(pbf.getId(), playerId, SheetName.ANCIENT_WONDERS);
+        drawAction.draw(pbf.getId(), playerId, SheetName.ANCIENT_WONDERS);
+        drawAction.draw(pbf.getId(), playerId, SheetName.MEDIEVAL_WONDERS);
+    }
+
+    private void drawStartingWonders(PBF pbf, String playerId) {
+        createInfoLog(pbf.getId(), "Drawing 4 ancient wonders");
+        drawAction.draw(pbf.getId(), playerId, SheetName.ANCIENT_WONDERS);
+        drawAction.draw(pbf.getId(), playerId, SheetName.ANCIENT_WONDERS);
+        drawAction.draw(pbf.getId(), playerId, SheetName.ANCIENT_WONDERS);
+        drawAction.draw(pbf.getId(), playerId, SheetName.ANCIENT_WONDERS);
     }
 
     private Civ setStartingTech(String playerId, Playerhand playerhand, Civ civ) {
@@ -322,16 +325,8 @@ public class PlayerAction extends BaseAction {
         }
     }
 
-    private void drawStartingWonders(PBF pbf, String playerId) {
-        createInfoLog(pbf.getId(), "Drawing 4 ancient wonders");
-        drawAction.draw(pbf.getId(), playerId, SheetName.ANCIENT_WONDERS);
-        drawAction.draw(pbf.getId(), playerId, SheetName.ANCIENT_WONDERS);
-        drawAction.draw(pbf.getId(), playerId, SheetName.ANCIENT_WONDERS);
-        drawAction.draw(pbf.getId(), playerId, SheetName.ANCIENT_WONDERS);
-    }
-
-    private boolean isCivilization(Playerhand playerhand, Optional<SheetName> sheetName) {
-        if (sheetName.get() == SheetName.CIV) {
+    private boolean isCivilization(Playerhand playerhand, SheetName sheetName) {
+        if (sheetName == SheetName.CIV) {
             if (playerhand.getCivilization() != null) {
                 log.warn("Cannot choose civilization again");
                 throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
@@ -720,14 +715,16 @@ public class PlayerAction extends BaseAction {
         Preconditions.checkNotNull(pbfId);
         Preconditions.checkNotNull(playerId);
         PBF pbf = pbfCollection.findOneById(pbfId);
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+        if(playerhand.isYourTurn()) {
+            return;
+        }
 
         pbf.getPlayers().stream()
                 .filter(p -> p.isYourTurn())
                 .forEach(p -> p.setYourTurn(false));
 
-        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
         playerhand.setYourTurn(true);
-
         pbfCollection.updateById(pbfId, pbf);
 
         super.createCommonPublicLog("took turn button", pbfId, playerId);
