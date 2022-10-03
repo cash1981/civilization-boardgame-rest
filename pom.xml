@@ -52,8 +52,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <dropwizard.version>0.8.0</dropwizard.version>
-        <jackson.version>2.5.1</jackson.version>
+        <dropwizard.version>2.1.2</dropwizard.version>
+        <jackson.version>2.13.4</jackson.version>
         <jersey.version>2.16</jersey.version>
         <apache-poi.version>3.13</apache-poi.version>
         <mongo-driver.version>3.12.7</mongo-driver.version>
