@@ -715,4 +715,21 @@ public class PlayerAction extends BaseAction {
         playerhand.setGamenote(messageDTO.getMessage());
         pbfCollection.updateById(pbfId, pbf);
     }
+
+    public void takeTurnButton(String pbfId, String playerId) {
+        Preconditions.checkNotNull(pbfId);
+        Preconditions.checkNotNull(playerId);
+        PBF pbf = pbfCollection.findOneById(pbfId);
+
+        pbf.getPlayers().stream()
+                .filter(p -> p.isYourTurn())
+                .forEach(p -> p.setYourTurn(false));
+
+        Playerhand playerhand = getPlayerhandByPlayerId(playerId, pbf);
+        playerhand.setYourTurn(true);
+
+        pbfCollection.updateById(pbfId, pbf);
+
+        super.createCommonPublicLog("took turn button", pbfId, playerId);
+    }
 }

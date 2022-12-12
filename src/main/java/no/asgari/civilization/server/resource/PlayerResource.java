@@ -345,4 +345,12 @@ public class PlayerResource {
         return Response.ok().build();
     }
 
+    @PUT
+    @Path("/turn/take")
+    public Response takeTurn(@Auth Player player, @NotEmpty @PathParam("pbfId") String pbfId) {
+        playerAction.takeTurnButton(pbfId, player.getId());
+        return Response.ok().build();
+    }
+
+
 }
